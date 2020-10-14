@@ -5,3 +5,10 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+# ##########################################################
+# To re-use the db:seed task, use .find_or_create_by instead of .create. 
+# However, should only use task to populate DB when project created. 
+# To perform complex data seeding during the app lifecycle, create a new rake task, execute it then remove it.
+# ##########################################################
+

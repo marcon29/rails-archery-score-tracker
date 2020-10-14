@@ -1,0 +1,2 @@
+class DistanceTarget < ApplicationRecord
+end
