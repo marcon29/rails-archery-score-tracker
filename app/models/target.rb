@@ -3,6 +3,7 @@ class Target < ApplicationRecord
     # validation notes
         # no duplicates: name
         # required: size, score_areas, rings, x_ring, max_score, spots (all but name and edit) 
+        # need to update error messages in tests for all validations 
 
     # need create name callback method: 
         # auto-creates name at time of instantiation
