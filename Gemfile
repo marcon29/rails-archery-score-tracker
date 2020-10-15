@@ -40,7 +40,6 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'capybara'
   gem 'selenium-webdriver'
-  gem 'chromedriver-helper'
   gem 'database_cleaner'
   gem 'rack_session_access'
   gem 'pry'
