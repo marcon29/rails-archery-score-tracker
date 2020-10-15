@@ -9,9 +9,14 @@ RSpec.describe Target, type: :model do
     Target.create(size: "20in", score_areas: 2, rings: 4, x_ring: true, max_score: 5, spots: 5)
   }
 
-  # need to create a ArcherCategory to associate target to
+  let(:rm_category) {
+    ArcherCategory.create(cat_code: "RM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: nil, max_age: nil, cat_gender: "Male")
+  }
   
   # need to create a Set to associate target to
+  # let(:set) {
+  #   Set.create()
+  # }
 
   let(:update_values) {
     {size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3}
@@ -138,15 +143,17 @@ RSpec.describe Target, type: :model do
   describe "instances are properly associated to other models" do
     it "has many Sets" do
       pending "need to create Set model"
+      expect(pre_load_target.sets).to include(set)
     end
 
     it "has many ArcherCategories" do
       pending "need to create ArcherCategory model"
+      expect(pre_load_target.archer_categories).to include(rm_category)
     end
   end
   
   # helper method tests ########################################################
-  describe "all helper methods work correctly" do
+  describe "all helper methods work correctly:" do
     it "helper methods TBD" do
       pending "add as needed - move commented out tests to Shot model"
     end

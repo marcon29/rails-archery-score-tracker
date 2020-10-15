@@ -5,9 +5,9 @@ class Target < ApplicationRecord
         # required: size, score_areas, rings, x_ring, max_score, spots (all but name and edit) 
         # need to update error messages in tests for all validations 
 
-    # need create name callback method: 
-        # auto-creates name at time of instantiation
-        # size/spot/ring = "122cm/1-spot/10-ring"
+    # need methods:
+        # auto-creates name at time of instantiation (callback)
+            # size/spot/ring = "122cm/1-spot/10-ring"
 
     # pre-load target list, all include an x-ring
         # 122cm: reg

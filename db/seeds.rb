@@ -37,7 +37,62 @@
 # Archer categories to pre-load
 # ##########################################################
 # World Archery
-# USA Archery
+    # WA-RCW - Recurve Cadet Women
+    # WA-RJW - Recurve Junior Women
+    # WA-RW - Recurve Senior Women
+    # WA-RMW - Recurve Master Women
+    
+    # WA-RCM - Recurve Cadet Men
+    # WA-RJM - Recurve Junior Men
+    # WA-RM - Recurve Senior Men
+    # WA-RMM - Recurve Master Men
+    
+    # WA-CCW - Compound Cadet Women
+    # WA-CJW - Compound Junior Women
+    # WA-CW - Compound Senior Women
+    # WA-CMW - Compound Master Women
+    
+    # WA-CCM - Compound Cadet Men
+    # WA-CJM - Compound Junior Men
+    # WA-CM - Compound Senior Men
+    # WA-CMM - Compound Master Men
+
+# USA Archer
+    # USA-RBW - Recurve Bowman Women
+    # USA-RUW - Recurve Cub Women
+    # USA-RCW - Recurve Cadet Women
+    # USA-RJW - Recurve Junior Women
+    # USA-RW - Recurve Senior Women
+    # USA-RM50W - Recurve Master50 Women
+    # USA-RM60W - Recurve Master60 Women
+    # USA-RM70W - Recurve Master70 Women
+
+    # USA-RBM - Recurve Bowman Men
+    # USA-RUM - Recurve Cub Men
+    # USA-RCM - Recurve Cadet Men
+    # USA-RJM - Recurve Junior Men
+    # USA-RM - Recurve Senior Men
+    # USA-RM50M - Recurve Master50 Men
+    # USA-RM60M - Recurve Master60 Men
+    # USA-RM70M - Recurve Master70 Men
+    
+    # USA-CBW - Compound Bowman Women
+    # USA-CUW - Compound Cub Women
+    # USA-CCW - Compound Cadet Women
+    # USA-CJW - Compound Junior Women
+    # USA-CW - Compound Senior Women
+    # USA-CM50W - Compound Master50 Women
+    # USA-CM60W - Compound Master60 Women
+    # USA-CM70W - Compound Master70 Women
+    
+    # USA-CBM - Compound Bowman Men
+    # USA-CUM - Compound Cub Men
+    # USA-CCM - Compound Cadet Men
+    # USA-CJM - Compound Junior Men
+    # USA-CM - Compound Senior Men
+    # USA-CM50M - Compound Master50 Men
+    # USA-CM60M - Compound Master60 Men
+    # USA-CM70M - Compound Master70 Men
 # NFAA (add later)
 # 3D (add later)
 
