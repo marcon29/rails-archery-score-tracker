@@ -15,27 +15,43 @@
 
 # ##########################################################
 # Targets to pre-load
-# ##########################################################    
-# pre-load target list, all include an x-ring
-    # 122cm: reg
-    # 80cm: reg, 6-ring
-    # 60cm: reg, 3-spot
-    # 40cm: reg, 3-spot
+# ##########################################################
+wa_target_attrs = {
+    cm122_1spot_10ring: {size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false}, 
+    cm80_1spot_10ring: {size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false}, 
+    cm80_1spot_6ring: {size: "80cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 1, user_edit: false}, 
+    cm60_1spot_10ring: {size: "60cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false}, 
+    cm60_3spot_6ring: {size: "60cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3, user_edit: false}, 
+    cm40_1spot_10ring: {size: "40cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false}, 
+    cm40_3spot_6ring: {size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3, user_edit: false}
+}
 
-# NFAA targets, not pre-loaded, but try to account for
-    # field: 
-        # all have 3 score areas but 6 rings, single spot
-        # all score 5 through 3
-        # 65cm, 50cm, 35cm, 20cm
-    # indoor: 
-        # 40cm: 5 score areas, 5 rings (w/ X-ring), single spot
-        # 40cm: 2 score areas, 4 rings (w/ X-ring), 5-spot
+# nfaa_target_attrs = {
+#     cm65_1spot_5ring: {size: "65cm", score_areas: 3, rings: 5, x_ring: true, max_score: 5, spots: 1, user_edit: false}, 
+#     cm50_1spot_5ring: {size: "50cm", score_areas: 3, rings: 5, x_ring: true, max_score: 5, spots: 1, user_edit: false}, 
+#     cm35_1spot_5ring: {size: "35cm", score_areas: 3, rings: 5, x_ring: true, max_score: 5, spots: 1, user_edit: false}, 
+#     cm20_1spot_5ring: {size: "20cm", score_areas: 3, rings: 5, x_ring: true, max_score: 5, spots: 1, user_edit: false}, 
+#     cm40_1spot_5ring: {size: "40cm", score_areas: 5, rings: 5, x_ring: true, max_score: 5, spots: 1, user_edit: false}, 
+#     cm40_5spot_3ring: {size: "40cm", score_areas: 2, rings: 3, x_ring: true, max_score: 5, spots: 5, user_edit: false}
+# }
 
-
+wa_target_attrs.each do |target, attrs| 
+	Target.find_or_create(attrs)
+end
 
 # ##########################################################
 # Archer categories to pre-load
 # ##########################################################
+
+
+# category_attrs = {
+#     {cat_code: "RM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: nil, max_age: nil, cat_gender: "Male"}
+# }
+
+# category_attrs.each do |cat, attrs|
+# 	ArcherCategory.find_or_create(attrs)
+# end
+
 # World Archery
     # WA-RCW - Recurve Cadet Women
     # WA-RJW - Recurve Junior Women

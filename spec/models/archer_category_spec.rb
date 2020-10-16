@@ -123,10 +123,12 @@ RSpec.describe ArcherCategory, type: :model do
   describe "instances are properly associated to other models" do
     it "has many Sets" do
       pending "need to create Set model"
-      # expect(rm_category.sets).to include(set)
+      pending "need to create DistanceTarget model"
+      expect(rm_category.sets).to include(set)
     end
 
     it "has many Targets" do
+      pending "need to create DistanceTarget model"
       expect(rm_category.targets).to include(pre_load_target)
     end
   end

@@ -3,11 +3,25 @@ class Target < ApplicationRecord
     # validation notes
         # no duplicates: name
         # required: size, score_areas, rings, x_ring, max_score, spots (all but name and edit) 
-        # need to update error messages in tests for all validations 
+        # need to update error messages in tests for all validations
+        
+    before_validation :assign_name
 
-    # need methods:
-        # auto-creates name at time of instantiation (callback)
-            # size/spot/ring = "122cm/1-spot/10-ring"
+    
+    # auto-creates name at time of instantiation (callback)
+        # auto-creates name
+        # assigns name to instance
+        # callback to run assignment method before persisting to DB
+
+    def assign_name
+        self.name = create_name
+    end
+
+    def create_name
+        "#{self.size}/#{self.spots}-spot/#{self.rings}-ring"
+    end
+
+            
 
     # pre-load target list, all include an x-ring
         # 122cm: reg
