@@ -1,4 +1,5 @@
 require_relative 'boot'
+require_relative 'constants'
 
 require "rails"
 # Pick the frameworks you want:
