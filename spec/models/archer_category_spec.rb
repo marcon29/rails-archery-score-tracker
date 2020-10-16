@@ -51,10 +51,6 @@ RSpec.describe ArcherCategory, type: :model do
     {cat_code: "WA-RM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: "", max_age: "", cat_gender: "Male"}
   }
 
-  let(:update_values) {
-    {cat_code: "USA-CM60W", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Master60", min_age: 60, max_age: "", cat_gender: "Female"}
-  }
-
   # object creation and validation tests #######################################
   describe "model creates and updates valid instances:" do
     it "pre-loaded category is valid with all values except min and max age" do
@@ -68,41 +64,63 @@ RSpec.describe ArcherCategory, type: :model do
       expect(rm_category.cat_gender).to eq("Male")
     end
 
-    # 
-    it "restricts values of: gov_body, cat_division, cat_age_class, cat_gender" do
-      pending "decide if needed"
-    end
-
-    it "is invalid if the category code is a duplicate" do
-      category = ArcherCategory.create(duplicate)
-      expect(rm_category).to be_invalid
-    end
+    describe "invalid if data missing or duplicated for:" do
+      it "category code (duplicated)" do
+        category = ArcherCategory.create(duplicate)
+        expect(rm_category).to be_invalid
+      end
     
-    it "is invalid without a category code" do
-      category = ArcherCategory.create(no_code)
-      expect(category).to be_invalid
+      it "category code (missing)" do
+        category = ArcherCategory.create(no_code)
+        expect(category).to be_invalid
+      end
+
+      it "governing body (missing)" do
+        category = ArcherCategory.create(no_gov_body)
+        expect(category).to be_invalid
+      end
+
+      it "division (missing)" do
+        category = ArcherCategory.create(no_division)
+        expect(category).to be_invalid
+      end
+
+      it "age class (missing)" do
+        category = ArcherCategory.create(no_class)
+        expect(category).to be_invalid
+      end
+
+      it "gender (missing)" do
+        category = ArcherCategory.create(no_gender)
+        expect(category).to be_invalid
+      end
     end
 
-    it "is invalid without governing body" do
-      category = ArcherCategory.create(no_gov_body)
-      expect(category).to be_invalid
-    end
+    describe "invalid if value not included in corresponding constant for:" do
+      it "governing body" do
+        duplicate[:gov_body] = "bad data"
+        category = ArcherCategory.create(duplicate)
+        expect(category).to be_invalid
+      end
+      
+      it "division" do
+        duplicate[:cat_division] = "bad data"
+        category = ArcherCategory.create(duplicate)
+        expect(category).to be_invalid
+      end
+      
+      it "age class" do
+        duplicate[:cat_age_class] = "bad data"
+        category = ArcherCategory.create(duplicate)
+        expect(category).to be_invalid
+      end
 
-    it "is invalid without a division" do
-      category = ArcherCategory.create(no_division)
-      expect(category).to be_invalid
+      it "gender" do
+        duplicate[:cat_gender] = "bad data"
+        category = ArcherCategory.create(duplicate)
+        expect(category).to be_invalid
+      end
     end
-
-    it "is invalid without having an age class" do
-      category = ArcherCategory.create(no_class)
-      expect(category).to be_invalid
-    end
-
-    it "is invalid without a gender" do
-      category = ArcherCategory.create(no_gender)
-      expect(category).to be_invalid
-    end
-    
   end
 
   # association tests ########################################################
@@ -142,6 +160,9 @@ RSpec.describe ArcherCategory, type: :model do
 
   # this will have to be part of ArcherCat controller tests
     # NOTE: need to restrict so user can't update any items from this model
+    # let(:update_values) {
+    #   {cat_code: "USA-CM60W", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Master60", min_age: 60, max_age: "", cat_gender: "Female"}
+    # }
     # it "won't update a pre-loaded (non-user-editable) category" do
     #   rm_category.update(update_values)
       

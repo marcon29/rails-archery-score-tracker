@@ -163,6 +163,9 @@ RSpec.describe Target, type: :model do
     # end
 
   # this will have to be part of target controller tests
+    # let(:update_values) {
+    #   {size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3}
+    # }
     # it "won't update a pre-loaded (non-user-editable) target" do
     #   pre_load_target.update(update_values)
 

@@ -5,16 +5,10 @@ class ArcherCategory < ApplicationRecord
     # but validations still helpful to ensure data integrity when extending app.
     # This also means there's no need to  display error messages.
     validates :cat_code, presence: true, uniqueness: true
-    validates :gov_body, presence: true
-    validates :cat_division, presence: true
-    validates :cat_age_class, presence: true
-    validates :cat_gender, presence: true
-
-
-    # restrict values of: gov_body, cat_division, cat_age_class, cat_gender
-        # use global constants - need to add tests if doing this
-        
-        
+    validates :gov_body, presence: true, inclusion: { in: GOV_BODIES }
+    validates :cat_division, presence: true, inclusion: { in: DIVISIONS }
+    validates :cat_age_class, presence: true, inclusion: { in: AGE_CLASSES.values.join(" ").split }
+    validates :cat_gender, presence: true, inclusion: { in: GENDERS }
         
 
     # need methods: 
