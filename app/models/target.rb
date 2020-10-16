@@ -1,17 +1,15 @@
 class Target < ApplicationRecord
-
-    # validation notes
-        # no duplicates: name
-        # required: size, score_areas, rings, x_ring, max_score, spots (all but name and edit) 
-        # need to update error messages in tests for all validations
+    
+    # need to update error messages in tests for all validations
+    validates :name, presence: true, uniqueness: true
+    validates :size, presence: { message: "You must provide a target size." }
+    validates :score_areas, presence: { message: "You must provide the number of scoring areas." }
+    validates :rings, presence: { message: "You must provide the number of rings." }
+    validates :x_ring, presence: { message: "You must specifiy if there is an X ring." }
+    validates :max_score, presence: { message: "You must provide the higest score value." }
+    validates :spots, presence: { message: "You must specify the number of spots." }
         
     before_validation :assign_name
-
-    
-    # auto-creates name at time of instantiation (callback)
-        # auto-creates name
-        # assigns name to instance
-        # callback to run assignment method before persisting to DB
 
     def assign_name
         self.name = create_name
@@ -21,18 +19,6 @@ class Target < ApplicationRecord
         "#{self.size}/#{self.spots}-spot/#{self.rings}-ring"
     end
 
-            
-
-    # pre-load target list, all include an x-ring
-        # 122cm: reg
-        # 80cm: reg, 6-ring
-        # 60cm: reg, 3-spot
-        # 40cm: reg, 3-spot
-
-    # NFAA targets, not pre-loaded, but try to account for
-        # field: all have 3 score areas but 6 rings, single spot
-            # 65cm, 50cm, 35cm, 20cm
-        # indoor: 
-            # 40cm: 5 score areas, 5 rings (w/ X-ring), single spot
-            # 40cm: 2 score areas, 4 rings (w/ X-ring), 5-spot
 end
+
+
