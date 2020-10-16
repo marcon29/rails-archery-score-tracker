@@ -1,11 +1,21 @@
 class ArcherCategory < ApplicationRecord
-     # validation notes
-        # no duplicates: cat_code
-        # required: cat_code, gov_body, cat_division, cat_age_class, cat_gender
-        # restrict values of: gov_body, cat_division, cat_age_class, cat_gender
-            # use global constants - need to add tests if doing this
-        # don't need to display error messages
-        # NOTE: restrict so user can't update these, only pre-loaded, but need easy to add for later app extension
+    # need to add associations
+    
+    # Regular user can't update these, pre-loaded for reference by rest of app only,
+    # but validations still helpful to ensure data integrity when extending app.
+    # This also means there's no need to  display error messages.
+    validates :cat_code, presence: true, uniqueness: true
+    validates :gov_body, presence: true
+    validates :cat_division, presence: true
+    validates :cat_age_class, presence: true
+    validates :cat_gender, presence: true
+
+
+    # restrict values of: gov_body, cat_division, cat_age_class, cat_gender
+        # use global constants - need to add tests if doing this
+        
+        
+        
 
     # need methods: 
         # creates a user-friendly display name (helper)

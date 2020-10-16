@@ -1,6 +1,6 @@
 class Target < ApplicationRecord
+    # need to add associations    
     
-    # need to update error messages in tests for all validations
     validates :name, presence: true, uniqueness: true
     validates :size, presence: { message: "You must provide a target size." }
     validates :score_areas, presence: { message: "You must provide the number of scoring areas." }
