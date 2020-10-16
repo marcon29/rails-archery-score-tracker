@@ -30,8 +30,8 @@ class ArcherCategory < ApplicationRecord
         self.eligible(age, gender).where(cat_division: division)
     end
 
-    def self.default_by_selection(id)
-        self.find(id)
+    def self.default_by_selection(cat_code)
+        self.where(cat_code: cat_code)
     end
 
     def self.eligible(age, gender)
