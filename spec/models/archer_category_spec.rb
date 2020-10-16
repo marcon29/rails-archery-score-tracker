@@ -1,54 +1,55 @@
 require 'rails_helper'
 
 RSpec.describe ArcherCategory, type: :model do
+  let(:rjm_category) {
+    rjm_category = ArcherCategory.create(cat_code: "WA-RJM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Junior", min_age: "", max_age: 20, cat_gender: "Male")
+  }
+
   let(:rm_category) {
     ArcherCategory.create(cat_code: "WA-RM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: "", max_age: "", cat_gender: "Male")
   }
-  
-  # ####################################
-  # ####################################
-  # only need these for default cat helper (for working with different age ranges)
-  let(:cjw_category) {
-    ArcherCategory.create(cat_code: "WA-CJW", gov_body: "World Archery", cat_division: "Compound", cat_age_class: "Junior", min_age: "", max_age: 20, cat_gender: "Female")
+
+  let(:usrm_category) {
+    usrm_category = ArcherCategory.create(cat_code: "USA-RM", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: "", max_age: "", cat_gender: "Male")
+  }
+
+  let(:rmm_category) {
+    rmm_category = ArcherCategory.create(cat_code: "WA-RMM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Master", min_age: 50, max_age: "", cat_gender: "Male")
   }
 
   let(:cm60w_category) {
-    ArcherCategory.create(cat_code: "USA-CM60W", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Master60", min_age: 60, max_age: "", cat_gender: "Female")
-  } 
-  # ####################################
-  # ####################################
+    cm60w_category = ArcherCategory.create(cat_code: "USA-CM60F", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Master60", min_age: 60, max_age: "", cat_gender: "Female")
+  }
 
   let(:pre_load_target) {
     Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
   }
-  
+
   # need to create a Set to associate category to
-  # let(:set) {
-  #   Set.create()
-  # }
+  # set = Set.create()
 
   let(:no_code) {
     {cat_code: "", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: "", max_age: "", cat_gender: "Male"}
   }
 
   let(:no_gov_body) {
-    {cat_code: "WA-RM", gov_body: "", cat_division: "Recurve", cat_age_class: "Senior", min_age: "", max_age: "", cat_gender: "Male"}
+    no_gov_body = {cat_code: "WA-RM", gov_body: "", cat_division: "Recurve", cat_age_class: "Senior", min_age: "", max_age: "", cat_gender: "Male"}
   }
 
   let(:no_division) {
-    {cat_code: "WA-RM", gov_body: "World Archery", cat_division: "", cat_age_class: "Senior", min_age: "", max_age: "", cat_gender: "Male"}
+    no_division = {cat_code: "WA-RM", gov_body: "World Archery", cat_division: "", cat_age_class: "Senior", min_age: "", max_age: "", cat_gender: "Male"}
   }
 
   let(:no_class) {
-    {cat_code: "WA-RM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "", min_age: "", max_age: "", cat_gender: "Male"}
+    no_class = {cat_code: "WA-RM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "", min_age: "", max_age: "", cat_gender: "Male"}
   }
 
   let(:no_gender) {
-    {cat_code: "WA-RM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: "", max_age: "", cat_gender: ""}
+    no_gender = {cat_code: "WA-RM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: "", max_age: "", cat_gender: ""}
   }
 
   let(:duplicate) {
-    {cat_code: "WA-RM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: "", max_age: "", cat_gender: "Male"}
+    duplicate = {cat_code: "WA-RM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: "", max_age: "", cat_gender: "Male"}
   }
 
   # object creation and validation tests #######################################
@@ -59,15 +60,16 @@ RSpec.describe ArcherCategory, type: :model do
       expect(rm_category.gov_body).to eq("World Archery")
       expect(rm_category.cat_division).to eq("Recurve")
       expect(rm_category.cat_age_class).to eq("Senior")
-      expect(rm_category.min_age).to eq(nil)
-      expect(rm_category.max_age).to eq(nil)
+      expect(rm_category.min_age).to eq(0)
+      expect(rm_category.max_age).to eq(1000)
       expect(rm_category.cat_gender).to eq("Male")
     end
 
     describe "invalid if data missing or duplicated for:" do
       it "category code (duplicated)" do
+        rm_category
         category = ArcherCategory.create(duplicate)
-        expect(rm_category).to be_invalid
+        expect(category).to be_invalid
       end
     
       it "category code (missing)" do
@@ -140,40 +142,109 @@ RSpec.describe ArcherCategory, type: :model do
   # helper method tests ########################################################
   describe "all helper methods work correctly:" do
     it "has a user-friendly display name" do
-      pending "need to create"
+      expect(rm_category.name).to eq("Recurve-Senior-Men")
     end
 
-    it "can calculate a default category" do
-      pending "need to create - uses division/age/gender data - delete instances above if not using here"
+    it "can calculate a default category with Archer data" do
+      rjm_category
+      rm_category
+      usrm_category
+      rmm_category
+      cm60w_category
+
+      junior_data = {div: "Recurve", age: 16, gender: "Male"}
+      senior_data = {div: "Recurve", age: 25, gender: "Male"}
+      master_data = {div: "Recurve", age: 55, gender: "Male"}
+      master60_data = {div: "Compound", age: 65, gender: "Female"}
+
+      junior = ArcherCategory.default_by_archer_data(junior_data[:div], junior_data[:age], junior_data[:gender])
+      senior = ArcherCategory.default_by_archer_data(senior_data[:div], senior_data[:age], senior_data[:gender])
+      master = ArcherCategory.default_by_archer_data(master_data[:div], master_data[:age], master_data[:gender])
+      master60 = ArcherCategory.default_by_archer_data(master60_data[:div], master60_data[:age], master60_data[:gender])
+
+      expect(junior).to include(rjm_category)
+      expect(junior).to_not include(rm_category)
+      expect(junior).to_not include(usrm_category)
+      expect(junior).to_not include(rmm_category)
+      expect(junior).to_not include(cm60w_category)
+
+      expect(senior).to_not include(rjm_category)
+      expect(senior).to include(rm_category)
+      expect(senior).to include(usrm_category)
+      expect(senior).to_not include(rmm_category)
+      expect(senior).to_not include(cm60w_category)
+
+      expect(master).to_not include(rjm_category)
+      expect(master).to_not include(rm_category)
+      expect(master).to_not include(usrm_category)
+      expect(master).to include(rmm_category)
+      expect(master).to_not include(cm60w_category)
+      
+      expect(master60).to_not include(rjm_category)
+      expect(master60).to_not include(rm_category)
+      expect(master60).to_not include(usrm_category)
+      expect(master60).to_not include(rmm_category)
+      expect(master60).to include(cm60w_category)
+    end
+
+    it "can calculate a default category by user selection" do
+      pending "need to create - uses a selection from the user"
+      junior_data = {div: "Recurve", age: 16, gen: "Male"}
+      junior = ArcherCategory.default_by_archer_data(junior_data[:div], junior_data[:age], junior_data[:gender])
+      expect(junior.default_by_selection).to eq(rjm_category)
+    end
+
+    it "can calculate all eligbile categories by Archer age and gender" do
+      rjm_category
+      rm_category
+      usrm_category
+      rmm_category
+      cm60w_category
+
+      junior_data = {age: 16, gender: "Male"}
+      senior_data = {age: 25, gender: "Male"}
+      master_data = {age: 55, gender: "Male"}
+      master60_data = {age: 65, gender: "Female"}
+
+      junior = ArcherCategory.eligible(junior_data[:age], junior_data[:gender])
+      senior = ArcherCategory.eligible(senior_data[:age], senior_data[:gender])
+      master = ArcherCategory.eligible(master_data[:age], master_data[:gender])
+      master60 = ArcherCategory.eligible(master60_data[:age], master60_data[:gender])
+
+
+      expect(junior).to include(rjm_category)
+      expect(junior).to include(rm_category)
+      expect(junior).to include(usrm_category)
+      expect(junior).to_not include(rmm_category)
+      expect(junior).to_not include(cm60w_category)
+
+      expect(senior).to_not include(rjm_category)
+      expect(senior).to include(rm_category)
+      expect(senior).to include(usrm_category)
+      expect(senior).to_not include(rmm_category)
+      expect(senior).to_not include(cm60w_category)
+
+      expect(master).to_not include(rjm_category)
+      expect(master).to include(rm_category)
+      expect(master).to include(usrm_category)
+      expect(master).to include(rmm_category)
+      expect(master).to_not include(cm60w_category)
+      
+      expect(master60).to_not include(rjm_category)
+      expect(master60).to_not include(rm_category)
+      expect(master60).to_not include(usrm_category)
+      expect(master60).to_not include(rmm_category)
+      expect(master60).to include(cm60w_category)
     end
 
     it "helper methods TBD" do
       pending "add as needed - move commented out tests to Archer model"
+      expect(junior).to eq(rjm_category)
     end
     
   end
   
-  # need to use to set as default for Archer
-    # can't associate category w/ archer - archer can shoot differing categories by ScoreSession - simply use as identifier
-    # need to assign a category as the default category based off of Archer data (in Archer model)
-        # archer.default_cat = archer_category.cat_code
-
-  # this will have to be part of ArcherCat controller tests
-    # NOTE: need to restrict so user can't update any items from this model
-    # let(:update_values) {
-    #   {cat_code: "USA-CM60W", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Master60", min_age: 60, max_age: "", cat_gender: "Female"}
-    # }
-    # it "won't update a pre-loaded (non-user-editable) category" do
-    #   rm_category.update(update_values)
-      
-    #   expect(rm_category.cat_code).to eq("WA-RM")
-    #   expect(rm_category.gov_body).to eq("World Archery")
-    #   expect(rm_category.cat_division).to eq("Recurve")
-    #   expect(rm_category.cat_age_class).to eq("Senior")
-    #   expect(rm_category.min_age).to eq(nil)
-    #   expect(rm_category.max_age).to eq(nil)
-    #   expect(rm_category.cat_gender).to eq("Male")
-    # end
+ 
 
 
 end

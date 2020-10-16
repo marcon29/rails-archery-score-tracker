@@ -65,10 +65,11 @@ RSpec.describe Target, type: :model do
     end
 
     it "will auto-create the target name, won't save unless it's unique" do
+      pre_load_target
       dup_target = Target.create(duplicate)
       
       expect(dup_target.name).to eq("122cm/1-spot/10-ring")
-      expect(pre_load_target).to be_invalid
+      expect(dup_target).to be_invalid
     end
     
     it "is invalid without a size and has correct error message" do
@@ -148,36 +149,6 @@ RSpec.describe Target, type: :model do
       expect(pre_load_target.tests_complete).to eq("not done yet")
     end
   end
-
-
-
-  # these should be for the shot model
-    # it "can identify all possible score values" do
-    #   # max_score..score_areas, M, and X if x_ring
-    # end
-
-    # it "will only allows score values up to the number of score areas, M and X" do
-    # end
-
-    # it "won't allow allow a score value of X if there is no x-ring" do
-    # end
-
-  # this will have to be part of target controller tests
-    # let(:update_values) {
-    #   {size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3}
-    # }
-    # it "won't update a pre-loaded (non-user-editable) target" do
-    #   pre_load_target.update(update_values)
-
-    #   expect(pre_load_target.name).to eq("122cm/1-spot/10-ring")
-    #   expect(pre_load_target.size).to eq("122cm")
-    #   expect(pre_load_target.score_areas).to eq(10)
-    #   expect(pre_load_target.rings).to eq(10)
-    #   expect(pre_load_target.x_ring).to eq(true)
-    #   expect(pre_load_target.max_score).to eq(10)
-    #   expect(pre_load_target.spots).to eq(1)
-    # end
-
 
 end
 

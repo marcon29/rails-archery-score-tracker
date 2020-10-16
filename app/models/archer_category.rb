@@ -9,18 +9,34 @@ class ArcherCategory < ApplicationRecord
     validates :cat_division, presence: true, inclusion: { in: DIVISIONS }
     validates :cat_age_class, presence: true, inclusion: { in: AGE_CLASSES.values.join(" ").split }
     validates :cat_gender, presence: true, inclusion: { in: GENDERS }
-        
 
-    # need methods: 
-        # creates a user-friendly display name (helper)
-            # cat_division/cat_age_class/cat_gender = "Recurve-Senior-Men"
+    before_validation :assign_blank_ages
+
+    # needed to allow for checking eligible categories by age
+    def assign_blank_ages
+        self.min_age = 0 unless self.min_age
+        self.max_age = 1000 unless self.max_age
+    end
         
-        # calculates a default category based off of division/age/gender data (helper - class method?)
-            # finds the category instance that matches division, age and gender
-                # division, age and gender must be passed in
-            # returns the cat_code
-            # this will be used by archer model to assign default_cat to archer
+    # creates a user-friendly display name
+    def name
+        self.cat_gender == "Male" ? gender = "Men" : gender = "Women" 
+        "#{self.cat_division}-#{self.cat_age_class}-#{gender}"
+    end
         
+    # returns an array of ArcherCategory objects
+    def self.default_by_archer_data(division, age, gender)
+        # self.where("max_age >?", age).where("min_age <?", age).where(cat_gender: gender).where(cat_division: division)
+        self.eligible(age, gender).where(cat_division: division)
+    end
+
+    def self.default_by_selection(id)
+        self.find(id)
+    end
+
+    def self.eligible(age, gender)
+        self.where("max_age >?", age).where("min_age <?", age).where(cat_gender: gender)
+    end
 
     # pre-load category list
         # World Archery
