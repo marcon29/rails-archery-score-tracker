@@ -11,12 +11,4 @@ class DistanceTarget < ApplicationRecord
     def distance_from_input(num, unit)
         "#{num}#{unit}"
     end
-
-    # what pre-load data should look like
-        # (set_id: 1, , archer_category_id: 1, distance: "90m", target_id: 1)
-
-        # set = Round/set/distanceX (X is number)
-        # arch_cat = find from ArcherCategory model by cat_code
-        # distance = list
-        # target = find from Target model
 end

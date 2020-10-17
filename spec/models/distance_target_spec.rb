@@ -42,9 +42,7 @@ RSpec.describe DistanceTarget, type: :model do
   let(:no_set) {
     {distance: "90m", target_id: 1, archer_category_id: 1, set_id: ""}
   }
-
   
-
   # object creation and validation tests #######################################
   describe "model creates and updates valid instances:" do
     it "pre-loaded distance/target is valid and has correct distance" do
@@ -101,5 +99,4 @@ RSpec.describe DistanceTarget, type: :model do
       expect(calc_distance).to eq("70m")
     end
   end
-  
 end

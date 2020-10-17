@@ -47,12 +47,74 @@ wa_category_attrs = {
     wa_cmm: {cat_code: "WA-CMM", gov_body: "World Archery", cat_division: "Compound", cat_age_class: "Master", min_age: 50, max_age: "", open_to_younger: false, open_to_older: true, cat_gender: "Male"}
 }
 
+# #### Standard Sets ####
+    # to maintain DistanceTarget values build in following order:
+    # wa1440/distance1
+    # wa1440/distance2
+    # wa1440/distance3
+    # wa1440/distance4
+
+
+# #### Distance/Target Lookup ####
+wa1440_attrs = {
+    wa1440_dist1_cadet_m:  {set_id: 1, age_class: "Cadet",  gender: "Male",   distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_cadet_w:  {set_id: 1, age_class: "Cadet",  gender: "Female", distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_junior_m: {set_id: 1, age_class: "Junior", gender: "Male",   distance: "90m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_junior_w: {set_id: 1, age_class: "Junior", gender: "Female", distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_senior_m: {set_id: 1, age_class: "Senior", gender: "Male",   distance: "90m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_senior_w: {set_id: 1, age_class: "Senior", gender: "Female", distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_master_m: {set_id: 1, age_class: "Master", gender: "Male",   distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_master_w: {set_id: 1, age_class: "Master", gender: "Female", distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
+
+    wa1440_dist2_cadet_m:  {set_id: 2, age_class: "Cadet",  gender: "Male",   distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_cadet_w:  {set_id: 2, age_class: "Cadet",  gender: "Female", distance: "50m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_junior_m: {set_id: 2, age_class: "Junior", gender: "Male",   distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_junior_w: {set_id: 2, age_class: "Junior", gender: "Female", distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_senior_m: {set_id: 2, age_class: "Senior", gender: "Male",   distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_senior_w: {set_id: 2, age_class: "Senior", gender: "Female", distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_master_m: {set_id: 2, age_class: "Master", gender: "Male",   distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_master_w: {set_id: 2, age_class: "Master", gender: "Female", distance: "50m", target_name: "122cm/1-spot/10-ring"}, 
+
+    wa1440_dist3_cadet_m:  {set_id: 3, age_class: "Cadet",  gender: "Male",   distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_cadet_w:  {set_id: 3, age_class: "Cadet",  gender: "Female", distance: "40m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_junior_m: {set_id: 3, age_class: "Junior", gender: "Male",   distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_junior_w: {set_id: 3, age_class: "Junior", gender: "Female", distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_senior_m: {set_id: 3, age_class: "Senior", gender: "Male",   distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_senior_w: {set_id: 3, age_class: "Senior", gender: "Female", distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_master_m: {set_id: 3, age_class: "Master", gender: "Male",   distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_master_w: {set_id: 3, age_class: "Master", gender: "Female", distance: "40m", target_name: "80cm/1-spot/10-ring"}, 
+
+    wa1440_dist4_cadet_m:  {set_id: 4, age_class: "Cadet",  gender: "Male",   distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist4_cadet_w:  {set_id: 4, age_class: "Cadet",  gender: "Female", distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist4_junior_m: {set_id: 4, age_class: "Junior", gender: "Male",   distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist4_junior_w: {set_id: 4, age_class: "Junior", gender: "Female", distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist4_senior_m: {set_id: 4, age_class: "Senior", gender: "Male",   distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist4_senior_w: {set_id: 4, age_class: "Senior", gender: "Female", distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist4_master_m: {set_id: 4, age_class: "Master", gender: "Male",   distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist4_master_w: {set_id: 4, age_class: "Master", gender: "Female", distance: "30m", target_name: "80cm/1-spot/10-ring"}
+}
+
 wa_target_attrs.each do |obj, attrs|
     Target.new(attrs).save
 end
 
 wa_category_attrs.each do |obj, attrs|
     ArcherCategory.new(attrs).save
+end
+
+# set = Round/set/distanceX (X is number)
+# arch_cat = find from ArcherCategory model by cat_code
+# distance = list
+# target = find from Target model
+wa1440_attrs.each do |obj, details|
+    ArcherCategory.where(cat_age_class: details[:age_class], cat_gender: details[:gender]).each do |category|
+        DistanceTarget.new(
+            set_id: details[:set_id], 
+            archer_category_id: category.id, 
+            distance: details[:distance], 
+            target_id: Target.find_by_name(details[:target_name]).id
+        ).save
+    end
 end
 
 # ##########################################################
@@ -109,6 +171,12 @@ usa_category_attrs = {
     usa_cm70m: {cat_code: "USA-CM70M", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Master", min_age: 70, max_age: "", open_to_younger: false, open_to_older: true, cat_gender: "Male"}
 }
 
+# #### Standard Sets ####
+
+
+# #### Distance/Target Lookup ####
+
+
 # usa_target_attrs.each do |obj, attrs|
 # 	Target.find_or_create(attrs)
 # end
@@ -134,6 +202,13 @@ usa_category_attrs = {
 # }
 
 # #### Categories ####
+
+
+# #### Standard Sets ####
+
+
+# #### Distance/Target Lookup ####
+
 
 
 
