@@ -130,14 +130,14 @@ RSpec.describe Target, type: :model do
 
   # association tests ########################################################
   describe "instances are properly associated to other models" do
-    it "has many Sets" do
+    it "has many Sets" do      
       pending "need to create Set model"
-      pending "need to create DistanceTarget model"
+      pending "need to add associations"
       expect(pre_load_target.sets).to include(set)
     end
 
     it "has many ArcherCategories" do
-      pending "need to create DistanceTarget model"
+      pending "need to add associations"
       expect(pre_load_target.archer_categories).to include(rm_category)
     end
   end
