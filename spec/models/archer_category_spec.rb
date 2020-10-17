@@ -197,14 +197,14 @@ RSpec.describe ArcherCategory, type: :model do
       expect(rm_category.name).to eq("Recurve-Senior-Men")
     end
 
-    it "can calculate a default category with Archer data" do
+    it "can calculate default categories with Archer data" do
       rjm_category
       rm_category
       usrm_category
       rmm_category
       cm60w_category
 
-      junior_data = {div: "Recurve", age: 16, gender: "Male"}
+      junior_data = {div: "Recurve", age: 19, gender: "Male"}
       senior_data = {div: "Recurve", age: 25, gender: "Male"}
       master_data = {div: "Recurve", age: 55, gender: "Male"}
       master60_data = {div: "Compound", age: 65, gender: "Female"}
@@ -239,9 +239,9 @@ RSpec.describe ArcherCategory, type: :model do
       expect(master60).to include(cm60w_category)
     end
 
-    it "can calculate a default category by user selection" do
+    it "can calculate default categories by user selection" do
       pending "need to create - uses a selection from the user"
-      junior_data = {div: "Recurve", age: 16, gen: "Male"}
+      junior_data = {div: "Recurve", age: 19, gen: "Male"}
       
       expect(ArcherCategory.default_by_selection).to eq(rjm_category)
     end
@@ -253,7 +253,7 @@ RSpec.describe ArcherCategory, type: :model do
       rmm_category
       cm60w_category
 
-      junior_data = {age: 16, gender: "Male"}
+      junior_data = {age: 19, gender: "Male"}
       senior_data = {age: 25, gender: "Male"}
       master_data = {age: 55, gender: "Male"}
       master60_data = {age: 65, gender: "Female"}

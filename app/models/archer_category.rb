@@ -12,7 +12,7 @@ class ArcherCategory < ApplicationRecord
 
     before_validation :assign_blank_ages
 
-    # needed to allow for checking eligible categories by age
+    # allows for leaving oldest max_age and youngest min_age blank
     def assign_blank_ages
         self.min_age = 0 unless self.min_age
         self.max_age = 1000 unless self.max_age
@@ -24,18 +24,33 @@ class ArcherCategory < ApplicationRecord
         "#{self.cat_division}-#{self.cat_age_class}-#{gender}"
     end
         
-    # returns an array of ArcherCategory objects
+    # returns array of ArcherCategory objects
     def self.default_by_archer_data(division, age, gender)
-        # self.where("max_age >?", age).where("min_age <?", age).where(cat_gender: gender).where(cat_division: division)
-        self.eligible(age, gender).where(cat_division: division)
+        self.where("max_age >=?", age).where("min_age <=?", age).where(cat_gender: gender, cat_division: division)
     end
 
-    def self.default_by_selection(cat_code)
-        self.where(cat_code: cat_code)
+    def self.default_by_selection(age, gender)
+    # def self.default_by_selection(cat_code)
+        # user will get list of eligible categories
+        # user will get list of eligible categories
+        
+        # self.where(cat_code: cat_code)
+
+        self.eligible(age, gender).uniq
     end
 
+    # returns array of ArcherCategory objects
     def self.eligible(age, gender)
-        self.where("max_age >?", age).where("min_age <?", age).where(cat_gender: gender)
+        categories = self.where("max_age >=?", age).where(open_to_younger: true).where(cat_gender: gender)
+        if categories.empty? 
+            categories = self.where("min_age <=?", age).where(open_to_older: true).where(cat_gender: gender)
+        end
+        categories.order(:min_age)
+    end
+
+    def self.default(age, gender)
+        
+        self.eligible(age, gender).collect { |cat| cat.cat_age_class }.uniq
     end
 
     # pre-load category list

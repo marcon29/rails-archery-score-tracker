@@ -36,7 +36,7 @@
     # end
 
 
-  # Target Controller tests
+# Target Controller tests
     # let(:update_values) {
     #   {size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3}
     # }
@@ -51,3 +51,7 @@
     #   expect(pre_load_target.max_score).to eq(10)
     #   expect(pre_load_target.spots).to eq(1)
     # end
+
+# Misc Stuff To Do
+    - when done - uncomment the USA in seeds and run that 
+        - should be able to just run that to add an entirely new org to app

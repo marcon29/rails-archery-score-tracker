@@ -1,21 +1,19 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+
 
 # ##########################################################
 # To re-use the db:seed task, use .find_or_create_by instead of .create. 
-# However, should only use task to populate DB when project created. 
+# However, should only use to populate DB when project created or adding new pre-load objects, such as when adding a new archery organization.
 # To perform complex data seeding during the app lifecycle, create a new rake task, execute it then remove it.
 # ##########################################################
 
 
 # ##########################################################
-# Targets to pre-load
+# World Archery Targets and Categories (pre-load)
 # ##########################################################
+
+# #### Targets ####
 wa_target_attrs = {
     cm122_1spot_10ring: {size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false}, 
     cm80_1spot_10ring: {size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false}, 
@@ -26,6 +24,106 @@ wa_target_attrs = {
     cm40_3spot_6ring: {size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3, user_edit: false}
 }
 
+# #### Categories ####
+wa_category_attrs = {
+    wa_rcw: {cat_code: "WA-RCW", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Cadet", min_age: "", max_age: 17, open_to_younger: true, open_to_older: false, cat_gender: "Female"}, 
+    wa_rjw: {cat_code: "WA-RJW", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Junior", min_age: 18, max_age: 20, open_to_younger: true, open_to_older: false, cat_gender: "Female"}, 
+    wa_rsw: {cat_code: "WA-RW",  gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: 21, max_age: 49, open_to_younger: true, open_to_older: true, cat_gender: "Female"}, 
+    wa_rmw: {cat_code: "WA-RMW", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Master", min_age: 50, max_age: "", open_to_younger: false, open_to_older: true, cat_gender: "Female"}, 
+    
+    wa_rcm: {cat_code: "WA-RCM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Cadet", min_age: "", max_age: 17, open_to_younger: true, open_to_older: false, cat_gender: "Male"}, 
+    wa_rjm: {cat_code: "WA-RJM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Junior", min_age: 18, max_age: 20, open_to_younger: true, open_to_older: false, cat_gender: "Male"}, 
+    wa_rsm: {cat_code: "WA-RM",  gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: 21, max_age: 49, open_to_younger: true, open_to_older: true, cat_gender: "Male"}, 
+    wa_rmm: {cat_code: "WA-RMM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Master", min_age: 50, max_age: "", open_to_younger: false, open_to_older: true, cat_gender: "Male"}, 
+    
+    wa_ccw: {cat_code: "WA-CCW", gov_body: "World Archery", cat_division: "Compound", cat_age_class: "Cadet", min_age: "", max_age: 17, open_to_younger: true, open_to_older: false, cat_gender: "Female"}, 
+    wa_cjw: {cat_code: "WA-CJW", gov_body: "World Archery", cat_division: "Compound", cat_age_class: "Junior", min_age: 18, max_age: 20, open_to_younger: true, open_to_older: false, cat_gender: "Female"}, 
+    wa_csw: {cat_code: "WA-CW",  gov_body: "World Archery", cat_division: "Compound", cat_age_class: "Senior", min_age: 21, max_age: 49, open_to_younger: true, open_to_older: true, cat_gender: "Female"}, 
+    wa_cmw: {cat_code: "WA-CMW", gov_body: "World Archery", cat_division: "Compound", cat_age_class: "Master", min_age: 50, max_age: "", open_to_younger: false, open_to_older: true, cat_gender: "Female"}, 
+
+    wa_ccm: {cat_code: "WA-CCM", gov_body: "World Archery", cat_division: "Compound", cat_age_class: "Cadet", min_age: "", max_age: 17, open_to_younger: true, open_to_older: false, cat_gender: "Male"}, 
+    wa_cjm: {cat_code: "WA-CJM", gov_body: "World Archery", cat_division: "Compound", cat_age_class: "Junior", min_age: 18, max_age: 20, open_to_younger: true, open_to_older: false, cat_gender: "Male"}, 
+    wa_csm: {cat_code: "WA-CM",  gov_body: "World Archery", cat_division: "Compound", cat_age_class: "Senior", min_age: 21, max_age: 49, open_to_younger: true, open_to_older: true, cat_gender: "Male"}, 
+    wa_cmm: {cat_code: "WA-CMM", gov_body: "World Archery", cat_division: "Compound", cat_age_class: "Master", min_age: 50, max_age: "", open_to_younger: false, open_to_older: true, cat_gender: "Male"}
+}
+
+wa_target_attrs.each do |obj, attrs|
+    Target.new(attrs).save
+end
+
+wa_category_attrs.each do |obj, attrs|
+    ArcherCategory.new(attrs).save
+end
+
+# ##########################################################
+# USA Archery Targets and Categories (pre-load)
+# ##########################################################
+
+# #### Targets ####
+usa_target_attrs = {
+    cm122_1spot_10ring: {size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false}, 
+    cm80_1spot_10ring: {size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false}, 
+    cm80_1spot_6ring: {size: "80cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 1, user_edit: false}, 
+    cm60_1spot_10ring: {size: "60cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false}, 
+    cm60_3spot_6ring: {size: "60cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3, user_edit: false}, 
+    cm40_1spot_10ring: {size: "40cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false}, 
+    cm40_3spot_6ring: {size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3, user_edit: false}
+}
+
+# #### Categories ####
+usa_category_attrs = {
+    usa_rbw: {cat_code: "USA-RBW", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Bowman", min_age: "", max_age: 12, open_to_younger: true, open_to_older: false, cat_gender: "Female"}, 
+    usa_ruw: {cat_code: "USA-RUW", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Cub", min_age: 13, max_age: 14, open_to_younger: true, open_to_older: false, cat_gender: "Female"}, 
+    usa_rcw: {cat_code: "USA-RCW", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Cadet", min_age: 15, max_age: 17, open_to_younger: true, open_to_older: false, cat_gender: "Female"}, 
+    usa_rjw: {cat_code: "USA-RJW", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Junior", min_age: 18, max_age: 20, open_to_younger: true, open_to_older: false, cat_gender: "Female"}, 
+    usa_rsw: {cat_code: "USA-RW",  gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: 21, max_age: 49, open_to_younger: true, open_to_older: true, cat_gender: "Female"}, 
+    usa_rm50w: {cat_code: "USA-RM50W", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Master", min_age: 50, max_age: 59, open_to_younger: false, open_to_older: true, cat_gender: "Female"}, 
+    usa_rm60w: {cat_code: "USA-RM60W", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Master", min_age: 60, max_age: 69, open_to_younger: false, open_to_older: true, cat_gender: "Female"}, 
+    usa_rm70w: {cat_code: "USA-RM70W", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Master", min_age: 70, max_age: "", open_to_younger: false, open_to_older: true, cat_gender: "Female"}, 
+    
+    usa_rbm: {cat_code: "USA-RBW", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Bowman", min_age: "", max_age: 12, open_to_younger: true, open_to_older: false, cat_gender: "Male"}, 
+    usa_rum: {cat_code: "USA-RUW", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Cub", min_age: 13, max_age: 14, open_to_younger: true, open_to_older: false, cat_gender: "Male"}, 
+    usa_rcm: {cat_code: "USA-RCM", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Cadet", min_age: 15, max_age: 17, open_to_younger: true, open_to_older: false, cat_gender: "Male"}, 
+    usa_rjm: {cat_code: "USA-RJM", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Junior", min_age: 18, max_age: 20, open_to_younger: true, open_to_older: false, cat_gender: "Male"}, 
+    usa_rsm: {cat_code: "USA-RM",  gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: 21, max_age: 49, open_to_younger: true, open_to_older: true, cat_gender: "Male"}, 
+    usa_rm50m: {cat_code: "USA-RM50M", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Master", min_age: 50, max_age: 59, open_to_younger: false, open_to_older: true, cat_gender: "Male"}, 
+    usa_rm60m: {cat_code: "USA-RM60M", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Master", min_age: 60, max_age: 69, open_to_younger: false, open_to_older: true, cat_gender: "Male"}, 
+    usa_rm70m: {cat_code: "USA-RM70M", gov_body: "USA Archery", cat_division: "Recurve", cat_age_class: "Master", min_age: 70, max_age: "", open_to_younger: false, open_to_older: true, cat_gender: "Male"}, 
+
+    usa_cbw: {cat_code: "USA-CBW", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Bowman", min_age: "", max_age: 12, open_to_younger: true, open_to_older: false, cat_gender: "Female"}, 
+    usa_cuw: {cat_code: "USA-CUW", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Cub", min_age: 13, max_age: 14, open_to_younger: true, open_to_older: false, cat_gender: "Female"}, 
+    usa_ccw: {cat_code: "USA-CCW", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Cadet", min_age: 15, max_age: 17, open_to_younger: true, open_to_older: false, cat_gender: "Female"}, 
+    usa_cjw: {cat_code: "USA-CJW", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Junior", min_age: 18, max_age: 20, open_to_younger: true, open_to_older: false, cat_gender: "Female"}, 
+    usa_csw: {cat_code: "USA-CW",  gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Senior", min_age: 21, max_age: 49, open_to_younger: true, open_to_older: true, cat_gender: "Female"}, 
+    usa_cm50w: {cat_code: "USA-CM50W", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Master", min_age: 50, max_age: 59, open_to_younger: false, open_to_older: true, cat_gender: "Female"}, 
+    usa_cm60w: {cat_code: "USA-CM60W", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Master", min_age: 60, max_age: 69, open_to_younger: false, open_to_older: true, cat_gender: "Female"}, 
+    usa_cm70w: {cat_code: "USA-CM70W", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Master", min_age: 70, max_age: "", open_to_younger: false, open_to_older: true, cat_gender: "Female"},
+
+    usa_cbm: {cat_code: "USA-CBM", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Bowman", min_age: "", max_age: 12, open_to_younger: true, open_to_older: false, cat_gender: "Male"}, 
+    usa_cum: {cat_code: "USA-CUM", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Cub", min_age: 13, max_age: 14, open_to_younger: true, open_to_older: false, cat_gender: "Male"}, 
+    usa_ccm: {cat_code: "USA-CCM", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Cadet", min_age: 15, max_age: 17, open_to_younger: true, open_to_older: false, cat_gender: "Male"}, 
+    usa_cjm: {cat_code: "USA-CJM", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Junior", min_age: 18, max_age: 20, open_to_younger: true, open_to_older: false, cat_gender: "Male"}, 
+    usa_csm: {cat_code: "USA-CM",  gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Senior", min_age: 21, max_age: 49, open_to_younger: true, open_to_older: true, cat_gender: "Male"}, 
+    usa_cm50m: {cat_code: "USA-CM50M", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Master", min_age: 50, max_age: 59, open_to_younger: false, open_to_older: true, cat_gender: "Male"}, 
+    usa_cm60m: {cat_code: "USA-CM60M", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Master", min_age: 60, max_age: 69, open_to_younger: false, open_to_older: true, cat_gender: "Male"}, 
+    usa_cm70m: {cat_code: "USA-CM70M", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Master", min_age: 70, max_age: "", open_to_younger: false, open_to_older: true, cat_gender: "Male"}
+}
+
+# usa_target_attrs.each do |obj, attrs|
+# 	Target.find_or_create(attrs)
+# end
+
+# usa_category_attrs.each do |obj, attrs|
+# 	ArcherCategory.find_or_create(attrs)
+# end
+   
+
+# ##########################################################
+# NFAA Targets and Categories (pre-load)
+# ##########################################################
+# NFAA (add later)
+
+# #### Targets ####
 # nfaa_target_attrs = {
 #     cm65_1spot_5ring: {size: "65cm", score_areas: 3, rings: 5, x_ring: true, max_score: 5, spots: 1, user_edit: false}, 
 #     cm50_1spot_5ring: {size: "50cm", score_areas: 3, rings: 5, x_ring: true, max_score: 5, spots: 1, user_edit: false}, 
@@ -35,80 +133,13 @@ wa_target_attrs = {
 #     cm40_5spot_3ring: {size: "40cm", score_areas: 2, rings: 3, x_ring: true, max_score: 5, spots: 5, user_edit: false}
 # }
 
-wa_target_attrs.each do |target, attrs| 
-	Target.find_or_create(attrs)
-end
+# #### Categories ####
+
+
+
 
 # ##########################################################
-# Archer categories to pre-load
+# 3D Targets (pre-load)
 # ##########################################################
-
-
-# category_attrs = {
-#     {cat_code: "RM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: nil, max_age: nil, cat_gender: "Male"}
-# }
-
-# category_attrs.each do |cat, attrs|
-# 	ArcherCategory.find_or_create(attrs)
-# end
-
-# World Archery
-    # WA-RCW - Recurve Cadet Women
-    # WA-RJW - Recurve Junior Women
-    # WA-RW - Recurve Senior Women
-    # WA-RMW - Recurve Master Women
-    
-    # WA-RCM - Recurve Cadet Men
-    # WA-RJM - Recurve Junior Men
-    # WA-RM - Recurve Senior Men
-    # WA-RMM - Recurve Master Men
-    
-    # WA-CCW - Compound Cadet Women
-    # WA-CJW - Compound Junior Women
-    # WA-CW - Compound Senior Women
-    # WA-CMW - Compound Master Women
-    
-    # WA-CCM - Compound Cadet Men
-    # WA-CJM - Compound Junior Men
-    # WA-CM - Compound Senior Men
-    # WA-CMM - Compound Master Men
-
-# USA Archer
-    # USA-RBW - Recurve Bowman Women
-    # USA-RUW - Recurve Cub Women
-    # USA-RCW - Recurve Cadet Women
-    # USA-RJW - Recurve Junior Women
-    # USA-RW - Recurve Senior Women
-    # USA-RM50W - Recurve Master50 Women
-    # USA-RM60W - Recurve Master60 Women
-    # USA-RM70W - Recurve Master70 Women
-
-    # USA-RBM - Recurve Bowman Men
-    # USA-RUM - Recurve Cub Men
-    # USA-RCM - Recurve Cadet Men
-    # USA-RJM - Recurve Junior Men
-    # USA-RM - Recurve Senior Men
-    # USA-RM50M - Recurve Master50 Men
-    # USA-RM60M - Recurve Master60 Men
-    # USA-RM70M - Recurve Master70 Men
-    
-    # USA-CBW - Compound Bowman Women
-    # USA-CUW - Compound Cub Women
-    # USA-CCW - Compound Cadet Women
-    # USA-CJW - Compound Junior Women
-    # USA-CW - Compound Senior Women
-    # USA-CM50W - Compound Master50 Women
-    # USA-CM60W - Compound Master60 Women
-    # USA-CM70W - Compound Master70 Women
-    
-    # USA-CBM - Compound Bowman Men
-    # USA-CUM - Compound Cub Men
-    # USA-CCM - Compound Cadet Men
-    # USA-CJM - Compound Junior Men
-    # USA-CM - Compound Senior Men
-    # USA-CM50M - Compound Master50 Men
-    # USA-CM60M - Compound Master60 Men
-    # USA-CM70M - Compound Master70 Men
-# NFAA (add later)
 # 3D (add later)
 
