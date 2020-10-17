@@ -1,8 +1,22 @@
 require 'rails_helper'
 
 RSpec.describe ArcherCategory, type: :model do
+  let(:rcm_category) {
+    ArcherCategory.create(
+      cat_code: "WA-RCM", 
+      gov_body: "World Archery", 
+      cat_division: "Recurve", 
+      cat_age_class: "Cadet", 
+      min_age: "", 
+      max_age: 17, 
+      open_to_younger: true, 
+      open_to_older: false, 
+      cat_gender: "Male"
+    )
+  }
+
   let(:rjm_category) {
-    rjm_category = ArcherCategory.create(
+    ArcherCategory.create(
       cat_code: "WA-RJM", 
       gov_body: "World Archery", 
       cat_division: "Recurve", 
@@ -30,7 +44,7 @@ RSpec.describe ArcherCategory, type: :model do
   }
 
   let(:usrm_category) {
-    usrm_category = ArcherCategory.create(
+    ArcherCategory.create(
       cat_code: "USA-RM", 
       gov_body: "USA Archery", 
       cat_division: "Recurve", 
@@ -44,7 +58,7 @@ RSpec.describe ArcherCategory, type: :model do
   }
 
   let(:rmm_category) {
-    rmm_category = ArcherCategory.create(
+    ArcherCategory.create(
       cat_code: "WA-RMM", 
       gov_body: "World Archery", 
       cat_division: "Recurve", 
@@ -58,7 +72,7 @@ RSpec.describe ArcherCategory, type: :model do
   }
 
   let(:cm60w_category) {
-    cm60w_category = ArcherCategory.create(
+    ArcherCategory.create(
       cat_code: "USA-CM60F", 
       gov_body: "USA Archery", 
       cat_division: "Compound", 
@@ -104,7 +118,7 @@ RSpec.describe ArcherCategory, type: :model do
 
   # object creation and validation tests #######################################
   describe "model creates and updates valid instances:" do
-    it "pre-loaded category is valid with all values except min and max age" do
+    it "pre-loaded category is valid with all values and correctly adds min and max age if missing" do
       expect(rm_category).to be_valid
       expect(rm_category.cat_code).to eq("WA-RM")
       expect(rm_category.gov_body).to eq("World Archery")
@@ -115,6 +129,14 @@ RSpec.describe ArcherCategory, type: :model do
       expect(rm_category.open_to_younger).to eq(true)
       expect(rm_category.open_to_older).to eq(true)
       expect(rm_category.cat_gender).to eq("Male")
+    end
+
+    it "pre-loaded category correctly adds min and max age if missing" do
+      expect(rcm_category.min_age).to eq(0)
+      expect(rcm_category.max_age).to eq(17)
+
+      expect(rmm_category.min_age).to eq(50)
+      expect(rmm_category.max_age).to eq(1000)
     end
 
     describe "invalid if data missing or duplicated for:" do
@@ -198,40 +220,63 @@ RSpec.describe ArcherCategory, type: :model do
     end
 
     it "can calculate default categories with Archer data" do
+      rcm_category
       rjm_category
       rm_category
       usrm_category
       rmm_category
       cm60w_category
 
-      junior_data = {div: "Recurve", age: 19, gender: "Male"}
-      senior_data = {div: "Recurve", age: 25, gender: "Male"}
-      master_data = {div: "Recurve", age: 55, gender: "Male"}
-      master60_data = {div: "Compound", age: 65, gender: "Female"}
+      cadet_data = {division: "Recurve", age: 17, gender: "Male"}
+      junior_data = {division: "Recurve", age: 20, gender: "Male"}
+      senior_data = {division: "Recurve", age: 21, gender: "Male"}
+      senior_data_two = {division: "Recurve", age: 49, gender: "Male"}
+      master_data = {division: "Recurve", age: 50, gender: "Male"}
+      master60_data = {division: "Compound", age: 60, gender: "Female"}
 
-      junior = ArcherCategory.default_by_archer_data(junior_data[:div], junior_data[:age], junior_data[:gender])
-      senior = ArcherCategory.default_by_archer_data(senior_data[:div], senior_data[:age], senior_data[:gender])
-      master = ArcherCategory.default_by_archer_data(master_data[:div], master_data[:age], master_data[:gender])
-      master60 = ArcherCategory.default_by_archer_data(master60_data[:div], master60_data[:age], master60_data[:gender])
+      cadet = ArcherCategory.default(cadet_data[:division], cadet_data[:age], cadet_data[:gender])
+      junior = ArcherCategory.default(junior_data[:division], junior_data[:age], junior_data[:gender])
+      senior = ArcherCategory.default(senior_data[:division], senior_data[:age], senior_data[:gender])
+      senior_two = ArcherCategory.default(senior_data_two[:division], senior_data_two[:age], senior_data_two[:gender])
+      master = ArcherCategory.default(master_data[:division], master_data[:age], master_data[:gender])
+      master60 = ArcherCategory.default(master60_data[:division], master60_data[:age], master60_data[:gender])
+      
+      expect(cadet).to include(rcm_category)
+      expect(cadet).to_not include(rjm_category)
+      expect(cadet).to_not include(rm_category)
+      expect(cadet).to_not include(usrm_category)
+      expect(cadet).to_not include(rmm_category)
+      expect(cadet).to_not include(cm60w_category)
 
+      expect(junior).to_not include(rcm_category)
       expect(junior).to include(rjm_category)
       expect(junior).to_not include(rm_category)
       expect(junior).to_not include(usrm_category)
       expect(junior).to_not include(rmm_category)
       expect(junior).to_not include(cm60w_category)
 
+      expect(senior).to_not include(rcm_category)
       expect(senior).to_not include(rjm_category)
       expect(senior).to include(rm_category)
       expect(senior).to include(usrm_category)
       expect(senior).to_not include(rmm_category)
       expect(senior).to_not include(cm60w_category)
 
+      expect(senior_two).to_not include(rcm_category)
+      expect(senior_two).to_not include(rjm_category)
+      expect(senior_two).to include(rm_category)
+      expect(senior_two).to include(usrm_category)
+      expect(senior_two).to_not include(rmm_category)
+      expect(senior_two).to_not include(cm60w_category)
+
+      expect(master).to_not include(rcm_category)
       expect(master).to_not include(rjm_category)
       expect(master).to_not include(rm_category)
       expect(master).to_not include(usrm_category)
       expect(master).to include(rmm_category)
       expect(master).to_not include(cm60w_category)
       
+      expect(master60).to_not include(rcm_category)
       expect(master60).to_not include(rjm_category)
       expect(master60).to_not include(rm_category)
       expect(master60).to_not include(usrm_category)
@@ -239,48 +284,64 @@ RSpec.describe ArcherCategory, type: :model do
       expect(master60).to include(cm60w_category)
     end
 
-    it "can calculate default categories by user selection" do
-      pending "need to create - uses a selection from the user"
-      junior_data = {div: "Recurve", age: 19, gen: "Male"}
-      
-      expect(ArcherCategory.default_by_selection).to eq(rjm_category)
-    end
-
-    it "can calculate all eligbile categories by Archer age and gender" do
+    it "can find all eligbile categories by Archer age and gender" do
+      rcm_category
       rjm_category
       rm_category
       usrm_category
       rmm_category
       cm60w_category
 
+      cadet_data = {age: 17, gender: "Male"}
       junior_data = {age: 19, gender: "Male"}
-      senior_data = {age: 25, gender: "Male"}
-      master_data = {age: 55, gender: "Male"}
-      master60_data = {age: 65, gender: "Female"}
+      senior_data = {age: 21, gender: "Male"}
+      senior_data_two = {age: 49, gender: "Male"}
+      master_data = {age: 50, gender: "Male"}
+      master60_data = {age: 60, gender: "Female"}
 
-      junior = ArcherCategory.eligible(junior_data[:age], junior_data[:gender])
-      senior = ArcherCategory.eligible(senior_data[:age], senior_data[:gender])
-      master = ArcherCategory.eligible(master_data[:age], master_data[:gender])
-      master60 = ArcherCategory.eligible(master60_data[:age], master60_data[:gender])
+      cadet = ArcherCategory.eligible_categories(cadet_data[:age], cadet_data[:gender])
+      junior = ArcherCategory.eligible_categories(junior_data[:age], junior_data[:gender])
+      senior = ArcherCategory.eligible_categories(senior_data[:age], senior_data[:gender])
+      senior_two = ArcherCategory.eligible_categories(senior_data_two[:age], senior_data_two[:gender])
+      master = ArcherCategory.eligible_categories(master_data[:age], master_data[:gender])
+      master60 = ArcherCategory.eligible_categories(master60_data[:age], master60_data[:gender])
 
+      expect(cadet).to include(rcm_category)
+      expect(cadet).to include(rjm_category)
+      expect(cadet).to include(rm_category)
+      expect(cadet).to include(usrm_category)
+      expect(cadet).to_not include(rmm_category)
+      expect(cadet).to_not include(cm60w_category)
+
+      expect(junior).to_not include(rcm_category)
       expect(junior).to include(rjm_category)
       expect(junior).to include(rm_category)
       expect(junior).to include(usrm_category)
       expect(junior).to_not include(rmm_category)
       expect(junior).to_not include(cm60w_category)
 
+      expect(senior).to_not include(rcm_category)
       expect(senior).to_not include(rjm_category)
       expect(senior).to include(rm_category)
       expect(senior).to include(usrm_category)
       expect(senior).to_not include(rmm_category)
       expect(senior).to_not include(cm60w_category)
 
+      expect(senior_two).to_not include(rcm_category)
+      expect(senior_two).to_not include(rjm_category)
+      expect(senior_two).to include(rm_category)
+      expect(senior_two).to include(usrm_category)
+      expect(senior_two).to_not include(rmm_category)
+      expect(senior_two).to_not include(cm60w_category)
+
+      expect(master).to_not include(rcm_category)
       expect(master).to_not include(rjm_category)
       expect(master).to include(rm_category)
       expect(master).to include(usrm_category)
       expect(master).to include(rmm_category)
       expect(master).to_not include(cm60w_category)
       
+      expect(master60).to_not include(rcm_category)
       expect(master60).to_not include(rjm_category)
       expect(master60).to_not include(rm_category)
       expect(master60).to_not include(usrm_category)
@@ -288,15 +349,47 @@ RSpec.describe ArcherCategory, type: :model do
       expect(master60).to include(cm60w_category)
     end
 
-    it "helper methods TBD" do
-      pending "add as needed - move commented out tests to Archer model"
-      expect(junior).to eq(rjm_category)
+    it "can find return all eligbile categories by age class" do
+      rcm_category
+      rjm_category
+      rm_category
+      usrm_category
+      rmm_category
+      cm60w_category
+
+      cadet_data = {age: 17, gender: "Male"}
+      senior_data = {age: 21, gender: "Male"}
+      master_data = {age: 50, gender: "Male"}
+
+      cat_by_age_cadet = ArcherCategory.eligible_categories_by_age_class(cadet_data[:age], cadet_data[:gender])
+      cat_by_age_senior = ArcherCategory.eligible_categories_by_age_class(senior_data[:age], senior_data[:gender])
+      cat_by_age_master = ArcherCategory.eligible_categories_by_age_class(master_data[:age], master_data[:gender])
+
+      expect(cat_by_age_cadet).to eq(["Cadet", "Junior", "Senior"])
+      expect(cat_by_age_senior).to eq(["Senior"])
+      expect(cat_by_age_master).to eq(["Senior", "Master"])
     end
-    
+
+    it "can find return all eligbile categories by category name" do
+      rcm_category
+      rjm_category
+      rm_category
+      usrm_category
+      rmm_category
+      cm60w_category
+
+      cadet_data = {age: 17, gender: "Male"}
+      senior_data = {age: 21, gender: "Male"}
+      master_data = {age: 50, gender: "Male"}
+
+      cat_by_name_cadet = ArcherCategory.eligible_categories_by_name(cadet_data[:age], cadet_data[:gender])
+      cat_by_name_senior = ArcherCategory.eligible_categories_by_name(senior_data[:age], senior_data[:gender])
+      cat_by_name_master = ArcherCategory.eligible_categories_by_name(master_data[:age], master_data[:gender])
+      
+      expect(cat_by_name_cadet).to eq(["Recurve-Cadet-Men", "Recurve-Junior-Men", "Recurve-Senior-Men"])
+      expect(cat_by_name_senior).to eq(["Recurve-Senior-Men"])
+      expect(cat_by_name_master).to eq(["Recurve-Senior-Men", "Recurve-Master-Men"])
+    end
   end
-  
- 
-
-
 end
 

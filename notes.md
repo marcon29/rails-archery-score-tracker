@@ -1,9 +1,20 @@
+# Next to do
+    - set up DistanceTarget model
+    - set up associations between Target, ArcherCategory and DistanceTarget
+        
+
+
+
+
+
+
 # Archer Model
     - use ArcherCategory.default_by_archer_data to set default_cat attr via callback
         - requires an age calculation from Bday
         - since this will auto-update over time, need way to check if default_cat must also update upon login
         - need to allow this to be changed by user via profile, but can use the same method
             - default_by_selection
+    - commented out the loginhelper line in spec/rails_helper - check when going through user/sessions
 
 # Shot model
     # it "can identify all possible score values" do
@@ -55,3 +66,4 @@
 # Misc Stuff To Do
     - when done - uncomment the USA in seeds and run that 
         - should be able to just run that to add an entirely new org to app
+    - remove a couple commented out lines of code when done in rails_helper.rb

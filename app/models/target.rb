@@ -1,5 +1,6 @@
 class Target < ApplicationRecord
-    # need to add associations    
+    
+    # need to add associations
     
     validates :name, presence: true, uniqueness: true
     validates :size, presence: { message: "You must provide a target size." }

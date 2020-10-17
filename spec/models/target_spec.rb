@@ -141,15 +141,6 @@ RSpec.describe Target, type: :model do
       expect(pre_load_target.archer_categories).to include(rm_category)
     end
   end
-  
-  # helper method tests ########################################################
-  describe "all helper methods work correctly:" do
-    it "helper methods TBD" do
-      pending "add as needed - move commented out tests to proper files"
-      expect(pre_load_target.tests_complete).to eq("not done yet")
-    end
-  end
-
 end
 
 
