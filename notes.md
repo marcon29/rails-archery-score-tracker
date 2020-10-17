@@ -1,6 +1,35 @@
 # Next to do
+    - build Set model (phase 1)
+        - build enough to make all associations with reference models work
+        - will build the rest in conjunction with other models
+    
     - set up associations between Set, Target, ArcherCategory, and DistanceTarget
         - probably need to uncomment running pre_load_set in Target, ArcherCategory specs
+    
+    - build Archer model
+        - see notes below
+    
+    - build ScoreSession model
+    
+    - build Round model
+    
+    - build Set model (phase 2)
+        - build rest to make all associations with functional models work
+    
+    - build Shot model
+        - see notes below
+    
+    - set up associations between Shot, Set, Round, ScoreSession, Archer
+
+    - start building out controllers/views
+        - build Session model
+        - build user authentication
+            - build profile page
+            - build Oauth
+        - build Target Management
+        - build Round Management
+        - build Results views (ScoreSessions show and index)
+    
         
 
 

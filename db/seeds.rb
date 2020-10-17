@@ -95,25 +95,21 @@ wa1440_attrs = {
 }
 
 wa_target_attrs.each do |obj, attrs|
-    Target.new(attrs).save
+    Target.find_or_create_by(attrs)
 end
 
 wa_category_attrs.each do |obj, attrs|
-    ArcherCategory.new(attrs).save
+    ArcherCategory.find_or_create_by(attrs)
 end
 
-# set = Round/set/distanceX (X is number)
-# arch_cat = find from ArcherCategory model by cat_code
-# distance = list
-# target = find from Target model
 wa1440_attrs.each do |obj, details|
     ArcherCategory.where(cat_age_class: details[:age_class], cat_gender: details[:gender]).each do |category|
-        DistanceTarget.new(
+        DistanceTarget.find_or_create_by(
             set_id: details[:set_id], 
             archer_category_id: category.id, 
             distance: details[:distance], 
             target_id: Target.find_by_name(details[:target_name]).id
-        ).save
+        )
     end
 end
 
@@ -178,11 +174,11 @@ usa_category_attrs = {
 
 
 # usa_target_attrs.each do |obj, attrs|
-# 	Target.find_or_create(attrs)
+# 	Target.find_or_create_by(attrs)
 # end
 
 # usa_category_attrs.each do |obj, attrs|
-# 	ArcherCategory.find_or_create(attrs)
+# 	ArcherCategory.find_or_create_by(attrs)
 # end
    
 
