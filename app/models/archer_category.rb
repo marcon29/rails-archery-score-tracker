@@ -1,6 +1,9 @@
 class ArcherCategory < ApplicationRecord
     
     # need to add associations
+    has_many :distance_targets
+    has_many :targets, through: :distance_targets
+    # has_many :sets, through: :distance_targets
     
     # Regular user can't update these, pre-loaded for reference by rest of app only,
     # but validations still helpful to ensure data integrity when extending app.

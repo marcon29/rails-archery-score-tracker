@@ -89,8 +89,14 @@ RSpec.describe ArcherCategory, type: :model do
     Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
   }
 
-  # need to create a Set to associate category to
-  # set = Set.create()
+  # need to create a Set to associate
+  # let(:pre_load_set) {
+  #   Set.create()
+  # }
+
+  let(:dist_targ) {
+    DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1)
+  }
   
   let(:no_code) {
     {cat_code: "", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: 21, max_age: 49, open_to_younger: true, open_to_older: true, cat_gender: "Male"}
@@ -201,14 +207,23 @@ RSpec.describe ArcherCategory, type: :model do
 
   # association tests ########################################################
   describe "instances are properly associated to other models" do
-    it "has many Sets" do
-      pending "need to create Set model"
+    it "has many Sets" do      
       pending "need to add associations"
-      expect(rm_category.sets).to include(set)
+      pending "need to create Set model"
+      pre_load_set
+      pre_load_target
+      rm_category
+      dist_targ
+      
+      expect(rm_category.sets).to include(pre_load_set)
     end
 
     it "has many Targets" do
-      pending "need to add associations"
+      # pre_load_set
+      pre_load_target
+      rm_category
+      dist_targ
+
       expect(rm_category.targets).to include(pre_load_target)
     end
   end

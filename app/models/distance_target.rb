@@ -1,6 +1,9 @@
 class DistanceTarget < ApplicationRecord
 
     # need to add associations
+    belongs_to :target
+    belongs_to :archer_category    
+    # belongs_to :set
 
 
     # Regular user can't update these directly, pre-loaded for reference by rest of app only,

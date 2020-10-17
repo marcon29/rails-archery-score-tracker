@@ -24,8 +24,10 @@ RSpec.describe DistanceTarget, type: :model do
     )
   }
 
-  # need to create a Set to associate category to
-  # set = Set.create()
+  # need to create a Set to associate
+  # let(:pre_load_set) {
+  #   Set.create()
+  # }
 
   let(:no_distance) {
     {distance: "", target_id: 1, archer_category_id: 1, set_id: 1}
@@ -42,10 +44,13 @@ RSpec.describe DistanceTarget, type: :model do
   let(:no_set) {
     {distance: "90m", target_id: 1, archer_category_id: 1, set_id: ""}
   }
-  
+
   # object creation and validation tests #######################################
   describe "model creates and updates valid instances:" do
     it "pre-loaded distance/target is valid and has correct distance" do
+      pre_load_target
+      rm_category
+
       expect(dist_targ).to be_valid
       expect(dist_targ.distance).to eq("90m")
     end
@@ -74,19 +79,22 @@ RSpec.describe DistanceTarget, type: :model do
   # association tests ########################################################
   describe "instances are properly associated to other models" do
     it "belongs to a Set" do
-      pending "need to create Set model"
       pending "need to add associations"
-      expect(dist_targ.set).to eq(set)
+      pending "need to create Set model"
+      pre_load_set
+      
+      expect(dist_targ.set).to eq(pre_load_set)
     end
 
     it "belongs to an ArcherCategory" do
-      pending "need to add associations"
+      rm_category
+
       expect(dist_targ.archer_category).to eq(rm_category)
     end
 
     it "belongs to a Target" do
-      pending "need to add associations"
-      expect(dist_targ.archer_category).to eq(rm_category)
+      pre_load_target
+
       expect(dist_targ.target).to eq(pre_load_target)
     end
   end

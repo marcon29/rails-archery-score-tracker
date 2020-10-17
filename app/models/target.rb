@@ -1,6 +1,9 @@
 class Target < ApplicationRecord
     
     # need to add associations
+    has_many :distance_targets
+    has_many :archer_categories, through: :distance_targets
+    # has_many :sets, through: :distance_targets
     
     validates :name, presence: true, uniqueness: true
     validates :size, presence: { message: "You must provide a target size." }

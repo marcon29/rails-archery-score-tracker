@@ -1,9 +1,7 @@
 # Next to do
-    - set up DistanceTarget model
-    - set up associations between Target, ArcherCategory and DistanceTarget
+    - set up associations between Set, Target, ArcherCategory, and DistanceTarget
+        - probably need to uncomment running pre_load_set in Target, ArcherCategory specs
         
-
-
 
 
 
