@@ -67,8 +67,8 @@ RSpec.describe RoundSet, type: :model do
 
     it "will auto-create the roundset name, won't save unless it's unique" do
       pending "need this???"
-      pre_load_round_set
-      dup_round_set = RoundSet.create(duplicate)
+      # pre_load_round_set
+      # dup_round_set = RoundSet.create(duplicate)
       
       expect(dup_round_set.name).to eq("1440 Round - Set/Distance1")
       expect(dup_round_set).to be_invalid
@@ -101,6 +101,13 @@ RSpec.describe RoundSet, type: :model do
     end
 
     describe "invalid if a bad value for:" do
+      it "name is duplicated" do
+        pre_load_round_set
+        round_set = RoundSet.create(duplicate)
+
+        expect(round_set).to be_invalid
+      end
+
       it "number of ends not a number" do
         duplicate[:ends] = "six"
         round_set = RoundSet.create(duplicate)
@@ -151,7 +158,7 @@ RSpec.describe RoundSet, type: :model do
   describe "all helper methods work correctly:" do
     it "helpers TBD" do
       pending "add as needed"
-      expect(pre_load_round_set).to be_valid
+      expect(pre_load_round_set).to be_invalid
     end
   end
 
