@@ -95,7 +95,7 @@ RSpec.describe ArcherCategory, type: :model do
   # }
 
   let(:dist_targ) {
-    DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1)
+    DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
   }
   
   let(:no_code) {

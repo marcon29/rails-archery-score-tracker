@@ -19,7 +19,7 @@ RSpec.describe Target, type: :model do
   # }
 
   let(:dist_targ) {
-    DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1)
+    DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
   }
 
   let(:update_values) {
@@ -141,7 +141,7 @@ RSpec.describe Target, type: :model do
       pre_load_target
       rm_category
       dist_targ
-      
+
       expect(pre_load_target.sets).to include(pre_load_set)
     end
 

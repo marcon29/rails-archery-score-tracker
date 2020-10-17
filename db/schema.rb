@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 2020_10_17_203902) do
     t.string "distance"
     t.integer "target_id"
     t.integer "archer_category_id"
-    t.integer "set_id"
+    t.integer "round_set_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -40,7 +40,6 @@ ActiveRecord::Schema.define(version: 2020_10_17_203902) do
     t.integer "ends"
     t.integer "shots_per_end"
     t.string "score_method"
-    t.string "round_set_rank"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

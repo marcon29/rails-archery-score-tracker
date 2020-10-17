@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe DistanceTarget, type: :model do
   
   let(:dist_targ) {
-    DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1)
+    DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
   }
 
   let(:pre_load_target) {
@@ -30,19 +30,19 @@ RSpec.describe DistanceTarget, type: :model do
   # }
 
   let(:no_distance) {
-    {distance: "", target_id: 1, archer_category_id: 1, set_id: 1}
+    {distance: "", target_id: 1, archer_category_id: 1, round_set_id: 1}
   }
   
   let(:no_target) {
-    {distance: "90m", target_id: "", archer_category_id: 1, set_id: 1}
+    {distance: "90m", target_id: "", archer_category_id: 1, round_set_id: 1}
   }
  
   let(:no_category) {
-    {distance: "90m", target_id: 1, archer_category_id: "", set_id: 1}
+    {distance: "90m", target_id: 1, archer_category_id: "", round_set_id: 1}
   }
 
-  let(:no_set) {
-    {distance: "90m", target_id: 1, archer_category_id: 1, set_id: ""}
+  let(:no_round_set) {
+    {distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: ""}
   }
 
   # object creation and validation tests #######################################
@@ -70,20 +70,20 @@ RSpec.describe DistanceTarget, type: :model do
       expect(bad_dist_targ).to be_invalid
     end
 
-    it "is invalid without a set" do
-      bad_dist_targ = DistanceTarget.create(no_set)
+    it "is invalid without a roundset" do
+      bad_dist_targ = DistanceTarget.create(no_round_set)
       expect(bad_dist_targ).to be_invalid
     end
   end
 
   # association tests ########################################################
   describe "instances are properly associated to other models" do
-    it "belongs to a Set" do
+    it "belongs to a RoundSet" do
       pending "need to add associations"
       pending "need to create Set model"
       pre_load_set
       
-      expect(dist_targ.set).to eq(pre_load_set)
+      expect(dist_targ.round_set).to eq(pre_load_set)
     end
 
     it "belongs to an ArcherCategory" do

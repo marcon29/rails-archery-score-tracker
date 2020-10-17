@@ -57,41 +57,41 @@ wa_category_attrs = {
 
 # #### Distance/Target Lookup ####
 wa1440_attrs = {
-    wa1440_dist1_cadet_m:  {set_id: 1, age_class: "Cadet",  gender: "Male",   distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
-    wa1440_dist1_cadet_w:  {set_id: 1, age_class: "Cadet",  gender: "Female", distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
-    wa1440_dist1_junior_m: {set_id: 1, age_class: "Junior", gender: "Male",   distance: "90m", target_name: "122cm/1-spot/10-ring"}, 
-    wa1440_dist1_junior_w: {set_id: 1, age_class: "Junior", gender: "Female", distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
-    wa1440_dist1_senior_m: {set_id: 1, age_class: "Senior", gender: "Male",   distance: "90m", target_name: "122cm/1-spot/10-ring"}, 
-    wa1440_dist1_senior_w: {set_id: 1, age_class: "Senior", gender: "Female", distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
-    wa1440_dist1_master_m: {set_id: 1, age_class: "Master", gender: "Male",   distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
-    wa1440_dist1_master_w: {set_id: 1, age_class: "Master", gender: "Female", distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_cadet_m:  {round_set_id: 1, age_class: "Cadet",  gender: "Male",   distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_cadet_w:  {round_set_id: 1, age_class: "Cadet",  gender: "Female", distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_junior_m: {round_set_id: 1, age_class: "Junior", gender: "Male",   distance: "90m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_junior_w: {round_set_id: 1, age_class: "Junior", gender: "Female", distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_senior_m: {round_set_id: 1, age_class: "Senior", gender: "Male",   distance: "90m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_senior_w: {round_set_id: 1, age_class: "Senior", gender: "Female", distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_master_m: {round_set_id: 1, age_class: "Master", gender: "Male",   distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist1_master_w: {round_set_id: 1, age_class: "Master", gender: "Female", distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
 
-    wa1440_dist2_cadet_m:  {set_id: 2, age_class: "Cadet",  gender: "Male",   distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
-    wa1440_dist2_cadet_w:  {set_id: 2, age_class: "Cadet",  gender: "Female", distance: "50m", target_name: "122cm/1-spot/10-ring"}, 
-    wa1440_dist2_junior_m: {set_id: 2, age_class: "Junior", gender: "Male",   distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
-    wa1440_dist2_junior_w: {set_id: 2, age_class: "Junior", gender: "Female", distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
-    wa1440_dist2_senior_m: {set_id: 2, age_class: "Senior", gender: "Male",   distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
-    wa1440_dist2_senior_w: {set_id: 2, age_class: "Senior", gender: "Female", distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
-    wa1440_dist2_master_m: {set_id: 2, age_class: "Master", gender: "Male",   distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
-    wa1440_dist2_master_w: {set_id: 2, age_class: "Master", gender: "Female", distance: "50m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_cadet_m:  {round_set_id: 2, age_class: "Cadet",  gender: "Male",   distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_cadet_w:  {round_set_id: 2, age_class: "Cadet",  gender: "Female", distance: "50m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_junior_m: {round_set_id: 2, age_class: "Junior", gender: "Male",   distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_junior_w: {round_set_id: 2, age_class: "Junior", gender: "Female", distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_senior_m: {round_set_id: 2, age_class: "Senior", gender: "Male",   distance: "70m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_senior_w: {round_set_id: 2, age_class: "Senior", gender: "Female", distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_master_m: {round_set_id: 2, age_class: "Master", gender: "Male",   distance: "60m", target_name: "122cm/1-spot/10-ring"}, 
+    wa1440_dist2_master_w: {round_set_id: 2, age_class: "Master", gender: "Female", distance: "50m", target_name: "122cm/1-spot/10-ring"}, 
 
-    wa1440_dist3_cadet_m:  {set_id: 3, age_class: "Cadet",  gender: "Male",   distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
-    wa1440_dist3_cadet_w:  {set_id: 3, age_class: "Cadet",  gender: "Female", distance: "40m", target_name: "80cm/1-spot/10-ring"}, 
-    wa1440_dist3_junior_m: {set_id: 3, age_class: "Junior", gender: "Male",   distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
-    wa1440_dist3_junior_w: {set_id: 3, age_class: "Junior", gender: "Female", distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
-    wa1440_dist3_senior_m: {set_id: 3, age_class: "Senior", gender: "Male",   distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
-    wa1440_dist3_senior_w: {set_id: 3, age_class: "Senior", gender: "Female", distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
-    wa1440_dist3_master_m: {set_id: 3, age_class: "Master", gender: "Male",   distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
-    wa1440_dist3_master_w: {set_id: 3, age_class: "Master", gender: "Female", distance: "40m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_cadet_m:  {round_set_id: 3, age_class: "Cadet",  gender: "Male",   distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_cadet_w:  {round_set_id: 3, age_class: "Cadet",  gender: "Female", distance: "40m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_junior_m: {round_set_id: 3, age_class: "Junior", gender: "Male",   distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_junior_w: {round_set_id: 3, age_class: "Junior", gender: "Female", distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_senior_m: {round_set_id: 3, age_class: "Senior", gender: "Male",   distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_senior_w: {round_set_id: 3, age_class: "Senior", gender: "Female", distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_master_m: {round_set_id: 3, age_class: "Master", gender: "Male",   distance: "50m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist3_master_w: {round_set_id: 3, age_class: "Master", gender: "Female", distance: "40m", target_name: "80cm/1-spot/10-ring"}, 
 
-    wa1440_dist4_cadet_m:  {set_id: 4, age_class: "Cadet",  gender: "Male",   distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
-    wa1440_dist4_cadet_w:  {set_id: 4, age_class: "Cadet",  gender: "Female", distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
-    wa1440_dist4_junior_m: {set_id: 4, age_class: "Junior", gender: "Male",   distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
-    wa1440_dist4_junior_w: {set_id: 4, age_class: "Junior", gender: "Female", distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
-    wa1440_dist4_senior_m: {set_id: 4, age_class: "Senior", gender: "Male",   distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
-    wa1440_dist4_senior_w: {set_id: 4, age_class: "Senior", gender: "Female", distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
-    wa1440_dist4_master_m: {set_id: 4, age_class: "Master", gender: "Male",   distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
-    wa1440_dist4_master_w: {set_id: 4, age_class: "Master", gender: "Female", distance: "30m", target_name: "80cm/1-spot/10-ring"}
+    wa1440_dist4_cadet_m:  {round_set_id: 4, age_class: "Cadet",  gender: "Male",   distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist4_cadet_w:  {round_set_id: 4, age_class: "Cadet",  gender: "Female", distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist4_junior_m: {round_set_id: 4, age_class: "Junior", gender: "Male",   distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist4_junior_w: {round_set_id: 4, age_class: "Junior", gender: "Female", distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist4_senior_m: {round_set_id: 4, age_class: "Senior", gender: "Male",   distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist4_senior_w: {round_set_id: 4, age_class: "Senior", gender: "Female", distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist4_master_m: {round_set_id: 4, age_class: "Master", gender: "Male",   distance: "30m", target_name: "80cm/1-spot/10-ring"}, 
+    wa1440_dist4_master_w: {round_set_id: 4, age_class: "Master", gender: "Female", distance: "30m", target_name: "80cm/1-spot/10-ring"}
 }
 
 wa_target_attrs.each do |obj, attrs|
@@ -105,7 +105,7 @@ end
 wa1440_attrs.each do |obj, details|
     ArcherCategory.where(cat_age_class: details[:age_class], cat_gender: details[:gender]).each do |category|
         DistanceTarget.find_or_create_by(
-            set_id: details[:set_id], 
+            round_set_id: details[:round_set_id], 
             archer_category_id: category.id, 
             distance: details[:distance], 
             target_id: Target.find_by_name(details[:target_name]).id

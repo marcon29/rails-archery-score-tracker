@@ -1,9 +1,9 @@
 # Next to do
-    - build Set model (phase 1)
+    - build RoundSet model (phase 1)
         - build enough to make all associations with reference models work
         - will build the rest in conjunction with other models
     
-    - set up associations between Set, Target, ArcherCategory, and DistanceTarget
+    - set up associations between RoundSet, Target, ArcherCategory, and DistanceTarget
         - probably need to uncomment running pre_load_set in Target, ArcherCategory specs
     
     - build Archer model
@@ -13,13 +13,13 @@
     
     - build Round model
     
-    - build Set model (phase 2)
+    - build RoundSet model (phase 2)
         - build rest to make all associations with functional models work
     
     - build Shot model
         - see notes below
     
-    - set up associations between Shot, Set, Round, ScoreSession, Archer
+    - set up associations between Shot, RoundSet, Round, ScoreSession, Archer
 
     - start building out controllers/views
         - build Session model
@@ -53,6 +53,13 @@
 
     # it "won't allow allow a score value of X if there is no x-ring" do
     # end
+
+    # it "can calculate the total score for a roundset)" do
+    # end
+
+    - calc a round_set_rank ???
+        - may need new model to make this work (might not be necessary)
+        - could just have the rank in ScoreSession only that updates as go
 
 # ArcherCategory Controller (will i even have a controller? - don't want to think right now)
     - need to restrict so user can't update any items from this model

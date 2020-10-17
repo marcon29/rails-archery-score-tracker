@@ -15,11 +15,11 @@ RSpec.describe RoundSet, type: :model do
   
   # need to create a Set to associate
   # let(:pre_load_set) {
-  #   Set.create()
+  #   RoundSet.create(name: "", ends: "", shots_per_end: "", score_method: "")
   # }
 
   let(:dist_targ) {
-    DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1)
+    DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
   }
 
   let(:update_values) {
