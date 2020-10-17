@@ -27,7 +27,7 @@
     # it "won't allow allow a score value of X if there is no x-ring" do
     # end
 
-# ArcherCategory Controller (will i even have a controller - don't want to think right now)
+# ArcherCategory Controller (will i even have a controller? - don't want to think right now)
     - need to restrict so user can't update any items from this model
     - this will have to be part of ArcherCat controller tests
     
@@ -62,6 +62,11 @@
     #   expect(pre_load_target.max_score).to eq(10)
     #   expect(pre_load_target.spots).to eq(1)
     # end
+
+
+# DistanceTarget Controller ???
+    - (revisit this if needed) or somewhere - if need to add ability to allow a user to create own distances, can't create a duplicate DistanceTarget record
+    
 
 # Misc Stuff To Do
     - when done - uncomment the USA in seeds and run that 

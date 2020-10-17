@@ -27,9 +27,23 @@ RSpec.describe DistanceTarget, type: :model do
   # need to create a Set to associate category to
   # set = Set.create()
 
-  let(:duplicate) {
-    {distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1}
+  let(:no_distance) {
+    {distance: "", target_id: 1, archer_category_id: 1, set_id: 1}
   }
+  
+  let(:no_target) {
+    {distance: "90m", target_id: "", archer_category_id: 1, set_id: 1}
+  }
+ 
+  let(:no_category) {
+    {distance: "90m", target_id: 1, archer_category_id: "", set_id: 1}
+  }
+
+  let(:no_set) {
+    {distance: "90m", target_id: 1, archer_category_id: 1, set_id: ""}
+  }
+
+  
 
   # object creation and validation tests #######################################
   describe "model creates and updates valid instances:" do
@@ -37,12 +51,25 @@ RSpec.describe DistanceTarget, type: :model do
       expect(dist_targ).to be_valid
       expect(dist_targ.distance).to eq("90m")
     end
-  
-    it "won't create a duplicate record" do
-      dist_targ
-      dup_dist_targ = DistanceTarget.create(duplicate)
-            
-      expect(dup_dist_targ).to be_invalid
+
+    it "is invalid without a distance" do
+      bad_dist_targ = DistanceTarget.create(no_distance)
+      expect(bad_dist_targ).to be_invalid
+    end
+
+    it "is invalid without a target" do
+      bad_dist_targ = DistanceTarget.create(no_target)
+      expect(bad_dist_targ).to be_invalid
+    end
+
+    it "is invalid without a category" do
+      bad_dist_targ = DistanceTarget.create(no_category)
+      expect(bad_dist_targ).to be_invalid
+    end
+
+    it "is invalid without a set" do
+      bad_dist_targ = DistanceTarget.create(no_set)
+      expect(bad_dist_targ).to be_invalid
     end
   end
 
@@ -63,6 +90,15 @@ RSpec.describe DistanceTarget, type: :model do
       pending "need to add associations"
       expect(dist_targ.archer_category).to eq(rm_category)
       expect(dist_targ.target).to eq(pre_load_target)
+    end
+  end
+
+  # helper method tests ########################################################
+  describe "all helper methods work correctly:" do
+    it "can create a properly formatted distance from number and unit" do
+      user_dist_targ = DistanceTarget.new
+      calc_distance = user_dist_targ.distance_from_input(70, "m")
+      expect(calc_distance).to eq("70m")
     end
   end
   
