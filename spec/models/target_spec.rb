@@ -1,6 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe Target, type: :model do
+  let(:rm_category) {
+    ArcherCategory.create(
+      cat_code: "WA-RM", 
+      gov_body: "World Archery", 
+      cat_division: "Recurve", 
+      cat_age_class: "Senior", 
+      min_age: 21, 
+      max_age: 49, 
+      open_to_younger: true, 
+      open_to_older: true, 
+      cat_gender: "Male"
+    )
+  }
+
   let(:pre_load_target) {
     Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
   }
@@ -8,15 +22,10 @@ RSpec.describe Target, type: :model do
   let(:user_target) {
     Target.create(size: "20in", score_areas: 2, rings: 4, x_ring: true, max_score: 5, spots: 5)
   }
-
-  let(:rm_category) {
-    ArcherCategory.create(cat_code: "RM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: nil, max_age: nil, cat_gender: "Male")
-  }
   
-  # need to create a Set to associate
-  # let(:pre_load_set) {
-  #   Set.create()
-  # }
+  let(:pre_load_round_set) {
+    RoundSet.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
+  }
 
   let(:dist_targ) {
     DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
@@ -134,19 +143,19 @@ RSpec.describe Target, type: :model do
 
   # association tests ########################################################
   describe "instances are properly associated to other models" do
-    it "has many Sets" do      
-      pending "need to add associations"
-      pending "need to create Set model"
-      pre_load_set
+    it "has many RoundSets" do      
+      pending "need to add RoundSet associations"
+      pre_load_round_set
       pre_load_target
       rm_category
       dist_targ
 
-      expect(pre_load_target.sets).to include(pre_load_set)
+      expect(pre_load_target.round_sets).to include(pre_load_round_set)
     end
 
     it "has many ArcherCategories" do
-      # pre_load_set
+      pending "need to add RoundSet associations"
+      pre_load_round_set
       pre_load_target
       rm_category
       dist_targ

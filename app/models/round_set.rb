@@ -14,7 +14,7 @@ class RoundSet < ApplicationRecord
 # need validations
     # required: :name :ends :shots_per_end :score_method
     # unique: :name
-    # restrict data: :score_method(SCORE_METHODS) :ends (number) :shots_per_end (number)
+    # restrict data: :ends (number) :shots_per_end (number) :score_method(SCORE_METHODS)
     # callbacks: before validations - assign name
     
 

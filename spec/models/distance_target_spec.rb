@@ -1,15 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe DistanceTarget, type: :model do
-  
-  let(:dist_targ) {
-    DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
-  }
-
-  let(:pre_load_target) {
-    Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-  }
-
   let(:rm_category) {
     ArcherCategory.create(
       cat_code: "WA-RM", 
@@ -24,10 +15,17 @@ RSpec.describe DistanceTarget, type: :model do
     )
   }
 
-  # need to create a Set to associate
-  # let(:pre_load_set) {
-  #   Set.create()
-  # }
+  let(:pre_load_target) {
+    Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+  }
+
+  let(:pre_load_round_set) {
+    RoundSet.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
+  }
+
+  let(:dist_targ) {
+    DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
+  }
 
   let(:no_distance) {
     {distance: "", target_id: 1, archer_category_id: 1, round_set_id: 1}
@@ -79,13 +77,12 @@ RSpec.describe DistanceTarget, type: :model do
   # association tests ########################################################
   describe "instances are properly associated to other models" do
     it "belongs to a RoundSet" do
-      pending "need to add associations"
-      pending "need to create Set model"
-      pre_load_set
+      pending "need to add RoundSet associations"
+      pre_load_round_set
       
-      expect(dist_targ.round_set).to eq(pre_load_set)
+      expect(dist_targ.round_set).to eq(pre_load_round_set)
     end
-
+    
     it "belongs to an ArcherCategory" do
       rm_category
 

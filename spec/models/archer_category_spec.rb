@@ -89,10 +89,9 @@ RSpec.describe ArcherCategory, type: :model do
     Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
   }
 
-  # need to create a Set to associate
-  # let(:pre_load_set) {
-  #   Set.create()
-  # }
+  let(:pre_load_round_set) {
+    RoundSet.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
+  }
 
   let(:dist_targ) {
     DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
@@ -207,19 +206,19 @@ RSpec.describe ArcherCategory, type: :model do
 
   # association tests ########################################################
   describe "instances are properly associated to other models" do
-    it "has many Sets" do      
-      pending "need to add associations"
-      pending "need to create Set model"
-      pre_load_set
+    it "has many RoundSets" do      
+      pending "need to add RoundSet associations"
+      pre_load_round_set
       pre_load_target
       rm_category
       dist_targ
       
-      expect(rm_category.sets).to include(pre_load_set)
+      expect(rm_category.round_sets).to include(pre_load_round_set)
     end
 
     it "has many Targets" do
-      # pre_load_set
+      pending "need to add RoundSet associations"
+      pre_load_round_set
       pre_load_target
       rm_category
       dist_targ
