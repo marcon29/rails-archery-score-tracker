@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2020_10_18_010808) do
     t.string "home_city"
     t.string "home_state"
     t.string "home_country"
-    t.string "default_cat"
+    t.string "default_age_class"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

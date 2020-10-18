@@ -44,8 +44,17 @@
         - may need new model to make this work (might not be necessary)
         - could just have the rank in ScoreSession only that updates as go
 
+# Archer Model
+    - need to update assign_default_age_class as you create associations
+
+# Archer Controller 
+    - this is where to test attr formatting methods with actual input
+
 # Sessions Controller 
-    - since Archer.default_cat will auto-update over time, need way to check if default_cat must also update upon login
+    - since Archer.default_cat will auto-update over time, need way to check if default_age_class must also update upon login
+        - make auto-update part of login process/method
+            - at login - check if still eligible for current default_age_class
+                - if so, keep as is, if not, run the assign_default_age_class again
     - need to allow this to be changed by user via profile, but can use the same method
             - default_by_selection
 

@@ -11,7 +11,7 @@ class CreateArchers < ActiveRecord::Migration[6.0]
       t.string :home_city
       t.string :home_state
       t.string :home_country
-      t.string :default_cat
+      t.string :default_age_class
 
       t.timestamps
     end
