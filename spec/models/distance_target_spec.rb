@@ -27,51 +27,37 @@ RSpec.describe DistanceTarget, type: :model do
     DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
   }
 
-  let(:no_distance) {
-    {distance: "", target_id: 1, archer_category_id: 1, round_set_id: 1}
+  let(:blank) {
+    {distance: "", target_id: "", archer_category_id: "", round_set_id: ""}
   }
   
-  let(:no_target) {
-    {distance: "90m", target_id: "", archer_category_id: 1, round_set_id: 1}
-  }
- 
-  let(:no_category) {
-    {distance: "90m", target_id: 1, archer_category_id: "", round_set_id: 1}
-  }
-
-  let(:no_round_set) {
-    {distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: ""}
-  }
+  let(:default_missing_message) {"can't be blank"}
+  let(:default_duplicate_message) {"has already been taken"}
+  let(:default_inclusion_message) {"is not included in the list"}
 
   # object creation and validation tests #######################################
   describe "model creates and updates only valid instances" do
-    it "pre-loaded distance/target is valid and has correct distance" do
-      pre_load_target
-      rm_category
-      pre_load_round_set
+    describe "valid with all required and unrequired input data" do
+      it "pre-loaded distance/target is valid and has correct distance" do
+        pre_load_target
+        rm_category
+        pre_load_round_set
 
-      expect(dist_targ).to be_valid
-      expect(dist_targ.distance).to eq("90m")
+        expect(dist_targ).to be_valid
+        expect(dist_targ.distance).to eq("90m")
+      end
     end
 
-    it "is invalid without a distance" do
-      bad_dist_targ = DistanceTarget.create(no_distance)
-      expect(bad_dist_targ).to be_invalid
-    end
+    describe "invalid if input data is missing or bad" do
+      it "is invalid without required attributes and has correct error message" do
+        bad_dist_targ = DistanceTarget.create(blank)
 
-    it "is invalid without a target" do
-      bad_dist_targ = DistanceTarget.create(no_target)
-      expect(bad_dist_targ).to be_invalid
-    end
-
-    it "is invalid without a category" do
-      bad_dist_targ = DistanceTarget.create(no_category)
-      expect(bad_dist_targ).to be_invalid
-    end
-
-    it "is invalid without a roundset" do
-      bad_dist_targ = DistanceTarget.create(no_round_set)
-      expect(bad_dist_targ).to be_invalid
+        expect(bad_dist_targ).to be_invalid
+        expect(bad_dist_targ.errors.messages[:distance]).to include(default_missing_message)
+        expect(bad_dist_targ.errors.messages[:target_id]).to include(default_missing_message)
+        expect(bad_dist_targ.errors.messages[:archer_category_id]).to include(default_missing_message)
+        expect(bad_dist_targ.errors.messages[:round_set_id]).to include(default_missing_message)
+      end
     end
   end
 
@@ -79,19 +65,16 @@ RSpec.describe DistanceTarget, type: :model do
   describe "instances are properly associated to other models" do
     it "belongs to a RoundSet" do
       pre_load_round_set
-      
       expect(dist_targ.round_set).to eq(pre_load_round_set)
     end
 
     it "belongs to an ArcherCategory" do
       rm_category
-
       expect(dist_targ.archer_category).to eq(rm_category)
     end
 
     it "belongs to a Target" do
       pre_load_target
-
       expect(dist_targ.target).to eq(pre_load_target)
     end
   end

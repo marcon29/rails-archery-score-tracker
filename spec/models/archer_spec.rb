@@ -63,139 +63,109 @@ RSpec.describe Archer, type: :model do
     {}
   }
 
-  let(:no_username) {
+  let(:blank) {
     {}
   }
 
-  let(:no_email) {
+  let(:bad_inclusion) {
     {}
   }
 
-  let(:no_password) {
+  let(:bad_format) {
     {}
   }
 
-  let(:no_first_name) {
-    {}
-  }
-
-  let(:no_last_name) {
-    {}
-  }
-
-  let(:no_birthdate) {
-    {}
-  }
-
-  let(:no_gender) {
-    {}
-  }
+  let(:default_missing_message) {"can't be blank"}
+  let(:default_duplicate_message) {"has already been taken"}
+  let(:default_inclusion_message) {"is not included in the list"}
+  let(:default_number_message) {"is not a number"}
+  let(:default_format_message) {"is invalid"}
 
   # object creation and validation tests #######################################
-  describe "model creates valid instances:" do
-    it "archer is valid and creates correct default category" do
-      expect(test_archer).to be_valid
-      expect(test_archer.username).to eq("testuser")
-      expect(test_archer.email).to eq("testuser@example.com")
-      # expect(test_archer.password).to eq("password")
-      expect(test_archer.first_name).to eq("test")
-      expect(test_archer.last_name).to eq("user")
-      expect(test_archer.birthdate).to eq(Jan 01, 1980)
-      expect(test_archer.gender).to eq("Male")
-      expect(test_archer.home_city).to eq("Denver")
-      expect(test_archer.home_state).to eq("CO")
-      expect(test_archer.home_country).to eq("USA")
-      expect(test_archer.default_cat).to eq("TBD")
-    end
-
-    describe "invalid and has correct error message if data missing for:" do
-      it "username" do
-        archer = Archer.create(no_username)
-
-        expect(archer).to be_invalid
-        expect(archer.errors.messages[:username]).to include("You must provide a username.")
+  describe "model creates and updates only valid instances" do
+    describe "valid with all required and unrequired input data" do
+      it "archer is valid with all and creates correct default category" do
+        expect(test_archer).to be_valid
+        expect(test_archer.username).to eq("testuser")
+        expect(test_archer.email).to eq("testuser@example.com")
+        # expect(test_archer.password).to eq("password")
+        expect(test_archer.first_name).to eq("test")
+        expect(test_archer.last_name).to eq("user")
+        expect(test_archer.birthdate).to eq(Jan 01, 1980)
+        expect(test_archer.gender).to eq("Male")
+        expect(test_archer.home_city).to eq("Denver")
+        expect(test_archer.home_state).to eq("CO")
+        expect(test_archer.home_country).to eq("USA")
+        expect(test_archer.default_cat).to eq("TBD")
       end
 
-      it "email" do
-        archer = Archer.create(no_email)
+      it "archer is valid with all and creates correct default category" do
+        test_archer.update(update)
 
-        expect(archer).to be_invalid
-        expect(archer.errors.messages[:email]).to include("You must provide your email.")
-      end
-      
-      it "password" do
-        archer = Archer.create(no_password)
-        
-        expect(archer).to be_invalid
-        expect(archer.errors.messages[:password]).to include("You must provide a password.")
-      end
-
-      it "first_name" do
-        archer = Archer.create(no_first_name)
-        
-        expect(archer).to be_invalid
-        expect(archer.errors.messages[:first_name]).to include("You must provide your first name.")
-      end
-
-      it "last_name" do
-        archer = Archer.create(no_last_name)
-        
-        expect(archer).to be_invalid
-        expect(archer.errors.messages[:last_name]).to include("You must provide your last name.")
-      end
-
-      it "birthdate" do
-        archer = Archer.create(no_birthdate)
-        
-        expect(archer).to be_invalid
-        expect(archer.errors.messages[:birthdate]).to include("You must provide your birthdate.")
-      end
-
-      it "gender" do
-        archer = Archer.create(no_gender)
-        
-        expect(archer).to be_invalid
-        expect(archer.errors.messages[:gender]).to include("You must provide your gender.")
+        expect(test_archer).to be_valid
+        expect(test_archer.username).to eq("testuser")
+        expect(test_archer.email).to eq("testuser@example.com")
+        # expect(test_archer.password).to eq("password")
+        expect(test_archer.first_name).to eq("test")
+        expect(test_archer.last_name).to eq("user")
+        expect(test_archer.birthdate).to eq(Jan 01, 1980)
+        expect(test_archer.gender).to eq("Male")
+        expect(test_archer.home_city).to eq("Denver")
+        expect(test_archer.home_state).to eq("CO")
+        expect(test_archer.home_country).to eq("USA")
+        expect(test_archer.default_cat).to eq("TBD")
       end
     end
+  end
 
-    describe "invalid and has correct error message if a bad value for:" do
-      it "username or email being duplicated" do
-        test_archer
-        archer = Archer.create(duplicate)
+  describe "invalid if input data is missing or bad" do
+    it "is invalid without required attributes and has correct error message" do
+      archer = Archer.create(blank)
 
-        expect(archer).to be_invalid
-        expect(archer.errors.messages[:username]).to include("That username is already taken.")
-        expect(archer.errors.messages[:email]).to include("That email is already taken")
-      end
+      expect(archer).to be_invalid
+      expect(archer.errors.messages[:username]).to include("You must provide a username.")
+      expect(archer.errors.messages[:email]).to include("You must provide your email.")
+      expect(archer.errors.messages[:password]).to include("You must provide a password.")
+      expect(archer.errors.messages[:first_name]).to include("You must provide your first name.")
+      expect(archer.errors.messages[:last_name]).to include("You must provide your last name.")
+      expect(archer.errors.messages[:birthdate]).to include("You must provide your birthdate.")
+      expect(archer.errors.messages[:gender]).to include("You must provide your gender.")
+      expect(archer.errors.messages[:default_cat]).to include(default_missing_message)
+    end
+  
+    it "is invalid when unique attributes are duplicated and has correct error message" do
+      test_archer
+      archer = Archer.create(duplicate)
 
-      it "username not being properly formatted" do
+      expect(archer).to be_invalid
+      expect(archer.errors.messages[:username]).to include("That username is already taken.")
+      expect(archer.errors.messages[:email]).to include("That email is already taken")
+    end
 
-        expect(archer).to be_invalid
-      end
+    it "is invalid if value not included in corresponding selection list and has correct error message" do
+      archer = Archer.create(bad_inclusion)
 
-      it "email not being properly formatted" do
-        
-        expect(archer).to be_invalid
-      end
+      expect(archer).to be_invalid
+      expect(archer.errors.messages[:gender]).to include("You must choose a gender from the list.")
+      expect(archer.errors.messages[:default_cat]).to include(default_inclusion_message)
+    end
 
-      it "password not being properly formatted" do
+    it "is invalid when attributes are the wrong format and has correct error message" do
+      archer = Archer.create(bad_format)
 
-        expect(archer).to be_invalid
-      end
-
-      it "gender not included in corresponding constant" do
-        duplicate[:gender] = "bad data"
-        archer = Archer.create(duplicate)
-
-        expect(archer).to be_invalid
-        expect(archer.errors.messages[:username]).to include("You must choose a gender from the list.")
-      end
+      expect(archer).to be_invalid
+      expect(archer.errors.messages[:username]).to include("You must provide a username.")
+      expect(archer.errors.messages[:email]).to include("You must provide your email.")
+      expect(archer.errors.messages[:password]).to include("You must provide a password.")
     end
   end
 
   # association tests ########################################################
   describe "instances are properly associated to other models" do
+    before(:each) do
+      # load all items that must be in DB for test to work
+    end
+
     it "has many ScoreSessions" do
       pending "need to add associations"
       pending "need to create Shots model"
@@ -203,8 +173,6 @@ RSpec.describe Archer, type: :model do
       pending "need to create Rounds model"
       pending "need to create ScoreSessions model"
 
-      # load all items that must be in DB for test to work
-      
       expect(test_archer.score_sessions).to include(test_score_session)
     end
 
@@ -214,8 +182,6 @@ RSpec.describe Archer, type: :model do
       pending "need to finish RoundSets model"
       pending "need to create Rounds model"
       pending "need to create ScoreSessions model"
-
-      # load all items that must be in DB for test to work
       
       expect(test_archer.rounds).to include(test_round)
     end
@@ -226,8 +192,6 @@ RSpec.describe Archer, type: :model do
       pending "need to finish RoundSets model"
       pending "need to create Rounds model"
       pending "need to create ScoreSessions model"
-
-      # load all items that must be in DB for test to work
       
       expect(test_archer.round_sets).to include(pre_load_round_set)
     end
@@ -238,8 +202,6 @@ RSpec.describe Archer, type: :model do
       pending "need to finish RoundSets model"
       pending "need to create Rounds model"
       pending "need to create ScoreSessions model"
-
-      # load all items that must be in DB for test to work
       
       expect(test_archer.shots).to include(test_shot)
     end
@@ -250,8 +212,6 @@ RSpec.describe Archer, type: :model do
       pending "need to finish RoundSets model"
       pending "need to create Rounds model"
       pending "need to create ScoreSessions model"
-
-      # load all items that must be in DB for test to work
       
       expect(test_archer.archer_categories).to include(rm_category)
     end

@@ -31,123 +31,103 @@ RSpec.describe RoundSet, type: :model do
     {name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points"}
   }
 
-  let(:no_name) {
-    {name: "", ends: 6, shots_per_end: 6, score_method: "Points"}
+  let(:blank) {
+    {name: "", ends: "", shots_per_end: "", score_method: ""}
   }
 
-  let(:no_ends) {
-    {name: "1440 Round - Set/Distance1", ends: "", shots_per_end: 6, score_method: "Points"}
+  let(:bad_inclusion) {
+    {name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "bad data"}
   }
 
-  let(:no_shots_per_end) {
-    {name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: "", score_method: "Points"}
+  let(:bad_format) {
+    {name: "1440 Round - Set/Distance1", ends: "six", shots_per_end: "six", score_method: "Points"}
   }
+  
+  let(:default_missing_message) {"can't be blank"}
+  let(:default_duplicate_message) {"has already been taken"}
+  let(:default_inclusion_message) {"is not included in the list"}
+  let(:default_number_message) {"is not a number"}
 
-  let(:no_score_method) {
-    {name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: ""}
-  }
-
+  
   # object creation and validation tests #######################################
   describe "model creates and updates only valid instances" do
-    it "pre-loaded roundset (name provided) is valid" do
-      expect(pre_load_round_set).to be_valid
-      expect(pre_load_round_set.name).to eq("1440 Round - Set/Distance1")
-      expect(pre_load_round_set.ends).to eq(6)
-      expect(pre_load_round_set.shots_per_end).to eq(6)
-      expect(pre_load_round_set.score_method).to eq("Points")
-    end
-
-    it "user-loaded roundset (without name provided) is valid and has correct name" do
-      pending "need this???"
-      user_round_set = RoundSet.create(no_name)
-
-      expect(user_round_set).to be_valid
-      expect(user_round_set.name).to eq("1440 Round - Set/Distance1")
-    end
-
-    it "will auto-create the roundset name, won't save unless it's unique" do
-      pending "need this???"
-      pre_load_round_set
-      dup_round_set = RoundSet.create(no_name)
-      
-      expect(dup_round_set.name).to eq("1440 Round - Set/Distance1")
-      expect(dup_round_set).to be_invalid
-    end
-
-    describe "invalid if data missing for:" do
-      it "name" do
-        round_set = RoundSet.create(no_name)
-
-        expect(round_set).to be_invalid
+    describe "valid with all required and unrequired input data" do
+      it "pre-loaded roundset (name provided) is valid" do
+        expect(pre_load_round_set).to be_valid
+        expect(pre_load_round_set.name).to eq("1440 Round - Set/Distance1")
+        expect(pre_load_round_set.ends).to eq(6)
+        expect(pre_load_round_set.shots_per_end).to eq(6)
+        expect(pre_load_round_set.score_method).to eq("Points")
       end
 
-      it "number of ends" do
-        round_set = RoundSet.create(no_ends)
+      it "user-loaded roundset (without name provided) is valid and has correct name" do
+        pending "need this???"
+        user_round_set = RoundSet.create(no_name)
 
-        expect(round_set).to be_invalid
-      end
-      
-      it "shots per end" do
-        round_set = RoundSet.create(no_shots_per_end)
-
-        expect(round_set).to be_invalid
+        expect(user_round_set).to be_valid
+        expect(user_round_set.name).to eq("1440 Round - Set/Distance1")
       end
 
-      it "score method" do
-        round_set = RoundSet.create(no_score_method)
-
-        expect(round_set).to be_invalid
+      it "will auto-create the roundset name, won't save unless it's unique" do
+        pending "need this???"
+        pre_load_round_set
+        dup_round_set = RoundSet.create(no_name)
+        
+        expect(dup_round_set.name).to eq("1440 Round - Set/Distance1")
+        expect(dup_round_set).to be_invalid
       end
     end
 
-    describe "invalid if a bad value for:" do
-      it "name is duplicated" do
+    describe "invalid if input data is missing or bad" do
+      it "is invalid without required attributes and has correct error message" do
+        round_set = RoundSet.create(blank)
+
+        expect(round_set).to be_invalid
+        expect(round_set.errors.messages[:name]).to include(default_missing_message)
+        expect(round_set.errors.messages[:ends]).to include(default_number_message)
+        expect(round_set.errors.messages[:shots_per_end]).to include(default_number_message)
+        expect(round_set.errors.messages[:score_method]).to include(default_missing_message)
+      end
+    
+      it "is invalid when unique attributes are duplicated and has correct error message" do
         pre_load_round_set
         round_set = RoundSet.create(duplicate)
 
         expect(round_set).to be_invalid
+        expect(round_set.errors.messages[:name]).to include(default_duplicate_message)
       end
 
-      it "number of ends not a number" do
-        duplicate[:ends] = "six"
-        round_set = RoundSet.create(duplicate)
+      it "is invalid if value not included in corresponding selection list and has correct error message" do
+        round_set = RoundSet.create(bad_inclusion)
 
         expect(round_set).to be_invalid
+        expect(round_set.errors.messages[:score_method]).to include(default_inclusion_message)
       end
 
-      it "shots per end not a number" do
-        duplicate[:shots_per_end] = "six"
-        round_set = RoundSet.create(duplicate)
-
+      it "is invalid when attributes are the wrong format and has correct error message" do
+        round_set = RoundSet.create(bad_format)
+        
         expect(round_set).to be_invalid
-      end
-
-      it "score method not included in corresponding constant" do
-        duplicate[:score_method] = "bad data"
-        round_set = RoundSet.create(duplicate)
-
-        expect(round_set).to be_invalid
+        expect(round_set.errors.messages[:ends]).to include(default_number_message)
+        expect(round_set.errors.messages[:shots_per_end]).to include(default_number_message)
       end
     end
   end
 
   # association tests ########################################################
   describe "instances are properly associated to other models" do
-    it "has many ArcherCategories" do
+    before(:each) do
       pre_load_round_set
       pre_load_target
       rm_category
       dist_targ
-      
+    end
+
+    it "has many ArcherCategories" do
       expect(pre_load_round_set.archer_categories).to include(rm_category)
     end
 
     it "has many Targets" do
-      pre_load_round_set
-      pre_load_target
-      rm_category
-      dist_targ
-
       expect(pre_load_round_set.targets).to include(pre_load_target)
     end
   end
@@ -159,5 +139,4 @@ RSpec.describe RoundSet, type: :model do
       expect(pre_load_round_set).to be_invalid
     end
   end
-
 end

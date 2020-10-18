@@ -39,3 +39,7 @@
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# Ignore all scratch and dev notes files.
+scratch_tests.rb
+notes_.md

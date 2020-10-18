@@ -158,7 +158,7 @@ RSpec.describe ArcherCategory, type: :model do
         expect(category.errors.messages[:cat_code]).to include(default_duplicate_message)
       end
 
-      it "is invalid if value not included in corresponding constant and has correct error message" do
+      it "is invalid if value not included in corresponding selection list and has correct error message" do
         category = ArcherCategory.create(bad_inclusion)
 
         expect(category).to be_invalid

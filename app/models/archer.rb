@@ -14,8 +14,8 @@ class Archer < ApplicationRecord
     # need to add validations
         # required: :username :email :first_name :last_name :birthdate :gender :default_cat
         # uniqueness: :username :email
-        # formatting: :username :email :password        
         # restricted values: :gender (GENDERS) :default_cat (from DB & archer category model)
+        # formatting: :username :email :password
         # callbacks: 
             # assign_default_category
             # format methods: username?, email, names, home_city, home_state, home_country
