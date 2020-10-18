@@ -101,113 +101,70 @@ RSpec.describe ArcherCategory, type: :model do
     {cat_code: "WA-RM", gov_body: "World Archery", cat_division: "Recurve", cat_age_class: "Senior", min_age: 21, max_age: 49, open_to_younger: true, open_to_older: true, cat_gender: "Male"}
   }
 
+  let(:blank) {
+    {cat_code: "", gov_body: "", cat_division: "", cat_age_class: "", min_age: "", max_age: "", open_to_younger: "", open_to_older: "", cat_gender: ""}
+  }
+
+  let(:bad_inclusion) {
+    {cat_code: "WA-RM", gov_body: "bad data", cat_division: "bad data", cat_age_class: "bad data", min_age: 21, max_age: 49, open_to_younger: true, open_to_older: true, cat_gender: "bad data"}
+  }
+
   let(:default_missing_message) {"can't be blank"}
   let(:default_duplicate_message) {"has already been taken"}
   let(:default_inclusion_message) {"is not included in the list"}
   
   # object creation and validation tests #######################################
-  describe "model creates and updates valid instances:" do
-    it "pre-loaded category is valid with all values and correctly adds min and max age if missing" do
-      expect(rm_category).to be_valid
-      expect(rm_category.cat_code).to eq("WA-RM")
-      expect(rm_category.gov_body).to eq("World Archery")
-      expect(rm_category.cat_division).to eq("Recurve")
-      expect(rm_category.cat_age_class).to eq("Senior")
-      expect(rm_category.min_age).to eq(21)
-      expect(rm_category.max_age).to eq(49)
-      expect(rm_category.open_to_younger).to eq(true)
-      expect(rm_category.open_to_older).to eq(true)
-      expect(rm_category.cat_gender).to eq("Male")
+  describe "model creates and updates only valid instances" do
+    describe "valid with all required and unrequired input data" do
+      it "pre-loaded category is valid with all values and correctly adds min and max age if missing" do
+        expect(rm_category).to be_valid
+        expect(rm_category.cat_code).to eq("WA-RM")
+        expect(rm_category.gov_body).to eq("World Archery")
+        expect(rm_category.cat_division).to eq("Recurve")
+        expect(rm_category.cat_age_class).to eq("Senior")
+        expect(rm_category.min_age).to eq(21)
+        expect(rm_category.max_age).to eq(49)
+        expect(rm_category.open_to_younger).to eq(true)
+        expect(rm_category.open_to_older).to eq(true)
+        expect(rm_category.cat_gender).to eq("Male")
+      end
+
+      it "pre-loaded category correctly adds min and max age if missing" do
+        expect(rcm_category.min_age).to eq(0)
+        expect(rcm_category.max_age).to eq(17)
+
+        expect(rmm_category.min_age).to eq(50)
+        expect(rmm_category.max_age).to eq(1000)
+      end
     end
 
-    it "pre-loaded category correctly adds min and max age if missing" do
-      expect(rcm_category.min_age).to eq(0)
-      expect(rcm_category.max_age).to eq(17)
+    describe "invalid if input data is missing or bad" do
+      it "is invalid without required attributes and has correct error message" do
+        category = ArcherCategory.create(blank)
 
-      expect(rmm_category.min_age).to eq(50)
-      expect(rmm_category.max_age).to eq(1000)
-    end
+        expect(category).to be_invalid
+        expect(category.errors.messages[:cat_code]).to include(default_missing_message)
+        expect(category.errors.messages[:gov_body]).to include(default_missing_message)
+        expect(category.errors.messages[:cat_division]).to include(default_missing_message)
+        expect(category.errors.messages[:cat_age_class]).to include(default_missing_message)
+        expect(category.errors.messages[:cat_gender]).to include(default_missing_message)
+      end
 
-    describe "invalid if data missing or duplicated for:" do
-      it "category code (duplicated)" do
+      it "is invalid when unique attributes are duplicated and has correct error message" do
         rm_category
         category = ArcherCategory.create(duplicate)
 
         expect(category).to be_invalid
         expect(category.errors.messages[:cat_code]).to include(default_duplicate_message)
       end
-    
-      it "category code (missing)" do
-        duplicate[:cat_code] = ""
-        category = ArcherCategory.create(duplicate)
 
-        expect(category).to be_invalid
-        expect(category.errors.messages[:cat_code]).to include(default_missing_message)
-      end
-
-      it "governing body (missing)" do
-        duplicate[:gov_body] = ""
-        category = ArcherCategory.create(duplicate)
-        
-        expect(category).to be_invalid
-        expect(category.errors.messages[:gov_body]).to include(default_missing_message)
-      end
-
-      it "division (missing)" do
-        duplicate[:cat_division] = ""
-        category = ArcherCategory.create(duplicate)
-
-        expect(category).to be_invalid
-        expect(category.errors.messages[:cat_division]).to include(default_missing_message)
-      end
-
-      it "age class (missing)" do
-        duplicate[:cat_age_class] = ""
-        category = ArcherCategory.create(duplicate)
-
-        expect(category).to be_invalid
-        expect(category.errors.messages[:cat_age_class]).to include(default_missing_message)
-      end
-
-      it "gender (missing)" do
-        duplicate[:cat_gender] = ""
-        category = ArcherCategory.create(duplicate)
-
-        expect(category).to be_invalid
-        expect(category.errors.messages[:cat_gender]).to include(default_missing_message)
-      end
-    end
-
-    describe "invalid if value not included in corresponding constant for:" do
-      it "governing body" do
-        duplicate[:gov_body] = "bad data"
-        category = ArcherCategory.create(duplicate)
+      it "is invalid if value not included in corresponding constant and has correct error message" do
+        category = ArcherCategory.create(bad_inclusion)
 
         expect(category).to be_invalid
         expect(category.errors.messages[:gov_body]).to include(default_inclusion_message)
-      end
-      
-      it "division" do
-        duplicate[:cat_division] = "bad data"
-        category = ArcherCategory.create(duplicate)
-
-        expect(category).to be_invalid
         expect(category.errors.messages[:cat_division]).to include(default_inclusion_message)
-      end
-      
-      it "age class" do
-        duplicate[:cat_age_class] = "bad data"
-        category = ArcherCategory.create(duplicate)
-
-        expect(category).to be_invalid
         expect(category.errors.messages[:cat_age_class]).to include(default_inclusion_message)
-      end
-
-      it "gender" do
-        duplicate[:cat_gender] = "bad data"
-        category = ArcherCategory.create(duplicate)
-
-        expect(category).to be_invalid
         expect(category.errors.messages[:cat_gender]).to include(default_inclusion_message)
       end
     end

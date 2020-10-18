@@ -44,7 +44,7 @@ RSpec.describe DistanceTarget, type: :model do
   }
 
   # object creation and validation tests #######################################
-  describe "model creates and updates valid instances:" do
+  describe "model creates and updates only valid instances" do
     it "pre-loaded distance/target is valid and has correct distance" do
       pre_load_target
       rm_category

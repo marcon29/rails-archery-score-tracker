@@ -48,7 +48,7 @@ RSpec.describe RoundSet, type: :model do
   }
 
   # object creation and validation tests #######################################
-  describe "model creates valid instances:" do
+  describe "model creates and updates only valid instances" do
     it "pre-loaded roundset (name provided) is valid" do
       expect(pre_load_round_set).to be_valid
       expect(pre_load_round_set.name).to eq("1440 Round - Set/Distance1")
