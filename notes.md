@@ -30,8 +30,7 @@
 
 # Archer Model
     - use ArcherCategory.default_by_archer_data to set default_cat attr via callback
-        - requires an age calculation from Bday
-        - since this will auto-update over time, need way to check if default_cat must also update upon login
+        - requires an age calculation from Bday        
         - need to allow this to be changed by user via profile, but can use the same method
             - default_by_selection
     - commented out the loginhelper line in spec/rails_helper - check when going through user/sessions
@@ -53,6 +52,11 @@
     - calc a round_set_rank ???
         - may need new model to make this work (might not be necessary)
         - could just have the rank in ScoreSession only that updates as go
+
+# Sessions Controller 
+    - since Archer.default_cat will auto-update over time, need way to check if default_cat must also update upon login
+    - need to allow this to be changed by user via profile, but can use the same method
+            - default_by_selection
 
 # ArcherCategory Controller (will i even have a controller? - don't want to think right now)
     - need to restrict so user can't update any items from this model
