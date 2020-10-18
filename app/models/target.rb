@@ -1,9 +1,7 @@
 class Target < ApplicationRecord
-    
-    # need to add associations
     has_many :distance_targets
     has_many :archer_categories, through: :distance_targets
-    # has_many :sets, through: :distance_targets
+    has_many :round_sets, through: :distance_targets
     
     validates :name, presence: true, uniqueness: true
     validates :size, presence: { message: "You must provide a target size." }
@@ -12,7 +10,6 @@ class Target < ApplicationRecord
     validates :x_ring, presence: { message: "You must specifiy if there is an X ring." }
     validates :max_score, presence: { message: "You must provide the higest score value." }
     validates :spots, presence: { message: "You must specify the number of spots." }
-        
     before_validation :assign_name
 
     def assign_name
@@ -22,7 +19,6 @@ class Target < ApplicationRecord
     def create_name
         "#{self.size}/#{self.spots}-spot/#{self.rings}-ring"
     end
-
 end
 
 

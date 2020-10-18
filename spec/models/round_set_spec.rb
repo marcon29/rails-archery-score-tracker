@@ -67,8 +67,8 @@ RSpec.describe RoundSet, type: :model do
 
     it "will auto-create the roundset name, won't save unless it's unique" do
       pending "need this???"
-      # pre_load_round_set
-      # dup_round_set = RoundSet.create(duplicate)
+      pre_load_round_set
+      dup_round_set = RoundSet.create(no_name)
       
       expect(dup_round_set.name).to eq("1440 Round - Set/Distance1")
       expect(dup_round_set).to be_invalid
@@ -134,7 +134,6 @@ RSpec.describe RoundSet, type: :model do
   # association tests ########################################################
   describe "instances are properly associated to other models" do
     it "has many ArcherCategories" do
-      pending "need to add RoundSet associations"
       pre_load_round_set
       pre_load_target
       rm_category
@@ -144,7 +143,6 @@ RSpec.describe RoundSet, type: :model do
     end
 
     it "has many Targets" do
-      pending "need to add RoundSet associations"
       pre_load_round_set
       pre_load_target
       rm_category

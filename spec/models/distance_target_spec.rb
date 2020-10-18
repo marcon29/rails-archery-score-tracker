@@ -48,6 +48,7 @@ RSpec.describe DistanceTarget, type: :model do
     it "pre-loaded distance/target is valid and has correct distance" do
       pre_load_target
       rm_category
+      pre_load_round_set
 
       expect(dist_targ).to be_valid
       expect(dist_targ.distance).to eq("90m")
@@ -77,12 +78,11 @@ RSpec.describe DistanceTarget, type: :model do
   # association tests ########################################################
   describe "instances are properly associated to other models" do
     it "belongs to a RoundSet" do
-      pending "need to add RoundSet associations"
       pre_load_round_set
       
       expect(dist_targ.round_set).to eq(pre_load_round_set)
     end
-    
+
     it "belongs to an ArcherCategory" do
       rm_category
 

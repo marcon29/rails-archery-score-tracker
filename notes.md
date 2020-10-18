@@ -1,11 +1,4 @@
 # Next to do
-    - build RoundSet model (phase 1)
-        - build enough to make all associations with reference models work
-        - will build the rest in conjunction with other models
-    
-    - set up associations between RoundSet, Target, ArcherCategory, and DistanceTarget
-        - probably need to uncomment running pre_load_set in Target, ArcherCategory specs
-    
     - build Archer model
         - see notes below
     

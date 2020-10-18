@@ -206,8 +206,7 @@ RSpec.describe ArcherCategory, type: :model do
 
   # association tests ########################################################
   describe "instances are properly associated to other models" do
-    it "has many RoundSets" do      
-      pending "need to add RoundSet associations"
+    it "has many RoundSets" do
       pre_load_round_set
       pre_load_target
       rm_category
@@ -217,7 +216,6 @@ RSpec.describe ArcherCategory, type: :model do
     end
 
     it "has many Targets" do
-      pending "need to add RoundSet associations"
       pre_load_round_set
       pre_load_target
       rm_category

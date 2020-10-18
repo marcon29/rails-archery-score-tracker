@@ -47,13 +47,15 @@ wa_category_attrs = {
     wa_cmm: {cat_code: "WA-CMM", gov_body: "World Archery", cat_division: "Compound", cat_age_class: "Master", min_age: 50, max_age: "", open_to_younger: false, open_to_older: true, cat_gender: "Male"}
 }
 
-# #### Standard Sets ####
-    # to maintain DistanceTarget values build in following order:
-    # wa1440/distance1
-    # wa1440/distance2
-    # wa1440/distance3
-    # wa1440/distance4
-
+# #### Standard RoundSets ####
+wa_round_set_attrs = {
+    wa1440_dist1: {name: "1440 Round - Set/Distance1", ends: 6,  shots_per_end: 6, score_method: "Points"}, 
+    wa1440_dist2: {name: "1440 Round - Set/Distance2", ends: 6,  shots_per_end: 6, score_method: "Points"}, 
+    wa1440_dist3: {name: "1440 Round - Set/Distance3", ends: 12, shots_per_end: 3, score_method: "Points"}, 
+    wa1440_dist4: {name: "1440 Round - Set/Distance4", ends: 12, shots_per_end: 3, score_method: "Points"}, 
+    wa720_dist1:  {name: "720 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points"}, 
+    wa_match_dist1:  {name: "Match Round - Set/Distance1", ends: 5, shots_per_end: 3, score_method: "Set"}
+}
 
 # #### Distance/Target Lookup ####
 wa1440_attrs = {
@@ -100,6 +102,10 @@ end
 
 wa_category_attrs.each do |obj, attrs|
     ArcherCategory.find_or_create_by(attrs)
+end
+
+wa_round_set_attrs.each do |obj, attrs|
+    RoundSet.find_or_create_by(attrs)
 end
 
 wa1440_attrs.each do |obj, details|
@@ -167,7 +173,7 @@ usa_category_attrs = {
     usa_cm70m: {cat_code: "USA-CM70M", gov_body: "USA Archery", cat_division: "Compound", cat_age_class: "Master", min_age: 70, max_age: "", open_to_younger: false, open_to_older: true, cat_gender: "Male"}
 }
 
-# #### Standard Sets ####
+# #### Standard RoundSets ####
 
 
 # #### Distance/Target Lookup ####
@@ -200,7 +206,7 @@ usa_category_attrs = {
 # #### Categories ####
 
 
-# #### Standard Sets ####
+# #### Standard RoundSets ####
 
 
 # #### Distance/Target Lookup ####
