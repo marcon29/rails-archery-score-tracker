@@ -1,6 +1,6 @@
 # Next to do
     - build Archer model
-        - see notes below
+        
     
     - build ScoreSession model
     
@@ -23,17 +23,8 @@
         - build Round Management
         - build Results views (ScoreSessions show and index)
     
-        
 
-
-
-
-# Archer Model
-    - use ArcherCategory.default_by_archer_data to set default_cat attr via callback
-        - requires an age calculation from Bday        
-        - need to allow this to be changed by user via profile, but can use the same method
-            - default_by_selection
-    - commented out the loginhelper line in spec/rails_helper - check when going through user/sessions
+  
 
 # Shot model
     # it "can identify all possible score values" do
