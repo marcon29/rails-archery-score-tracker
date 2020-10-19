@@ -52,14 +52,14 @@ class Archer < ApplicationRecord
     end
 
     def format_date(date_string)
-        date_string.to_date.strftime("%m/%d/%Y") if date_string
+        date_string.strftime("%m/%d/%Y") if date_string
         # date_string.strftime("%m/%d/%Y")
     end
     
     def eligibility_age
         if self.birthdate
             year_today = Date.today.strftime("%Y").to_i
-            birthyear = self.birthdate.to_date.strftime("%Y").to_i
+            birthyear = self.birthdate.strftime("%Y").to_i
             year_today-birthyear
         end
     end
@@ -91,8 +91,8 @@ class Archer < ApplicationRecord
         day_today = Date.today.strftime("%m/%d")
         year_today = Date.today.strftime("%Y").to_i
 
-        birthday = self.birthdate.to_date.strftime("%m/%d")
-        birthyear = self.birthdate.to_date.strftime("%Y").to_i
+        birthday = self.birthdate.strftime("%m/%d")
+        birthyear = self.birthdate.strftime("%Y").to_i
 
         if day_today >= birthday
             year_today-birthyear 

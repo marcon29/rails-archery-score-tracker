@@ -1,8 +1,6 @@
 # Next to do
-    - build Archer model
-        
-    
     - build ScoreSession model
+        - finish building out helpers    
     
     - build Round model
     
@@ -56,6 +54,15 @@
 # ScoreSession Model
     - force rank as necessary if not practice?
         - only when all shots are scored? or all shots for each round (or RoundSet)?
+
+# Controller Helpers
+    - all date formatting needs to go in here, not models
+        # def format_date(date)
+        #    # date.strftime("%m/%d/%Y")
+        #    # date.to_date.strftime("%m/%d/%Y")
+        #    # "#{date.month}/#{date.day}/#{date.year}"
+        #    # "#{date.to_date.month}/#{date.to_date.day}/#{date.to_date.year}"
+        # end
 
 # Archer Controller 
     - this is where to test attr formatting methods with actual input

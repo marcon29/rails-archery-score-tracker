@@ -88,8 +88,7 @@ RSpec.describe ScoreSession, type: :model do
         city: "Oxford", 
         state: "OH", 
         country: "USA", 
-        start_date: "2020-09-01", 
-        end_date: "2020-09-05"
+        start_date: "2020-09-01"
         }
     }
 
@@ -98,7 +97,7 @@ RSpec.describe ScoreSession, type: :model do
     }
     
     let(:update) {
-        {name: "2010 PanAm Trials", score_session_type: "Competition", city: "Chula Vista", state: "CA", country: "USA", start_date: "2010-09-01", end_date: "", rank: "3rd", active: false}
+        {name: "2010 Pan Am Trials", score_session_type: "Competition", city: "Chula Vista", state: "CA", country: "USA", start_date: "2010-09-01", end_date: "", rank: "3rd", active: false}
     }
 
     let(:blank) {
@@ -130,13 +129,13 @@ RSpec.describe ScoreSession, type: :model do
                 expect(test_score_session.city).to eq(valid_all[:city])
                 expect(test_score_session.state).to eq(valid_all[:state])
                 expect(test_score_session.country).to eq(valid_all[:country])
-                expect(test_score_session.start_date).to eq(valid_all[:start_date])
-                expect(test_score_session.end_date).to eq(valid_all[:end_date])
+                expect(test_score_session.start_date).to eq(valid_all[:start_date].to_date)
+                expect(test_score_session.end_date).to eq(valid_all[:end_date].to_date)
                 expect(test_score_session.rank).to eq(valid_all[:rank])
                 expect(test_score_session.active).to eq(valid_all[:active])
             end
             
-            it "instance is valid with only required attributes and auto-assigns active status" do
+            it "instance is valid with only required attributes, auto-assigns end date and active status" do
                 expect(ScoreSession.all.count).to eq(0)
                 score_session = ScoreSession.create(valid_req)
 
@@ -148,12 +147,12 @@ RSpec.describe ScoreSession, type: :model do
                 expect(score_session.city).to eq(valid_req[:city])
                 expect(score_session.state).to eq(valid_req[:state])
                 expect(score_session.country).to eq(valid_req[:country])
-                expect(score_session.start_date).to eq(valid_req[:start_date])
-                expect(score_session.end_date).to eq(valid_req[:end_date])
+                expect(score_session.start_date).to eq(valid_req[:start_date].to_date)
+                expect(score_session.end_date).to eq(valid_req[:start_date].to_date)
                 expect(score_session.active).to eq(true)
             end
 
-            it "instance is valid when updating all attrs" do
+            it "instance is valid when updating all attrs, re-assigns end date if value deleted" do
                 test_score_session.update(update)
                 
                 expect(test_score_session.name).to eq(update[:name])
@@ -161,8 +160,8 @@ RSpec.describe ScoreSession, type: :model do
                 expect(test_score_session.city).to eq(update[:city])
                 expect(test_score_session.state).to eq(update[:state])
                 expect(test_score_session.country).to eq(update[:country])
-                expect(test_score_session.start_date).to eq(update[:start_date])
-                expect(test_score_session.end_date).to eq(update[:end_date])
+                expect(test_score_session.start_date).to eq(update[:start_date].to_date)
+                expect(test_score_session.end_date).to eq(update[:start_date].to_date)
                 expect(test_score_session.rank).to eq(update[:rank])
                 expect(test_score_session.active).to eq(update[:active])
             end
@@ -180,7 +179,6 @@ RSpec.describe ScoreSession, type: :model do
                 expect(score_session.errors.messages[:state]).to include("You must enter a state.")
                 expect(score_session.errors.messages[:country]).to include("You must enter a country.")
                 expect(score_session.errors.messages[:start_date]).to include("You must choose a start date.")
-                expect(score_session.errors.messages[:end_date]).to include(default_missing_message)
             end
 
             it "is invalid when unique attributes are duplicated and has correct error message" do
@@ -193,12 +191,24 @@ RSpec.describe ScoreSession, type: :model do
                 expect(score_session.errors.messages[:name]).to include("That name is already taken.")
             end
 
-            it "is invalid if value not included in corresponding selection list and has correct error message" do
+            it "is invalid if score session not included in corresponding selection list and has correct error message" do
                 score_session = ScoreSession.create(bad_inclusion)
 
                 expect(score_session).to be_invalid
                 expect(ScoreSession.all.count).to eq(0)
                 expect(score_session.errors.messages[:score_session_type]).to include(default_inclusion_message)
+            end
+
+            it "is invalid if rank is not included in corresponding selection list and has correct error message" do
+                bad_scenarios = ["0", "000", "00text", "00st", "-1", "first", "winner", "loser"]
+
+                bad_scenarios.each do | test_value |
+                    bad_inclusion[:rank] = test_value
+                    score_session = ScoreSession.create(bad_inclusion)
+                    expect(score_session).to be_invalid
+                    expect(ScoreSession.all.count).to eq(0)
+                    expect(score_session.errors.messages[:rank]).to include('Enter only a number above 0, "W" or "L".')
+                end
             end
         end
     end
@@ -237,6 +247,58 @@ RSpec.describe ScoreSession, type: :model do
 
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
+        it "can return the score sessions's name with correct capitalization" do
+            valid_all[:name] = "2020 world cup"
+            score_session = ScoreSession.create(valid_all)
+            expect(score_session.name).to eq(valid_all[:name].titlecase)
+        end
+
+        it "can assign and format the rank from any good input" do
+            st_scenarios = ["1", "21", "0021", "1ND", "21ST", "0021st"]
+            nd_scenarios = ["2", "22","0022", "2ST", "22ND", "0022nd"]
+            rd_scenarios = ["3", "23", "0023", "3ST", "23RD", "0023rd"]
+            th_scenarios = ["4", "24", "0024", "4ST", "24TH", "0024th", "11", "0011"]
+            win_scenarios = ["W", "w", "Win", "win", "Won", "won"]
+            lose_scenarios = ["L", "l", "Loss", "loss", "Lost", "lost"]
+
+            st_scenarios.each do | test_value |
+                valid_all[:rank] = test_value
+                score_session = ScoreSession.create(valid_all)
+                expect(score_session.rank).to eq("#{test_value.to_i.to_s}st")
+            end
+
+            nd_scenarios.each do | test_value |
+                valid_all[:rank] = test_value
+                score_session = ScoreSession.create(valid_all)
+                expect(score_session.rank).to eq("#{test_value.to_i.to_s}nd")
+            end
+
+            rd_scenarios.each do | test_value |
+                valid_all[:rank] = test_value
+                score_session = ScoreSession.create(valid_all)
+                expect(score_session.rank).to eq("#{test_value.to_i.to_s}rd")
+            end
+
+            th_scenarios.each do | test_value |
+                valid_all[:rank] = test_value
+                score_session = ScoreSession.create(valid_all)
+                expect(score_session.rank).to eq("#{test_value.to_i.to_s}th")
+            end
+
+            win_scenarios.each do | test_value |
+                valid_all[:rank] = test_value
+                score_session = ScoreSession.create(valid_all)
+                expect(score_session.rank).to eq("Win")
+            end
+
+            lose_scenarios.each do | test_value |
+                valid_all[:rank] = test_value
+                score_session = ScoreSession.create(valid_all)
+                expect(score_session.rank).to eq("Loss")
+            end
+        end
+
+
         it "helpers TBD" do
             pending "add as needed"
             expect(test_score_session).to be_invalid

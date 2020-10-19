@@ -16,46 +16,64 @@ class ScoreSession < ApplicationRecord
     validates :city, presence: { message: "You must enter a city." }
     validates :state, presence: { message: "You must enter a state." }
     validates :country, presence: { message: "You must enter a country." }
-    validates :start_date, presence: { message: "You must choose a start date." }
-    validates :end_date, presence: true
-    before_validation :assign_dates
+    validate :assign_dates, :check_and_assign_rank
+    before_validation :format_name
+
     
     # callbacks (validations): 
-    #     assign_end_date - if blank same as start_date
-    #     format_rank - take integer as input, add "st" "nd" "rd" "th" as necessary
-    #         need ability to use "W" or "L" ???
-    #     format :start_date :end_date
-    # callbacks (save):
-    #     format name - init cap
-
-    # refactor to use same method as date formatting in Archer???
     def assign_dates
-        self.start_date = format_date(self.start_date) if !self.start_date
-        self.end_date = format_date(self.end_date) if !self.end_date
+        if self.start_date.blank?
+            errors.add(:start_date, "You must choose a start date.")
+        elsif self.end_date.blank?
+            self.end_date = self.start_date
+        end
     end
 
-    def format_date(date_string)
-        date_string.to_date.strftime("%m/%d/%Y")
+    def format_name
+        self.name = self.name.titlecase
     end
 
+    def check_and_assign_rank        
+        allowable_ranks = [/\A\d+st\z/i, /\A\d+nd\z/i, /\A\d+rd\z/i, /\A\d+th\z/i, /\A\d+\z/, /\AW\z/i, /\AL\z/i, /\Awin\z/i, /\Aloss\z/i, /\Awon\z/i, /\Alost\z/i]
+            # allows all numbers only: /\A\d+\z/ ( checks below for not 0: /\A^0+\z/ )
+            # allows all numbers except 0 (checked below) ending with 'st' 'nd' 'rd' 'th' (case insenitive): /\A\d+st\z/i, /\A\d+nd\z/i, /\A\d+rd\z/i, /\A\d+th\z/i
+            # allowable text  (case insenitive): W, L, win, loss, won, lost
+        if self.rank
+            string = self.rank.strip.gsub(" ", "").downcase
+        
+            if string.scan(Regexp.union(allowable_ranks)).empty? || string.match(Regexp.union(/\A^0+\z/, /\A^0+st\z/i, /\A^0+nd\z/i, /\A^0+rd\z/i, /\A^0+th\z/i))
+                errors.add(:rank, 'Enter only a number above 0, "W" or "L".')
+            else
+                self.assign_rank(string)
+            end
+        end
+    end
 
+    def assign_rank(rank)
+        if rank.starts_with?("W", "w")
+            string = "Win"
+        elsif rank.starts_with?("L", "l")
+            string = "Loss"
+        else
+            stripped = rank.to_i.to_s
+            string = "#{stripped}th"
+            string = "#{stripped}st" if stripped.ends_with?("1")
+            string = "#{stripped}nd" if stripped.ends_with?("2")
+            string = "#{stripped}rd" if stripped.ends_with?("3")
+            string = "#{stripped}th" if stripped.ends_with?("11")
+        end
+        self.rank = string
+    end
 
     # need helpers
         # date range - collect all dates between start and end (inclusive)
+            # hold - may not need this - html can restrict date range (can just use start and end)
             # will use to restrict date options for round
     
-    
-    # rank
-        # need ability to use "W" or "L" ???
-        # would need to input to be text not number
-        # would need to add inclusive validation
-
     # all location info
             # should be some gems to better handle this
             # city - make initial cap
             # state - all cap, two letter only
             # country - abbreviations?
-
-
     
 end
