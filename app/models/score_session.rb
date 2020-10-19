@@ -1,0 +1,2 @@
+class ScoreSession < ApplicationRecord
+end
