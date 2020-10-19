@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_19_032411) do
+ActiveRecord::Schema.define(version: 2020_10_19_072214) do
 
   create_table "archer_categories", force: :cascade do |t|
     t.string "cat_code"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 2020_10_19_032411) do
     t.string "password_digest"
     t.string "first_name"
     t.string "last_name"
-    t.date "birthdate"
+    t.string "birthdate"
     t.string "gender"
     t.string "home_city"
     t.string "home_state"
@@ -66,8 +66,8 @@ ActiveRecord::Schema.define(version: 2020_10_19_032411) do
     t.string "city"
     t.string "state"
     t.string "country"
-    t.date "start_date"
-    t.date "end_date"
+    t.string "start_date"
+    t.string "end_date"
     t.string "rank"
     t.boolean "active", default: true
     t.datetime "created_at", precision: 6, null: false

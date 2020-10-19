@@ -11,8 +11,8 @@ RSpec.describe ScoreSession, type: :model do
         city: "Oxford", 
         state: "OH", 
         country: "USA", 
-        start_date: "2020-09-01",
-        end_date: "2020-09-05",
+        start_date: "2020-09-01", 
+        end_date: "2020-09-05", 
         rank: "1st", 
         active: true
         }
@@ -76,13 +76,11 @@ RSpec.describe ScoreSession, type: :model do
         DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
     }
 
-    # add the following attr sets for common testing (delete any unnecessary for model)
-
+    # add the following attr sets if need active and inactive at same time for testing
     # let(:valid_inactive) {
     #     {name: "2000 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2000-09-01", end_date: "2000-09-05", rank: "1st", active: false}
     # }
 
-    # take valid_all and make blank (don't delete) any non-required values
     let(:valid_req) {
         {
         name: "2020 World Cup", 
@@ -90,35 +88,25 @@ RSpec.describe ScoreSession, type: :model do
         city: "Oxford", 
         state: "OH", 
         country: "USA", 
-        start_date: "2020-09-01",
-        end_date: "2020-09-05",        
-        active: ""
+        start_date: "2020-09-01", 
+        end_date: "2020-09-05"
         }
     }
 
-    # should be exact same as valid_all
     let(:duplicate) {
         {name: "2020 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2020-09-01", end_date: "2020-09-05", rank: "1st", active: true}
     }
-
-    # all new values for every attr
+    
     let(:update) {
         {name: "2010 PanAm Trials", score_session_type: "Competition", city: "Chula Vista", state: "CA", country: "USA", start_date: "2010-09-01", end_date: "", rank: "3rd", active: false}
     }
 
-    # all blank values for every attr (can test that each is correct by testing error messages)
     let(:blank) {
         {name: "", score_session_type: "", city: "", state: "", country: "", start_date: "", end_date: "", rank: "", active: ""}
     }
 
-    # take valid_all and change any values validated for inclusion so they're not included
     let(:bad_inclusion) {
         {name: "2020 World Cup", score_session_type: "bad data", city: "Oxford", state: "OH", country: "USA", start_date: "2020-09-01", end_date: "2020-09-05", rank: "1st", active: true}
-    }
-
-    # take valid_all and change any values validated for number/format so they're incorrect
-    let(:bad_format) {
-        {name: value}
     }
   
     # add the following default error messages for different validation failures (delete any unnecessary for model)
@@ -136,9 +124,7 @@ RSpec.describe ScoreSession, type: :model do
 
                 expect(test_score_session).to be_valid
                 expect(ScoreSession.all.count).to eq(1)
-                # expect(test_archer.start_date).to eq("09/01/2020")
-                # expect(test_archer.end_date).to eq("09/05/2020")
-
+                
                 expect(test_score_session.name).to eq(valid_all[:name])
                 expect(test_score_session.score_session_type).to eq(valid_all[:score_session_type])
                 expect(test_score_session.city).to eq(valid_all[:city])
@@ -193,10 +179,8 @@ RSpec.describe ScoreSession, type: :model do
                 expect(score_session.errors.messages[:city]).to include("You must enter a city.")
                 expect(score_session.errors.messages[:state]).to include("You must enter a state.")
                 expect(score_session.errors.messages[:country]).to include("You must enter a country.")
-                expect(score_session.errors.messages[:start_date]).to include("You must choose a start date session type.")
+                expect(score_session.errors.messages[:start_date]).to include("You must choose a start date.")
                 expect(score_session.errors.messages[:end_date]).to include(default_missing_message)
-                expect(score_session.errors.messages[:active]).to include(default_missing_message)
-                # add expect for every required attr, update error message if using custom
             end
 
             it "is invalid when unique attributes are duplicated and has correct error message" do
@@ -206,7 +190,7 @@ RSpec.describe ScoreSession, type: :model do
 
                 expect(score_session).to be_invalid
                 expect(ScoreSession.all.count).to eq(1)
-                expect(score_session.errors.messages[:name]).to include("That username is already taken.")
+                expect(score_session.errors.messages[:name]).to include("That name is already taken.")
             end
 
             it "is invalid if value not included in corresponding selection list and has correct error message" do
@@ -215,17 +199,6 @@ RSpec.describe ScoreSession, type: :model do
                 expect(score_session).to be_invalid
                 expect(ScoreSession.all.count).to eq(0)
                 expect(score_session.errors.messages[:score_session_type]).to include(default_inclusion_message)
-            end
-
-            it "is invalid when attributes are the wrong format and has correct error message" do
-                pending "not sure if need this - if so update attr set above"
-                score_session = ScoreSession.create(bad_format)
-
-                expect(score_session).to be_invalid
-                expect(ScoreSession.all.count).to eq(0)
-                expect(score_session.errors.messages[:start_date]).to include(default_format_message)
-                expect(score_session.errors.messages[:end_date]).to include(default_format_message)
-                expect(score_session.errors.messages[:ramk]).to include(default_format_message)
             end
         end
     end

@@ -6,8 +6,8 @@ class CreateScoreSessions < ActiveRecord::Migration[6.0]
       t.string :city
       t.string :state
       t.string :country
-      t.date :start_date
-      t.date :end_date
+      t.string :start_date
+      t.string :end_date
       t.string :rank
       t.boolean :active, default: true
 

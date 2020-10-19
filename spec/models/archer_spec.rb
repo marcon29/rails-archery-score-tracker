@@ -122,12 +122,12 @@ RSpec.describe Archer, type: :model do
         expect(test_archer).to be_valid
         expect(Archer.all.count).to eq(1)
         expect(test_archer.authenticate(valid_all[:password])).to eq(test_archer)
-        expect(test_archer.format_birthdate).to eq("07/01/1980")
 
         expect(test_archer.username).to eq(valid_all[:username])
         expect(test_archer.email).to eq(valid_all[:email])
         expect(test_archer.first_name).to eq(valid_all[:first_name].capitalize)
         expect(test_archer.last_name).to eq(valid_all[:last_name].capitalize)
+        expect(test_archer.birthdate).to eq(valid_all[:birthdate])
         expect(test_archer.gender).to eq(valid_all[:gender])
         expect(test_archer.home_city).to eq(valid_all[:home_city])
         expect(test_archer.home_state).to eq(valid_all[:home_state])
@@ -142,12 +142,12 @@ RSpec.describe Archer, type: :model do
         expect(archer).to be_valid
         expect(Archer.all.count).to eq(1)
         expect(archer.authenticate(valid_req[:password])).to eq(archer)
-        expect(archer.format_birthdate).to eq("10/01/2001")
-
+        
         expect(archer.username).to eq(valid_req[:username])
         expect(archer.email).to eq(valid_req[:email])
         expect(archer.first_name).to eq(valid_req[:first_name].capitalize)
         expect(archer.last_name).to eq(valid_req[:last_name].capitalize)
+        expect(archer.birthdate).to eq(valid_req[:birthdate])
         expect(archer.gender).to eq(valid_req[:gender])
         expect(archer.default_age_class).to eq("Junior")
       end
@@ -157,12 +157,12 @@ RSpec.describe Archer, type: :model do
 
         expect(test_archer).to be_valid
         expect(test_archer.authenticate(update[:password])).to eq(test_archer)
-        expect(test_archer.format_birthdate).to eq("10/01/2001")
 
         expect(test_archer.username).to eq(update[:username])
         expect(test_archer.email).to eq(update[:email])
         expect(test_archer.first_name).to eq(update[:first_name].capitalize)
         expect(test_archer.last_name).to eq(update[:last_name].capitalize)
+        expect(test_archer.birthdate).to eq(update[:birthdate])
         expect(test_archer.gender).to eq(update[:gender])
         expect(test_archer.home_city).to eq(update[:home_city])
         expect(test_archer.home_state).to eq(update[:home_state])
