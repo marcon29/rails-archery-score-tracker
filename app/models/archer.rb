@@ -25,6 +25,7 @@ class Archer < ApplicationRecord
         inclusion: { in: GENDERS, message: "You can only choose male or female."  }
     validates :default_age_class, presence: true, inclusion: { in: @@all_age_classes }
     before_validation :all_age_classes, :format_birthdate, :assign_default_age_class, :format_names
+    before_save :format_username, :format_email
 
     # #########################
     # validation helpers (already tested)
@@ -57,25 +58,27 @@ class Archer < ApplicationRecord
     end
 
     def format_names
-        self.first_name = self.first_name.capitalize # if self.first_name
-        self.last_name = self.last_name.capitalize # if self.last_name
+        self.first_name = self.first_name.capitalize
+        self.last_name = self.last_name.capitalize
+    end
+
+    def format_email
+        self.email = self.email.downcase.gsub(" ","")
+    end
+
+    def format_username
+        self.username = self.username.downcase.gsub(" ","")
     end
 
     # #########################
     # other helpers (need to add tests to helpers section tested)
 
     # need helpers
-        # need several format methods: 
-            # username (use as callback for keeping data cleaner)
-                # make all lowercase, remove spaces
-            # email (use as callback for keeping data cleaner)
-                # make all lowercase, remove spaces
-            
-            # all home info
-                # should be some gems to better handle this
-                # city - make initial cap
-                # state - all cap, two letter only
-                # country - abbreviations?
+        # all home info
+            # should be some gems to better handle this
+            # city - make initial cap
+            # state - all cap, two letter only
+            # country - abbreviations?
 
     def age
         day_today = Date.today.strftime("%m/%d")
@@ -99,7 +102,6 @@ class Archer < ApplicationRecord
         # need to update to using the associated instance???
         # possible updates in ArchCat model: instance scope (for above)?
         ArcherCategory.eligible_categories_by_name(self.eligibility_age, self.gender)
-        
     end
 
     def eligbile_age_classes

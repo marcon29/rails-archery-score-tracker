@@ -96,8 +96,9 @@ RSpec.describe Archer, type: :model do
     {username: "testuser", email: "testuser@example.com", password: "test", first_name: "test", last_name: "user", birthdate: "1980-07-01", gender: "bad data", home_city: "Denver", home_state: "CO", home_country: "USA", default_age_class: "bad data"}
   }
 
+  # only tests for username and email - this tests for spaces, other cases are adjusted manually in corresponding tests
   let(:bad_format) {
-    {}
+    {username: "bad user", email: "joe blow@example.com", password: "test", first_name: "joe", last_name: "blow", birthdate: "1980-07-01", gender: "Male", home_city: "Denver", home_state: "CO", home_country: "USA", default_age_class: "Senior"}
   }
 
   # add default error messages for different validation failures
@@ -112,9 +113,6 @@ RSpec.describe Archer, type: :model do
     before(:each) do
       assoc_category_senior
       assoc_category_junior
-      # assoc_round_set
-      # assoc_target
-      # assoc_dist_targ
     end
 
     describe "valid with all required and unrequired input data" do
@@ -192,7 +190,6 @@ RSpec.describe Archer, type: :model do
       it "is invalid when unique attributes are duplicated and has correct error message" do
         test_archer
         expect(Archer.all.count).to eq(1)
-
         archer = Archer.create(duplicate)
 
         expect(archer).to be_invalid
@@ -210,15 +207,115 @@ RSpec.describe Archer, type: :model do
         expect(archer.errors.messages[:default_age_class]).to include(default_inclusion_message)
       end
 
-      # it "is invalid when attributes are the wrong format and has correct error message" do
-      #   archer = Archer.create(bad_format)
+      describe "is invalid when username has the wrong format and has correct error message" do
+        it "username has spaces" do
+          archer = Archer.create(bad_format)
 
-      #   expect(archer).to be_invalid
-      #   expect(Archer.all.count).to eq(0)
-      #   expect(archer.errors.messages[:username]).to include("Username can only use letters and numbers without spaces.")
-      #   expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
-      #   expect(archer.errors.messages[:password]).to include("You must provide a password.")
-      # end
+          expect(archer).to be_invalid
+          expect(Archer.all.count).to eq(0)
+          expect(archer.errors.messages[:username]).to include("Username can only use letters and numbers without spaces.")
+        end
+
+        it "username has specia characters" do
+          bad_format[:username] = "ba$d%u$er"
+          archer = Archer.create(bad_format)
+
+          expect(archer).to be_invalid
+          expect(Archer.all.count).to eq(0)
+          expect(archer.errors.messages[:username]).to include("Username can only use letters and numbers without spaces.")
+        end
+
+        it "username has punctuation" do
+          bad_format[:username] = "bad.user!"
+          archer = Archer.create(bad_format)
+
+          expect(archer).to be_invalid
+          expect(Archer.all.count).to eq(0)
+          expect(archer.errors.messages[:username]).to include("Username can only use letters and numbers without spaces.")
+        end
+      end
+
+      describe "is invalid when email has the wrong format and has correct error message" do
+        it "email has spaces" do
+          archer = Archer.create(bad_format)
+
+          expect(archer).to be_invalid
+          expect(Archer.all.count).to eq(0)
+          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
+        end
+
+        it "email is missing @ symbol" do
+          bad_format[:email] = "joe_blowexample.com"
+          archer = Archer.create(bad_format)
+
+          expect(archer).to be_invalid
+          expect(Archer.all.count).to eq(0)
+          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
+        end
+        
+        it "email is missing dot" do
+          bad_format[:email] = "joe_blow@examplecom"
+          archer = Archer.create(bad_format)
+
+          expect(archer).to be_invalid
+          expect(Archer.all.count).to eq(0)
+          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
+        end
+
+        it "email is missing 'com' after dot" do
+          bad_format[:email] = "joe_blow@example."
+          archer = Archer.create(bad_format)
+
+          expect(archer).to be_invalid
+          expect(Archer.all.count).to eq(0)
+          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
+        end
+
+        it "email has short 'com' after dot" do
+          bad_format[:email] = "joe_blow@example.c"
+          archer = Archer.create(bad_format)
+
+          expect(archer).to be_invalid
+          expect(Archer.all.count).to eq(0)
+          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
+        end
+
+        it "email has long 'com' after dot" do
+          bad_format[:email] = "joe_blow@example.comm"
+          archer = Archer.create(bad_format)
+
+          expect(archer).to be_invalid
+          expect(Archer.all.count).to eq(0)
+          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
+        end
+
+        it "email has invalid 'com' after dot" do
+          bad_format[:email] = "joe_blow@example.c2m"
+          archer = Archer.create(bad_format)
+
+          expect(archer).to be_invalid
+          expect(Archer.all.count).to eq(0)
+          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
+        end
+
+        it "email missing local part" do
+          bad_format[:email] = "@example.com"
+          archer = Archer.create(bad_format)
+
+          expect(archer).to be_invalid
+          expect(Archer.all.count).to eq(0)
+          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
+        end
+
+        it "email missing domain" do
+          bad_format[:email] = "joe_blow@.com"
+          archer = Archer.create(bad_format)
+          
+          expect(archer).to be_invalid
+          expect(Archer.all.count).to eq(0)
+          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
+        end
+      end
     end
   end
 
@@ -258,10 +355,6 @@ RSpec.describe Archer, type: :model do
   describe "all helper methods work correctly:" do
     before(:each) do
       assoc_category_senior
-      # assoc_category_junior
-      # assoc_round_set
-      # assoc_target
-      # assoc_dist_targ
     end
 
     it "can return the archer's actual age" do
@@ -284,7 +377,6 @@ RSpec.describe Archer, type: :model do
     it "can return all the age classes the archer is elgibile for" do
       expect(test_archer.eligbile_age_classes).to include(assoc_category_senior.cat_age_class)
     end
-
 
     it "helpers TBD" do
       pending "add as needed"
