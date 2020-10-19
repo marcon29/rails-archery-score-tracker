@@ -1,5 +1,272 @@
 require 'rails_helper'
 
 RSpec.describe ScoreSession, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+    # add attrs (must be in hash) for all regular valid instances of ScoreSession
+        # one with all attrs defined and one with only required attrs defined
+        # doing this separately makes writing the expect statments easier
+    let(:valid_all) {
+        {
+        name: "2020 World Cup", 
+        score_session_type: "Tournament", 
+        city: "Oxford", 
+        state: "OH", 
+        country: "USA", 
+        start_date: "2020-09-01",
+        end_date: "2020-09-05",
+        rank: "1st", 
+        active: true
+        }
+    }
+
+    # create the main valid test instances, using the valid_all attrs (not persisted until called)
+        # only add multiple instantiations if need multiple instances at the same time for testing
+        # if just need to adjust attr values, use the attr sets below
+    let(:test_score_session) {
+        ScoreSession.create(valid_all)
+    }
+    
+    #  all instances of AssocModels needed for testing associations (not persisted until called)
+    let(:assoc_archer) {
+        Archer.create(
+            username: "testuser", 
+            email: "testuser@example.com", 
+            password: "test", 
+            first_name: "test", 
+            last_name: "user", 
+            birthdate: "1980-07-01", 
+            gender: "Male",
+            home_city: "Denver", 
+            home_state: "CO", 
+            home_country: "USA", 
+            default_age_class: "Senior"
+        )
+    }
+    
+    # let(:assoc_round) {
+    #   Round.create()
+    # }
+
+    let(:assoc_round_set) {
+        RoundSet.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
+    }
+
+    # let(:assoc_shot) {
+    #   Shot.create()
+    # }
+
+    let(:assoc_category_senior) {
+        ArcherCategory.create(
+        cat_code: "WA-RM", 
+        gov_body: "World Archery", 
+        cat_division: "Recurve", 
+        cat_age_class: "Senior", 
+        min_age: 21, 
+        max_age: 49, 
+        open_to_younger: true, 
+        open_to_older: true, 
+        cat_gender: "Male"
+        )
+    }
+
+    let(:assoc_target) {
+        Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+    }
+
+    let(:assoc_dist_targ) {
+        DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
+    }
+
+    # add the following attr sets for common testing (delete any unnecessary for model)
+
+    # let(:valid_inactive) {
+    #     {name: "2000 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2000-09-01", end_date: "2000-09-05", rank: "1st", active: false}
+    # }
+
+    # take valid_all and make blank (don't delete) any non-required values
+    let(:valid_req) {
+        {
+        name: "2020 World Cup", 
+        score_session_type: "Tournament", 
+        city: "Oxford", 
+        state: "OH", 
+        country: "USA", 
+        start_date: "2020-09-01",
+        end_date: "2020-09-05",        
+        active: ""
+        }
+    }
+
+    # should be exact same as valid_all
+    let(:duplicate) {
+        {name: "2020 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2020-09-01", end_date: "2020-09-05", rank: "1st", active: true}
+    }
+
+    # all new values for every attr
+    let(:update) {
+        {name: "2010 PanAm Trials", score_session_type: "Competition", city: "Chula Vista", state: "CA", country: "USA", start_date: "2010-09-01", end_date: "", rank: "3rd", active: false}
+    }
+
+    # all blank values for every attr (can test that each is correct by testing error messages)
+    let(:blank) {
+        {name: "", score_session_type: "", city: "", state: "", country: "", start_date: "", end_date: "", rank: "", active: ""}
+    }
+
+    # take valid_all and change any values validated for inclusion so they're not included
+    let(:bad_inclusion) {
+        {name: "2020 World Cup", score_session_type: "bad data", city: "Oxford", state: "OH", country: "USA", start_date: "2020-09-01", end_date: "2020-09-05", rank: "1st", active: true}
+    }
+
+    # take valid_all and change any values validated for number/format so they're incorrect
+    let(:bad_format) {
+        {name: value}
+    }
+  
+    # add the following default error messages for different validation failures (delete any unnecessary for model)
+    let(:default_missing_message) {"can't be blank"}
+    let(:default_duplicate_message) {"has already been taken"}
+    let(:default_inclusion_message) {"is not included in the list"}
+    let(:default_number_message) {"is not a number"}
+    let(:default_format_message) {"is invalid"}
+
+    # object creation and validation tests #######################################
+    describe "model creates and updates only valid instances" do
+        describe "valid with all required and unrequired input data" do
+            it "instance is valid with all attributes" do
+                expect(ScoreSession.all.count).to eq(0)
+
+                expect(test_score_session).to be_valid
+                expect(ScoreSession.all.count).to eq(1)
+                # expect(test_archer.start_date).to eq("09/01/2020")
+                # expect(test_archer.end_date).to eq("09/05/2020")
+
+                expect(test_score_session.name).to eq(valid_all[:name])
+                expect(test_score_session.score_session_type).to eq(valid_all[:score_session_type])
+                expect(test_score_session.city).to eq(valid_all[:city])
+                expect(test_score_session.state).to eq(valid_all[:state])
+                expect(test_score_session.country).to eq(valid_all[:country])
+                expect(test_score_session.start_date).to eq(valid_all[:start_date])
+                expect(test_score_session.end_date).to eq(valid_all[:end_date])
+                expect(test_score_session.rank).to eq(valid_all[:rank])
+                expect(test_score_session.active).to eq(valid_all[:active])
+            end
+            
+            it "instance is valid with only required attributes and auto-assigns active status" do
+                expect(ScoreSession.all.count).to eq(0)
+                score_session = ScoreSession.create(valid_req)
+
+                expect(score_session).to be_valid
+                expect(ScoreSession.all.count).to eq(1)
+                
+                expect(score_session.name).to eq(valid_req[:name])
+                expect(score_session.score_session_type).to eq(valid_req[:score_session_type])
+                expect(score_session.city).to eq(valid_req[:city])
+                expect(score_session.state).to eq(valid_req[:state])
+                expect(score_session.country).to eq(valid_req[:country])
+                expect(score_session.start_date).to eq(valid_req[:start_date])
+                expect(score_session.end_date).to eq(valid_req[:end_date])
+                expect(score_session.active).to eq(true)
+            end
+
+            it "instance is valid when updating all attrs" do
+                test_score_session.update(update)
+                
+                expect(test_score_session.name).to eq(update[:name])
+                expect(test_score_session.score_session_type).to eq(update[:score_session_type])
+                expect(test_score_session.city).to eq(update[:city])
+                expect(test_score_session.state).to eq(update[:state])
+                expect(test_score_session.country).to eq(update[:country])
+                expect(test_score_session.start_date).to eq(update[:start_date])
+                expect(test_score_session.end_date).to eq(update[:end_date])
+                expect(test_score_session.rank).to eq(update[:rank])
+                expect(test_score_session.active).to eq(update[:active])
+            end
+        end
+
+        describe "invalid if input data is missing or bad" do
+            it "is invalid without required attributes and has correct error message" do
+                score_session = ScoreSession.create(blank)
+
+                expect(score_session).to be_invalid
+                expect(ScoreSession.all.count).to eq(0)
+                expect(score_session.errors.messages[:name]).to include("You must enter a name.")
+                expect(score_session.errors.messages[:score_session_type]).to include("You must choose a score session type.")
+                expect(score_session.errors.messages[:city]).to include("You must enter a city.")
+                expect(score_session.errors.messages[:state]).to include("You must enter a state.")
+                expect(score_session.errors.messages[:country]).to include("You must enter a country.")
+                expect(score_session.errors.messages[:start_date]).to include("You must choose a start date session type.")
+                expect(score_session.errors.messages[:end_date]).to include(default_missing_message)
+                expect(score_session.errors.messages[:active]).to include(default_missing_message)
+                # add expect for every required attr, update error message if using custom
+            end
+
+            it "is invalid when unique attributes are duplicated and has correct error message" do
+                test_score_session
+                expect(ScoreSession.all.count).to eq(1)
+                score_session = ScoreSession.create(duplicate)
+
+                expect(score_session).to be_invalid
+                expect(ScoreSession.all.count).to eq(1)
+                expect(score_session.errors.messages[:name]).to include("That username is already taken.")
+            end
+
+            it "is invalid if value not included in corresponding selection list and has correct error message" do
+                score_session = ScoreSession.create(bad_inclusion)
+
+                expect(score_session).to be_invalid
+                expect(ScoreSession.all.count).to eq(0)
+                expect(score_session.errors.messages[:score_session_type]).to include(default_inclusion_message)
+            end
+
+            it "is invalid when attributes are the wrong format and has correct error message" do
+                pending "not sure if need this - if so update attr set above"
+                score_session = ScoreSession.create(bad_format)
+
+                expect(score_session).to be_invalid
+                expect(ScoreSession.all.count).to eq(0)
+                expect(score_session.errors.messages[:start_date]).to include(default_format_message)
+                expect(score_session.errors.messages[:end_date]).to include(default_format_message)
+                expect(score_session.errors.messages[:ramk]).to include(default_format_message)
+            end
+        end
+    end
+
+    # association tests ########################################################
+    describe "instances are properly associated to other models" do
+        before(:each) do
+            # load all AssocModels that must be in DB for tests to work
+        end
+
+        it "has one Archers" do
+            pending "need to add create associated models and add associations"
+            expect(test_score_session.archer).to eq(assoc_archer)
+        end
+      
+        it "has many Rounds" do
+            pending "need to add create associated models and add associations"
+            expect(test_score_session.rounds).to include(assoc_round)
+        end
+    
+        it "has many RoundSets" do
+            pending "need to add create associated models and add associations"
+            expect(test_score_session.round_sets).to include(assoc_round_set)
+        end
+    
+        it "has many Shots" do
+            pending "need to add create associated models and add associations"
+            expect(test_score_session.shots).to include(assoc_shot)
+        end
+    
+        it "has many ArcherCategories" do
+            pending "need to add create associated models and add associations"
+            expect(test_test_score_sessionarcher.archer_categories).to include(assoc_category)
+        end
+    end
+
+    # helper method tests ########################################################
+    describe "all helper methods work correctly:" do
+        it "helpers TBD" do
+            pending "add as needed"
+            expect(test_score_session).to be_invalid
+        end
+    end
 end

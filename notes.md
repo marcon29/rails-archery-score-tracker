@@ -14,6 +14,10 @@
     
     - set up associations between Shot, RoundSet, Round, ScoreSession, Archer
 
+    - find gem and set up location information
+        - user home info
+        - score_session location info
+
     - start building out controllers/views
         - build Session model
         - build user authentication
@@ -22,6 +26,8 @@
         - build Target Management
         - build Round Management
         - build Results views (ScoreSessions show and index)
+
+
     
 
   
@@ -46,6 +52,10 @@
 
 # Archer Model
     - need to update assign_default_age_class as you create associations
+
+# ScoreSession Model
+    - force rank as necessary if not practice?
+        - only when all shots are scored? or all shots for each round (or RoundSet)?
 
 # Archer Controller 
     - this is where to test attr formatting methods with actual input

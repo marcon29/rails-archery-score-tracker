@@ -42,4 +42,4 @@ yarn-debug.log*
 
 # Ignore all scratch and dev notes files.
 scratch_tests.rb
-notes_.md
+notes.md
