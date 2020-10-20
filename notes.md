@@ -1,6 +1,4 @@
 # Next to do
-    - build Round model
-    
     - build RoundSet model (phase 2)
         - build rest to make all associations with functional models work
     
@@ -34,6 +32,7 @@
         - Shots - all private
         - Target - shared (pre-loaded) and private (user-created)
         - All elsee - shared (pre-loaded)
+    - update numericality validations to be greater than 0
     
 # Round Model
     - when instantiating, see if an existing one first
@@ -93,6 +92,10 @@
 
 # Archer Controller 
     - this is where to test attr formatting methods with actual input
+
+# Round Controller 
+    - can't allow an empty value for user_edit to be passed to model
+        - i.e. no user_edit = "", must not use at all and allow DB default or explictly setting only
 
 # Sessions Controller 
     - since Archer.default_cat will auto-update over time, need way to check if default_age_class must also update upon login

@@ -84,12 +84,12 @@ RSpec.describe Round, type: :model do
 
     # start w/ valid_all, change all values, make any auto-assign blank (don't delete)
     let(:update) {
-        {name: "720 Round", discipline: "Indoor", round_type: "Match", num_roundsets: 4, user_edit: ""}
+        {name: "720 Round", discipline: "Indoor", round_type: "Match", num_roundsets: 2}
     }
 
     # every attr blank
     let(:blank) {
-        {name: "", discipline: "", round_type: "", num_roundsets: 4, user_edit: ""}
+        {name: "", discipline: "", round_type: "", num_roundsets: ""}
     }
   
     # add the following default error messages for different validation failures (delete any unnecessary for model)
@@ -122,16 +122,16 @@ RSpec.describe Round, type: :model do
                 expect(Round.all.count).to eq(1)
 
                 # req input tests (should have value in valid_req)
-                expect(test_round.name).to eq(valid_req[:name])
-                expect(test_round.discipline).to eq(valid_req[:discipline])
-                expect(test_round.round_type).to eq(valid_req[:round_type])
-                expect(test_round.num_roundsets).to eq(valid_req[:num_roundsets])
+                expect(round.name).to eq(valid_req[:name])
+                expect(round.discipline).to eq(valid_req[:discipline])
+                expect(round.round_type).to eq(valid_req[:round_type])
+                expect(round.num_roundsets).to eq(valid_req[:num_roundsets])
 
                 # not req input tests (user_edit auto-asigned from missing)
-                expect(test_round.user_edit).to eq(valid_req[:user_edit])
+                expect(round.user_edit).to eq(true)
             end
 
-            it "instance is valid when updating all attrs, re-assigns user_edit if value deleted" do
+            it "instance is valid when updating all attrs, does not re-assign user_edit if value deleted" do
                 test_round.update(update)
                 
                 expect(test_round).to be_valid
@@ -143,7 +143,7 @@ RSpec.describe Round, type: :model do
                 expect(test_round.num_roundsets).to eq(update[:num_roundsets])
 
                 # user_edit auto-asigned from blank
-                expect(test_round.user_edit).to eq(update[:user_edit])
+                expect(test_round.user_edit).to eq(false)
             end
         end
 
@@ -156,8 +156,8 @@ RSpec.describe Round, type: :model do
                 expect(round.errors.messages[:name]).to include("You must enter a name.")
                 expect(round.errors.messages[:discipline]).to include("You must choose a discipline.")
                 expect(round.errors.messages[:round_type]).to include("You must choose a round type.")
-                expect(round.errors.messages[:num_roundsets]).to include("You must enter the number of distances/sets for this round.")
-                expect(round.errors.messages[:user_edit]).to include(default_missing_message)
+                expect(round.errors.messages[:num_roundsets]).to include("You must enter a number greater than 0.")
+                expect(round.user_edit).to eq(true)
             end
 
             it "is invalid and has correct error message when unique attributes are duplicated" do
@@ -184,7 +184,7 @@ RSpec.describe Round, type: :model do
                 expect(Round.all.count).to eq(0)
                 expect(round.errors.messages[:discipline]).to include(default_inclusion_message)
                 expect(round.errors.messages[:round_type]).to include(default_inclusion_message)
-                expect(round.errors.messages[:num_roundsets]).to include(default_number_message)
+                expect(round.errors.messages[:num_roundsets]).to include("You must enter a number greater than 0.")
             end
         end
     end
@@ -225,7 +225,7 @@ RSpec.describe Round, type: :model do
     describe "all helper methods work correctly:" do
         it "can return the round's name with correct capitalization" do
             duplicate[:name] = "1440 round"
-            round = ScoreSession.create(duplicate)
+            round = Round.create(duplicate)
             expect(round.name).to eq(duplicate[:name].titlecase)
         end
 

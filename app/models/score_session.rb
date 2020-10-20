@@ -20,7 +20,7 @@ class ScoreSession < ApplicationRecord
     before_validation :format_name
 
     
-    # callbacks (validations): 
+    # callbacks/validation helpers 
     def assign_dates
         if self.start_date.blank?
             errors.add(:start_date, "You must choose a start date.")
