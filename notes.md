@@ -22,9 +22,28 @@
         - build Round Management
         - build Results views (ScoreSessions show and index)
 
-
+# General
+    - think about shared vs. private objects - can be both in same model
+        - shared are pre-loaded and not editable by user
+        - private are user-generated and can be (not always) edited by user
+        - Archer - all private
+        - ScoreSessions - all private
+        - Rounds - shared (pre-loaded) and private (user-created)
+        - Roundsets - shared (pre-loaded) and private (user-created)
+            - this isn't marked right now - might be able to via Round assoc
+        - Shots - all private
+        - Target - shared (pre-loaded) and private (user-created)
+        - All elsee - shared (pre-loaded)
     
-
+# Round Model
+    - when instantiating, see if an existing one first
+    - pre-loaded can't be updated (same as pre-load targets)
+        - pre-loaded are only shared 
+    - auto assigns name
+    - when creating via ScoreSession
+        - if existing (incl. preload), associates to ScoreSession
+        - if new, is associated to only that user (no others can access)
+            
   
 
 # Shot model
@@ -51,6 +70,7 @@
 # ScoreSession Model
     - force rank as necessary if not practice?
         - only when all shots are scored? or all shots for each round (or RoundSet)?
+    - only allow one active object at time
 
 # Controller Helpers
     - all date formatting needs to go in here, not models

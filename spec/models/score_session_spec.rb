@@ -135,6 +135,7 @@ RSpec.describe ScoreSession, type: :model do
                 expect(score_session).to be_valid
                 expect(ScoreSession.all.count).to eq(1)
                 
+                # req input tests
                 expect(score_session.name).to eq(valid_req[:name])
                 expect(score_session.score_session_type).to eq(valid_req[:score_session_type])
                 expect(score_session.city).to eq(valid_req[:city])
@@ -142,6 +143,10 @@ RSpec.describe ScoreSession, type: :model do
                 expect(score_session.country).to eq(valid_req[:country])
                 expect(score_session.start_date).to eq(valid_req[:start_date].to_date)
                 expect(score_session.end_date).to eq(valid_req[:start_date].to_date)
+                
+                # not req input tests (active and end date auto-asigned from missing)
+                expect(score_session.end_date).to eq(valid_req[:start_date].to_date)
+                expect(score_session.rank).to eq(valid_req[:rank])
                 expect(score_session.active).to eq(true)
             end
 
@@ -154,9 +159,11 @@ RSpec.describe ScoreSession, type: :model do
                 expect(test_score_session.state).to eq(update[:state])
                 expect(test_score_session.country).to eq(update[:country])
                 expect(test_score_session.start_date).to eq(update[:start_date].to_date)
-                expect(test_score_session.end_date).to eq(update[:start_date].to_date)
                 expect(test_score_session.rank).to eq(update[:rank])
                 expect(test_score_session.active).to eq(update[:active])
+
+                # end date auto-asigned from blank
+                expect(test_score_session.end_date).to eq(update[:start_date].to_date)
             end
         end
 
@@ -291,7 +298,6 @@ RSpec.describe ScoreSession, type: :model do
                 expect(score_session.rank).to eq("Loss")
             end
         end
-
 
         it "helpers TBD" do
             pending "add as needed"
