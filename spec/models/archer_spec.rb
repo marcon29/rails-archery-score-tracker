@@ -7,9 +7,9 @@ RSpec.describe Archer, type: :model do
       username: "testuser", 
       email: "testuser@example.com", 
       password: "test", 
-      first_name: "test", 
-      last_name: "user", 
-      birthdate: "1980-07-01",
+      first_name: "Test", 
+      last_name: "User", 
+      birthdate: "1980-07-01", 
       gender: "Male", 
       home_city: "Denver", 
       home_state: "CO", 
@@ -76,29 +76,24 @@ RSpec.describe Archer, type: :model do
   }
 
   # add attr sets for common testing
+  # remove any non-required atts, and auto-assign (not auto_format) attrs, all should be formatted correctly already
   let(:valid_req) {
-    {username: "testuser2", email: "testuser2@example.com", password: "test", first_name: "test2", last_name: "user2", birthdate: "2001-10-01", gender: "Female", default_age_class: ""}
+    {username: "testuser2", email: "testuser2@example.com", password: "test", first_name: "Test2", last_name: "User2", birthdate: "2001-10-01", gender: "Female"}
   }
 
+  # exact duplicate of valid_all - use as whole for testing unique values, use for testing specific atttrs (bad inclusion, bad format, etc.)
   let(:duplicate) {
-    {username: "testuser", email: "testuser@example.com", password: "test", first_name: "test", last_name: "user", birthdate: "1980-07-01", gender: "Male", home_city: "Denver", home_state: "CO", home_country: "USA", default_age_class: "Senior"}
+    {username: "testuser", email: "testuser@example.com", password: "test", first_name: "Test", last_name: "User", birthdate: "1980-07-01", gender: "Male", home_city: "Denver", home_state: "CO", home_country: "USA", default_age_class: "Senior"}
   }
   
+  # start w/ valid_all, change all values (correctly formatted), make any auto-assign blank (don't delete)
   let(:update) {
     {username: "updateuser", email: "update-user@example.com", password: "test", first_name: "Jane", last_name: "Doe", birthdate: "2001-10-01", gender: "Female", home_city: "Chicago", home_state: "IL", home_country: "USA", default_age_class: ""}
   }
 
+  # every attr blank
   let(:blank) {
     {username: "", email: "", password: "", first_name: "", last_name: "", birthdate: "", gender: "", home_city: "", home_state: "", home_country: "", default_age_class: ""}
-  }
-
-  let(:bad_inclusion) {
-    {username: "testuser", email: "testuser@example.com", password: "test", first_name: "test", last_name: "user", birthdate: "1980-07-01", gender: "bad data", home_city: "Denver", home_state: "CO", home_country: "USA", default_age_class: "bad data"}
-  }
-
-  # only tests for username and email - this tests for spaces, other cases are adjusted manually in corresponding tests
-  let(:bad_format) {
-    {username: "bad user", email: "joe blow@example.com", password: "test", first_name: "joe", last_name: "blow", birthdate: "1980-07-01", gender: "Male", home_city: "Denver", home_state: "CO", home_country: "USA", default_age_class: "Senior"}
   }
 
   # add default error messages for different validation failures
@@ -125,9 +120,9 @@ RSpec.describe Archer, type: :model do
 
         expect(test_archer.username).to eq(valid_all[:username])
         expect(test_archer.email).to eq(valid_all[:email])
-        expect(test_archer.first_name).to eq(valid_all[:first_name].capitalize)
-        expect(test_archer.last_name).to eq(valid_all[:last_name].capitalize)
-        expect(test_archer.birthdate).to eq(valid_all[:birthdate])
+        expect(test_archer.first_name).to eq(valid_all[:first_name])
+        expect(test_archer.last_name).to eq(valid_all[:last_name])
+        expect(test_archer.birthdate).to eq(valid_all[:birthdate].to_date)
         expect(test_archer.gender).to eq(valid_all[:gender])
         expect(test_archer.home_city).to eq(valid_all[:home_city])
         expect(test_archer.home_state).to eq(valid_all[:home_state])
@@ -145,9 +140,9 @@ RSpec.describe Archer, type: :model do
         
         expect(archer.username).to eq(valid_req[:username])
         expect(archer.email).to eq(valid_req[:email])
-        expect(archer.first_name).to eq(valid_req[:first_name].capitalize)
-        expect(archer.last_name).to eq(valid_req[:last_name].capitalize)
-        expect(archer.birthdate).to eq(valid_req[:birthdate])
+        expect(archer.first_name).to eq(valid_req[:first_name])
+        expect(archer.last_name).to eq(valid_req[:last_name])
+        expect(archer.birthdate).to eq(valid_req[:birthdate].to_date)
         expect(archer.gender).to eq(valid_req[:gender])
         expect(archer.default_age_class).to eq("Junior")
       end
@@ -160,9 +155,9 @@ RSpec.describe Archer, type: :model do
 
         expect(test_archer.username).to eq(update[:username])
         expect(test_archer.email).to eq(update[:email])
-        expect(test_archer.first_name).to eq(update[:first_name].capitalize)
-        expect(test_archer.last_name).to eq(update[:last_name].capitalize)
-        expect(test_archer.birthdate).to eq(update[:birthdate])
+        expect(test_archer.first_name).to eq(update[:first_name])
+        expect(test_archer.last_name).to eq(update[:last_name])
+        expect(test_archer.birthdate).to eq(update[:birthdate].to_date)
         expect(test_archer.gender).to eq(update[:gender])
         expect(test_archer.home_city).to eq(update[:home_city])
         expect(test_archer.home_state).to eq(update[:home_state])
@@ -172,7 +167,7 @@ RSpec.describe Archer, type: :model do
     end
 
     describe "invalid if input data is missing or bad" do
-      it "is invalid without required attributes and has correct error message" do
+      it "is invalid and has correct error message without required attributes" do
         archer = Archer.create(blank)
 
         expect(archer).to be_invalid
@@ -187,7 +182,7 @@ RSpec.describe Archer, type: :model do
         expect(archer.errors.messages[:default_age_class]).to include(default_missing_message)
       end
     
-      it "is invalid when unique attributes are duplicated and has correct error message" do
+      it "is invalid and has correct error message when unique attributes are duplicated" do
         test_archer
         expect(Archer.all.count).to eq(1)
         archer = Archer.create(duplicate)
@@ -198,119 +193,39 @@ RSpec.describe Archer, type: :model do
         expect(archer.errors.messages[:email]).to include("That email is already taken.")
       end
 
-      it "is invalid if value not included in corresponding selection list and has correct error message" do
-        archer = Archer.create(bad_inclusion)
+      it "is invalid and has correct error message if value not included in corresponding selection list" do
+        duplicate[:gender] = "bad data"
+        duplicate[:default_age_class] = "bad data"
+        archer = Archer.create(duplicate)
 
         expect(archer).to be_invalid
         expect(Archer.all.count).to eq(0)
         expect(archer.errors.messages[:gender]).to include("You can only choose male or female.")
         expect(archer.errors.messages[:default_age_class]).to include(default_inclusion_message)
       end
+      
+      it "is invalid and has correct error message when username has the wrong format" do
+        # has spaces, has special characters, has punctuation
+        bad_usernames = ["bad user", "ba$d%u$er", "bad.user!"]
 
-      describe "is invalid when username has the wrong format and has correct error message" do
-        it "username has spaces" do
-          archer = Archer.create(bad_format)
-
-          expect(archer).to be_invalid
-          expect(Archer.all.count).to eq(0)
-          expect(archer.errors.messages[:username]).to include("Username can only use letters and numbers without spaces.")
-        end
-
-        it "username has specia characters" do
-          bad_format[:username] = "ba$d%u$er"
-          archer = Archer.create(bad_format)
-
-          expect(archer).to be_invalid
-          expect(Archer.all.count).to eq(0)
-          expect(archer.errors.messages[:username]).to include("Username can only use letters and numbers without spaces.")
-        end
-
-        it "username has punctuation" do
-          bad_format[:username] = "bad.user!"
-          archer = Archer.create(bad_format)
-
+        bad_usernames.each do | test_value |
+          duplicate[:username] = test_value
+          archer = Archer.create(duplicate)
           expect(archer).to be_invalid
           expect(Archer.all.count).to eq(0)
           expect(archer.errors.messages[:username]).to include("Username can only use letters and numbers without spaces.")
         end
       end
 
-      describe "is invalid when email has the wrong format and has correct error message" do
-        it "email has spaces" do
-          archer = Archer.create(bad_format)
+      it "is invalid and has correct error message when email has the wrong format" do
+        # has spaces, is missing @ symbol, is missing dot
+        # is missing 'com' after dot, has short 'com' after dot, has long 'com' after dot, has invalid 'com' after dot
+        # missing local part, missing domain
+        bad_emails = ["joe blow@example.com", "joe_blowexample.com", "joe_blow@examplecom", "joe_blow@example.", "joe_blow@example.c", "joe_blow@example.comm", "joe_blow@example.c2m", "@example.com", "joe_blow@.com"]
 
-          expect(archer).to be_invalid
-          expect(Archer.all.count).to eq(0)
-          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
-        end
-
-        it "email is missing @ symbol" do
-          bad_format[:email] = "joe_blowexample.com"
-          archer = Archer.create(bad_format)
-
-          expect(archer).to be_invalid
-          expect(Archer.all.count).to eq(0)
-          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
-        end
-        
-        it "email is missing dot" do
-          bad_format[:email] = "joe_blow@examplecom"
-          archer = Archer.create(bad_format)
-
-          expect(archer).to be_invalid
-          expect(Archer.all.count).to eq(0)
-          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
-        end
-
-        it "email is missing 'com' after dot" do
-          bad_format[:email] = "joe_blow@example."
-          archer = Archer.create(bad_format)
-
-          expect(archer).to be_invalid
-          expect(Archer.all.count).to eq(0)
-          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
-        end
-
-        it "email has short 'com' after dot" do
-          bad_format[:email] = "joe_blow@example.c"
-          archer = Archer.create(bad_format)
-
-          expect(archer).to be_invalid
-          expect(Archer.all.count).to eq(0)
-          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
-        end
-
-        it "email has long 'com' after dot" do
-          bad_format[:email] = "joe_blow@example.comm"
-          archer = Archer.create(bad_format)
-
-          expect(archer).to be_invalid
-          expect(Archer.all.count).to eq(0)
-          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
-        end
-
-        it "email has invalid 'com' after dot" do
-          bad_format[:email] = "joe_blow@example.c2m"
-          archer = Archer.create(bad_format)
-
-          expect(archer).to be_invalid
-          expect(Archer.all.count).to eq(0)
-          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
-        end
-
-        it "email missing local part" do
-          bad_format[:email] = "@example.com"
-          archer = Archer.create(bad_format)
-
-          expect(archer).to be_invalid
-          expect(Archer.all.count).to eq(0)
-          expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
-        end
-
-        it "email missing domain" do
-          bad_format[:email] = "joe_blow@.com"
-          archer = Archer.create(bad_format)
-          
+        bad_emails.each do | test_value |
+          duplicate[:email] = test_value
+          archer = Archer.create(duplicate)
           expect(archer).to be_invalid
           expect(Archer.all.count).to eq(0)
           expect(archer.errors.messages[:email]).to include("Email doesn't look valid. Please use another.")
@@ -357,6 +272,18 @@ RSpec.describe Archer, type: :model do
       assoc_category_senior
     end
 
+    it "can return the archer's first and last names with correct capitalization" do
+      duplicate[:first_name] = "some"
+      duplicate[:last_name] = "tester"
+      archer = Archer.create(duplicate)
+      expect(archer.first_name).to eq(duplicate[:first_name].capitalize)
+      expect(archer.last_name).to eq(duplicate[:last_name].capitalize)
+    end
+
+    it "can return the archer's full name with correct capitalization" do
+      expect(test_archer.full_name).to eq(valid_all[:first_name].capitalize+" "+valid_all[:last_name].capitalize)
+    end
+
     it "can return the archer's actual age" do
       allow(Date).to receive(:today).and_return Date.new(2020,10,1)
       expect(test_archer.age).to eq(40)
@@ -364,11 +291,7 @@ RSpec.describe Archer, type: :model do
       allow(Date).to receive(:today).and_return Date.new(2020,1,1)
       expect(test_archer.age).to eq(39)
     end
-
-    it "can return the archer's full name with correct capitalization" do
-      expect(test_archer.full_name).to eq(valid_all[:first_name].capitalize+" "+valid_all[:last_name].capitalize)
-    end
-
+    
     it "can return all the categories the archer is elgibile for" do
       assoc_category_senior
       expect(test_archer.eligbile_categories).to include(assoc_category_senior.name)

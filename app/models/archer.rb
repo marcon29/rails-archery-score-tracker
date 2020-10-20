@@ -24,8 +24,11 @@ class Archer < ApplicationRecord
         presence: { message: "You must provide your gender." }, 
         inclusion: { in: GENDERS, message: "You can only choose male or female."  }
     validates :default_age_class, presence: true, inclusion: { in: @@all_age_classes }
-    before_validation :all_age_classes, :assign_default_age_class
-    before_save :format_username, :format_email, :assign_birthdate, :format_names
+    before_validation :all_age_classes, :assign_default_age_class, :format_names
+    before_save :format_username, :format_email
+        # format username and email after validations so spaces can be caught
+
+        
 
     # #########################
     # validation helpers (already tested)
@@ -34,7 +37,7 @@ class Archer < ApplicationRecord
     def assign_default_age_class
         # need to update to using the associated instance???
         # possible updates in ArchCat model: instance scope (for above)?, return single object instead of array?
-        if self.birthdate.present?
+        if self.birthdate
             category = ArcherCategory.default("Recurve", self.eligibility_age, self.gender).first
             self.default_age_class = category.cat_age_class if category
         end
@@ -46,22 +49,9 @@ class Archer < ApplicationRecord
         end
         @@all_age_classes.uniq
     end
-
-    def assign_birthdate
-        self.birthdate = format_date(self.birthdate) if !self.birthdate
-    end
-
-    def format_date(date_string)
-        date_string.strftime("%m/%d/%Y") if date_string
-        # date_string.strftime("%m/%d/%Y")
-    end
     
     def eligibility_age
-        if self.birthdate
-            year_today = Date.today.strftime("%Y").to_i
-            birthyear = self.birthdate.strftime("%Y").to_i
-            year_today-birthyear
-        end
+        Date.today.year-self.birthdate.year if self.birthdate
     end
 
     def format_names
@@ -88,17 +78,9 @@ class Archer < ApplicationRecord
             # country - abbreviations?
 
     def age
-        day_today = Date.today.strftime("%m/%d")
-        year_today = Date.today.strftime("%Y").to_i
-
+        today = Date.today.strftime("%m/%d")
         birthday = self.birthdate.strftime("%m/%d")
-        birthyear = self.birthdate.strftime("%Y").to_i
-
-        if day_today >= birthday
-            year_today-birthyear 
-        else
-            year_today-birthyear-1
-        end
+        today >= birthday ? eligibility_age : eligibility_age-1
     end
 
     def full_name

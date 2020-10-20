@@ -31,10 +31,10 @@ RSpec.describe ScoreSession, type: :model do
             username: "testuser", 
             email: "testuser@example.com", 
             password: "test", 
-            first_name: "test", 
-            last_name: "user", 
+            first_name: "Test", 
+            last_name: "User", 
             birthdate: "1980-07-01", 
-            gender: "Male",
+            gender: "Male", 
             home_city: "Denver", 
             home_state: "CO", 
             home_country: "USA", 
@@ -81,31 +81,24 @@ RSpec.describe ScoreSession, type: :model do
     #     {name: "2000 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2000-09-01", end_date: "2000-09-05", rank: "1st", active: false}
     # }
 
+    # remove any non-required atts, and auto-assign (not auto_format) attrs, all should be formatted correctly already
     let(:valid_req) {
-        {
-        name: "2020 World Cup", 
-        score_session_type: "Tournament", 
-        city: "Oxford", 
-        state: "OH", 
-        country: "USA", 
-        start_date: "2020-09-01"
-        }
+        {name: "2020 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2020-09-01"}
     }
 
+    # exact duplicate of valid_all - use as whole for testing unique values, use for testing specific atttrs (bad inclusion, bad format, etc.)
     let(:duplicate) {
         {name: "2020 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2020-09-01", end_date: "2020-09-05", rank: "1st", active: true}
     }
     
+    # start w/ valid_all, change all values, make any auto-assign blank (don't delete)
     let(:update) {
         {name: "2010 Pan Am Trials", score_session_type: "Competition", city: "Chula Vista", state: "CA", country: "USA", start_date: "2010-09-01", end_date: "", rank: "3rd", active: false}
     }
 
+    # every attr blank
     let(:blank) {
         {name: "", score_session_type: "", city: "", state: "", country: "", start_date: "", end_date: "", rank: "", active: ""}
-    }
-
-    let(:bad_inclusion) {
-        {name: "2020 World Cup", score_session_type: "bad data", city: "Oxford", state: "OH", country: "USA", start_date: "2020-09-01", end_date: "2020-09-05", rank: "1st", active: true}
     }
   
     # add the following default error messages for different validation failures (delete any unnecessary for model)
@@ -192,7 +185,8 @@ RSpec.describe ScoreSession, type: :model do
             end
 
             it "is invalid if score session not included in corresponding selection list and has correct error message" do
-                score_session = ScoreSession.create(bad_inclusion)
+                duplicate[:score_session_type] = "bad data"
+                score_session = ScoreSession.create(duplicate)
 
                 expect(score_session).to be_invalid
                 expect(ScoreSession.all.count).to eq(0)
@@ -203,8 +197,8 @@ RSpec.describe ScoreSession, type: :model do
                 bad_scenarios = ["0", "000", "00text", "00st", "-1", "first", "winner", "loser"]
 
                 bad_scenarios.each do | test_value |
-                    bad_inclusion[:rank] = test_value
-                    score_session = ScoreSession.create(bad_inclusion)
+                    duplicate[:rank] = test_value
+                    score_session = ScoreSession.create(duplicate)
                     expect(score_session).to be_invalid
                     expect(ScoreSession.all.count).to eq(0)
                     expect(score_session.errors.messages[:rank]).to include('Enter only a number above 0, "W" or "L".')
@@ -248,9 +242,9 @@ RSpec.describe ScoreSession, type: :model do
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
         it "can return the score sessions's name with correct capitalization" do
-            valid_all[:name] = "2020 world cup"
-            score_session = ScoreSession.create(valid_all)
-            expect(score_session.name).to eq(valid_all[:name].titlecase)
+            duplicate[:name] = "2020 world cup"
+            score_session = ScoreSession.create(duplicate)
+            expect(score_session.name).to eq(duplicate[:name].titlecase)
         end
 
         it "can assign and format the rank from any good input" do
@@ -262,38 +256,38 @@ RSpec.describe ScoreSession, type: :model do
             lose_scenarios = ["L", "l", "Loss", "loss", "Lost", "lost"]
 
             st_scenarios.each do | test_value |
-                valid_all[:rank] = test_value
-                score_session = ScoreSession.create(valid_all)
+                duplicate[:rank] = test_value
+                score_session = ScoreSession.create(duplicate)
                 expect(score_session.rank).to eq("#{test_value.to_i.to_s}st")
             end
 
             nd_scenarios.each do | test_value |
-                valid_all[:rank] = test_value
-                score_session = ScoreSession.create(valid_all)
+                duplicate[:rank] = test_value
+                score_session = ScoreSession.create(duplicate)
                 expect(score_session.rank).to eq("#{test_value.to_i.to_s}nd")
             end
 
             rd_scenarios.each do | test_value |
-                valid_all[:rank] = test_value
-                score_session = ScoreSession.create(valid_all)
+                duplicate[:rank] = test_value
+                score_session = ScoreSession.create(duplicate)
                 expect(score_session.rank).to eq("#{test_value.to_i.to_s}rd")
             end
 
             th_scenarios.each do | test_value |
-                valid_all[:rank] = test_value
-                score_session = ScoreSession.create(valid_all)
+                duplicate[:rank] = test_value
+                score_session = ScoreSession.create(duplicate)
                 expect(score_session.rank).to eq("#{test_value.to_i.to_s}th")
             end
 
             win_scenarios.each do | test_value |
-                valid_all[:rank] = test_value
-                score_session = ScoreSession.create(valid_all)
+                duplicate[:rank] = test_value
+                score_session = ScoreSession.create(duplicate)
                 expect(score_session.rank).to eq("Win")
             end
 
             lose_scenarios.each do | test_value |
-                valid_all[:rank] = test_value
-                score_session = ScoreSession.create(valid_all)
+                duplicate[:rank] = test_value
+                score_session = ScoreSession.create(duplicate)
                 expect(score_session.rank).to eq("Loss")
             end
         end

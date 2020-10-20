@@ -1,7 +1,4 @@
 # Next to do
-    - build ScoreSession model
-        - finish building out helpers    
-    
     - build Round model
     
     - build RoundSet model (phase 2)
@@ -57,12 +54,22 @@
 
 # Controller Helpers
     - all date formatting needs to go in here, not models
-        # def format_date(date)
-        #    # date.strftime("%m/%d/%Y")
-        #    # date.to_date.strftime("%m/%d/%Y")
-        #    # "#{date.month}/#{date.day}/#{date.year}"
-        #    # "#{date.to_date.month}/#{date.to_date.day}/#{date.to_date.year}"
-        # end
+        - from ScoreSession model for start and end dates
+            # def format_date(date)
+            #    # date.strftime("%m/%d/%Y")
+            #    # date.to_date.strftime("%m/%d/%Y")
+            #    # "#{date.month}/#{date.day}/#{date.year}"
+            #    # "#{date.to_date.month}/#{date.to_date.day}/#{date.to_date.year}"
+            # end
+        - from Archer model for birthdate
+            # def assign_birthdate
+            #     self.birthdate = format_date(self.birthdate) if !self.birthdate
+            # end
+            
+            # def format_date(date_string)
+            #     date_string.strftime("%m/%d/%Y") if date_string
+            #     # date_string.strftime("%m/%d/%Y")
+            # end
 
 # Archer Controller 
     - this is where to test attr formatting methods with actual input
