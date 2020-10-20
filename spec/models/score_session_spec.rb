@@ -42,9 +42,9 @@ RSpec.describe ScoreSession, type: :model do
         )
     }
     
-    # let(:assoc_round) {
-    #   Round.create()
-    # }
+    let(:test_round) {
+        Round.create(name: "1440 Round", discipline: "Outdoor", round_type: "Qualifying", num_roundsets: 4, user_edit: false)
+    }
 
     let(:assoc_round_set) {
         RoundSet.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
@@ -153,6 +153,7 @@ RSpec.describe ScoreSession, type: :model do
             it "instance is valid when updating all attrs, re-assigns end date if value deleted" do
                 test_score_session.update(update)
                 
+                expect(test_score_session).to be_valid
                 expect(test_score_session.name).to eq(update[:name])
                 expect(test_score_session.score_session_type).to eq(update[:score_session_type])
                 expect(test_score_session.city).to eq(update[:city])
@@ -242,7 +243,7 @@ RSpec.describe ScoreSession, type: :model do
     
         it "has many ArcherCategories" do
             pending "need to add create associated models and add associations"
-            expect(test_test_score_sessionarcher.archer_categories).to include(assoc_category)
+            expect(test_score_session.archer_categories).to include(assoc_category)
         end
     end
 
