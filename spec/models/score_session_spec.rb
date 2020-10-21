@@ -216,7 +216,7 @@ RSpec.describe ScoreSession, type: :model do
             # load all AssocModels that must be in DB for tests to work
         end
 
-        it "has one Archers" do
+        it "has one Archer" do
             pending "need to add create associated models and add associations"
             expect(test_score_session.archer).to eq(assoc_archer)
         end

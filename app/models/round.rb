@@ -27,6 +27,12 @@ class Round < ApplicationRecord
     end
 
     # need other helper methods
+    # it "can calculate the total score for a round" do
+            # pending "need to add associations"
+            # want to be able to to call shot.round_score
+        # end
+
+        
 
 
 end

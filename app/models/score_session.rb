@@ -69,6 +69,14 @@ class ScoreSession < ApplicationRecord
         # date range - collect all dates between start and end (inclusive)
             # hold - may not need this - html can restrict date range (can just use start and end)
             # will use to restrict date options for round
+        
+
+        # it "can calculate the total score for a score session" do
+            # pending "need to add associations"
+            # want to be able to to call shot.score_session_score
+        # end
+
+        
     
     # all location info
             # should be some gems to better handle this

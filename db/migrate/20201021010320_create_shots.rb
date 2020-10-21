@@ -9,6 +9,7 @@ class CreateShots < ActiveRecord::Migration[6.0]
       t.integer :shot_num
       t.string :score_entry
       t.integer :set_score
+      t.date :shot_date
 
       t.timestamps
     end

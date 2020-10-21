@@ -22,6 +22,13 @@ class RoundSet < ApplicationRecord
     # need helpers
         # need to get date (from shots)
         # need to get distance (from shots)
+
+        # it "can calculate the total score for a roundset" do
+        #     pending "need to add associations"
+        #     want to be able to to call shot.round_set_score
+        # end
+
+        
   
 
 end
