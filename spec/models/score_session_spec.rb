@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe ScoreSession, type: :model do
-    # add attrs (must be in hash) for all regular valid instances of ScoreSession
-        # one with all attrs defined and one with only required attrs defined
-        # doing this separately makes writing the expect statments easier
     let(:valid_all) {
         {
         name: "2020 World Cup", 
@@ -17,10 +14,7 @@ RSpec.describe ScoreSession, type: :model do
         active: true
         }
     }
-
-    # create the main valid test instances, using the valid_all attrs (not persisted until called)
-        # only add multiple instantiations if need multiple instances at the same time for testing
-        # if just need to adjust attr values, use the attr sets below
+    
     let(:test_score_session) {
         ScoreSession.create(valid_all)
     }
@@ -42,7 +36,7 @@ RSpec.describe ScoreSession, type: :model do
         )
     }
     
-    let(:test_round) {
+    let(:assoc_round) {
         Round.create(name: "1440 Round", discipline: "Outdoor", round_type: "Qualifying", num_roundsets: 4, user_edit: false)
     }
 
@@ -54,7 +48,7 @@ RSpec.describe ScoreSession, type: :model do
     #   Shot.create()
     # }
 
-    let(:assoc_category_senior) {
+    let(:assoc_category) {
         ArcherCategory.create(
         cat_code: "WA-RM", 
         gov_body: "World Archery", 
@@ -153,6 +147,7 @@ RSpec.describe ScoreSession, type: :model do
             it "instance is valid when updating all attrs, re-assigns end date if value deleted" do
                 test_score_session.update(update)
                 
+                # req input tests (should have value in update)
                 expect(test_score_session).to be_valid
                 expect(test_score_session.name).to eq(update[:name])
                 expect(test_score_session.score_session_type).to eq(update[:score_session_type])
@@ -169,7 +164,7 @@ RSpec.describe ScoreSession, type: :model do
         end
 
         describe "invalid if input data is missing or bad" do
-            it "is invalid without required attributes and has correct error message" do
+            it "is invalid and has correct error message without required attributes" do
                 score_session = ScoreSession.create(blank)
 
                 expect(score_session).to be_invalid
@@ -182,7 +177,7 @@ RSpec.describe ScoreSession, type: :model do
                 expect(score_session.errors.messages[:start_date]).to include("You must choose a start date.")
             end
 
-            it "is invalid when unique attributes are duplicated and has correct error message" do
+            it "is invalid and has correct error message when unique attributes are duplicated" do
                 test_score_session
                 expect(ScoreSession.all.count).to eq(1)
                 score_session = ScoreSession.create(duplicate)
@@ -192,7 +187,7 @@ RSpec.describe ScoreSession, type: :model do
                 expect(score_session.errors.messages[:name]).to include("That name is already taken.")
             end
 
-            it "is invalid if score session not included in corresponding selection list and has correct error message" do
+            it "is invalid and has correct error message if score session not included in corresponding selection list" do
                 duplicate[:score_session_type] = "bad data"
                 score_session = ScoreSession.create(duplicate)
 
@@ -201,7 +196,7 @@ RSpec.describe ScoreSession, type: :model do
                 expect(score_session.errors.messages[:score_session_type]).to include(default_inclusion_message)
             end
 
-            it "is invalid if rank is not included in corresponding selection list and has correct error message" do
+            it "is invalid and has correct error message if rank is not included in corresponding selection list" do
                 bad_scenarios = ["0", "000", "00text", "00st", "-1", "first", "winner", "loser"]
 
                 bad_scenarios.each do | test_value |

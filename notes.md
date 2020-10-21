@@ -96,6 +96,21 @@
 # Round Controller 
     - can't allow an empty value for user_edit to be passed to model
         - i.e. no user_edit = "", must not use at all and allow DB default or explictly setting only
+    - auto-generating name needs to be a controller method
+        # round = Round.find_or_create_by(round_params)
+        # create_round_sets(round)
+        # def create_round_sets(round)
+        #     count = 0
+        #     round.num_roundsets.times do
+        #         round_set = RoundSet.find_or_create_by(
+        #             name: "#{round.name} - Set/Distance#{count +=1}"
+        #             ends: params[:round_set][:ends]
+        #             shots_per_end: params[:round_set][:shots_per_end]
+        #             score_method: params[:round_set][:score_method]
+        #         )
+        #     round.round_sets << round_set
+        #     end
+        # end
 
 # Sessions Controller 
     - since Archer.default_cat will auto-update over time, need way to check if default_age_class must also update upon login

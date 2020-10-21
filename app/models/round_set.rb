@@ -6,21 +6,20 @@ class RoundSet < ApplicationRecord
     has_many :targets, through: :distance_targets
 
     validates :name, presence: true, uniqueness: true
-    validates :ends, :shots_per_end, numericality: { only_integer: true }
-    validates :score_method, presence: true, inclusion: { in: SCORE_METHODS }
+    validates :ends, :shots_per_end, 
+        numericality: { only_integer: true, greater_than: 0, message: "You must enter a number greater than 0." }
+    validates :score_method, 
+        presence: { message: "You must choose a score method." }, 
+        inclusion: { in: SCORE_METHODS }
+
     # before_validation :assign_name
 
+    
 
-    # need helpers        
-        # need to auto-create name ("Round name" + "set/distance 1")
-        # need to assign auto-created name to object
-        # examples from Target model
-            # def assign_name
-            #     self.name = create_name
-            # end
-        
-            # def create_name
-            #     "#{self.size}/#{self.spots}-spot/#{self.rings}-ring"
-            # end
+
+    # need helpers
+        # need to get date (from shots)
+        # need to get distance (from shots)
+  
 
 end

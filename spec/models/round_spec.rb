@@ -1,24 +1,10 @@
 require 'rails_helper'
 
-# to get template up and running quickly, do a find/replace (match capitalization, don't use whole word) of the following:
-    #    Find       -->         <replace>
-    # Round     --> <actual ModelName for this model> 
-    # round    --> <actual model_name for this model>
-    # attr          --> <column_name for first attr> (you'll need to add additional attrs manually, only assoc_model attr will be wrong)
-    # assoc_model   --> <actual model_name for first associated model>
-                
-
 RSpec.describe Round, type: :model do
-    # add attrs (must be in hash) for all regular valid instances of Round
-        # one with all attrs defined and one with only required attrs defined
-        # doing this separately makes writing the expect statments easier
     let(:valid_all) {
         {name: "1440 Round", discipline: "Outdoor", round_type: "Qualifying", num_roundsets: 4, user_edit: false}
     }
-
-    # create the main valid test instances, using the valid_all attrs (not persisted until called)
-        # only add multiple instantiations if need multiple instances at the same time for testing
-        # if just need to adjust attr values, use the attr sets below
+    
     let(:test_round) {
         Round.create(valid_all)
     }
@@ -136,7 +122,7 @@ RSpec.describe Round, type: :model do
                 
                 expect(test_round).to be_valid
                 
-                # req input tests (should have value in valid_req)
+                # req input tests (should have value in update)
                 expect(test_round.name).to eq(update[:name])
                 expect(test_round.discipline).to eq(update[:discipline])
                 expect(test_round.round_type).to eq(update[:round_type])
@@ -172,8 +158,6 @@ RSpec.describe Round, type: :model do
                 expect(round.errors.messages[:name]).to include("That name is already taken.")
             end
 
-            # this is the simple version - can test multiple attrs at same time
-            # can combine inclusion and formatting if both simple enough and don't overlap
             it "is invalid and has correct error message if value not included in corresponding selection list or is wrong format" do
                 duplicate[:discipline] = "bad discipline"
                 duplicate[:round_type] = "bad type"
