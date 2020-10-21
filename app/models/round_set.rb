@@ -1,6 +1,8 @@
 class RoundSet < ApplicationRecord
     # has_many :archers, score_sessions, rounds, through: :shots
 
+    # all attrs - :name, :ends, :shots_per_end, :score_method
+
     has_many :distance_targets
     has_many :archer_categories, through: :distance_targets
     has_many :targets, through: :distance_targets

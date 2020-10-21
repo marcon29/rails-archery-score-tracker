@@ -1,7 +1,4 @@
 # Next to do
-    - build RoundSet model (phase 2)
-        - build rest to make all associations with functional models work
-    
     - build Shot model
         - see notes below
     
@@ -59,9 +56,6 @@
     # it "can calculate the total score for a roundset)" do
     # end
 
-    - calc a round_set_rank ???
-        - may need new model to make this work (might not be necessary)
-        - could just have the rank in ScoreSession only that updates as go
 
 # Archer Model
     - need to update assign_default_age_class as you create associations
@@ -111,6 +105,14 @@
         #     round.round_sets << round_set
         #     end
         # end
+    - calc a round_set_rank ???
+        - may need new model to make this work (might not be necessary)
+        - could just have the rank in ScoreSession only that updates as go
+        
+# ScoreSession Controller
+    - for match RoundSets and set scoring_method
+        - first to 6 set points wins (don't need to complete all ends)
+        - so when tracking shot.set_score, if 6, destroy any unshot ends for that SetRound
 
 # Sessions Controller 
     - since Archer.default_cat will auto-update over time, need way to check if default_age_class must also update upon login
