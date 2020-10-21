@@ -4,8 +4,8 @@ class Shot < ApplicationRecord
         # belongs_to :archer, :score_session, round, :round_set
         
 
-    # all attrs - :archer_id, :score_session_id, :round_id, :round_set_id, :end_num, :shot_num, :score, :set_score
-    # all data attrs  - :end_num, :shot_num, :score_entry, :set_score
+    # all attrs - :archer_id, :score_session_id, :round_id, :round_set_id, :end_num, :shot_num, :score, :set_score, shot_date
+    # all data attrs  - :shot_date, :end_num, :shot_num, :score_entry, :set_score
 
     # ####### possible attrs to add ##########
     # target, distance, age_class, division, discipline
@@ -15,10 +15,12 @@ class Shot < ApplicationRecord
 
 
     # need validations
-        # required: :end_num, :shot_num, :score_entry, :set_score ( if round_set.score_method == "Set" )
+        # required: :date, :end_num, :shot_num, :score_entry, :set_score ( if round_set.score_method == "Set" )
+            # "Date must be between #{shot.score_session.start_date} and #{shot.score_session.end_date}."
             # "You must enter a score for shot #{shot.shot_num}."
             # "You must enter a set score for the end."
         # inclusion: 
+        #     :shot_date ( within score_session start and end dates, inclusive )
         #     :end_num ( 1 - round_set.ends ), 
         #     :shot_num ( 1 - round_set.shots_per_end ), 
         #     :score_entry ( 1 - target.max_score, M, X if target.x_ring )
@@ -29,59 +31,66 @@ class Shot < ApplicationRecord
 
 
     # need helpers (callbacks & validations)
-        # it "can identify all possible score values" do
-        #   max_score..score_areas, M, and X if x_ring
-        # end
+        # to assign date (for inclusion validation)
+            # it "can identify the range of valid dates" do
+                # shot.score_session.start_date <= shot.shot_date <=shot.score_session.end_date
+            # end
 
-        # it "will only allows score values up to the number of score areas, M and X" do
-        # end
+        # to assign score (for inclusion validation)
+            # it "can identify all possible score values" do
+            #   max_score..score_areas, M, and X if x_ring
+            # end
 
-        # it "won't allow allow a score value of X if there is no x-ring" do
-        # end
-
-        # it "can calculate a point value (as score) from the score entry" do
-            # this will be shot.score
-            # must return an integer
-            # will use the can calculate a score for X and M method below
-        # end
-
-        # it "can auto-assign the set_score for all shots from same end at same time" do
-            # takes it from last arrow of same end
-            # so a single input will get assigned to last arrow of end
-            # this will update all shots from same end with same set_score
-            # won't update any shots if not last shot of end
-        # end
+        # to assign set_score (auto assign)
+            # it "can auto-assign the set_score for all shots from same end at same time" do
+                # takes it from last arrow of same end
+                # so a single input will get assigned to last arrow of end
+                # this will update all shots from same end with same set_score
+                # won't update any shots if not last shot of end (separate test)
+            # end
 
 
         
     # need helpers (data control)
-        # it "can calculate a score for X and M" do
-            # X = target.max_score, M = 0
-        # end
+        # to assign score (for getting points value from a score entry)
+            # it "can calculate a point value (as score) from the score entry" do
+                # this will be shot.score
+                # must return an integer
+                # will use the can calculate a score for X and M method below
+            # end
+
+            # it "can calculate a score for X and M" do
+                # X = target.max_score, M = 0
+            # end
 
         
     
     # need helpers (ScoreSession & Round display) - some of these should probably go in other models
+        # to get and display end scores
+            # it "can calculate the total score for an end" do
+                # want to be able to to call shot.end_score
+                # needs to find a specific end (shot.rs_end)
+                # needs to find all shots that are in that end (end_shots)
+                # needs to sum the scores from those shots (this method)
+            # end
 
-        # it "can calculate the total score for an end" do
-            # want to be able to to call shot.end_score
-        # end
+            # ############### should I build an end model????? ######################################
 
+            # it "can find a specific end" do
+                # want to be able to to call shot.rs_end
+                # round_id, round_set_id, end_num
+            # end
 
+            # it "can find all shots that belong to same end" do
+                # want to be able to to call shot.end_shots
+            # end
+            
+            # it "can track if end it is in is complete or not" do
+                # can use this to identify the active end so only display form for that end
+                # want to be able to to call shot.end_complete?
+            # end
 
-        # #####################################################
-        # should I build an end model?????
-
-        # it "can find all shots that belong to same end" do
-            # want to be able to to call shot.end_shots
-        # end
-        
-        # it "can track if end it is in is complete or not" do
-            # can use this to identify the active end so only display form for that end
-            # want to be able to to call shot.end_complete?
-        # end
-
-        # #####################################################
+            # #####################################################
         
 
 
@@ -92,10 +101,6 @@ class Shot < ApplicationRecord
 
         # it "can identify its target" do
             # want to be able to to call shot.target
-        # end
-
-        # it "can identify date it was shot" do
-            # want to be able to to call shot.archer_category
         # end
 
         # it "can identify its archer's archer_category for the round it's in" do

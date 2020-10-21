@@ -5,16 +5,16 @@ RSpec.describe Shot, type: :model do
         # one with all attrs defined and one with only required attrs defined
         # doing this separately makes writing the expect statments easier
     let(:valid_all) {
-        {end_num: 5, shot_num: 5, score_entry: "5",  set_score: 2}
+        {date: "2020-09-01", end_num: 5, shot_num: 5, score_entry: "5",  set_score: 2}
     }
 
     let(:multi_valid_all) {
-        multi_shot_11: {end_num: 1, shot_num: 1, score_entry: "X",  set_score: 2}
-        multi_shot_12: {end_num: 1, shot_num: 2, score_entry: "10", set_score: 2}
-        multi_shot_13: {end_num: 1, shot_num: 3, score_entry: "M",  set_score: 2}
-        multi_shot_21: {end_num: 2, shot_num: 1, score_entry: "9",  set_score: ""}
-        multi_shot_22: {end_num: 2, shot_num: 2, score_entry: "8",  set_score: ""}
-        multi_shot_23: {end_num: 2, shot_num: 3, score_entry: "7",  set_score: ""}
+        multi_shot_11: {date: "2020-09-01", end_num: 1, shot_num: 1, score_entry: "X",  set_score: 2}
+        multi_shot_12: {date: "2020-09-01", end_num: 1, shot_num: 2, score_entry: "10", set_score: 2}
+        multi_shot_13: {date: "2020-09-01", end_num: 1, shot_num: 3, score_entry: "M",  set_score: 2}
+        multi_shot_21: {date: "2020-09-01", end_num: 2, shot_num: 1, score_entry: "9",  set_score: ""}
+        multi_shot_22: {date: "2020-09-01", end_num: 2, shot_num: 2, score_entry: "8",  set_score: ""}
+        multi_shot_23: {date: "2020-09-01", end_num: 2, shot_num: 3, score_entry: "7",  set_score: ""}
     }
     
     # create the main valid test instances, using the valid_all attrs (not persisted until called)
@@ -95,23 +95,23 @@ RSpec.describe Shot, type: :model do
     
     # take valid_all and remove any non-required atts and auto-assign (not auto_format) attrs, all should be formatted correctly already
     let(:valid_req) {
-        {end_num: 5, shot_num: 5, score_entry: "5"}
+        {date: "2020-09-01", end_num: 5, shot_num: 5, score_entry: "5"}
     }
 
     # exact duplicate of valid_all - use as whole for testing unique values
     # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.)
     let(:duplicate) {
-        {end_num: 5, shot_num: 5, score_entry: "5",  set_score: 2}
+        {date: "2020-09-01", end_num: 5, shot_num: 5, score_entry: "5",  set_score: 2}
     }
 
     # start w/ valid_all, change all values, make any auto-assign blank (don't delete)
     let(:update) {
-        {end_num: 6, shot_num: 6, score_entry: "6",  set_score: ""}
+        {date: "2020-09-05", end_num: 6, shot_num: 6, score_entry: "6",  set_score: ""}
     }
 
     # every attr blank
     let(:blank) {
-        {end_num: "", shot_num: "", score_entry: "",  set_score: ""}
+        {date: "", end_num: "", shot_num: "", score_entry: "",  set_score: ""}
     }
   
     # add the following default error messages for different validation failures (delete any unnecessary for model)
@@ -120,6 +120,10 @@ RSpec.describe Shot, type: :model do
     let(:default_inclusion_message) {"is not included in the list"}
     let(:default_number_message) {"is not a number"}
     let(:default_format_message) {"is invalid"}
+    
+    let(:missing_score_entry_message) {"You must provide a set score for shot #{shot.shot_num}."}
+    let(:missing_set_score_message) {"You must enter a set score for the end."}
+    # let(:inclusion_date_message) {"Date must be between #{assoc_score_session.start_date} and #{assoc_score_session.end_date}."}
 
     # object creation and validation tests #######################################
     describe "model creates and updates only valid instances" do
@@ -129,6 +133,7 @@ RSpec.describe Shot, type: :model do
 
                 expect(test_shot).to be_valid
                 expect(Shot.all.count).to eq(1)
+                expect(test_shot.date).to eq(valid_all[:date])
                 expect(test_shot.end_num).to eq(valid_all[:end_num])
                 expect(test_shot.shot_num).to eq(valid_all[:shot_num])
                 expect(test_shot.score_entry).to eq(valid_all[:score_entry])
@@ -141,6 +146,7 @@ RSpec.describe Shot, type: :model do
 
                 expect(shot).to be_valid
                 expect(Shot.all.count).to eq(1)
+                expect(shot.date).to eq(valid_req[:date])
                 expect(shot.end_num).to eq(valid_req[:end_num])
                 expect(shot.shot_num).to eq(valid_req[:shot_num])
                 expect(shot.score_entry).to eq(valid_req[:score_entry])
@@ -155,6 +161,7 @@ RSpec.describe Shot, type: :model do
                 test_shot.update(update)
                 
                 expect(test_shot).to be_valid
+                expect(test_shot.date).to eq(update[:date])
                 expect(test_shot.end_num).to eq(update[:end_num])
                 expect(test_shot.shot_num).to eq(update[:shot_num])
                 expect(test_shot.score_entry).to eq(update[:score_entry])
@@ -162,28 +169,45 @@ RSpec.describe Shot, type: :model do
             end
         end
 
-        describe "invalid if input data is missing or bad" do
-            it "is invalid and has correct error message without required attributes" do
+        describe "invalid and has correct error message if" do
+            it "missing required attributes" do
                 shot = Shot.create(blank)
 
                 expect(shot).to be_invalid
                 expect(Shot.all.count).to eq(0)
+                expect(shot.errors.messages[:date]).to include(default_missing_message)
                 expect(shot.errors.messages[:end_num]).to include(default_missing_message)
                 expect(shot.errors.messages[:shot_num]).to include(default_missing_message)
-                expect(shot.errors.messages[:score_entry]).to include("You must provide a set score for shot #{shot.shot_num}.")
+                expect(shot.errors.messages[:score_entry]).to include(missing_score_entry_message)
                 expect(test_shot.set_score).to eq(blank[:set_score])
+
+                # expect(shot.errors.messages[:date]).to include(inclusion_date_message)
             end
 
-            it "is invalid and has correct error message if missing set_score during a RoundSet with 'Set' score method" do
+            it "missing set_score during a RoundSet with 'Set' score method" do
                 assoc_round_set.update(score_method: "Set")
                 shot = Shot.create(blank)
 
                 expect(shot).to be_invalid
                 expect(Shot.all.count).to eq(0)
-                expect(shot.errors.messages[:set_score]).to include("You must enter a set score for the end.")
+                expect(shot.errors.messages[:set_score]).to include(missing_set_score_message)
+            end
+
+            it "date is outside allowable inputs" do
+                bad_scenarios = ["2020-08-31", "2020-09-06"]
+                
+                bad_scenarios.each do | test_value |
+                    duplicate[:end_num] = test_value
+                    shot = Shot.create(duplicate)
+                    expect(shot).to be_invalid
+                    expect(Shot.all.count).to eq(0)
+                    expect(shot.errors.messages[:date]).to include(default_inclusion_message)
+
+                    # expect(shot.errors.messages[:date]).to include(inclusion_date_message)
+                end
             end
             
-            it "is invalid and has correct error message if end_num outside allowable inputs" do
+            it "end_num is outside allowable inputs" do
                 bad_scenarios = ["0", "-1", "7", "bad"]
                 
                 bad_scenarios.each do | test_value |
@@ -195,7 +219,7 @@ RSpec.describe Shot, type: :model do
                 end
             end
 
-            it "is invalid and has correct error message if shot_num outside allowable inputs" do
+            it "shot_num is outside allowable inputs" do
                 bad_scenarios = ["0", "-1", "7", "bad"]
                 
                 bad_scenarios.each do | test_value |
@@ -207,7 +231,7 @@ RSpec.describe Shot, type: :model do
                 end
             end
 
-            it "is invalid and has correct error message if score_entry outside allowable inputs" do
+            it "score_entry is outside allowable inputs" do
                 bad_scenarios = ["0", "-1", "11", "bad", "MX", "b"]
                 
                 bad_scenarios.each do | test_value |
@@ -219,7 +243,7 @@ RSpec.describe Shot, type: :model do
                 end
             end
 
-            it "is invalid and has correct error message if set_score outside allowable inputs" do
+            it "set_score is outside allowable inputs" do
                 bad_scenarios = ["-1", "3", "bad"]
                 
                 bad_scenarios.each do | test_value |
@@ -231,7 +255,7 @@ RSpec.describe Shot, type: :model do
                 end
             end
 
-            it "is invalid and has correct error message with a score value of X if there is no x-ring" do
+            it "the score_entry value is X when there is no x-ring" do
                 assoc_target
                 duplicate[:score_entry] = "X"
                 shot = Shot.create(duplicate)
@@ -280,12 +304,6 @@ RSpec.describe Shot, type: :model do
             test_multi
         end
 
-        it "can calculate a point value (as score) from the score entry" do
-            expect(multi_shot_11.score).to eq(target.max_score)
-            expect(multi_shot_12.score).to eq(multi_valid_all[:multi_shot_12][:score_entry].to_i)
-            expect(multi_shot_13.score).to eq(0)
-        end
-
         it "can auto-assign the set_score for all shots from same end at same time if entered at last shot" do
             multi_valid_all[:multi_shot_23][:set_score] = 1
 
@@ -304,6 +322,20 @@ RSpec.describe Shot, type: :model do
             expect(multi_shot_23.set_score).to eq(multi_valid_all[:multi_shot_23][:set_score])
         end
 
+        it "can calculate a point value (as score) from the score entry" do
+            expect(multi_shot_11.score).to eq(target.max_score)
+            expect(multi_shot_12.score).to eq(multi_valid_all[:multi_shot_12][:score_entry].to_i)
+            expect(multi_shot_13.score).to eq(0)
+        end
+
+        it "can find a specific end" do
+            want to be able to to call shot.rs_end
+        end
+
+        # it "can find all shots that belong to same end" do
+            # want to be able to to call shot.end_shots
+        # end
+
         it "can calculate the total score for an end" do
             test_end_one_score = multi_shot_11.score + multi_shot_12.score + multi_shot_13.score
             test_end_two_score = multi_valid_all[:multi_shot_21][:score_entry].to_i + multi_valid_all[:multi_shot_22][:score_entry].to_i + multi_valid_all[:multi_shot_23][:score_entry].to_i
@@ -315,7 +347,20 @@ RSpec.describe Shot, type: :model do
             expect(multi_shot_21.end_score).to eq(test_end_two_score)
             expect(multi_shot_22.end_score).to eq(test_end_two_score)
             expect(multi_shot_21.end_score).to eq(test_end_two_score)
-        end
+        end        
+
+        # #####################################################
+        # should I build an end model?????
+        
+        # it "can find all shots that belong to same end" do
+        #     expect(multi_shot_11.set_score).to eq(multi_valid_all[:multi_shot_11][:set_score])
+        # end
+
+        # it "can track if end it is in is complete or not" do
+            # can use this to identify the active end so only display form for that end
+            # want to be able to to call shot.end_complete?
+        # end
+        # #####################################################
 
 
         # #####################################################
@@ -351,30 +396,13 @@ RSpec.describe Shot, type: :model do
             expect(test_shot.target).to eq(assoc_dist_targ.target)
         end
 
-        
-        # it "can identify date it was shot" do
-        #     pending "need to add associations"
-        #     want to be able to to call shot.archer_category
-        # end
-
         # it "can identify its archer's archer_category for the round it's in" do
         #     pending "need to add associations"
         #     want to be able to to call shot.archer_category
         # end
 
 
-        # #####################################################
-        # should I build an end model?????
         
-        # it "can find all shots that belong to same end" do
-        #     expect(multi_shot_11.set_score).to eq(multi_valid_all[:multi_shot_11][:set_score])
-        # end
-
-        # it "can track if end it is in is complete or not" do
-            # can use this to identify the active end so only display form for that end
-            # want to be able to to call shot.end_complete?
-        # end
-        # #####################################################
         
         
 
