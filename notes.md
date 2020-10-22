@@ -83,6 +83,19 @@
             #     date_string.strftime("%m/%d/%Y") if date_string
             #     # date_string.strftime("%m/%d/%Y")
             # end
+    - not sure where or if i'll need this
+        - came from DistTargCat - should be a controller helper)
+            # def distance_from_input(num, unit)
+            #     "#{num}#{unit}"
+            # end
+
+            # it "can create a properly formatted distance from number and unit" do
+            #   user_dist_targ = DistanceTargetCategory.new
+            #   calc_distance = user_dist_targ.distance_from_input(70, "m")
+            #   expect(calc_distance).to eq("70m")
+            # end
+
+            
 
 # Archer Controller 
     - this is where to test attr formatting methods with actual input

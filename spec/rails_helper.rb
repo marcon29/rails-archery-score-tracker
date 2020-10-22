@@ -165,7 +165,7 @@ def valid_category
   )
 end
 
-def valid_dist_targ
+def valid_dist_targ_cat
   DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
 end
 

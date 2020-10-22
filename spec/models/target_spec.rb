@@ -162,7 +162,7 @@ RSpec.describe Target, type: :model do
             # load all AssocModels that must be in DB for tests to work
             valid_archer
             valid_category
-            valid_dist_targ
+            valid_dist_targ_cat
         end
 
         it "has many Archers" do
