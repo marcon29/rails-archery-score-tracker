@@ -2,11 +2,13 @@ class Archer < ApplicationRecord
 
     # need to add associations
         # has_many :shots
-        # has_many :score_sessions, :rounds, :round_sets, through: :shots
-        # has_many :archer_categories, through: :round_sets
+        # has_many :score_sessions, :rounds, :sets, :ends, through: :shots
+        # has_many :distance_target_categories
+        # has_many :archer_categories, through: :distance_target_categories
         has_secure_password 
 
-    # all attrs  -  :username :email :password :first_name :last_name :birthdate :gender :home_city :home_state :home_country :default_age_class
+    # all authentication attrs - :username :email :password 
+    # all data attrs - :first_name :last_name :birthdate :gender :home_city :home_state :home_country :default_age_class, :default_division
     @@all_age_classes = []
     
     validates :username, 
@@ -24,6 +26,10 @@ class Archer < ApplicationRecord
         presence: { message: "You must provide your gender." }, 
         inclusion: { in: GENDERS, message: "You can only choose male or female."  }
     validates :default_age_class, presence: true, inclusion: { in: @@all_age_classes }
+    validates :default_division, 
+        presence: { message: "You must enter your primary shooting style." }, 
+        inclusion: { in: DIVISIONS }
+        
     before_validation :all_age_classes, :assign_default_age_class, :format_names
     before_save :format_username, :format_email
         # format username and email after validations so spaces can be caught

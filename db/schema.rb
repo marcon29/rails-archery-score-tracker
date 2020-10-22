@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_22_182445) do
+ActiveRecord::Schema.define(version: 2020_10_22_212554) do
 
   create_table "archer_categories", force: :cascade do |t|
     t.string "cat_code"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2020_10_22_182445) do
     t.string "default_age_class"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "default_division"
   end
 
   create_table "distance_target_categories", force: :cascade do |t|

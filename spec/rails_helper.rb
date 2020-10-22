@@ -107,17 +107,18 @@ end
 
 def valid_archer
   Archer.create(
-    username: "testuser", 
-    email: "testuser@example.com", 
+    username: "validuser", 
+    email: "validuser@example.com", 
     password: "test", 
-    first_name: "Test", 
-    last_name: "User", 
+    first_name: "Valid", 
+    last_name: "Vuser", 
     birthdate: "1980-07-01", 
     gender: "Male", 
     home_city: "Denver", 
     home_state: "CO", 
     home_country: "USA", 
-    default_age_class: "Senior"
+    default_age_class: "Senior", 
+    default_division: "Recurve"
   )
 end
 
@@ -139,9 +140,13 @@ def valid_round
   Round.create(name: "1440 Round", discipline: "Outdoor", round_type: "Qualifying", num_roundsets: 4, user_edit: false)
 end
 
-def valid_round_set
+def valid_set
   RoundSet.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
 end
+
+# def valid_end
+#   End.create()
+# end
 
 def valid_shot
   Shot.create(date: "2020-09-01", end_num: 5, shot_num: 5, score_entry: "5",  set_score: 2)
