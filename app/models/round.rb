@@ -2,8 +2,8 @@ class Round < ApplicationRecord
 
     # need to add associations
         # has_many :shots
-        # has_many :archers, :score_sessions, :round_sets, through: :shots
-        # has_many :archer_categories, through: :round_sets
+        # has_many :archers, :score_sessions, :sets, through: :shots
+        # has_many :archer_categories, through: :sets
     
     # all attrs - :name, :discipline, :round_type, :num_roundsets, :user_edit
 

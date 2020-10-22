@@ -67,8 +67,8 @@ RSpec.describe Shot, type: :model do
         Round.create(name: "1440 Round", discipline: "Outdoor", round_type: "Qualifying", num_roundsets: 4, user_edit: false)
     }
 
-    let(:assoc_round_set) {
-        RoundSet.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
+    let(:assoc_set) {
+        Set.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
     }
 
     let(:assoc_category) {
@@ -90,7 +90,7 @@ RSpec.describe Shot, type: :model do
     }
 
     let(:assoc_dist_targ) {
-        DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
+        DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1)
     }
     
     # take valid_all and remove any non-required atts and auto-assign (not auto_format) attrs, all should be formatted correctly already
@@ -184,8 +184,8 @@ RSpec.describe Shot, type: :model do
                 # expect(shot.errors.messages[:date]).to include(inclusion_date_message)
             end
 
-            it "missing set_score during a RoundSet with 'Set' score method" do
-                assoc_round_set.update(score_method: "Set")
+            it "missing set_score during a Set with 'Set' score method" do
+                assoc_set.update(score_method: "Set")
                 shot = Shot.create(blank)
 
                 expect(shot).to be_invalid
@@ -288,9 +288,9 @@ RSpec.describe Shot, type: :model do
             expect(test_shot.round).to eq(assoc_round)
         end
     
-        it "belongs to RoundSet" do
+        it "belongs to Set" do
             pending "need to add associations"
-            expect(test_shot.round_set).to eq(assoc_round_set)
+            expect(test_shot.set).to eq(assoc_set)
         end
     end
 
@@ -299,7 +299,7 @@ RSpec.describe Shot, type: :model do
         before(:each) do
             assoc_score_session
             assoc_round
-            assoc_round_set
+            assoc_set
             assoc_target
             test_multi
         end

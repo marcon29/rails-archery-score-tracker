@@ -89,12 +89,12 @@ RSpec.describe ArcherCategory, type: :model do
     Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
   }
 
-  let(:pre_load_round_set) {
-    RoundSet.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
+  let(:pre_load_set) {
+    Set.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
   }
 
   let(:dist_targ_cat) {
-    DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
+    DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1)
   }
 
   let(:duplicate) {
@@ -173,14 +173,14 @@ RSpec.describe ArcherCategory, type: :model do
   # association tests ########################################################
   describe "instances are properly associated to other models" do
     before(:each) do
-      pre_load_round_set
+      pre_load_set
       pre_load_target
       rm_category
       dist_targ_cat
     end
 
-    it "has many RoundSets" do
-      expect(rm_category.round_sets).to include(pre_load_round_set)
+    it "has many Sets" do
+      expect(rm_category.sets).to include(pre_load_set)
     end
 
     it "has many Targets" do

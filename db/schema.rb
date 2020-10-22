@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_22_212554) do
+ActiveRecord::Schema.define(version: 2020_10_22_233158) do
 
   create_table "archer_categories", force: :cascade do |t|
     t.string "cat_code"
@@ -52,15 +52,6 @@ ActiveRecord::Schema.define(version: 2020_10_22_212554) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "round_sets", force: :cascade do |t|
-    t.string "name"
-    t.integer "ends"
-    t.integer "shots_per_end"
-    t.string "score_method"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "rounds", force: :cascade do |t|
     t.string "name"
     t.string "discipline"
@@ -81,6 +72,24 @@ ActiveRecord::Schema.define(version: 2020_10_22_212554) do
     t.date "end_date"
     t.string "rank"
     t.boolean "active", default: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "set_end_formats", force: :cascade do |t|
+    t.string "name"
+    t.integer "num_ends"
+    t.integer "shots_per_end"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "user_edit", default: true
+    t.integer "round_format_id"
+  end
+
+  create_table "sets", force: :cascade do |t|
+    t.string "name"
+    t.date "date"
+    t.string "rank"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

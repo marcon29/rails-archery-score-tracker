@@ -141,7 +141,7 @@ def valid_round
 end
 
 def valid_set
-  RoundSet.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
+  Set.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
 end
 
 # def valid_end
@@ -171,7 +171,7 @@ def valid_category
 end
 
 def valid_dist_targ_cat
-  DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
+  DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1)
 end
 
 

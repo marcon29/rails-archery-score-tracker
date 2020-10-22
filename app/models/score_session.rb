@@ -73,7 +73,8 @@ class ScoreSession < ApplicationRecord
 
         # it "can calculate the total score for a score session" do
             # pending "need to add associations"
-            # want to be able to to call shot.score_session_score
+            # want to be able to to call score_session.score
+            # sums all round scores
         # end
 
         

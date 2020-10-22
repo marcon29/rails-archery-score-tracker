@@ -209,7 +209,7 @@ RSpec.describe ScoreSession, type: :model do
     
         it "has many Sets" do
             pending "need to add create associated models and add associations"
-            expect(test_score_session.round_sets).to include(valid_set)
+            expect(test_score_session.sets).to include(valid_set)
         end
 
         it "has many Ends" do

@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe RoundSet, type: :model do
+RSpec.describe Set, type: :model do
     let(:valid_all) {
         {name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points"}
     }
 
-    let(:test_round_set) {
-        RoundSet.create(valid_all)
+    let(:test_set) {
+        Set.create(valid_all)
     }
 
     #  all instances of AssocModels needed for testing associations (not persisted until called)
@@ -67,7 +67,7 @@ RSpec.describe RoundSet, type: :model do
     }  
 
     let(:assoc_dist_targ) {
-        DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
+        DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1)
     }
 
     # remove any non-required atts, and auto-assign (not auto_format) attrs, all should be formatted correctly already
@@ -102,87 +102,87 @@ RSpec.describe RoundSet, type: :model do
     describe "model creates and updates only valid instances" do
         describe "valid with all required and unrequired input data" do
             it "instance is valid with all attributes (all are required)" do
-                expect(RoundSet.all.count).to eq(0)
+                expect(Set.all.count).to eq(0)
 
-                expect(test_round_set).to be_valid
-                expect(RoundSet.all.count).to eq(1)
+                expect(test_set).to be_valid
+                expect(Set.all.count).to eq(1)
                 
-                expect(test_round_set.name).to eq(valid_all[:name])
-                expect(test_round_set.ends).to eq(valid_all[:ends])
-                expect(test_round_set.shots_per_end).to eq(valid_all[:shots_per_end])
-                expect(test_round_set.score_method).to eq(valid_all[:score_method])
+                expect(test_set.name).to eq(valid_all[:name])
+                expect(test_set.ends).to eq(valid_all[:ends])
+                expect(test_set.shots_per_end).to eq(valid_all[:shots_per_end])
+                expect(test_set.score_method).to eq(valid_all[:score_method])
             end
 
             # it "instance is valid with only required attributes, auto-assigns name" do
-            #     expect(RoundSet.all.count).to eq(0)
-            #     round_set = RoundSet.create(valid_req)
+            #     expect(Set.all.count).to eq(0)
+            #     set = Set.create(valid_req)
 
-            #     expect(round_set).to be_valid
-            #     expect(RoundSet.all.count).to eq(1)
+            #     expect(set).to be_valid
+            #     expect(Set.all.count).to eq(1)
 
             #     # req input tests
-            #     expect(round_set.ends).to eq(valid_req[:ends])
-            #     expect(round_set.shots_per_end).to eq(valid_req[:shots_per_end])
-            #     expect(round_set.score_method).to eq(valid_req[:score_method])
+            #     expect(set.ends).to eq(valid_req[:ends])
+            #     expect(set.shots_per_end).to eq(valid_req[:shots_per_end])
+            #     expect(set.score_method).to eq(valid_req[:score_method])
                 
             #     # not req input tests (name auto-asigned from missing)
-            #     expect(round_set.name).to eq("1440 Round - Set/Distance1")
+            #     expect(set.name).to eq("1440 Round - Set/Distance1")
             # end
 
             it "instance is valid when updating all attrs, re-assigns name if value deleted" do
-                test_round_set.update(update)
+                test_set.update(update)
                 
                 # req input tests (should have value in update)
-                expect(test_round_set.name).to eq(update[:name])
-                expect(test_round_set.ends).to eq(update[:ends])
-                expect(test_round_set.shots_per_end).to eq(update[:shots_per_end])
-                expect(test_round_set.score_method).to eq(update[:score_method])
+                expect(test_set.name).to eq(update[:name])
+                expect(test_set.ends).to eq(update[:ends])
+                expect(test_set.shots_per_end).to eq(update[:shots_per_end])
+                expect(test_set.score_method).to eq(update[:score_method])
             end
         end
     
         describe "invalid if input data is missing or bad" do
             it "is invalid and has correct error message without required attributes" do
-                round_set = RoundSet.create(blank)
+                set = Set.create(blank)
 
-                expect(round_set).to be_invalid
-                expect(RoundSet.all.count).to eq(0)
-                expect(round_set.errors.messages[:name]).to include(default_missing_message)
-                expect(round_set.errors.messages[:ends]).to include("You must enter a number greater than 0.")
-                expect(round_set.errors.messages[:shots_per_end]).to include("You must enter a number greater than 0.")
-                expect(round_set.errors.messages[:score_method]).to include("You must choose a score method.")
+                expect(set).to be_invalid
+                expect(Set.all.count).to eq(0)
+                expect(set.errors.messages[:name]).to include(default_missing_message)
+                expect(set.errors.messages[:ends]).to include("You must enter a number greater than 0.")
+                expect(set.errors.messages[:shots_per_end]).to include("You must enter a number greater than 0.")
+                expect(set.errors.messages[:score_method]).to include("You must choose a score method.")
             end
             
             it "is invalid and has correct error message when unique attributes are duplicated" do
                 # need to call initial test object to check against for duplication
-                test_round_set
-                round_set = RoundSet.create(duplicate)
+                test_set
+                set = Set.create(duplicate)
 
-                expect(round_set).to be_invalid
-                expect(RoundSet.all.count).to eq(1)
-                expect(round_set.errors.messages[:name]).to include(default_duplicate_message)
+                expect(set).to be_invalid
+                expect(Set.all.count).to eq(1)
+                expect(set.errors.messages[:name]).to include(default_duplicate_message)
             end
 
             # it "if auto-created roundset name already exists, will return that object instead" do
             #     pending "do this or the duplication error above"
             #     pending "straight dupliction error seems better for an update test"
             #     # need to call initial test object to check against for duplication
-            #     test_round_set
-            #     round_set = RoundSet.create(duplicate)
+            #     test_set
+            #     set = Set.create(duplicate)
 
-            #     expect(RoundSet.all.count).to eq(1)
-            #     expect(round_set.id).to eq(test_round_set.id)
+            #     expect(Set.all.count).to eq(1)
+            #     expect(set.id).to eq(test_set.id)
             # end
 
             it "is invalid and has correct error message if value not included in corresponding selection list or is wrong format" do
                 duplicate[:ends] = "six"
                 duplicate[:shots_per_end] = "six"
                 duplicate[:score_method] = "bad data"
-                round_set = RoundSet.create(duplicate)
+                set = Set.create(duplicate)
 
-                expect(round_set).to be_invalid
-                expect(round_set.errors.messages[:score_method]).to include(default_inclusion_message)
-                expect(round_set.errors.messages[:ends]).to include("You must enter a number greater than 0.")
-                expect(round_set.errors.messages[:shots_per_end]).to include("You must enter a number greater than 0.")
+                expect(set).to be_invalid
+                expect(set.errors.messages[:score_method]).to include(default_inclusion_message)
+                expect(set.errors.messages[:ends]).to include("You must enter a number greater than 0.")
+                expect(set.errors.messages[:shots_per_end]).to include("You must enter a number greater than 0.")
             end
         end
     end
@@ -190,7 +190,7 @@ RSpec.describe RoundSet, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            test_round_set
+            test_set
             assoc_target
             assoc_category
             assoc_dist_targ
@@ -198,30 +198,30 @@ RSpec.describe RoundSet, type: :model do
 
         it "has many Archers" do
             pending "need to add create associated models and add associations"
-            expect(test_round_set.archer).to include(assoc_archer)
+            expect(test_set.archer).to include(assoc_archer)
         end
 
         it "has many ScoreSessons" do
             pending "need to add create associated models and add associations"
-            expect(test_round_set.rounds).to include(assoc_round)
+            expect(test_set.rounds).to include(assoc_round)
         end
 
-        it "has many RoundSets" do
+        it "has many Sets" do
             pending "need to add create associated models and add associations"
-            expect(test_round_set.round_sets).to include(assoc_round_set)
+            expect(test_set.sets).to include(assoc_set)
         end
     
         it "has many Shots" do
             pending "need to add create associated models and add associations"
-            expect(test_round_set.shots).to include(assoc_shot)
+            expect(test_set.shots).to include(assoc_shot)
         end
 
         it "has many ArcherCategories" do
-            expect(test_round_set.archer_categories).to include(assoc_category)
+            expect(test_set.archer_categories).to include(assoc_category)
         end
 
         it "has many Targets" do
-            expect(test_round_set.targets).to include(assoc_target)
+            expect(test_set.targets).to include(assoc_target)
         end
     end
 
@@ -229,7 +229,7 @@ RSpec.describe RoundSet, type: :model do
     describe "all helper methods work correctly:" do
         it "helpers TBD" do
             pending "add as needed"
-            expect(test_round_set).to be_invalid
+            expect(test_set).to be_invalid
         end
     end
 end

@@ -27,8 +27,8 @@ RSpec.describe Round, type: :model do
         )
     }
 
-    let(:assoc_round_set) {
-        RoundSet.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
+    let(:assoc_set) {
+        Set.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
     }
 
     # let(:assoc_shot) {
@@ -54,7 +54,7 @@ RSpec.describe Round, type: :model do
     }
 
     let(:assoc_dist_targ) {
-        DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
+        DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1)
     }
     
     # take valid_all and remove any non-required atts and auto-assign (not auto_format) attrs, all should be formatted correctly already
@@ -189,9 +189,9 @@ RSpec.describe Round, type: :model do
             expect(test_round.rounds).to include(assoc_round)
         end
 
-        it "has many RoundSets" do
+        it "has many Sets" do
             pending "need to add create associated models and add associations"
-            expect(test_round.round_sets).to include(assoc_round_set)
+            expect(test_round.sets).to include(assoc_set)
         end
     
         it "has many Shots" do

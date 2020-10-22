@@ -2,7 +2,7 @@
     - build Shot model
         - see notes below
     
-    - set up associations between Shot, RoundSet, Round, ScoreSession, Archer
+    - set up associations between Shot, Set, Round, ScoreSession, Archer
 
     - find gem and set up location information
         - user home info
@@ -62,7 +62,7 @@
 
 # ScoreSession Model
     - force rank as necessary if not practice?
-        - only when all shots are scored? or all shots for each round (or RoundSet)?
+        - only when all shots are scored? or all shots for each round (or Set)?
     - only allow one active object at time
 
 # Controller Helpers
@@ -105,25 +105,25 @@
         - i.e. no user_edit = "", must not use at all and allow DB default or explictly setting only
     - auto-generating name needs to be a controller method
         # round = Round.find_or_create_by(round_params)
-        # create_round_sets(round)
-        # def create_round_sets(round)
+        # create_sets(round)
+        # def create_sets(round)
         #     count = 0
         #     round.num_roundsets.times do
-        #         round_set = RoundSet.find_or_create_by(
+        #         set = Set.find_or_create_by(
         #             name: "#{round.name} - Set/Distance#{count +=1}"
-        #             ends: params[:round_set][:ends]
-        #             shots_per_end: params[:round_set][:shots_per_end]
-        #             score_method: params[:round_set][:score_method]
+        #             ends: params[:set][:ends]
+        #             shots_per_end: params[:set][:shots_per_end]
+        #             score_method: params[:set][:score_method]
         #         )
-        #     round.round_sets << round_set
+        #     round.sets << set
         #     end
         # end
-    - calc a round_set_rank ???
+    - calc a set_rank ???
         - may need new model to make this work (might not be necessary)
         - could just have the rank in ScoreSession only that updates as go
         
 # ScoreSession Controller
-    - for match RoundSets and set scoring_method
+    - for match Sets and set scoring_method
         - first to 6 set points wins (don't need to complete all ends)
         - so when tracking shot.set_score, if 6, destroy any unshot ends for that SetRound
 

@@ -1,7 +1,7 @@
 class ArcherCategory < ApplicationRecord
     has_many :distance_target_categoriess
     has_many :targets, through: :distance_target_categoriess
-    has_many :round_sets, through: :distance_target_categoriess
+    has_many :sets, through: :distance_target_categoriess
     
     # Regular user can't update these - pre-loaded for reference by rest of app only.
     # Validations to ensure data integrity when extending app. No need to display error messages.
