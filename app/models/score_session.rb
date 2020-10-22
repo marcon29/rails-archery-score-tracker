@@ -1,10 +1,10 @@
 class ScoreSession < ApplicationRecord
     # need to add associations
         # has_many :shots
-        # has_many :rounds, :round_sets, through: :shots
+        # has_many :rounds, :sets, :ends, through: :shots
         # has_one archer, through: :shots
-        # has_many :archer_categories, through: :round_sets
 
+    
     # all attrs  -  :name :score_session_type :city :state :country :start_date :end_date :rank :active
 
     validates :name, 
@@ -41,7 +41,7 @@ class ScoreSession < ApplicationRecord
         if self.rank.present?
             string = self.rank.strip.gsub(" ", "").downcase
         
-            if string.scan(Regexp.union(allowable_ranks)).empty? #|| string.match(Regexp.union(/\A^0+\z/, /\A^0+st\z/i, /\A^0+nd\z/i, /\A^0+rd\z/i, /\A^0+th\z/i))
+            if string.scan(Regexp.union(allowable_ranks)).empty? || string.match(Regexp.union(/\A^0+\z/, /\A^0+st\z/i, /\A^0+nd\z/i, /\A^0+rd\z/i, /\A^0+th\z/i))
                 errors.add(:rank, 'Enter only a number above 0, "W" or "L".')
             else
                 self.assign_rank(string)

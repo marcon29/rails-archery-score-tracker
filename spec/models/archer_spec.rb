@@ -95,9 +95,6 @@ RSpec.describe Archer, type: :model do
     let(:format_username_message) {"Username can only use letters and numbers without spaces."}
     let(:format_email_message) {"Email doesn't look valid. Please use another."}
     
-    
-    
-    
 
     # ###################################################################
     # define tests
