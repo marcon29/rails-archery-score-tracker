@@ -1,121 +1,177 @@
 require 'rails_helper'
 
 RSpec.describe Target, type: :model do
-  let(:rm_category) {
-    ArcherCategory.create(
-      cat_code: "WA-RM", 
-      gov_body: "World Archery", 
-      cat_division: "Recurve", 
-      cat_age_class: "Senior", 
-      min_age: 21, 
-      max_age: 49, 
-      open_to_younger: true, 
-      open_to_older: true, 
-      cat_gender: "Male"
-    )
-  }
+    # ###################################################################
+    # define main test object
+    # ###################################################################
+    # needs to be different from valid object in RailsHelper to avoid duplicte failures
+    let(:test_all) {
+        {name: "80cm/1-spot/10-ring", size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false}
+    }
 
-  let(:pre_load_target) {
-    Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-  }
-
-  let(:user_target) {
-    Target.create(size: "20in", score_areas: 2, rings: 4, x_ring: true, max_score: 5, spots: 5)
-  }
-  
-  let(:pre_load_round_set) {
-    RoundSet.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
-  }
-
-  let(:dist_targ) {
-    DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
-  }
-
-  let(:update) {
-    {size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3}
-  }
-
-  let(:duplicate) {
-    {size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1}
-  }
-
-  let(:blank) {
-    {size: "", score_areas: "", rings: "", x_ring: "", max_score: "", spots: "", user_edit: ""}
-  }
-
-  let(:default_missing_message) {"can't be blank"}
-  let(:default_duplicate_message) {"has already been taken"}
-  let(:default_inclusion_message) {"is not included in the list"}
-
-  # object creation and validation tests #######################################
-  describe "model creates and updates only valid instances" do
-    describe "valid with all required and unrequired input data" do
-      it "pre-loaded target (without name provided) is valid, has correct name, and is marked not user-editable" do
-        expect(pre_load_target).to be_valid
-        expect(pre_load_target.name).to eq("122cm/1-spot/10-ring")
-        expect(pre_load_target.user_edit).to eq(false)
-      end
+    let(:test_target) {
+        Target.create(test_all)
+    }
     
-      it "user-loaded target (without name or user_edit provided) is valid, has correct name, and is marked user-editable" do
-        expect(user_target).to be_valid
-        expect(user_target.name).to eq("20in/5-spot/4-ring")
-        expect(user_target.user_edit).to eq(true)
-      end
+    # ###################################################################
+    # define any additional objects to test for this model 
+    # ###################################################################
+    # only add multiple instantiations if need simultaneous instances for testing
 
-      it "will auto-create the target name, won't save unless it's unique" do
-        pre_load_target
-        target = Target.create(duplicate)
-        
-        expect(target.name).to eq("122cm/1-spot/10-ring")
-        expect(target).to be_invalid
-      end
 
-      it "updates the name if the size, spots or rings are edited" do
-        user_target.update(update)
+    # ###################################################################
+    # define standard create/update variations
+    # ###################################################################
 
-        expect(user_target.name).to eq("40cm/3-spot/6-ring")
-        expect(user_target.size).to eq("40cm")
-        expect(user_target.score_areas).to eq(6)
-        expect(user_target.rings).to eq(6)
-        expect(user_target.x_ring).to eq(true)
-        expect(user_target.max_score).to eq(10)
-        expect(user_target.spots).to eq(3)
-      end
+    # take test_all and remove any non-required atts and auto-assign (not auto_format) attrs, all should be formatted correctly
+    let(:test_req) {
+        {size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1}
+    }
+
+    # exact duplicate of test_all
+        # use as whole for testing unique values
+        # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
+    let(:duplicate) {
+        {name: "80cm/1-spot/10-ring", size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false}
+    }
+
+    # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
+    let(:update) {
+        {name: "", size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3}
+    }
+
+    # every attr blank
+    let(:blank) {
+        {name: "", size: "", score_areas: "", rings: "", x_ring: "", max_score: "", spots: "", user_edit: ""}
+    }
+
+    # ###################################################################
+    # define test results for auto-assign attrs
+    # ###################################################################
+    let(:assigned_name) {"80cm/1-spot/10-ring"}
+    let(:assigned_name_update) {"40cm/3-spot/6-ring"}
+    let(:default_user_edit) {true}
+
+    # ###################################################################
+    # define custom error messages
+    # ###################################################################
+    let(:missing_size_message) {"You must provide a target size."}
+    let(:missing_score_areas_message) {"You must provide the number of scoring areas."}
+    let(:missing_rings_message) {"You must provide the number of rings."}
+    let(:missing_x_ring_message) {"You must specifiy if there is an X ring."}
+    let(:missing_max_score_message) {"You must provide the higest score value."}
+    let(:missing_spots_message) {"You must specify the number of spots."}
+
+
+    # ###################################################################
+    # define tests
+    # ###################################################################
+
+    # object creation and validation tests #######################################
+    describe "model creates and updates only valid instances - " do
+        describe "valid when" do
+            it "given all required and unrequired attributes" do
+                expect(Target.all.count).to eq(0)
+
+                expect(test_target).to be_valid
+                expect(Target.all.count).to eq(1)
+
+                expect(test_target.name).to eq(assigned_name)
+                expect(test_target.size).to eq(test_all[:size])
+                expect(test_target.score_areas).to eq(test_all[:score_areas])
+                expect(test_target.rings).to eq(test_all[:rings])
+                expect(test_target.x_ring).to eq(test_all[:x_ring])
+                expect(test_target.max_score).to eq(test_all[:max_score])
+                expect(test_target.spots).to eq(test_all[:spots])
+                expect(test_target.user_edit).to eq(test_all[:user_edit])
+            end
+            
+            it "given only required attributes" do
+                expect(Target.all.count).to eq(0)
+                target = Target.create(test_req)
+
+                expect(target).to be_valid
+                expect(Target.all.count).to eq(1)
+
+                # req input tests (should have value in test_req)
+                expect(target.size).to eq(test_req[:size])
+                expect(target.score_areas).to eq(test_req[:score_areas])
+                expect(target.rings).to eq(test_req[:rings])
+                expect(target.x_ring).to eq(test_req[:x_ring])
+                expect(target.max_score).to eq(test_req[:max_score])
+                expect(target.spots).to eq(test_req[:spots])
+
+                # not req input tests (name and user_edit auto-asigned from missing)
+                expect(target.name).to eq(assigned_name)
+                expect(target.user_edit).to eq(default_user_edit)
+            end
+
+            it "updating all attributes" do
+                test_target.update(update)
+                
+                expect(test_target).to be_valid
+                
+                # req input tests (should have value in test_req)
+                expect(test_target.size).to eq(update[:size])
+                expect(test_target.score_areas).to eq(update[:score_areas])
+                expect(test_target.rings).to eq(update[:rings])
+                expect(test_target.x_ring).to eq(update[:x_ring])
+                expect(test_target.max_score).to eq(update[:max_score])
+                expect(test_target.spots).to eq(update[:spots])
+
+                # not req input tests (name and user_edit auto-asigned from blank)
+                expect(test_target.name).to eq(assigned_name_update)
+                expect(test_target.user_edit).to eq(test_all[:user_edit])
+            end
+        end    
+
+        describe "invalid and has correct error message when" do
+            it "missing required attributes" do
+                target = Target.create(blank)
+
+                expect(target).to be_invalid
+                expect(Target.all.count).to eq(0)
+
+                expect(target.errors.messages[:size]).to include(missing_size_message)
+                expect(target.errors.messages[:score_areas]).to include(missing_score_areas_message)
+                expect(target.errors.messages[:rings]).to include(missing_rings_message)
+                expect(target.errors.messages[:x_ring]).to include(missing_x_ring_message)
+                expect(target.errors.messages[:max_score]).to include(missing_max_score_message)
+                expect(target.errors.messages[:spots]).to include(missing_spots_message)
+            end
+
+            it "unique attributes are duplicated" do
+                # call initial test object to check against for duplication
+                test_target
+                expect(Target.all.count).to eq(1)
+                target = Target.create(duplicate)
+
+                expect(target).to be_invalid
+                expect(Target.all.count).to eq(1)
+                expect(target.errors.messages[:name]).to include(default_duplicate_message)
+            end
+        end
     end
 
-    describe "invalid if input data is missing or bad" do
-      it "is invalid without required attributes and has correct error message" do
-        target = Target.create(blank)
+    # association tests ########################################################
+    describe "instances are properly associated to other models" do
+        before(:each) do
+            # load test object
+            test_target
 
-        expect(target).to be_invalid
-        expect(target.errors.messages[:size]).to include("You must provide a target size.")
-        expect(target.errors.messages[:score_areas]).to include("You must provide the number of scoring areas.")
-        expect(target.errors.messages[:rings]).to include("You must provide the number of rings.")
-        expect(target.errors.messages[:x_ring]).to include("You must specifiy if there is an X ring.")
-        expect(target.errors.messages[:max_score]).to include("You must provide the higest score value.")
-        expect(target.errors.messages[:spots]).to include("You must specify the number of spots.")
-      end
-    end
-  end
+            # load all AssocModels that must be in DB for tests to work
+            valid_archer
+            valid_category
+            valid_dist_targ
+        end
 
-  # association tests ########################################################
-  describe "instances are properly associated to other models" do
-    before(:each) do
-      pre_load_round_set
-      pre_load_target
-      rm_category
-      dist_targ
-    end
+        it "has many Archers" do
+            expect(test_target.archers).to include(valid_archer)
+        end
 
-    it "has many RoundSets" do
-      expect(pre_load_target.round_sets).to include(pre_load_round_set)
+        it "has many ArcherCategories" do
+            expect(test_target.archer_categories).to include(valid_category)
+        end
     end
-
-    it "has many ArcherCategories" do
-      expect(pre_load_target.archer_categories).to include(rm_category)
-    end
-  end
 end
-
-
 

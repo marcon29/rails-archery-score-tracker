@@ -9,6 +9,8 @@ AGE_CLASSES = {
     "USA Archery" => ["Bowman", "Cub", "Cadet", "Junior", "Senior", "Master50", "Master60", "Master70"]
 }
 DIVISIONS = ["Recurve", "Compound"]
+
+
 DISCIPLINES = ["Outdoor", "Indoor"]
 ROUND_TYPES = ["Qualifying", "Match"]
 SCORE_METHODS = ["Points", "Set"]

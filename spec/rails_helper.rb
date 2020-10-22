@@ -84,3 +84,90 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 end
+
+def default_missing_message
+  "can't be blank"
+end
+
+def default_duplicate_message
+  "has already been taken"
+end
+
+def default_inclusion_message
+  "is not included in the list"
+end
+
+def default_number_message
+  "is not a number"
+end
+
+def default_format_message
+  "is invalid"
+end
+
+def valid_archer
+  Archer.create(
+    username: "testuser", 
+    email: "testuser@example.com", 
+    password: "test", 
+    first_name: "Test", 
+    last_name: "User", 
+    birthdate: "1980-07-01", 
+    gender: "Male", 
+    home_city: "Denver", 
+    home_state: "CO", 
+    home_country: "USA", 
+    default_age_class: "Senior"
+  )
+end
+
+def valid_score_session
+  ScoreSession.create(
+    name: "2020 World Cup", 
+    score_session_type: "Tournament", 
+    city: "Oxford", 
+    state: "OH", 
+    country: "USA", 
+    start_date: "2020-09-01", 
+    end_date: "2020-09-05", 
+    rank: "1st", 
+    active: true
+  )
+end
+
+def valid_round
+  Round.create(name: "1440 Round", discipline: "Outdoor", round_type: "Qualifying", num_roundsets: 4, user_edit: false)
+end
+
+def valid_round_set
+  RoundSet.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
+end
+
+def valid_shot
+  Shot.create(date: "2020-09-01", end_num: 5, shot_num: 5, score_entry: "5",  set_score: 2)
+end
+
+def valid_target
+  Target.create(name: "122cm/1-spot/10-ring", size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+end
+
+def valid_category
+  ArcherCategory.create(
+    cat_code: "WA-RM", 
+    gov_body: "World Archery", 
+    cat_division: "Recurve", 
+    cat_age_class: "Senior", 
+    min_age: 21, 
+    max_age: 49, 
+    open_to_younger: true, 
+    open_to_older: true, 
+    cat_gender: "Male"
+  )
+end
+
+def valid_dist_targ
+  DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
+end
+
+
+

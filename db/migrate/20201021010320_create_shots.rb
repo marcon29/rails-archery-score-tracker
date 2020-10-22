@@ -6,12 +6,10 @@ class CreateShots < ActiveRecord::Migration[6.0]
       t.integer :round_id
       t.integer :round_set_id
       t.integer :end_id
-      # t.integer :end_num
       t.integer :shot_num
       t.string :score_entry
       t.integer :set_score
-      # t.date :date
-
+      
       t.timestamps
     end
   end
