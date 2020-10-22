@@ -3,9 +3,9 @@ class RoundSet < ApplicationRecord
 
     # all attrs - :name, :ends, :shots_per_end, :score_method
 
-    has_many :distance_targets
-    has_many :archer_categories, through: :distance_targets
-    has_many :targets, through: :distance_targets
+    has_many :distance_target_categoriess
+    has_many :archer_categories, through: :distance_target_categoriess
+    has_many :targets, through: :distance_target_categoriess
 
     validates :name, presence: true, uniqueness: true
     validates :ends, :shots_per_end, 

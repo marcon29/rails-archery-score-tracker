@@ -93,8 +93,8 @@ RSpec.describe ArcherCategory, type: :model do
     RoundSet.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
   }
 
-  let(:dist_targ) {
-    DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
+  let(:dist_targ_cat) {
+    DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
   }
 
   let(:duplicate) {
@@ -176,7 +176,7 @@ RSpec.describe ArcherCategory, type: :model do
       pre_load_round_set
       pre_load_target
       rm_category
-      dist_targ
+      dist_targ_cat
     end
 
     it "has many RoundSets" do

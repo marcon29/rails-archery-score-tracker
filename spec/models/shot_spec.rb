@@ -90,7 +90,7 @@ RSpec.describe Shot, type: :model do
     }
 
     let(:assoc_dist_targ) {
-        DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
+        DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
     }
     
     # take valid_all and remove any non-required atts and auto-assign (not auto_format) attrs, all should be formatted correctly already

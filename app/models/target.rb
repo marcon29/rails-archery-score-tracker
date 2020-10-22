@@ -1,11 +1,10 @@
 class Target < ApplicationRecord
-        
+    has_many :distance_target_categoriess
+    has_many :archer_categories, through: :distance_target_categoriess
+    has_many :archers, through: :distance_target_categoriess
+    
     # all data attrs  - :name, :size, :score_areas, :rings, :x_ring, :max_score, :spots, :user_edit
 
-    has_many :distance_targets
-    has_many :archer_categories, through: :distance_targets
-    has_many :archers, through: :distance_targets
-    
     validates :name, presence: true, uniqueness: true
     validates :size, presence: { message: "You must provide a target size." }
     validates :score_areas, presence: { message: "You must provide the number of scoring areas." }

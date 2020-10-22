@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe DistanceTarget, type: :model do
+RSpec.describe DistanceTargetCategory, type: :model do
   let(:rm_category) {
     ArcherCategory.create(
       cat_code: "WA-RM", 
@@ -23,8 +23,8 @@ RSpec.describe DistanceTarget, type: :model do
     RoundSet.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
   }
 
-  let(:dist_targ) {
-    DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
+  let(:dist_targ_cat) {
+    DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
   }
 
   let(:blank) {
@@ -43,14 +43,14 @@ RSpec.describe DistanceTarget, type: :model do
         rm_category
         pre_load_round_set
 
-        expect(dist_targ).to be_valid
-        expect(dist_targ.distance).to eq("90m")
+        expect(dist_targ_cat).to be_valid
+        expect(dist_targ_cat.distance).to eq("90m")
       end
     end
 
     describe "invalid if input data is missing or bad" do
       it "is invalid without required attributes and has correct error message" do
-        bad_dist_targ = DistanceTarget.create(blank)
+        bad_dist_targ = DistanceTargetCategory.create(blank)
 
         expect(bad_dist_targ).to be_invalid
         expect(bad_dist_targ.errors.messages[:distance]).to include(default_missing_message)
@@ -65,24 +65,24 @@ RSpec.describe DistanceTarget, type: :model do
   describe "instances are properly associated to other models" do
     it "belongs to a RoundSet" do
       pre_load_round_set
-      expect(dist_targ.round_set).to eq(pre_load_round_set)
+      expect(dist_targ_cat.round_set).to eq(pre_load_round_set)
     end
 
     it "belongs to an ArcherCategory" do
       rm_category
-      expect(dist_targ.archer_category).to eq(rm_category)
+      expect(dist_targ_cat.archer_category).to eq(rm_category)
     end
 
     it "belongs to a Target" do
       pre_load_target
-      expect(dist_targ.target).to eq(pre_load_target)
+      expect(dist_targ_cat.target).to eq(pre_load_target)
     end
   end
 
   # helper method tests ########################################################
   describe "all helper methods work correctly:" do
     it "can create a properly formatted distance from number and unit" do
-      user_dist_targ = DistanceTarget.new
+      user_dist_targ = DistanceTargetCategory.new
       calc_distance = user_dist_targ.distance_from_input(70, "m")
       expect(calc_distance).to eq("70m")
     end

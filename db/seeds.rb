@@ -110,7 +110,7 @@ end
 
 wa1440_attrs.each do |obj, details|
     ArcherCategory.where(cat_age_class: details[:age_class], cat_gender: details[:gender]).each do |category|
-        DistanceTarget.find_or_create_by(
+        DistanceTargetCategory.find_or_create_by(
             round_set_id: details[:round_set_id], 
             archer_category_id: category.id, 
             distance: details[:distance], 

@@ -67,7 +67,7 @@ RSpec.describe ScoreSession, type: :model do
     }
 
     let(:assoc_dist_targ) {
-        DistanceTarget.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
+        DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, round_set_id: 1)
     }
 
     # add the following attr sets if need active and inactive at same time for testing

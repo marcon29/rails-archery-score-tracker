@@ -1,7 +1,7 @@
-class DistanceTarget < ApplicationRecord
+class DistanceTargetCategory < ApplicationRecord
     belongs_to :target
     belongs_to :archer_category    
-    belongs_to :round_set
+    belongs_to :archer
     
     # Regular user can't update these - pre-loaded for reference by rest of app only.
     # Validations to ensure data integrity when extending app. No need to display error messages.
