@@ -88,12 +88,12 @@ RSpec.describe Rset, type: :model do
                 expect(rset).to be_valid
                 expect(Rset.all.count).to eq(1)
 
-                # req input tests
+                # req input tests (should have value in valid_req)
                 expect(rset.date).to eq(valid_req[:date].to_date)
                 
                 # not req input tests (name auto-asigned from missing)
-                expect(rset.rank).to be_nil
                 expect(rset.name).to eq(assigned_name)
+                expect(rset.rank).to be_nil
             end
 
             it "updating all attributes" do
@@ -115,6 +115,8 @@ RSpec.describe Rset, type: :model do
                 expect(rset).to be_invalid
                 expect(Rset.all.count).to eq(0)
                 
+                # expect(rset.errors.messages[:name]).to include(default_missing_message)
+                # expect(rset.name).to eq(assigned_name)
                 expect(rset.errors.messages[:date]).to include(missing_date_message)
                 expect(rset.rank).to be_blank
             end
@@ -122,6 +124,7 @@ RSpec.describe Rset, type: :model do
             it "unique attributes are duplicated" do
                 # need to call initial test object to check against for duplication
                 test_rset
+                expect(Rset.all.count).to eq(1)
                 rset = Rset.create(duplicate)
 
                 expect(rset).to be_invalid
@@ -166,17 +169,17 @@ RSpec.describe Rset, type: :model do
 
         it "has one Archer" do
             pending "need to add create associated models and add associations"
-            expect(test_rset.archer).to include(valid_archer)
+            expect(test_rset.archer).to eq(valid_archer)
         end
 
         it "has one ScoreSesson" do
             pending "need to add create associated models and add associations"
-            expect(test_rset.score_session).to include(valid_score_session)
+            expect(test_rset.score_session).to eq(valid_score_session)
         end
 
         it "has one Round" do
             pending "need to add create associated models and add associations"
-            expect(test_rset.round).to include(valid_round)
+            expect(test_rset.round).to eq(valid_round)
         end
 
         it "has many Ends" do
@@ -190,11 +193,11 @@ RSpec.describe Rset, type: :model do
         end
 
         it "has one DistanceTargetCategory" do
-            expect(test_rset.distance_target_category).to include(valid_category)
+            expect(test_rset.distance_target_category).to eq(valid_category)
         end
 
         it "has one Target" do
-            expect(test_rset.target).to include(valid_target)
+            expect(test_rset.target).to eq(valid_target)
         end
     end
 

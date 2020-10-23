@@ -9,10 +9,6 @@ class Round < ApplicationRecord
     
     # old attrs - :name, :discipline, :round_type, :num_roundsets, :user_edit
 
-    # old attrs - :name, :round_type, 
-
-    
-
     # all attrs - :name, :round_type, :rank
     # format attrs - :name, :num_sets, :user_edit
 

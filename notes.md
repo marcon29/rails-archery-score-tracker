@@ -129,6 +129,7 @@
     - calc a set_rank ???
         - may need new model to make this work (might not be necessary)
         - could just have the rank in ScoreSession only that updates as go
+    - if round_type is "Match", restrict rank options to "Win" or "Loss"
         
 # ScoreSession Controller
     - for match Rsets and set scoring_method

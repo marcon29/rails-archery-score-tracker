@@ -12,15 +12,16 @@ class Round < ApplicationRecord
     # all attrs - :name, :round_type, :rank
     # format attrs - :name, :num_sets, :user_edit
 
-    validates :name, 
-        presence: { message: "You must enter a name." }, 
-        uniqueness: { case_sensitive: false, message: "That name is already taken." }
+    # validates :name, 
+    #     presence: { message: "You must enter a name." }, 
+    #     uniqueness: { case_sensitive: false, message: "That name is already taken." }
+    validates :name, presence: true, uniqueness: true
     validates :round_type, 
         presence: { message: "You must choose a round type." }, 
         inclusion: { in: ROUND_TYPES }
-    validates :num_roundsets, 
-        numericality: { only_integer: true, greater_than: 0, message: "You must enter a number greater than 0." }
-    before_validation :format_name
+    validate :check_and_assign_rank
+    before_validation :assign_name
+    
     
     # keeping this until I'm sure the discipline association works
     # validates :discipline, 
@@ -28,11 +29,24 @@ class Round < ApplicationRecord
     #     inclusion: { in: DISCIPLINES }
 
     # callbacks/validation helpers
-        # auto-create name (ScoreSession.name + RoundFormat.name)
     
-    def format_name
-        self.name = self.name.titlecase
-    end
+    # need to auto create name ( ScoreSession.name - RoundFormat.name )
+        # RoundFormat.name will be input by controller, not via assoc.
+        def assign_name
+            # can't use an arg
+            # self.name = create_name
+            
+            # using this until associations and controller set up
+            self.name = create_name("1440 Round")
+        end
+    
+        def create_name(input)
+            # "#{self.round.name} - #{input}"
+    
+            # using this until associations and controller set up
+            temp = "100th US Nationals"
+            "#{temp} - #{input}"
+        end
 
     # need other helper methods
     # it "can calculate the total score for a round" do
