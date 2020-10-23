@@ -48,7 +48,7 @@ RSpec.describe Archer, type: :model do
     # define standard create/update variations
     # ###################################################################
     
-    # take test_all and remove any non-required atts and auto-assign (not auto_format) attrs, all should be formatted correctly
+    # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:test_req) {
         {username: "testuser", email: "testuser@example.com", password: "test", first_name: "Test", last_name: "Tuser", birthdate: "1980-07-01", gender: "Male", default_division: "Recurve"}
     }
@@ -136,6 +136,7 @@ RSpec.describe Archer, type: :model do
                 expect(Archer.all.count).to eq(1)
                 expect(archer.authenticate(test_req[:password])).to eq(archer)
 
+                # req input tests (should have value in test_req)
                 expect(archer.username).to eq(test_req[:username])
                 expect(archer.email).to eq(test_req[:email])
                 expect(archer.first_name).to eq(test_req[:first_name])
@@ -157,7 +158,7 @@ RSpec.describe Archer, type: :model do
                 expect(test_archer).to be_valid
                 expect(test_archer.authenticate(update[:password])).to eq(test_archer)
                 
-                # req input tests (should have value in test_req)
+                # req input tests (should have value in update)
                 expect(test_archer.username).to eq(update[:username])
                 expect(test_archer.email).to eq(update[:email])
                 expect(test_archer.first_name).to eq(update[:first_name])

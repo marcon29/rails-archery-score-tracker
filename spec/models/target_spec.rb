@@ -23,7 +23,7 @@ RSpec.describe Target, type: :model do
     # define standard create/update variations
     # ###################################################################
 
-    # take test_all and remove any non-required atts and auto-assign (not auto_format) attrs, all should be formatted correctly
+    # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:test_req) {
         {size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1}
     }
@@ -56,11 +56,9 @@ RSpec.describe Target, type: :model do
     # define custom error messages
     # ###################################################################
     let(:missing_size_message) {"You must provide a target size."}
-    let(:missing_score_areas_message) {"You must provide the number of scoring areas."}
-    let(:missing_rings_message) {"You must provide the number of rings."}
     let(:missing_x_ring_message) {"You must specifiy if there is an X ring."}
-    let(:missing_max_score_message) {"You must provide the higest score value."}
-    let(:missing_spots_message) {"You must specify the number of spots."}
+
+    let(:number_all_message) {"You must enter a number greater than 0."}
 
 
     # ###################################################################
@@ -111,7 +109,7 @@ RSpec.describe Target, type: :model do
                 
                 expect(test_target).to be_valid
                 
-                # req input tests (should have value in test_req)
+                # req input tests (should have value in update)
                 expect(test_target.size).to eq(update[:size])
                 expect(test_target.score_areas).to eq(update[:score_areas])
                 expect(test_target.rings).to eq(update[:rings])
@@ -133,11 +131,11 @@ RSpec.describe Target, type: :model do
                 expect(Target.all.count).to eq(0)
 
                 expect(target.errors.messages[:size]).to include(missing_size_message)
-                expect(target.errors.messages[:score_areas]).to include(missing_score_areas_message)
-                expect(target.errors.messages[:rings]).to include(missing_rings_message)
+                expect(target.errors.messages[:score_areas]).to include(number_all_message)
+                expect(target.errors.messages[:rings]).to include(number_all_message)
                 expect(target.errors.messages[:x_ring]).to include(missing_x_ring_message)
-                expect(target.errors.messages[:max_score]).to include(missing_max_score_message)
-                expect(target.errors.messages[:spots]).to include(missing_spots_message)
+                expect(target.errors.messages[:max_score]).to include(number_all_message)
+                expect(target.errors.messages[:spots]).to include(number_all_message)
             end
 
             it "unique attributes are duplicated" do
@@ -149,6 +147,23 @@ RSpec.describe Target, type: :model do
                 expect(target).to be_invalid
                 expect(Target.all.count).to eq(1)
                 expect(target.errors.messages[:name]).to include(default_duplicate_message)
+            end
+
+            it "attributes are outside allowable inputs" do
+                duplicate[:score_areas] = "six"
+                duplicate[:rings] = "six"
+                duplicate[:max_score] = "six"
+                duplicate[:spots] = "six"
+
+                target = Target.create(duplicate)
+
+                expect(target).to be_invalid
+                expect(Target.all.count).to eq(0)
+                
+                expect(target.errors.messages[:score_areas]).to include(number_all_message)
+                expect(target.errors.messages[:rings]).to include(number_all_message)
+                expect(target.errors.messages[:max_score]).to include(number_all_message)
+                expect(target.errors.messages[:spots]).to include(number_all_message)
             end
         end
     end

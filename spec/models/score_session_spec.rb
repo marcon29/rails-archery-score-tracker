@@ -37,7 +37,7 @@ RSpec.describe ScoreSession, type: :model do
     # define standard create/update variations
     # ###################################################################
     
-    # take test_all and remove any non-required atts and auto-assign (not auto_format) attrs, all should be formatted correctly
+    # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:valid_req) {
         {name: "2020 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2020-09-01"}
     }
@@ -63,6 +63,7 @@ RSpec.describe ScoreSession, type: :model do
     # define test results for auto-assign attrs
     # ###################################################################
     let(:assigned_end_date) {}
+    let(:default_active) {true}
     
   
     # ###################################################################
@@ -120,7 +121,7 @@ RSpec.describe ScoreSession, type: :model do
                 
                 # not req input tests (active and end date auto-asigned from missing)
                 expect(score_session.end_date).to eq(valid_req[:start_date].to_date)
-                expect(score_session.active).to eq(true)
+                expect(score_session.active).to eq(default_active)
             end
 
             # it "instance is valid when updating all attrs, re-assigns end date if value deleted" do

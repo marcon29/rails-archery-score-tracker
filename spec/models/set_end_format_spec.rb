@@ -1,188 +1,169 @@
 require 'rails_helper'
 
 RSpec.describe Set, type: :model do
-    let(:valid_all) {
-        {name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points"}
+    # ###################################################################
+    # define main test object
+    # ###################################################################
+    # needs to be different from valid object in RailsHelper to avoid duplicte failures
+
+    let(:test_all) {
+        {name: "Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format_id: 1}
     }
 
-    let(:test_set) {
-        Set.create(valid_all)
+    let(:test_set_end_format) {
+        SetEndFormat.create(test_all)
     }
 
-    #  all instances of AssocModels needed for testing associations (not persisted until called)
-    # let(:assoc_archer) {
-    #     Archer.create(
-    #         username: "testuser", 
-    #         email: "testuser@example.com", 
-    #         password: "test", 
-    #         first_name: "Test", 
-    #         last_name: "User", 
-    #         birthdate: "1980-07-01", 
-    #         gender: "Male", 
-    #         home_city: "Denver", 
-    #         home_state: "CO", 
-    #         home_country: "USA", 
-    #         default_age_class: "Senior"
-    #     )
-    # }
+    # ###################################################################
+    # define any additional objects to test for this model 
+    # ###################################################################
+    # only add multiple instantiations if need simultaneous instances for testing
 
-    # let(:assoc_score_session) {
-    #     ScoreSession.create(
-    #         name: "2020 World Cup", 
-    #         score_session_type: "Tournament", 
-    #         city: "Oxford", 
-    #         state: "OH", 
-    #         country: "USA", 
-    #         start_date: "2020-09-01", 
-    #         end_date: "2020-09-05", 
-    #         rank: "1st", 
-    #         active: true
-    #     )
-    # }
 
-    let(:assoc_round) {
-        Round.create(name: "1440 Round", discipline: "Outdoor", round_type: "Qualifying", num_roundsets: 4, user_edit: false)
-    }
-
-    # let(:assoc_shot) {
-    #   Shot.create()
-    # }
-
-    let(:assoc_category) {
-        ArcherCategory.create(
-            cat_code: "WA-RM", 
-            gov_body: "World Archery", 
-            cat_division: "Recurve", 
-            cat_age_class: "Senior", 
-            min_age: 21, 
-            max_age: 49, 
-            open_to_younger: true, 
-            open_to_older: true, 
-            cat_gender: "Male"
-        )
-    }
+    # ###################################################################
+    # define standard create/update variations
+    # ###################################################################
     
-    let(:assoc_target) {
-        Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-    }  
-
-    let(:assoc_dist_targ) {
-        DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1)
+    # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
+    let(:test_req) {
+        {num_ends: 6, shots_per_end: 6, round_format_id: 1}
     }
 
-    # remove any non-required atts, and auto-assign (not auto_format) attrs, all should be formatted correctly already
-    # all are required - name is auto-assigned at controller level
-    # let(:valid_req) {
-    #     {ends: 6, shots_per_end: 6, score_method: "Points"}
-    # }
-
-    # exact duplicate of valid_all - use as whole for testing unique values, use for testing specific atttrs (bad inclusion, bad format, etc.)
+    # exact duplicate of test_all
+        # use as whole for testing unique values
+        # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points"}
+        {name: "Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format_id: 1}
     }
 
-    # start w/ valid_all, change all values, make any auto-assign blank (don't delete)
+    # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {name: "720 Round - Set/Distance1", ends: 12, shots_per_end: 3, score_method: "Set"}
+        {name: "", num_ends: 12, shots_per_end: 3, round_format_id: 1}
     }
 
     # every attr blank
     let(:blank) {
-        {name: "", ends: "", shots_per_end: "", score_method: ""}
+        {name: "", num_ends: "", shots_per_end: "", user_edit: "", round_format_id: ""}
     }
     
-    # add the following default error messages for different validation failures (delete any unnecessary for model)
-    let(:default_missing_message) {"can't be blank"}
-    let(:default_duplicate_message) {"has already been taken"}
-    let(:default_inclusion_message) {"is not included in the list"}
-    let(:default_number_message) {"is not a number"}
-    let(:default_format_message) {"is invalid"}
+    # ###################################################################
+    # define test results for auto-assign attrs
+    # ###################################################################
+    let(:assigned_name) {"Set/Distance2"}
+    let(:default_user_edit) {true}
+  
+    # ###################################################################
+    # define custom error messages
+    # ###################################################################
+    let(:number_all_message) {"You must enter a number greater than 0."}
+    
     
     # object creation and validation tests #######################################
-    describe "model creates and updates only valid instances" do
-        describe "valid with all required and unrequired input data" do
-            it "instance is valid with all attributes (all are required)" do
-                expect(Set.all.count).to eq(0)
+    describe "model creates and updates only valid instances - " do
+        describe "valid when " do
+            it "given all required and unrequired attributes" do
+                expect(SetEndFormat.all.count).to eq(0)
 
-                expect(test_set).to be_valid
-                expect(Set.all.count).to eq(1)
+                expect(test_set_end_format).to be_valid
+                expect(SetEndFormat.all.count).to eq(1)
                 
-                expect(test_set.name).to eq(valid_all[:name])
-                expect(test_set.ends).to eq(valid_all[:ends])
-                expect(test_set.shots_per_end).to eq(valid_all[:shots_per_end])
-                expect(test_set.score_method).to eq(valid_all[:score_method])
+                expect(test_set_end_format.name).to eq(test_all[:name])
+                expect(test_set_end_format.num_ends).to eq(test_all[:num_ends])
+                expect(test_set_end_format.shots_per_end).to eq(test_all[:shots_per_end])
+                expect(test_set_end_format.user_edit).to eq(test_all[:user_edit])
             end
 
-            # it "instance is valid with only required attributes, auto-assigns name" do
-            #     expect(Set.all.count).to eq(0)
-            #     set = Set.create(valid_req)
+            it "given only required attributes" do
+                expect(SetEndFormat.all.count).to eq(0)
+                set_end_format = SetEndFormat.create(test_req)
 
-            #     expect(set).to be_valid
-            #     expect(Set.all.count).to eq(1)
+                expect(set_end_format).to be_valid
+                expect(SetEndFormat.all.count).to eq(1)
 
-            #     # req input tests
-            #     expect(set.ends).to eq(valid_req[:ends])
-            #     expect(set.shots_per_end).to eq(valid_req[:shots_per_end])
-            #     expect(set.score_method).to eq(valid_req[:score_method])
+                # req input tests (should have value in test_req)
+                expect(set_end_format.num_ends).to eq(test_req[:num_ends])
+                expect(set_end_format.shots_per_end).to eq(test_req[:shots_per_end])
                 
-            #     # not req input tests (name auto-asigned from missing)
-            #     expect(set.name).to eq("1440 Round - Set/Distance1")
-            # end
+                # not req input tests (name auto-asigned from missing)
+                expect(set_end_format.name).to eq(assigned_name)
+                expect(set_end_format.user_edit).to eq(default_user_edit)
+            end
 
-            it "instance is valid when updating all attrs, re-assigns name if value deleted" do
-                test_set.update(update)
+            it "updating all attributes" do
+                test_set_end_format.update(update)
+
+                expect(test_set_end_format).to be_valid
                 
                 # req input tests (should have value in update)
-                expect(test_set.name).to eq(update[:name])
-                expect(test_set.ends).to eq(update[:ends])
-                expect(test_set.shots_per_end).to eq(update[:shots_per_end])
-                expect(test_set.score_method).to eq(update[:score_method])
+                expect(test_set_end_format.num_ends).to eq(update[:num_ends])
+                expect(test_set_end_format.shots_per_end).to eq(update[:shots_per_end])
+                
+                # not req input tests (name auto-asigned from missing)
+                expect(test_set_end_format.name).to eq(assigned_name)
+                expect(test_set_end_format.user_edit).to eq(test_all[:user_edit])
+            end
+
+            it "name is duplicated but for different RoundFormat" do
+                pending "need to create associated models and add associations"
+
+                # need two round_formats
+                valid_round_format
+                RoundFormat.create(name: "720 Round", num_sets: 2, user_edit: false)
+                expect(RoundFormat.all.count).to eq(2)
+                expect(SetEndFormat.all.count).to eq(0)
+
+                # gives me 2 se_forms in valid_round_format
+                valid_set_end_format
+                test_set_end_format
+                expect(SetEndFormat.all.count).to eq(2)
+                
+                # gives me 1 se_form in second_round_format
+                SetEndFormat.create(name: "Set/Distance1", num_ends: 6, shots_per_end: 6, round_format_id: 2)
+                expect(SetEndFormat.all.count).to eq(3)
+
+                # test duped name from valid_round_format but in second_round_format
+                set_end_format = SetEndFormat.create(duplicate)
+
+                expect(set_end_format).to be_valid
+                expect(SetEndFormat.all.count).to eq(4)
+
+                expect(set_end_format.name).to eq(assigned_name)
+                expect(test_set_end_format.num_ends).to eq(duplicate[:num_ends])
+                expect(test_set_end_format.shots_per_end).to eq(duplicate[:shots_per_end])
+                expect(test_set_end_format.user_edit).to eq(default_user_edit)
             end
         end
     
-        describe "invalid if input data is missing or bad" do
-            it "is invalid and has correct error message without required attributes" do
-                set = Set.create(blank)
+        describe "invalid and has correct error message when" do
+            it "missing required attributes" do
+                set_end_format = SetEndFormat.create(blank)
 
-                expect(set).to be_invalid
-                expect(Set.all.count).to eq(0)
-                expect(set.errors.messages[:name]).to include(default_missing_message)
-                expect(set.errors.messages[:ends]).to include("You must enter a number greater than 0.")
-                expect(set.errors.messages[:shots_per_end]).to include("You must enter a number greater than 0.")
-                expect(set.errors.messages[:score_method]).to include("You must choose a score method.")
+                expect(set_end_format).to be_invalid
+                expect(SetEndFormat.all.count).to eq(0)
+
+                expect(set_end_format.errors.messages[:num_ends]).to include(number_all_message)
+                expect(set_end_format.errors.messages[:shots_per_end]).to include(number_all_message)
             end
             
-            it "is invalid and has correct error message when unique attributes are duplicated" do
+            it "unique attributes are duplicated" do
                 # need to call initial test object to check against for duplication
-                test_set
-                set = Set.create(duplicate)
+                test_set_end_format
+                set_end_format = SetEndFormat.create(duplicate)
 
-                expect(set).to be_invalid
-                expect(Set.all.count).to eq(1)
-                expect(set.errors.messages[:name]).to include(default_duplicate_message)
+                expect(set_end_format).to be_invalid
+                expect(SetEndFormat.all.count).to eq(1)
+                expect(set_end_format.errors.messages[:name]).to include(default_duplicate_message)
             end
 
-            # it "if auto-created roundset name already exists, will return that object instead" do
-            #     pending "do this or the duplication error above"
-            #     pending "straight dupliction error seems better for an update test"
-            #     # need to call initial test object to check against for duplication
-            #     test_set
-            #     set = Set.create(duplicate)
-
-            #     expect(Set.all.count).to eq(1)
-            #     expect(set.id).to eq(test_set.id)
-            # end
-
-            it "is invalid and has correct error message if value not included in corresponding selection list or is wrong format" do
-                duplicate[:ends] = "six"
+            it "attributes are outside allowable inputs" do
+                duplicate[:num_ends] = "six"
                 duplicate[:shots_per_end] = "six"
-                duplicate[:score_method] = "bad data"
-                set = Set.create(duplicate)
+                set_end_format = SetEndFormat.create(duplicate)
 
-                expect(set).to be_invalid
-                expect(set.errors.messages[:score_method]).to include(default_inclusion_message)
-                expect(set.errors.messages[:ends]).to include("You must enter a number greater than 0.")
-                expect(set.errors.messages[:shots_per_end]).to include("You must enter a number greater than 0.")
+                expect(set_end_format).to be_invalid
+                expect(SetEndFormat.all.count).to eq(0)
+                expect(set_end_format.errors.messages[:num_ends]).to include(number_all_message)
+                expect(set_end_format.errors.messages[:shots_per_end]).to include(number_all_message)
             end
         end
     end
@@ -190,38 +171,14 @@ RSpec.describe Set, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            test_set
-            assoc_target
-            assoc_category
-            assoc_dist_targ
+            # load test object
+            
+            # load all AssocModels that must be in DB for tests to work
         end
 
-        it "has many Archers" do
-            pending "need to add create associated models and add associations"
-            expect(test_set.archer).to include(assoc_archer)
-        end
-
-        it "has many ScoreSessons" do
-            pending "need to add create associated models and add associations"
-            expect(test_set.rounds).to include(assoc_round)
-        end
-
-        it "has many Sets" do
-            pending "need to add create associated models and add associations"
-            expect(test_set.sets).to include(assoc_set)
-        end
-    
-        it "has many Shots" do
-            pending "need to add create associated models and add associations"
-            expect(test_set.shots).to include(assoc_shot)
-        end
-
-        it "has many ArcherCategories" do
-            expect(test_set.archer_categories).to include(assoc_category)
-        end
-
-        it "has many Targets" do
-            expect(test_set.targets).to include(assoc_target)
+        it "belongs to RoundFormat" do
+            pending "need to create associated models and add associations"
+            expect(test_set_end_format.round_format).to eq(valid_round_format)
         end
     end
 
@@ -229,7 +186,7 @@ RSpec.describe Set, type: :model do
     describe "all helper methods work correctly:" do
         it "helpers TBD" do
             pending "add as needed"
-            expect(test_set).to be_invalid
+            expect(test_set_end_format).to be_invalid
         end
     end
 end
