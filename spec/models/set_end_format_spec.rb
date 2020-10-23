@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Set, type: :model do
+RSpec.describe SetEndFormat, type: :model do
     # ###################################################################
     # define main test object
     # ###################################################################

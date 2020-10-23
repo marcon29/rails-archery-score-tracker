@@ -140,8 +140,8 @@ def valid_round
   Round.create(name: "1440 Round", discipline: "Outdoor", round_type: "Qualifying", num_roundsets: 4, user_edit: false)
 end
 
-def valid_set
-  Set.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
+def valid_rset
+  Rset.create(name: "1440 Round - Set/Distance1", start_date: "2020-09-01", rank: "1st")
 end
 
 # def valid_end
@@ -171,7 +171,7 @@ def valid_category
 end
 
 def valid_dist_targ_cat
-  DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1)
+  DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, archer_id: 1)
 end
 
 def valid_round_format

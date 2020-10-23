@@ -62,7 +62,7 @@ RSpec.describe ScoreSession, type: :model do
     # ###################################################################
     # define test results for auto-assign attrs
     # ###################################################################
-    let(:assigned_end_date) {}
+    # end_date is assigned but only if empty, so it varies - easier to put in data source for tests
     let(:default_active) {true}
     
   
@@ -208,9 +208,9 @@ RSpec.describe ScoreSession, type: :model do
             expect(test_score_session.rounds).to include(valid_round)
         end
     
-        it "has many Sets" do
+        it "has many Rsets" do
             pending "need to add create associated models and add associations"
-            expect(test_score_session.sets).to include(valid_set)
+            expect(test_score_session.rsets).to include(valid_rset)
         end
 
         it "has many Ends" do

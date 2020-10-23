@@ -68,7 +68,7 @@ RSpec.describe Shot, type: :model do
     }
 
     let(:assoc_set) {
-        Set.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
+        Rset.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
     }
 
     let(:assoc_category) {
@@ -90,7 +90,7 @@ RSpec.describe Shot, type: :model do
     }
 
     let(:assoc_dist_targ) {
-        DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1)
+        DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, rset_id: 1)
     }
     
     # take valid_all and remove any non-required atts and auto-assign (not auto_format) attrs, all should be formatted correctly already
@@ -121,7 +121,7 @@ RSpec.describe Shot, type: :model do
     let(:default_number_message) {"is not a number"}
     let(:default_format_message) {"is invalid"}
     
-    let(:missing_score_entry_message) {"You must provide a set score for shot #{shot.shot_num}."}
+    let(:missing_score_entry_message) {"You must provide a rset score for shot #{shot.shot_num}."}
     let(:missing_set_score_message) {"You must enter a set score for the end."}
     # let(:inclusion_date_message) {"Date must be between #{assoc_score_session.start_date} and #{assoc_score_session.end_date}."}
 
@@ -191,20 +191,6 @@ RSpec.describe Shot, type: :model do
                 expect(shot).to be_invalid
                 expect(Shot.all.count).to eq(0)
                 expect(shot.errors.messages[:set_score]).to include(missing_set_score_message)
-            end
-
-            it "date is outside allowable inputs" do
-                bad_scenarios = ["2020-08-31", "2020-09-06"]
-                
-                bad_scenarios.each do | test_value |
-                    duplicate[:end_num] = test_value
-                    shot = Shot.create(duplicate)
-                    expect(shot).to be_invalid
-                    expect(Shot.all.count).to eq(0)
-                    expect(shot.errors.messages[:date]).to include(default_inclusion_message)
-
-                    # expect(shot.errors.messages[:date]).to include(inclusion_date_message)
-                end
             end
             
             it "end_num is outside allowable inputs" do
@@ -288,9 +274,9 @@ RSpec.describe Shot, type: :model do
             expect(test_shot.round).to eq(assoc_round)
         end
     
-        it "belongs to Set" do
+        it "belongs to Rset" do
             pending "need to add associations"
-            expect(test_shot.set).to eq(assoc_set)
+            expect(test_shot.rset).to eq(assoc_set)
         end
     end
 

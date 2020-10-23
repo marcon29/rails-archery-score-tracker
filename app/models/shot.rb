@@ -1,10 +1,10 @@
 class Shot < ApplicationRecord
     
     # need to add associations        
-        # belongs_to :archer, :score_session, round, :set
+        # belongs_to :archer, :score_session, round, :rset
         
 
-    # all attrs - :archer_id, :score_session_id, :round_id, :set_id, :end_num, :shot_num, :score, :set_score, shot_date
+    # all attrs - :archer_id, :score_session_id, :round_id, :rset_id, :end_num, :shot_num, :score, :set_score, shot_date
     # all data attrs  - :shot_date, :end_num, :shot_num, :score_entry, :set_score
 
     # ####### possible attrs to add ##########
@@ -15,14 +15,14 @@ class Shot < ApplicationRecord
 
 
     # need validations
-        # required: :date, :end_num, :shot_num, :score_entry, :set_score ( if set.score_method == "Set" )
-            # "Date must be between #{shot.score_session.start_date} and #{shot.score_session.end_date}."
+        # required: :date, :end_num, :shot_num, :score_entry, :set_score ( if rset.score_method == "Set" )
+            
             # "You must enter a score for shot #{shot.shot_num}."
             # "You must enter a set score for the end."
         # inclusion: 
         #     :shot_date ( within score_session start and end dates, inclusive )
-        #     :end_num ( 1 - set.ends ), 
-        #     :shot_num ( 1 - set.shots_per_end ), 
+        #     :end_num ( 1 - rset.ends ), 
+        #     :shot_num ( 1 - rset.shots_per_end ), 
         #     :score_entry ( 1 - target.max_score, M, X if target.x_ring )
         #     :set_score ( 0 - 2 )
         # format: :end_num (number), :shot_num (number), :score_entry (cap, length = 1)
@@ -78,7 +78,7 @@ class Shot < ApplicationRecord
 
             # it "can find a specific end" do
                 # want to be able to to call shot.rs_end
-                # round_id, set_id, end_num
+                # round_id, rset_id, end_num
             # end
 
             # it "can find all shots that belong to same end" do

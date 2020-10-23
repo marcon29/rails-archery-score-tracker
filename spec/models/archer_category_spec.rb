@@ -90,11 +90,11 @@ RSpec.describe ArcherCategory, type: :model do
   }
 
   let(:pre_load_set) {
-    Set.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
+    Rset.create(name: "1440 Round - Set/Distance1", ends: 6, shots_per_end: 6, score_method: "Points")
   }
 
   let(:dist_targ_cat) {
-    DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, set_id: 1)
+    DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, rset_id: 1)
   }
 
   let(:duplicate) {
@@ -179,8 +179,8 @@ RSpec.describe ArcherCategory, type: :model do
       dist_targ_cat
     end
 
-    it "has many Sets" do
-      expect(rm_category.sets).to include(pre_load_set)
+    it "has many Rsets" do
+      expect(rm_category.rsets).to include(pre_load_set)
     end
 
     it "has many Targets" do

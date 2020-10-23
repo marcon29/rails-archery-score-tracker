@@ -266,9 +266,9 @@ RSpec.describe Archer, type: :model do
             expect(test_archer.rounds).to include(valid_round)
         end
     
-        it "has many Sets" do
+        it "has many Rsets" do
             pending "need to add create associated models and add associations"
-            expect(test_archer.sets).to include(valid_set)
+            expect(test_archer.rsets).to include(valid_rset)
         end
 
         it "has many Ends" do

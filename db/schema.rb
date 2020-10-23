@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_22_233158) do
+ActiveRecord::Schema.define(version: 2020_10_23_031351) do
 
   create_table "archer_categories", force: :cascade do |t|
     t.string "cat_code"
@@ -62,6 +62,14 @@ ActiveRecord::Schema.define(version: 2020_10_22_233158) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "rsets", force: :cascade do |t|
+    t.string "name"
+    t.date "date"
+    t.string "rank"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "score_sessions", force: :cascade do |t|
     t.string "name"
     t.string "score_session_type"
@@ -84,14 +92,6 @@ ActiveRecord::Schema.define(version: 2020_10_22_233158) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "user_edit", default: true
     t.integer "round_format_id"
-  end
-
-  create_table "sets", force: :cascade do |t|
-    t.string "name"
-    t.date "date"
-    t.string "rank"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "shots", force: :cascade do |t|

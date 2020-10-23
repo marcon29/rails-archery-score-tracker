@@ -2,7 +2,7 @@
     - build Shot model
         - see notes below
     
-    - set up associations between Shot, Set, Round, ScoreSession, Archer
+    - set up associations between Shot, Rset, Round, ScoreSession, Archer
 
     - find gem and set up location information
         - user home info
@@ -62,7 +62,7 @@
 
 # ScoreSession Model
     - force rank as necessary if not practice?
-        - only when all shots are scored? or all shots for each round (or Set)?
+        - only when all shots are scored? or all shots for each round (or Rset)?
     - only allow one active object at time
 
 # Controller Helpers
@@ -109,13 +109,13 @@
         # def create_sets(round)
         #     count = 0
         #     round.num_roundsets.times do
-        #         set = Set.find_or_create_by(
-        #             name: "#{round.name} - Set/Distance#{count +=1}"
-        #             ends: params[:set][:ends]
-        #             shots_per_end: params[:set][:shots_per_end]
-        #             score_method: params[:set][:score_method]
+        #         rset = Rset.find_or_create_by(
+        #             name: "#{round.name} - Rset/Distance#{count +=1}"
+        #             ends: params[:rset][:ends]
+        #             shots_per_end: params[:rset][:shots_per_end]
+        #             score_method: params[:rset][:score_method]
         #         )
-        #     round.sets << set
+        #     round.rsets << rset
         #     end
         # end
     - calc a set_rank ???
@@ -123,7 +123,7 @@
         - could just have the rank in ScoreSession only that updates as go
         
 # ScoreSession Controller
-    - for match Sets and set scoring_method
+    - for match Rsets and set scoring_method
         - first to 6 set points wins (don't need to complete all ends)
         - so when tracking shot.set_score, if 6, destroy any unshot ends for that SetRound
 

@@ -2,7 +2,7 @@ class Archer < ApplicationRecord
 
     # need to add associations
         # has_many :shots
-        # has_many :score_sessions, :rounds, :sets, :ends, through: :shots
+        # has_many :score_sessions, :rounds, :rsets, :ends, through: :shots
         # has_many :distance_target_categories
         # has_many :archer_categories, through: :distance_target_categories
         has_secure_password 
