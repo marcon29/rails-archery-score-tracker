@@ -84,7 +84,7 @@ RSpec.describe SetEndFormat, type: :model do
                 expect(set_end_format.num_ends).to eq(test_req[:num_ends])
                 expect(set_end_format.shots_per_end).to eq(test_req[:shots_per_end])
                 
-                # not req input tests (name auto-asigned from missing)
+                # not req input tests (name and user_edit auto-asigned from missing)
                 expect(set_end_format.name).to eq(assigned_name)
                 expect(set_end_format.user_edit).to eq(default_user_edit)
             end
@@ -98,7 +98,7 @@ RSpec.describe SetEndFormat, type: :model do
                 expect(test_set_end_format.num_ends).to eq(update[:num_ends])
                 expect(test_set_end_format.shots_per_end).to eq(update[:shots_per_end])
                 
-                # not req input tests (name auto-asigned from missing)
+                # not req input tests (name auto-asigned from blank, user_edit originally manually set and unchanged, so should be original)
                 expect(test_set_end_format.name).to eq(assigned_name)
                 expect(test_set_end_format.user_edit).to eq(test_all[:user_edit])
             end
@@ -148,6 +148,7 @@ RSpec.describe SetEndFormat, type: :model do
             it "unique attributes are duplicated" do
                 # need to call initial test object to check against for duplication
                 test_set_end_format
+                expect(SetEndFormat.all.count).to eq(1)
                 set_end_format = SetEndFormat.create(duplicate)
 
                 expect(set_end_format).to be_invalid
