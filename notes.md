@@ -1,4 +1,12 @@
 # Next to do
+    - Architecture overhaul
+        - revisit Round model and test
+        - build End model
+        - revisit Shot model (basics only)
+        - build new Organization models
+            - GovBody, Discipline, Division, AgeClass, Gender???
+        - update ArcherCategory for new models
+        
     - build Shot model
         - see notes below
     
