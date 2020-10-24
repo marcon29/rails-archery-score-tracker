@@ -66,7 +66,7 @@ class End < ApplicationRecord
     # need helpers
         # need to get distance and target (same process for each)
         
-        # it "can calculate the total score for a rset" do
+        # it "can calculate the total score for a end" do
             # pending "need to add associations"
             # want to be able to to call end.score
             # sums all shot scores
