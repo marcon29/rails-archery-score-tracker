@@ -5,6 +5,7 @@ class ArchitectureUpdateSplitRound < ActiveRecord::Migration[6.0]
       t.remove :num_roundsets
       t.remove :user_edit
       t.string :rank
+      t.string :score_method
     end
 
     create_table :round_formats do |t|
@@ -19,8 +20,10 @@ class ArchitectureUpdateSplitRound < ActiveRecord::Migration[6.0]
   def down
     change_table :rounds do |t|
       t.string :discipline
-      t.integer :num_sets
+      t.integer :num_roundsets
       t.boolean "user_edit", default: true
+      t.remove :rank
+      t.remove :score_method
     end
 
     drop_table :round_formats

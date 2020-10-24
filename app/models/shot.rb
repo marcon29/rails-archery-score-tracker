@@ -41,15 +41,6 @@ class Shot < ApplicationRecord
             #   max_score..score_areas, M, and X if x_ring
             # end
 
-        # to assign set_score (auto assign)
-            # it "can auto-assign the set_score for all shots from same end at same time" do
-                # takes it from last arrow of same end
-                # so a single input will get assigned to last arrow of end
-                # this will update all shots from same end with same set_score
-                # won't update any shots if not last shot of end (separate test)
-            # end
-
-
         
     # need helpers (data control)
         # to assign score (for getting points value from a score entry)
@@ -66,31 +57,6 @@ class Shot < ApplicationRecord
         
     
     # need helpers (ScoreSession & Round display) - some of these should probably go in other models
-        # to get and display end scores
-            # it "can calculate the total score for an end" do
-                # want to be able to to call shot.end_score
-                # needs to find a specific end (shot.rs_end)
-                # needs to find all shots that are in that end (end_shots)
-                # needs to sum the scores from those shots (this method)
-            # end
-
-            # ############### should I build an end model????? ######################################
-
-            # it "can find a specific end" do
-                # want to be able to to call shot.rs_end
-                # round_id, rset_id, end_num
-            # end
-
-            # it "can find all shots that belong to same end" do
-                # want to be able to to call shot.end_shots
-            # end
-            
-            # it "can track if end it is in is complete or not" do
-                # can use this to identify the active end so only display form for that end
-                # want to be able to to call shot.end_complete?
-            # end
-
-            # #####################################################
         
 
 

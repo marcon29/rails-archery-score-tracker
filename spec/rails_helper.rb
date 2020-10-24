@@ -137,7 +137,7 @@ def valid_score_session
 end
 
 def valid_round
-  Round.create(name: "135th US Nationals - 1440 Round", round_type: "Qualifying", rank: "1st")
+  Round.create(name: "135th US Nationals - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st")
 end
 
 
@@ -145,12 +145,12 @@ def valid_rset
   Rset.create(name: "1440 Round - Set/Distance1", date: "2020-09-01", rank: "1st")
 end
 
-# def valid_end_points
-#   End.create(number: 1, score_method: "Points",  set_score: "")
-# end
+def valid_end
+  End.create(number: 1, set_score: "")
+end
 
 # def valid_end_set
-#   End.create(number: 1, score_method: "Set",  set_score: 2)
+#   End.create(number: 1, set_score: 2)
 # end
 
 def valid_shot

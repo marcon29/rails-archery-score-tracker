@@ -13,16 +13,6 @@ class Rset < ApplicationRecord
     before_validation :assign_name
     
 
-
-
-    # ########### use this for the End class ########################
-    # validates :score_method, 
-    #     presence: { message: "You must choose a score method." }, 
-    #     inclusion: { in: SCORE_METHODS }
-    # ###############################################################
-
-    
-
     # need helpers (callbacks & validations)
     def check_date
         # start_date = self.score_session.start_date

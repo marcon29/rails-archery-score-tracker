@@ -9,7 +9,7 @@ class Round < ApplicationRecord
     
     # old attrs - :name, :discipline, :round_type, :num_roundsets, :user_edit
 
-    # all attrs - :name, :round_type, :rank
+    # all attrs - :name, :round_type, :score_method, :rank
     # format attrs - :name, :num_sets, :user_edit
 
     # validates :name, 
@@ -21,6 +21,13 @@ class Round < ApplicationRecord
         inclusion: { in: ROUND_TYPES }
     validate :check_and_assign_rank
     before_validation :assign_name
+
+
+    # ########### add this in and add test (already in rails_helper) ########################
+    # validates :score_method, 
+    #     presence: { message: "You must choose a score method." }, 
+    #     inclusion: { in: SCORE_METHODS }
+    # ###############################################################
     
     
     # keeping this until I'm sure the discipline association works
