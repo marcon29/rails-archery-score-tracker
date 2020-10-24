@@ -112,7 +112,7 @@ ActiveRecord::Schema.define(version: 2020_10_24_160308) do
     t.integer "round_id"
     t.integer "rset_id"
     t.integer "end_id"
-    t.integer "shot_num"
+    t.integer "number"
     t.string "score_entry"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

@@ -4,37 +4,44 @@ class Shot < ApplicationRecord
         # belongs_to :archer, :score_session, :round, :rset, :end
         
 
-    # old all attrs - :archer_id, :score_session_id, :round_id, :rset_id, :end_num, :shot_num, :score, :set_score, shot_date
-    # old all data attrs  - :shot_date, :end_num, :shot_num, :score_entry, :set_score
+    # old all attrs - :archer_id, :score_session_id, :round_id, :rset_id, :end_num, :number, :score, :set_score, shot_date
+    # old all data attrs  - :shot_date, :end_num, :number, :score_entry, :set_score
 
     # all assoc attrs - :archer_id, :score_session_id, :round_id, :rset_id, :end_id
-    # all data attrs  - :shot_num, :score_entry
+    # all data attrs  - :number, :score_entry
 
 
     # need validations
-        # required: :date, :end_num, :shot_num, :score_entry, :set_score ( if rset.score_method == "Set" )
-            
-            # "You must enter a score for shot #{shot.shot_num}."
-            # "You must enter a set score for the end."
+        # required: :number, :score_entry (update only)
+            # "You must enter a score for shot #{shot.number}."
         # inclusion: 
-        #     :shot_num ( 1 - rset.shots_per_end ), 
-        #     :score_entry ( 1 - target.max_score, M, X if target.x_ring )
-        # format: :shot_num (number), :score_entry (cap, length = 1)
+        #     :number ( 1 - end.shots_per_end ), 
+        #     :score_entry ( target.score_areas through target.max_score, M, X if target.x_ring )
+                    # message if x-ring: "Enter only X, M or a number between #{shot.target.score_areas} and #{shot.target.max_score}."
+                    # message if no x-ring: "Enter only M or a number between #{shot.target.score_areas} and #{shot.target.max_score}."
+                    
+                    
+        # format: :number (number), :score_entry (cap)
+
+        # number validation rules
+            # need to find Set_End_format corresponding to rset
+            # needs to be between 1 and Set_End_format.shots_per_end
 
         # score_entry validation rules
             # must be able to be blank on instantiation
             # upon update, must be included in possible_scores
-            
-
-
-
 
     # need helpers (callbacks & validations)
-        # need to assign shot_num (same as end_num for End)
+        # need to assign number (same as end_num for End)
         # to validate score_entry
             # it "can identify all possible score values" do
             #     want to be able to to call shot.possible_scores
             #     max_score..score_areas, M, and X if x_ring
+            # end
+
+            # it "knows if target on which shot was made has an x-ring" do
+            #     want to be able to to call shot.target.x_ring?
+            #     true if shot.target.x_ring == true, else false
             # end
 
         

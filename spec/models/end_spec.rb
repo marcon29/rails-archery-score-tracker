@@ -59,7 +59,7 @@ RSpec.describe End, type: :model do
     # define custom error messages
     # ###################################################################
     # let(:missing_set_score_message) {"You must enter a set score for the end."}
-    # let(:number_set_score_message) {"You must enter 0, 1, or 2."}
+    let(:number_set_score_message) {"You must enter 0, 1, or 2."}
     
     # let(:duplicate_attr_message) {}
     # let(:inclusion_attr_message) {}
@@ -98,7 +98,7 @@ RSpec.describe End, type: :model do
                 expect(test_end.number).to eq(assigned_num)
             end
 
-            it "belonging to round with 'Points' for score_method and given no attributes" do
+            it "belonging to round with 'Points' for score_method and given no attributes at instantiation" do
                 valid_round
 
                 expect(End.all.count).to eq(0)
@@ -108,10 +108,10 @@ RSpec.describe End, type: :model do
                 expect(End.all.count).to eq(1)
 
                 # req input tests (should have value in test_req)
-                expect(test_end.set_score).to be_blank
+                expect(endd.set_score).to be_blank
 
                 # not req input tests (number auto-asigned from missing)
-                expect(test_end.number).to eq(assigned_num)
+                expect(endd.number).to eq(assigned_num)
             end
 
             it "belonging to round with 'Set' for score_method, it updates set_score" do
@@ -154,6 +154,7 @@ RSpec.describe End, type: :model do
                 expect(End.all.count).to eq(1)
 
                 endd.update(blank)
+                
                 expect(endd).to be_invalid
                 expect(endd.errors.messages[:set_score]).to include(number_set_score_message)
                 expect(test_end.number).to eq(assigned_num)

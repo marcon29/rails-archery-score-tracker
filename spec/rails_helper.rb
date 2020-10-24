@@ -154,7 +154,7 @@ end
 # end
 
 def valid_shot
-  Shot.create(date: "2020-09-01", end_num: 5, shot_num: 5, score_entry: "5",  set_score: 2)
+  Shot.create(number: 1, score_entry: "5")
 end
 
 def valid_target
