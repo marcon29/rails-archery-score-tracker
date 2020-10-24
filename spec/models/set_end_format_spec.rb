@@ -173,11 +173,10 @@ RSpec.describe SetEndFormat, type: :model do
             assoc_round_format = valid_round_format
             expect(test_set_end_format.round_format).to eq(assoc_round_format)
 
-            # can create a new instance via the associated object
+            # can create a new instance via the associated object and get assoc object attributes
             update[:round_format_id] = ""
             check_set_end_format = assoc_round_format.set_end_formats.create(update)
-
-            # can get attributes from an associated object
+            
             expect(check_set_end_format.round_format).to eq(assoc_round_format)
             expect(check_set_end_format.round_format.name).to include(assoc_round_format.name)
         end

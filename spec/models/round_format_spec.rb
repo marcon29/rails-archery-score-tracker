@@ -14,12 +14,6 @@ RSpec.describe RoundFormat, type: :model do
     }
 
     # ###################################################################
-    # define any additional objects to test for this model 
-    # ###################################################################
-    # only add multiple instantiations if need simultaneous instances for testing
-
-
-    # ###################################################################
     # define standard create/update variations
     # ###################################################################
     
@@ -145,23 +139,28 @@ RSpec.describe RoundFormat, type: :model do
         end
 
         it "has many SetEndFormats" do
-            expect(test_round_format.set_end_formats).to include(valid_set_end_format)
+            test_round_format
+            assoc_round_format = valid_round_format
+            check_se_format_attrs = {num_ends: 6, shots_per_end: 6}
 
-            binding.pry
+            # can find an associated object
+            assoc_set_end_format = valid_set_end_format
+            expect(test_round_format.set_end_formats).to include(assoc_set_end_format)
 
-            round_format = RoundFormat.create(update)
 
-            binding.pry
+            # can create a new associated object via instance and get assoc object attributes
+            check_set_end_format = test_round_format.set_end_formats.create(check_se_format_attrs)
             
-            valid_set_end_format.update(round_format: round_format)
-            # valid_set_end_format.round_format = round_format
-            # valid_set_end_format.save
+            expect(test_round_format.set_end_formats).to include(check_set_end_format)
+            expect(test_round_format.set_end_formats.last.name).to include(check_set_end_format.name)
 
-            binding.pry
+            
+            # can re-assign instance via the associated object
+            assoc_set_end_format.round_format = assoc_round_format
+            assoc_set_end_format.save
 
-            expect(test_round_format.set_end_formats).to be_empty
-            expect(round_format.set_end_formats).to include(valid_set_end_format)
-            expect(round_format.set_end_formats.first.name).to include(valid_set_end_format.name)
+            expect(test_round_format.set_end_formats).not_to include(assoc_set_end_format)
+            expect(assoc_round_format.set_end_formats).to include(assoc_set_end_format)
         end
     end
 
@@ -171,11 +170,6 @@ RSpec.describe RoundFormat, type: :model do
             duplicate[:name] = "1440 round"
             round_format = RoundFormat.create(duplicate)
             expect(round_format.name).to eq(duplicate[:name].titlecase)
-        end
-
-        it "helpers TBD" do
-            pending "add as needed"
-            expect(test_round_format).to be_invalid
         end
     end
 end
