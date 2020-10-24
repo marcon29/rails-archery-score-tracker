@@ -1,7 +1,5 @@
 class RoundFormat < ApplicationRecord
-
-    # need to add associations
-        # has_many :set_end_formats
+    has_many :set_end_formats
         
     
     # old attrs - :name, :discipline, :round_type, :num_roundsets, :user_edit

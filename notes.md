@@ -1,8 +1,7 @@
 # Next to do
     - Architecture overhaul
-        - revisit Round model and test
-        - build End model
-        - revisit Shot model (basics only)
+        - namespace format models, get them passing completely
+        
         - build new Organization models
             - GovBody, Discipline, Division, AgeClass, Gender???
         - update ArcherCategory for new models

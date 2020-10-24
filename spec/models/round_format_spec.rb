@@ -145,8 +145,23 @@ RSpec.describe RoundFormat, type: :model do
         end
 
         it "has many SetEndFormats" do
-            pending "need to add create associated models and add associations"
             expect(test_round_format.set_end_formats).to include(valid_set_end_format)
+
+            binding.pry
+
+            round_format = RoundFormat.create(update)
+
+            binding.pry
+            
+            valid_set_end_format.update(round_format: round_format)
+            # valid_set_end_format.round_format = round_format
+            # valid_set_end_format.save
+
+            binding.pry
+
+            expect(test_round_format.set_end_formats).to be_empty
+            expect(round_format.set_end_formats).to include(valid_set_end_format)
+            expect(round_format.set_end_formats.first.name).to include(valid_set_end_format.name)
         end
     end
 

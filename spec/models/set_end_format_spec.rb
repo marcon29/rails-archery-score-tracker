@@ -5,7 +5,6 @@ RSpec.describe SetEndFormat, type: :model do
     # define main test object
     # ###################################################################
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
-
     let(:test_all) {
         {name: "Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format_id: 1}
     }
@@ -13,12 +12,6 @@ RSpec.describe SetEndFormat, type: :model do
     let(:test_set_end_format) {
         SetEndFormat.create(test_all)
     }
-
-    # ###################################################################
-    # define any additional objects to test for this model 
-    # ###################################################################
-    # only add multiple instantiations if need simultaneous instances for testing
-
 
     # ###################################################################
     # define standard create/update variations
@@ -60,6 +53,10 @@ RSpec.describe SetEndFormat, type: :model do
     
     # object creation and validation tests #######################################
     describe "model creates and updates only valid instances - " do
+        before(:each) do
+            valid_round_format
+        end
+
         describe "valid when " do
             it "given all required and unrequired attributes" do
                 expect(SetEndFormat.all.count).to eq(0)
@@ -74,11 +71,13 @@ RSpec.describe SetEndFormat, type: :model do
             end
 
             it "given only required attributes" do
-                expect(SetEndFormat.all.count).to eq(0)
+                valid_set_end_format
+
+                expect(SetEndFormat.all.count).to eq(1)
                 set_end_format = SetEndFormat.create(test_req)
 
                 expect(set_end_format).to be_valid
-                expect(SetEndFormat.all.count).to eq(1)
+                expect(SetEndFormat.all.count).to eq(2)
 
                 # req input tests (should have value in test_req)
                 expect(set_end_format.num_ends).to eq(test_req[:num_ends])
@@ -104,10 +103,7 @@ RSpec.describe SetEndFormat, type: :model do
             end
 
             it "name is duplicated but for different RoundFormat" do
-                pending "need to create associated models and add associations"
-
                 # need two round_formats
-                valid_round_format
                 RoundFormat.create(name: "720 Round", num_sets: 2, user_edit: false)
                 expect(RoundFormat.all.count).to eq(2)
                 expect(SetEndFormat.all.count).to eq(0)
@@ -118,19 +114,20 @@ RSpec.describe SetEndFormat, type: :model do
                 expect(SetEndFormat.all.count).to eq(2)
                 
                 # gives me 1 se_form in second_round_format
-                SetEndFormat.create(name: "Set/Distance1", num_ends: 6, shots_per_end: 6, round_format_id: 2)
+                third_set_end_format = SetEndFormat.create(name: "Set/Distance1", num_ends: 6, shots_per_end: 6, round_format_id: 2)
                 expect(SetEndFormat.all.count).to eq(3)
 
                 # test duped name from valid_round_format but in second_round_format
+                duplicate[:round_format_id] = 2
                 set_end_format = SetEndFormat.create(duplicate)
 
                 expect(set_end_format).to be_valid
                 expect(SetEndFormat.all.count).to eq(4)
 
                 expect(set_end_format.name).to eq(assigned_name)
-                expect(test_set_end_format.num_ends).to eq(duplicate[:num_ends])
-                expect(test_set_end_format.shots_per_end).to eq(duplicate[:shots_per_end])
-                expect(test_set_end_format.user_edit).to eq(default_user_edit)
+                expect(set_end_format.num_ends).to eq(duplicate[:num_ends])
+                expect(set_end_format.shots_per_end).to eq(duplicate[:shots_per_end])
+                expect(set_end_format.user_edit).to eq(duplicate[:user_edit])
             end
         end
     
@@ -171,23 +168,31 @@ RSpec.describe SetEndFormat, type: :model do
 
     # association tests ########################################################
     describe "instances are properly associated to other models" do
-        before(:each) do
-            # load test object
-            
-            # load all AssocModels that must be in DB for tests to work
-        end
-
         it "belongs to RoundFormat" do
-            pending "need to create associated models and add associations"
-            expect(test_set_end_format.round_format).to eq(valid_round_format)
+            # can find an associated object
+            assoc_round_format = valid_round_format
+            expect(test_set_end_format.round_format).to eq(assoc_round_format)
+
+            # can create a new instance via the associated object
+            update[:round_format_id] = ""
+            check_set_end_format = assoc_round_format.set_end_formats.create(update)
+
+            # can get attributes from an associated object
+            expect(check_set_end_format.round_format).to eq(assoc_round_format)
+            expect(check_set_end_format.round_format.name).to include(assoc_round_format.name)
         end
     end
 
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
-        it "helpers TBD" do
-            pending "add as needed"
-            expect(test_set_end_format).to be_invalid
+        it "can find all the SetEndFormats belonging to the same RoundFormat" do
+            valid_round_format
+            valid_set_end_format
+            test_set_end_format
+
+            all_sets = SetEndFormat.all
+
+            expect(test_set_end_format.all_sets_in_same_round).to eq(all_sets)
         end
     end
 end
