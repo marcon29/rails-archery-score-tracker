@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RoundFormat, type: :model do
+RSpec.describe Formats::RoundFormat, type: :model do
     # ###################################################################
     # define main test object
     # ###################################################################
@@ -10,7 +10,7 @@ RSpec.describe RoundFormat, type: :model do
     }
     
     let(:test_round_format) {
-        RoundFormat.create(test_all)
+        Formats::RoundFormat.create(test_all)
     }
 
     # ###################################################################
@@ -58,10 +58,10 @@ RSpec.describe RoundFormat, type: :model do
     describe "model creates and updates only valid instances - " do
         describe "valid when " do
             it "given all required and unrequired attributes" do
-                expect(RoundFormat.all.count).to eq(0)
+                expect(Formats::RoundFormat.all.count).to eq(0)
 
                 expect(test_round_format).to be_valid
-                expect(RoundFormat.all.count).to eq(1)
+                expect(Formats::RoundFormat.all.count).to eq(1)
 
                 expect(test_round_format.name).to eq(test_all[:name])
                 expect(test_round_format.num_sets).to eq(test_all[:num_sets])
@@ -69,11 +69,11 @@ RSpec.describe RoundFormat, type: :model do
             end
             
             it "given only required attributes" do
-                expect(RoundFormat.all.count).to eq(0)
-                round_format = RoundFormat.create(test_req)
+                expect(Formats::RoundFormat.all.count).to eq(0)
+                round_format = Formats::RoundFormat.create(test_req)
 
                 expect(round_format).to be_valid
-                expect(RoundFormat.all.count).to eq(1)
+                expect(Formats::RoundFormat.all.count).to eq(1)
 
                 # req input tests (should have value in test_req)
                 expect(round_format.name).to eq(test_req[:name])
@@ -99,10 +99,10 @@ RSpec.describe RoundFormat, type: :model do
 
         describe "invalid and has correct error message when" do
             it "missing required attributes" do
-                round_format = RoundFormat.create(blank)
+                round_format = Formats::RoundFormat.create(blank)
 
                 expect(round_format).to be_invalid
-                expect(RoundFormat.all.count).to eq(0)
+                expect(Formats::RoundFormat.all.count).to eq(0)
 
                 expect(round_format.errors.messages[:name]).to include(missing_name_message)
                 expect(round_format.errors.messages[:num_sets]).to include(number_all_message)
@@ -111,20 +111,20 @@ RSpec.describe RoundFormat, type: :model do
             it "unique attributes are duplicated" do
                 # need to call initial test object to check against for duplication
                 test_round_format
-                expect(RoundFormat.all.count).to eq(1)
-                round_format = RoundFormat.create(duplicate)
+                expect(Formats::RoundFormat.all.count).to eq(1)
+                round_format = Formats::RoundFormat.create(duplicate)
 
                 expect(round_format).to be_invalid
-                expect(RoundFormat.all.count).to eq(1)
+                expect(Formats::RoundFormat.all.count).to eq(1)
                 expect(round_format.errors.messages[:name]).to include(duplicate_name_message)
             end
 
             it "attributes are outside allowable inputs" do
                 duplicate[:num_sets] = "four"
-                round_format = RoundFormat.create(duplicate)
+                round_format = Formats::RoundFormat.create(duplicate)
 
                 expect(round_format).to be_invalid
-                expect(RoundFormat.all.count).to eq(0)
+                expect(Formats::RoundFormat.all.count).to eq(0)
                 expect(round_format.errors.messages[:num_sets]).to include(number_all_message)
             end
         end
@@ -138,7 +138,7 @@ RSpec.describe RoundFormat, type: :model do
             # load all AssocModels that must be in DB for tests to work
         end
 
-        it "has many SetEndFormats" do
+        it "has many Formats::SetEndFormats" do
             test_round_format
             assoc_round_format = valid_round_format
             check_se_format_attrs = {num_ends: 6, shots_per_end: 6}
@@ -168,7 +168,7 @@ RSpec.describe RoundFormat, type: :model do
     describe "all helper methods work correctly:" do
         it "can return the round's name with correct capitalization" do
             duplicate[:name] = "1440 round"
-            round_format = RoundFormat.create(duplicate)
+            round_format = Formats::RoundFormat.create(duplicate)
             expect(round_format.name).to eq(duplicate[:name].titlecase)
         end
     end

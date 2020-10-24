@@ -180,10 +180,10 @@ def valid_dist_targ_cat
 end
 
 def valid_round_format
-  RoundFormat.create(name: "1440 Round", num_sets: 4, user_edit: false)
+  Formats::RoundFormat.create(name: "1440 Round", num_sets: 4, user_edit: false)
 end
 
 def valid_set_end_format
-  SetEndFormat.create(name: "Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format_id: 1)
+  Formats::SetEndFormat.create(name: "Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format_id: 1)
 end
 

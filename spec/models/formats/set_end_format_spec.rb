@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SetEndFormat, type: :model do
+RSpec.describe Formats::SetEndFormat, type: :model do
     # ###################################################################
     # define main test object
     # ###################################################################
@@ -10,7 +10,7 @@ RSpec.describe SetEndFormat, type: :model do
     }
 
     let(:test_set_end_format) {
-        SetEndFormat.create(test_all)
+        Formats::SetEndFormat.create(test_all)
     }
 
     # ###################################################################
@@ -59,10 +59,10 @@ RSpec.describe SetEndFormat, type: :model do
 
         describe "valid when " do
             it "given all required and unrequired attributes" do
-                expect(SetEndFormat.all.count).to eq(0)
+                expect(Formats::SetEndFormat.all.count).to eq(0)
 
                 expect(test_set_end_format).to be_valid
-                expect(SetEndFormat.all.count).to eq(1)
+                expect(Formats::SetEndFormat.all.count).to eq(1)
                 
                 expect(test_set_end_format.name).to eq(test_all[:name])
                 expect(test_set_end_format.num_ends).to eq(test_all[:num_ends])
@@ -73,11 +73,11 @@ RSpec.describe SetEndFormat, type: :model do
             it "given only required attributes" do
                 valid_set_end_format
 
-                expect(SetEndFormat.all.count).to eq(1)
-                set_end_format = SetEndFormat.create(test_req)
+                expect(Formats::SetEndFormat.all.count).to eq(1)
+                set_end_format = Formats::SetEndFormat.create(test_req)
 
                 expect(set_end_format).to be_valid
-                expect(SetEndFormat.all.count).to eq(2)
+                expect(Formats::SetEndFormat.all.count).to eq(2)
 
                 # req input tests (should have value in test_req)
                 expect(set_end_format.num_ends).to eq(test_req[:num_ends])
@@ -102,27 +102,27 @@ RSpec.describe SetEndFormat, type: :model do
                 expect(test_set_end_format.user_edit).to eq(test_all[:user_edit])
             end
 
-            it "name is duplicated but for different RoundFormat" do
+            it "name is duplicated but for different Formats::RoundFormat" do
                 # need two round_formats
-                RoundFormat.create(name: "720 Round", num_sets: 2, user_edit: false)
-                expect(RoundFormat.all.count).to eq(2)
-                expect(SetEndFormat.all.count).to eq(0)
+                Formats::RoundFormat.create(name: "720 Round", num_sets: 2, user_edit: false)
+                expect(Formats::RoundFormat.all.count).to eq(2)
+                expect(Formats::SetEndFormat.all.count).to eq(0)
 
                 # gives me 2 se_forms in valid_round_format
                 valid_set_end_format
                 test_set_end_format
-                expect(SetEndFormat.all.count).to eq(2)
+                expect(Formats::SetEndFormat.all.count).to eq(2)
                 
                 # gives me 1 se_form in second_round_format
-                third_set_end_format = SetEndFormat.create(name: "Set/Distance1", num_ends: 6, shots_per_end: 6, round_format_id: 2)
-                expect(SetEndFormat.all.count).to eq(3)
+                third_set_end_format = Formats::SetEndFormat.create(name: "Set/Distance1", num_ends: 6, shots_per_end: 6, round_format_id: 2)
+                expect(Formats::SetEndFormat.all.count).to eq(3)
 
                 # test duped name from valid_round_format but in second_round_format
                 duplicate[:round_format_id] = 2
-                set_end_format = SetEndFormat.create(duplicate)
+                set_end_format = Formats::SetEndFormat.create(duplicate)
 
                 expect(set_end_format).to be_valid
-                expect(SetEndFormat.all.count).to eq(4)
+                expect(Formats::SetEndFormat.all.count).to eq(4)
 
                 expect(set_end_format.name).to eq(assigned_name)
                 expect(set_end_format.num_ends).to eq(duplicate[:num_ends])
@@ -133,10 +133,10 @@ RSpec.describe SetEndFormat, type: :model do
     
         describe "invalid and has correct error message when" do
             it "missing required attributes" do
-                set_end_format = SetEndFormat.create(blank)
+                set_end_format = Formats::SetEndFormat.create(blank)
 
                 expect(set_end_format).to be_invalid
-                expect(SetEndFormat.all.count).to eq(0)
+                expect(Formats::SetEndFormat.all.count).to eq(0)
 
                 expect(set_end_format.errors.messages[:num_ends]).to include(number_all_message)
                 expect(set_end_format.errors.messages[:shots_per_end]).to include(number_all_message)
@@ -145,21 +145,21 @@ RSpec.describe SetEndFormat, type: :model do
             it "unique attributes are duplicated" do
                 # need to call initial test object to check against for duplication
                 test_set_end_format
-                expect(SetEndFormat.all.count).to eq(1)
-                set_end_format = SetEndFormat.create(duplicate)
+                expect(Formats::SetEndFormat.all.count).to eq(1)
+                set_end_format = Formats::SetEndFormat.create(duplicate)
 
                 expect(set_end_format).to be_invalid
-                expect(SetEndFormat.all.count).to eq(1)
+                expect(Formats::SetEndFormat.all.count).to eq(1)
                 expect(set_end_format.errors.messages[:name]).to include(default_duplicate_message)
             end
 
             it "attributes are outside allowable inputs" do
                 duplicate[:num_ends] = "six"
                 duplicate[:shots_per_end] = "six"
-                set_end_format = SetEndFormat.create(duplicate)
+                set_end_format = Formats::SetEndFormat.create(duplicate)
 
                 expect(set_end_format).to be_invalid
-                expect(SetEndFormat.all.count).to eq(0)
+                expect(Formats::SetEndFormat.all.count).to eq(0)
                 expect(set_end_format.errors.messages[:num_ends]).to include(number_all_message)
                 expect(set_end_format.errors.messages[:shots_per_end]).to include(number_all_message)
             end
@@ -168,7 +168,7 @@ RSpec.describe SetEndFormat, type: :model do
 
     # association tests ########################################################
     describe "instances are properly associated to other models" do
-        it "belongs to RoundFormat" do
+        it "belongs to Formats::RoundFormat" do
             # can find an associated object
             assoc_round_format = valid_round_format
             expect(test_set_end_format.round_format).to eq(assoc_round_format)
@@ -184,12 +184,12 @@ RSpec.describe SetEndFormat, type: :model do
 
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
-        it "can find all the SetEndFormats belonging to the same RoundFormat" do
+        it "can find all the Formats::SetEndFormats belonging to the same Formats::RoundFormat" do
             valid_round_format
             valid_set_end_format
             test_set_end_format
 
-            all_sets = SetEndFormat.all
+            all_sets = Formats::SetEndFormat.all
 
             expect(test_set_end_format.all_sets_in_same_round).to eq(all_sets)
         end
