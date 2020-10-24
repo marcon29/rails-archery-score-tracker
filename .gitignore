@@ -44,3 +44,4 @@ yarn-debug.log*
 scratch_tests.rb
 scratch_tests_orig.rb
 notes.md
+organization-from-gen.rb

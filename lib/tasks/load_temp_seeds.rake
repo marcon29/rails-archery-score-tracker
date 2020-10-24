@@ -1,8 +1,31 @@
-# desc "just checking"
-# task check_tasks: :environment do
-# 	puts "hello world"
-# end
 
+# ################################################
+# these should go in regular seeds
+# ################################################
+desc "Load RoundFormat Seeds"
+task load_round_formats: :environment do
+	r1440 = RoundFormat.create(name: "1440 Round", num_sets: 4)
+	r720 = RoundFormat.create(name: "720 Round", num_sets: 2)
+end
+
+desc "Load SetEndFormat Seeds"
+task set_end_formats: :environment do
+	r1440 = RoundFormat.find_by(name: "1440 Round")
+	r720 = RoundFormat.find_by(name: "720 Round")
+
+	r1440.set_end_formats.create(num_ends: 6, shots_per_end: 6, round_format_id: 1)
+	r1440.set_end_formats.create(num_ends: 6, shots_per_end: 6, round_format_id: 1)
+	r1440.set_end_formats.create(num_ends: 12, shots_per_end: 3, round_format_id: 1)
+	r1440.set_end_formats.create(num_ends: 12, shots_per_end: 3, round_format_id: 1)
+	r720.set_end_formats.create(num_ends: 6, shots_per_end: 6, round_format_id: 2)
+	r720.set_end_formats.create(num_ends: 6, shots_per_end: 6, round_format_id: 2)
+end
+
+
+
+# ################################################
+# original seeds
+# ################################################
 def get_gender(code)
 	if code.last == "w"
 		"Female"

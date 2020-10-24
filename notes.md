@@ -1,7 +1,5 @@
 # Next to do
     - Architecture overhaul
-        - namespace format models, get them passing completely
-        
         - build new Organization models
             - GovBody, Discipline, Division, AgeClass, Gender???
         - update ArcherCategory for new models
