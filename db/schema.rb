@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_24_160308) do
+ActiveRecord::Schema.define(version: 2020_10_24_231350) do
+
+  create_table "age_classes", force: :cascade do |t|
+    t.string "name"
+    t.integer "min_age"
+    t.integer "max_age"
+    t.boolean "open_to_younger"
+    t.boolean "open_to_older"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "archer_categories", force: :cascade do |t|
     t.string "cat_code"
@@ -43,6 +53,12 @@ ActiveRecord::Schema.define(version: 2020_10_24_160308) do
     t.string "default_division"
   end
 
+  create_table "disciplines", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "distance_target_categories", force: :cascade do |t|
     t.string "distance"
     t.integer "target_id"
@@ -52,9 +68,29 @@ ActiveRecord::Schema.define(version: 2020_10_24_160308) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "divisions", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "ends", force: :cascade do |t|
     t.integer "number"
     t.integer "set_score"
+  end
+
+  create_table "genders", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "gov_bodies", force: :cascade do |t|
+    t.string "name"
+    t.string "org_type"
+    t.string "geo_area"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "round_formats", force: :cascade do |t|
