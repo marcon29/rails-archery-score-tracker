@@ -10,13 +10,14 @@ class ArcherCategory < ApplicationRecord
     validates :cat_division, presence: true, inclusion: { in: DIVISIONS }
     validates :cat_age_class, presence: true, inclusion: { in: AGE_CLASSES.values.join(" ").split }
     validates :cat_gender, presence: true, inclusion: { in: GENDERS }
-    before_validation :assign_blank_ages
+    # before_validation :assign_blank_ages
 
+    # ########### copied to AgeClass ###############
     # allows for leaving oldest max_age and youngest min_age blank
-    def assign_blank_ages
-        self.min_age = 0 unless self.min_age
-        self.max_age = 1000 unless self.max_age
-    end
+    # def assign_blank_ages
+    #     self.min_age = 0 unless self.min_age
+    #     self.max_age = 1000 unless self.max_age
+    # end
         
     # creates a user-friendly display name
     def name
@@ -28,17 +29,18 @@ class ArcherCategory < ApplicationRecord
         self.where("max_age >=?", age).where("min_age <=?", age).where(cat_gender: gender, cat_division: division)
     end
 
-    def self.eligible_categories(age, gender)
-        categories = self.where("max_age >=?", age).where(open_to_younger: true).where(cat_gender: gender)
-        if categories.empty? 
-            categories = self.where("min_age <=?", age).where(open_to_older: true).where(cat_gender: gender)
-        end
-        categories.order(:min_age)
-    end
+    # ########### copied to AgeClass ###############
+    # def self.eligible_categories(age, gender)
+    #     categories = self.where("max_age >=?", age).where(open_to_younger: true).where(cat_gender: gender)
+    #     if categories.empty? 
+    #         categories = self.where("min_age <=?", age).where(open_to_older: true).where(cat_gender: gender)
+    #     end
+    #     categories.order(:min_age)
+    # end
 
-    def self.eligible_categories_by_age_class(age, gender)
-        self.eligible_categories(age, gender).collect { |cat| cat.cat_age_class }.uniq
-    end
+    # def self.eligible_categories_by_age_class(age, gender)
+    #     self.eligible_categories(age, gender).collect { |cat| cat.cat_age_class }.uniq
+    # end
 
     def self.eligible_categories_by_name(age, gender)
         self.eligible_categories(age, gender).collect { |cat| cat.name }.uniq
