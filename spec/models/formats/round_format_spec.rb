@@ -133,34 +133,34 @@ RSpec.describe Formats::RoundFormat, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            # load test object
-            
-            # load all AssocModels that must be in DB for tests to work
+            # load the main test instance (for has many_many only)
+            test_round_format
         end
 
-        it "has many Formats::SetEndFormats" do
-            test_round_format
-            assoc_round_format = valid_round_format
-            check_se_format_attrs = {num_ends: 6, shots_per_end: 6}
+        describe "has many SetEndFormats and can" do
+            it "find an associated object" do
+                assoc_set_end_format = valid_set_end_format
+                expect(test_round_format.set_end_formats).to include(assoc_set_end_format)
+            end
 
-            # can find an associated object
-            assoc_set_end_format = valid_set_end_format
-            expect(test_round_format.set_end_formats).to include(assoc_set_end_format)
-
-
-            # can create a new associated object via instance and get assoc object attributes
-            check_set_end_format = test_round_format.set_end_formats.create(check_se_format_attrs)
+            it "create a new associated object via instance and get associated object attributes" do
+                check_set_end_format_attrs = {num_ends: 6, shots_per_end: 6}
+                check_set_end_format = test_round_format.set_end_formats.create(check_set_end_format_attrs)
+                
+                expect(test_round_format.set_end_formats).to include(check_set_end_format)
+                expect(test_round_format.set_end_formats.last.name).to include(check_set_end_format.name)
+            end
             
-            expect(test_round_format.set_end_formats).to include(check_set_end_format)
-            expect(test_round_format.set_end_formats.last.name).to include(check_set_end_format.name)
+            it "re-assign instance via the associated object" do
+                assoc_round_format = valid_round_format
+                assoc_set_end_format = valid_set_end_format
+                
+                assoc_set_end_format.round_format = assoc_round_format
+                assoc_set_end_format.save
 
-            
-            # can re-assign instance via the associated object
-            assoc_set_end_format.round_format = assoc_round_format
-            assoc_set_end_format.save
-
-            expect(test_round_format.set_end_formats).not_to include(assoc_set_end_format)
-            expect(assoc_round_format.set_end_formats).to include(assoc_set_end_format)
+                expect(test_round_format.set_end_formats).not_to include(assoc_set_end_format)
+                expect(assoc_round_format.set_end_formats).to include(assoc_set_end_format)
+            end
         end
     end
 

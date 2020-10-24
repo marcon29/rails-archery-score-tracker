@@ -168,17 +168,20 @@ RSpec.describe Formats::SetEndFormat, type: :model do
 
     # association tests ########################################################
     describe "instances are properly associated to other models" do
-        it "belongs to Formats::RoundFormat" do
-            # can find an associated object
-            assoc_round_format = valid_round_format
-            expect(test_set_end_format.round_format).to eq(assoc_round_format)
+        describe "belongs to RoundFormat and can" do
+            it "find an associated object" do
+                assoc_round_format = valid_round_format
+                expect(test_set_end_format.round_format).to eq(assoc_round_format)
+            end
 
-            # can create a new instance via the associated object and get assoc object attributes
-            update[:round_format_id] = ""
-            check_set_end_format = assoc_round_format.set_end_formats.create(update)
-            
-            expect(check_set_end_format.round_format).to eq(assoc_round_format)
-            expect(check_set_end_format.round_format.name).to include(assoc_round_format.name)
+            it "create a new instance via the associated object and get associated object attributes" do
+                assoc_round_format = valid_round_format
+                update[:round_format_id] = ""
+                check_set_end_format = assoc_round_format.set_end_formats.create(update)
+                
+                expect(check_set_end_format.round_format).to eq(assoc_round_format)
+                expect(check_set_end_format.round_format.name).to include(assoc_round_format.name)
+            end
         end
     end
 
