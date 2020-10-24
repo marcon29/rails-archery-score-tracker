@@ -19,15 +19,11 @@ class Round < ApplicationRecord
     validates :round_type, 
         presence: { message: "You must choose a round type." }, 
         inclusion: { in: ROUND_TYPES }
+    validates :score_method, 
+        presence: { message: "You must choose a score method." }, 
+        inclusion: { in: SCORE_METHODS }
     validate :check_and_assign_rank
     before_validation :assign_name
-
-
-    # ########### add this in and add test (already in rails_helper) ########################
-    # validates :score_method, 
-    #     presence: { message: "You must choose a score method." }, 
-    #     inclusion: { in: SCORE_METHODS }
-    # ###############################################################
     
     
     # keeping this until I'm sure the discipline association works

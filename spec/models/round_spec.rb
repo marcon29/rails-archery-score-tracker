@@ -6,7 +6,7 @@ RSpec.describe Round, type: :model do
     # ###################################################################
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
     let(:test_all) {
-        {name: "100th US Nationals - 1440 Round", round_type: "Qualifying", rank: "1st"}
+        {name: "100th US Nationals - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st"}
     }
     
     let(:test_round) {
@@ -25,24 +25,24 @@ RSpec.describe Round, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:valid_req) {
-        {round_type: "Qualifying"}
+        {round_type: "Qualifying", score_method: "Points"}
     }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "100th US Nationals - 1440 Round", round_type: "Qualifying", rank: "1st"}
+        {name: "100th US Nationals - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st"}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {name: "", round_type: "Match", rank: "Win"}
+        {name: "", round_type: "Match", score_method: "Set", rank: "Win"}
     }
 
     # every attr blank
     let(:blank) {
-        {name: "", round_type: "", rank: ""}
+        {name: "", round_type: "", score_method: "", rank: ""}
     }
   
     # ###################################################################
@@ -55,6 +55,7 @@ RSpec.describe Round, type: :model do
     # define custom error messages
     # ###################################################################
     let(:missing_round_type_message) {"You must choose a round type."}
+    let(:missing_score_method_message) {"You must choose a score method."}
     
     let(:inclusion_rank_message) {'Enter only a number above 0, "W" or "L".'}
     
@@ -74,6 +75,7 @@ RSpec.describe Round, type: :model do
 
                 expect(test_round.name).to eq(test_all[:name])
                 expect(test_round.round_type).to eq(test_all[:round_type])
+                expect(test_round.score_method).to eq(test_all[:score_method])
                 expect(test_round.rank).to eq(test_all[:rank])
             end
             
@@ -86,7 +88,7 @@ RSpec.describe Round, type: :model do
 
                 # req input tests (should have value in valid_req)
                 expect(round.round_type).to eq(valid_req[:round_type])
-                
+                expect(round.score_method).to eq(valid_req[:score_method])
 
                 # not req input tests (name auto-asigned from missing)
                 expect(round.name).to eq(assigned_name)
@@ -100,6 +102,7 @@ RSpec.describe Round, type: :model do
                 
                 # req input tests (should have value in update)
                 expect(test_round.round_type).to eq(update[:round_type])
+                expect(test_round.score_method).to eq(update[:score_method])
                 expect(test_round.rank).to eq(update[:rank])
 
                 # user_edit auto-asigned from blank
@@ -117,6 +120,7 @@ RSpec.describe Round, type: :model do
                 # expect(round.errors.messages[:name]).to include(default_missing_message)
                 # expect(round.name).to eq(assigned_name)
                 expect(round.errors.messages[:round_type]).to include(missing_round_type_message)
+                expect(round.errors.messages[:score_method]).to include(missing_score_method_message)
                 expect(round.rank).to be_blank
             end
 
@@ -133,11 +137,13 @@ RSpec.describe Round, type: :model do
 
             it "round type is outside allowable inputs" do
                 duplicate[:round_type] = "bad type"
+                duplicate[:score_method] = "bad method"
                 round = Round.create(duplicate)
 
                 expect(round).to be_invalid
                 expect(Round.all.count).to eq(0)
                 expect(round.errors.messages[:round_type]).to include(default_inclusion_message)
+                expect(round.errors.messages[:score_method]).to include(default_inclusion_message)
             end
 
             it "rank is outside allowable inputs" do
