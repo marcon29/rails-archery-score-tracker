@@ -190,18 +190,6 @@ def valid_gender
 end
 
 def valid_category
-  # ArcherCategory.create(
-  #   cat_code: "WA-RM", 
-  #   gov_body: "World Archery", 
-  #   cat_division: "Recurve", 
-  #   cat_age_class: "Senior", 
-  #   min_age: 21, 
-  #   max_age: 49, 
-  #   open_to_younger: true, 
-  #   open_to_older: true, 
-  #   cat_gender: "Male"
-  # )
-
   Organization::ArcherCategory.create(cat_code: "WA-RM", gov_body_id: 1, discipline_id: 1, division_id: 1, age_class_id: 1, gender_id: 1)
 end
 

@@ -9,30 +9,27 @@ module Organization
         belongs_to :age_class
         belongs_to :gender
 
-        # all attrs - :cat_code, :gov_body_id, :discipline_id, :division_id, :age_class_id, :gender_id
         # assoc attrs - :gov_body_id, :discipline_id, :division_id, :age_class_id, :gender_id
         # data attrs - :cat_code
         
         # Regular user can't update these - only for app to reference. Validations to ensure data integrity when extending app.
-        validates :cat_code, presence: true, uniqueness: true
+        validates :cat_code, 
             presence: { message: "You must provide a category code." }, 
             uniqueness: { case_sensitive: false, message: "That category code is already used." }
-            
-        # creates a user-friendly display name
+        before_validation :format_cat_code
+        
+        
+        # helpers (callbacks & validations)
         def name
-            self.gender == "Male" ? gender = "Men" : gender = "Women" 
+            self.gender.name == "Male" ? gender = "Men" : gender = "Women" 
             "#{self.division.name}-#{self.age_class.name}-#{gender}"
         end
-
-        # all cap, no spaces
+        
         def format_cat_code
-            self.cat_code.upcase.gsub(" ", "") # if self.cat_code
+            self.cat_code = self.cat_code.gsub(" ", "").upcase # if self.cat_code
         end
-        
-        
-        
 
-        
+
 
         # ########### need to build - WHERE? ###############
         # from Archer
@@ -70,5 +67,7 @@ module Organization
         # def self.age_class_by_age(age)
         #     self.where("max_age >=?", age).where("min_age <=?", age)
         # end
+
+        
     end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_24_231350) do
+ActiveRecord::Schema.define(version: 2020_10_25_045034) do
 
   create_table "age_classes", force: :cascade do |t|
     t.string "name"
@@ -24,16 +24,13 @@ ActiveRecord::Schema.define(version: 2020_10_24_231350) do
 
   create_table "archer_categories", force: :cascade do |t|
     t.string "cat_code"
-    t.string "gov_body"
-    t.integer "min_age"
-    t.integer "max_age"
-    t.string "cat_division"
-    t.string "cat_age_class"
-    t.string "cat_gender"
+    t.integer "gov_body_id"
+    t.integer "discipline_id"
+    t.integer "division_id"
+    t.integer "age_class_id"
+    t.integer "gender_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "open_to_younger"
-    t.boolean "open_to_older"
   end
 
   create_table "archers", force: :cascade do |t|
