@@ -6,8 +6,8 @@ module Organization
         # all attrs - :name
         
         # validates :name, 
-        #     presence: { message: "You must enter a name." }, 
-        #     uniqueness: { case_sensitive: false, message: "That name is already taken." }
+        #     presence: { message: "You must enter a gender." }, 
+        #     uniqueness: { case_sensitive: false, message: "That gender is already used." }
         # before_validation :format_name
 
         # helpers (callbacks & validations)
