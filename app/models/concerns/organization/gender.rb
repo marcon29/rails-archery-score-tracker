@@ -16,7 +16,6 @@ module Organization
         # end
 
         # helpers (data)
-        
 
     end
 end
