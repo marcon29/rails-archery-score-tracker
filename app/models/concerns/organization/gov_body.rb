@@ -19,7 +19,12 @@ module Organization
         # end
 
         # def format_geo_area
-        #     self.geo_area = self.geo_area.titlecase
+        #     all_cap_entries = ["USA", "UK"]
+        #     if all_cap_entries.include?(self.geo_area.upcase)
+        #         self.geo_area = self.geo_area.upcase
+        #     else
+        #         self.geo_area = self.geo_area.titlecase
+        #     end
         # end
 
         # helpers (data)

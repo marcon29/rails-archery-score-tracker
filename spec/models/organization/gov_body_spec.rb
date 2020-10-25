@@ -1,5 +1,273 @@
 require 'rails_helper'
 
 RSpec.describe Organization::GovBody, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+    # ###################################################################
+    # define main test object
+    # ###################################################################
+    # needs to be different from valid object in RailsHelper to avoid duplicte failures
+    let(:test_all) {
+        {name: "USA Archery", org_type: "National", geo_area: "USA"}
+    }
+
+    let(:test_gov_body) {
+        Organization::GovBody.create(test_all)
+    }
+
+    # ###################################################################
+    # define any additional objects to test for this model 
+    # ###################################################################
+    # only add multiple instantiations if need simultaneous instances for testing
+
+
+    # ###################################################################
+    # define standard create/update variations
+    # ###################################################################
+    
+    # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
+    let(:test_req) {
+        {name: "USA Archery", org_type: "National"}
+    }
+
+    # exact duplicate of test_all
+        # use as whole for testing unique values
+        # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
+    let(:duplicate) {
+        {name: "USA Archery", org_type: "National", geo_area: "USA"}
+    }
+    
+    # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
+    let(:update) {
+        {name: "CSAA", org_type: "State/Province", geo_area: "CO"}
+    }
+
+    # every attr blank
+    let(:blank) {
+        {name: "", org_type: "", geo_area: ""}
+    }
+  
+    # ###################################################################
+    # define custom error messages
+    # ###################################################################
+    let(:missing_name_message) {"You must enter a name."}
+    let(:missing_org_type_message) {"You must choose a score session type."}
+    
+    let(:duplicate_name_message) {"That name is already taken."}
+    
+    
+    # ###################################################################
+    # define tests
+    # ###################################################################
+
+    # object creation and validation tests #######################################
+    describe "model creates and updates only valid instances - " do
+        describe "valid when " do
+            it "given all required and unrequired attributes" do
+                expect(Organization::GovBody.all.count).to eq(0)
+
+                expect(test_gov_body).to be_valid
+                expect(Organization::GovBody.all.count).to eq(1)
+
+                expect(test_gov_body.name).to eq(test_all[:name])
+                expect(test_gov_body.org_type).to eq(test_all[:org_type])
+                expect(test_gov_body.geo_area).to eq(test_all[:geo_area])
+            end
+            
+            it "given only required attributes" do
+                expect(Organization::GovBody.all.count).to eq(0)
+                gov_body = Organization::GovBody.create(test_req)
+
+                expect(gov_body).to be_valid
+                expect(Organization::GovBody.all.count).to eq(1)
+
+                # req input tests (should have value in test_req)
+                expect(gov_body.name).to eq(test_req[:name])
+                expect(gov_body.org_type).to eq(test_req[:org_type])
+
+                # not req input tests (no attrs auto-asigned from missing)
+                expect(gov_body.geo_area).to be_nil
+            end
+
+            it "updating all attributes" do
+                test_gov_body.update(update)
+                
+                expect(test_gov_body).to be_valid
+                
+                # req input tests (should have value in update)
+                expect(test_gov_body.name).to eq(update[:name])
+                expect(test_gov_body.org_type).to eq(update[:org_type])
+                expect(test_gov_body.geo_area).to eq(update[:geo_area])
+                
+                # not req input tests (no attrs auto-asigned from blank)
+            end
+        end
+
+        describe "invalid and has correct error message when" do
+            it "missing required attributes" do
+                gov_body = Organization::GovBody.create(blank)
+
+                expect(gov_body).to be_invalid
+                expect(Organization::GovBody.all.count).to eq(0)
+
+                expect(gov_body.errors.messages[:name]).to include(missing_name_message)
+                expect(gov_body.errors.messages[:org_type]).to include(missing_org_type_message)
+            end
+
+            it "unique attributes are duplicated" do
+                # call initial test object to check against for duplication
+                test_gov_body
+                expect(Organization::GovBody.all.count).to eq(1)
+                gov_body = Organization::GovBody.create(duplicate)
+
+                expect(gov_body).to be_invalid
+                expect(Organization::GovBody.all.count).to eq(1)
+                expect(gov_body.errors.messages[:name]).to include(duplicate_name_message)
+            end
+
+            
+            it "attributes are outside allowable inputs" do
+                duplicate[:org_type] = "bad data"
+                gov_body = Organization::GovBody.create(duplicate)
+
+                expect(gov_body).to be_invalid
+                expect(Organization::GovBody.all.count).to eq(0)
+                expect(gov_body.errors.messages[:org_type]).to include(default_inclusion_message)
+            end
+        end
+    end
+
+    # association tests ########################################################
+    describe "instances are properly associated to other models" do
+        before(:each) do
+            # load the main test instance (for has many_many only)
+            test_gov_body
+        end
+
+        describe "has many Disciplines and can" do
+            it "find an associated object" do
+                assoc_discipline = valid_discipline
+                expect(test_gov_body.disciplines).to include(assoc_discipline)
+            end
+
+            it "create a new associated object via instance and get associated object attributes" do
+                check_discipline_attrs = {name: "Field"}
+                check_discipline = test_gov_body.disciplines.create(check_discipline_attrs)
+                
+                expect(test_gov_body.disciplines).to include(check_discipline)
+                expect(test_gov_body.disciplines.last.name).to include(check_discipline.name)
+            end
+            
+            it "re-assign instance via the associated object" do
+                assoc_gov_body = valid_gov_body
+                assoc_discipline = valid_discipline
+                
+                assoc_discipline.gov_body = assoc_gov_body
+                assoc_discipline.save
+
+                expect(test_gov_body.disciplines).not_to include(assoc_discipline)
+                expect(assoc_gov_body.disciplines).to include(assoc_discipline)
+            end
+        end 
+
+        describe "has many Divisions and can" do
+            it "find an associated object" do
+                assoc_discipline = valid_discipline
+                expect(test_gov_body.disciplines).to include(assoc_discipline)
+            end
+
+            it "create a new associated object via instance and get associated object attributes" do
+                check_discipline_attrs = {name: "Barebow"}
+                check_discipline = test_gov_body.disciplines.create(check_discipline_attrs)
+                
+                expect(test_gov_body.disciplines).to include(check_discipline)
+                expect(test_gov_body.disciplines.last.name).to include(check_discipline.name)
+            end
+            
+            it "re-assign instance via the associated object" do
+                assoc_gov_body = valid_gov_body
+                assoc_discipline = valid_discipline
+                
+                assoc_discipline.gov_body = assoc_gov_body
+                assoc_discipline.save
+
+                expect(test_gov_body.disciplines).not_to include(assoc_discipline)
+                expect(assoc_gov_body.disciplines).to include(assoc_discipline)
+            end
+        end
+
+        describe "has many AgeClasses and can" do
+            it "find an associated object" do
+                assoc_age_class = valid_age_class
+                expect(test_gov_body.age_classes).to include(assoc_age_class)
+            end
+
+            it "create a new associated object via instance and get associated object attributes" do
+                check_age_class_attrs = {name: "Cadet", min_age: "", max_age: 17, open_to_younger: true, open_to_older: false}
+                check_age_class = test_gov_body.age_classes.create(check_age_class_attrs)
+                
+                expect(test_gov_body.age_classes).to include(check_age_class)
+                expect(test_gov_body.age_classes.last.name).to include(check_age_class.name)
+            end
+            
+            it "re-assign instance via the associated object" do
+                assoc_gov_body = valid_gov_body
+                assoc_age_class = valid_age_class
+                
+                assoc_age_class.gov_body = assoc_gov_body
+                assoc_age_class.save
+
+                expect(test_gov_body.age_classes).not_to include(assoc_age_class)
+                expect(assoc_gov_body.age_classes).to include(assoc_age_class)
+            end
+        end
+
+        describe "has many Genders and can" do
+            it "find an associated object" do
+                assoc_gender = valid_gender
+                expect(test_gov_body.genders).to include(assoc_gender)
+            end
+
+            it "create a new associated object via instance and get associated object attributes" do
+                check_gender_attrs = {name: "Trans"}
+                check_gender = test_gov_body.genders.create(check_gender_attrs)
+                
+                expect(test_gov_body.genders).to include(check_gender)
+                expect(test_gov_body.genders.last.name).to include(check_gender.name)
+            end
+            
+            it "re-assign instance via the associated object" do
+                assoc_gov_body = valid_gov_body
+                assoc_gender = valid_gender
+                
+                assoc_gender.gov_body = assoc_gov_body
+                assoc_gender.save
+
+                expect(test_gov_body.genders).not_to include(assoc_gender)
+                expect(assoc_gov_body.genders).to include(assoc_gender)
+            end
+        end
+    end
+
+    # helper method tests ########################################################
+    describe "all helper methods work correctly:" do
+        it "can return the gov body's name with correct capitalization" do
+            duplicate[:name] = "canadian archery association"
+            gov_body = Organization::GovBody.create(duplicate)
+            expect(gov_body.name).to eq(duplicate[:name].titlecase)
+        end
+
+        it "can return the geographic areas with correct capitalization" do
+            duplicate[:geo_area] = "canada"
+            gov_body = Organization::GovBody.create(duplicate)
+            expect(gov_body.name).to eq(duplicate[:name].titlecase)
+
+            duplicate[:geo_area] = "UK"
+            gov_body_up = Organization::GovBody.create(duplicate)
+            expect(gov_body_up.name).to eq(duplicate[:name].upcase)
+        end
+
+        it "helpers TBD" do
+            pending "add as needed"
+            expect(test_gov_body).to be_invalid
+        end
+    end
 end
