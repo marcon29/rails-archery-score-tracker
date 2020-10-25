@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_25_045034) do
+ActiveRecord::Schema.define(version: 2020_10_25_171259) do
 
   create_table "age_classes", force: :cascade do |t|
     t.string "name"
@@ -45,9 +45,9 @@ ActiveRecord::Schema.define(version: 2020_10_25_045034) do
     t.string "home_state"
     t.string "home_country"
     t.string "default_age_class"
+    t.string "default_division"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "default_division"
   end
 
   create_table "disciplines", force: :cascade do |t|
@@ -74,6 +74,8 @@ ActiveRecord::Schema.define(version: 2020_10_25_045034) do
   create_table "ends", force: :cascade do |t|
     t.integer "number"
     t.integer "set_score"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "genders", force: :cascade do |t|
@@ -101,10 +103,10 @@ ActiveRecord::Schema.define(version: 2020_10_25_045034) do
   create_table "rounds", force: :cascade do |t|
     t.string "name"
     t.string "round_type"
+    t.string "score_method"
+    t.string "rank"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "rank"
-    t.string "score_method"
   end
 
   create_table "rsets", force: :cascade do |t|
@@ -133,10 +135,10 @@ ActiveRecord::Schema.define(version: 2020_10_25_045034) do
     t.string "name"
     t.integer "num_ends"
     t.integer "shots_per_end"
+    t.integer "round_format_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "user_edit", default: true
-    t.integer "round_format_id"
   end
 
   create_table "shots", force: :cascade do |t|
