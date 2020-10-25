@@ -3,13 +3,15 @@ module Organization
         # has_many :archer_categories
         # has_many :gov_bodies, through :archer_categories
 
-        # all attrs - :name, :min_age, :max_age, :open_to_younger, :open_to_older        
+        # all attrs - :name, :min_age, :max_age, :open_to_younger, :open_to_older
 
         # validates :name, 
         #     presence: { message: "You must enter a name." }, 
         #     uniqueness: { case_sensitive: false, message: "That name is already taken." }
         # validates :min_age, :max_age, 
         #     numericality: { only_integer: true, greater_than: 0, message: "You must enter a number greater than 0." }
+        # validates :open_to_younger, :open_to_older, 
+        #     presence: { message: "You must select if an open class." }, 
         # before_validation :format_name, assign_blank_ages
 
         # helpers (callbacks & validations)

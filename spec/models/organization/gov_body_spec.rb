@@ -153,7 +153,7 @@ RSpec.describe Organization::GovBody, type: :model do
                 check_discipline = test_gov_body.disciplines.create(check_discipline_attrs)
                 
                 expect(test_gov_body.disciplines).to include(check_discipline)
-                expect(test_gov_body.disciplines.last.name).to include(check_discipline.name)
+                expect(test_gov_body.disciplines.last.name).to eq(check_discipline.name)
             end
             
             it "re-assign instance via the associated object" do
@@ -179,7 +179,7 @@ RSpec.describe Organization::GovBody, type: :model do
                 check_discipline = test_gov_body.disciplines.create(check_discipline_attrs)
                 
                 expect(test_gov_body.disciplines).to include(check_discipline)
-                expect(test_gov_body.disciplines.last.name).to include(check_discipline.name)
+                expect(test_gov_body.disciplines.last.name).to eq(check_discipline.name)
             end
             
             it "re-assign instance via the associated object" do
@@ -205,7 +205,7 @@ RSpec.describe Organization::GovBody, type: :model do
                 check_age_class = test_gov_body.age_classes.create(check_age_class_attrs)
                 
                 expect(test_gov_body.age_classes).to include(check_age_class)
-                expect(test_gov_body.age_classes.last.name).to include(check_age_class.name)
+                expect(test_gov_body.age_classes.last.name).to eq(check_age_class.name)
             end
             
             it "re-assign instance via the associated object" do
@@ -231,7 +231,7 @@ RSpec.describe Organization::GovBody, type: :model do
                 check_gender = test_gov_body.genders.create(check_gender_attrs)
                 
                 expect(test_gov_body.genders).to include(check_gender)
-                expect(test_gov_body.genders.last.name).to include(check_gender.name)
+                expect(test_gov_body.genders.last.name).to eq(check_gender.name)
             end
             
             it "re-assign instance via the associated object" do
