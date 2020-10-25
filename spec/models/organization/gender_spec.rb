@@ -50,7 +50,7 @@ RSpec.describe Organization::Gender, type: :model do
     # ###################################################################
     let(:missing_name_message) {"You must enter a gender."}
     
-    let(:duplicate_name_message) {"That gender is already taken."}
+    let(:duplicate_name_message) {"That gender is already used."}
 
 
     # ###################################################################
