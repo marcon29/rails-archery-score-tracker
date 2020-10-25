@@ -1,7 +1,7 @@
 module Organization
     class AgeClass < ApplicationRecord
         # has_many :archer_categories
-        # has_many :gov_bodies, through :archer_categories
+        # has_many :gov_bodies, through: :archer_categories
 
         # all attrs - :name, :min_age, :max_age, :open_to_younger, :open_to_older
 

@@ -1,7 +1,7 @@
 module Organization
     class Division < ApplicationRecord
         # has_many :archer_categories
-        # has_many :gov_bodies, through :archer_categories
+        # has_many :gov_bodies, through: :archer_categories
 
         # all attrs - :name
         

@@ -1,7 +1,7 @@
 module Organization
     class Discipline < ApplicationRecord
         # has_many :archer_categories
-        # has_many :gov_bodies, through :archer_categories
+        # has_many :gov_bodies, through: :archer_categories
 
         # all attrs - :name
         
@@ -16,6 +16,6 @@ module Organization
         # end
 
         # helpers (data)
-        
+
     end
 end

@@ -49,7 +49,7 @@ RSpec.describe Organization::GovBody, type: :model do
     # define custom error messages
     # ###################################################################
     let(:missing_name_message) {"You must enter a name."}
-    let(:missing_org_type_message) {"You must choose a score session type."}
+    let(:missing_org_type_message) {"You must choose an organization type."}
     
     let(:duplicate_name_message) {"That name is already taken."}
     
@@ -249,22 +249,6 @@ RSpec.describe Organization::GovBody, type: :model do
 
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
-        it "can return the gov body's name with correct capitalization" do
-            duplicate[:name] = "canadian archery association"
-            gov_body = Organization::GovBody.create(duplicate)
-            expect(gov_body.name).to eq(duplicate[:name].titlecase)
-        end
-
-        it "can return the geographic areas with correct capitalization" do
-            duplicate[:geo_area] = "canada"
-            gov_body = Organization::GovBody.create(duplicate)
-            expect(gov_body.name).to eq(duplicate[:name].titlecase)
-
-            duplicate[:geo_area] = "UK"
-            gov_body_up = Organization::GovBody.create(duplicate)
-            expect(gov_body_up.name).to eq(duplicate[:name].upcase)
-        end
-
         it "helpers TBD" do
             pending "add as needed"
             expect(test_gov_body).to be_invalid
