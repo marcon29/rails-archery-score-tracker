@@ -48,7 +48,7 @@ RSpec.describe Organization::AgeClass, type: :model do
     # ###################################################################
     # define test results for auto-assign attrs
     # ###################################################################
-    let(:assigned_min_age) {0}
+    let(:assigned_min_age) {1}
     let(:assigned_max_age) {1000}
   
     # ###################################################################
@@ -122,8 +122,6 @@ RSpec.describe Organization::AgeClass, type: :model do
                 expect(Organization::AgeClass.all.count).to eq(0)
 
                 expect(age_class.errors.messages[:name]).to include(missing_name_message)
-                expect(age_class.errors.messages[:min_age]).to include(invalid_age_message)
-                expect(age_class.errors.messages[:max_age]).to include(invalid_age_message)
                 expect(age_class.errors.messages[:open_to_younger]).to include(missing_open_message)
                 expect(age_class.errors.messages[:open_to_older]).to include(missing_open_message)
             end
