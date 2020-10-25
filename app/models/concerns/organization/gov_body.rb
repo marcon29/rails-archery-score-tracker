@@ -8,6 +8,7 @@ module Organization
 
         # all attrs - :name, :org_type, :geo_area
         
+        # Regular user can't update these - only for app to reference. Validations to ensure data integrity when extending app.
         validates :name, 
             presence: { message: "You must enter a name." }, 
             uniqueness: { case_sensitive: false, message: "That name is already taken." }

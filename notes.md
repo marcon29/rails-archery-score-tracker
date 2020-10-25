@@ -1,10 +1,18 @@
 # Next to do
     - Architecture overhaul
         - build new Organization models
-            - GovBody, Discipline, Division, AgeClass, Gender???
+            - GovBody, Discipline, Division, AgeClass, Gender
         - update ArcherCategory for new models
+            - namespace it with the belongs_to models
+        - have ArcherCategory and belongs_to models completely passing
+            - except for assoc w/ DistTargCat
+        - double check Target model
+            - namespace into Organization
+        - update DistTargCat model for use with new ArcheryCategory
+            - namespace into Organization
+        - get ArcherCategory, Target, DistTargCat completely passing        
         
-    - build Shot model
+    - finish building Shot model
         - see notes below
     
     - set up associations between Shot, Rset, Round, ScoreSession, Archer

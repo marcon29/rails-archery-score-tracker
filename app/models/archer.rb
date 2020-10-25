@@ -93,6 +93,9 @@ class Archer < ApplicationRecord
         "#{self.first_name.capitalize} #{self.last_name.capitalize}"
     end
 
+    # ##########################
+    # check out ArcherCategory (model and specs) for ideas and started code
+
     def eligbile_categories
         # need to update to using the associated instance???
         # possible updates in ArchCat model: instance scope (for above)?

@@ -52,10 +52,23 @@ class Round < ApplicationRecord
         end
 
     # need other helper methods
-    # it "can calculate the total score for a round" do
+        # it "can calculate the total score for a round" do
             # pending "need to add associations"
             # want to be able to to call round.score
             # sums all rset scores
+        # end
+
+        # ##########################
+        # check out ArcherCategory (model and specs) for ideas and started code
+
+        # ########### to set category by selections from setting up Round ###############
+        # returns a category by division, age_class & gender
+            # originally from archer_category
+        # def self.default(division, age_class, gender)
+            # self.where("max_age >=?", age).where("min_age <=?", age).where(cat_gender: gender, cat_division: division)
+            # finds division by name (only input at Round)
+            # finds age_class by name
+            # finds gender by name
         # end
 
         
