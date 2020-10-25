@@ -15,8 +15,5 @@ module Organization
         def format_name
             self.name = self.name.titlecase
         end
-
-        # helpers (data)
-        
     end
 end

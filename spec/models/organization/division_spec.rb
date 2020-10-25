@@ -14,19 +14,8 @@ RSpec.describe Organization::Division, type: :model do
     }
 
     # ###################################################################
-    # define any additional objects to test for this model 
-    # ###################################################################
-    # only add multiple instantiations if need simultaneous instances for testing
-
-
-    # ###################################################################
     # define standard create/update variations
     # ###################################################################
-    
-    # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
-    # let(:test_req) {
-    #     {name: "Compound"}
-    # }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
@@ -49,7 +38,6 @@ RSpec.describe Organization::Division, type: :model do
     # define custom error messages
     # ###################################################################
     let(:missing_name_message) {"You must enter a name."}
-    
     let(:duplicate_name_message) {"That name is already taken."}
 
 
@@ -90,7 +78,6 @@ RSpec.describe Organization::Division, type: :model do
             end
 
             it "unique attributes are duplicated" do
-                # call initial test object to check against for duplication
                 test_division
                 expect(Organization::Division.all.count).to eq(1)
                 division = Organization::Division.create(duplicate)
@@ -105,35 +92,21 @@ RSpec.describe Organization::Division, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            # load the main test instance (for has many_many only)
             test_division
+
+            @assoc_gov_body = valid_gov_body
+            @assoc_discipline = valid_discipline
+            @assoc_age_class = valid_age_class
+            @assoc_gender = valid_gender
+            @valid_category = valid_category
         end 
 
         describe "has many GovBodies and can" do
             it "find an associated object" do
                 assoc_gov_body = valid_gov_body
-                expect(test_division.gov_bodies).to include(assoc_gov_body)
+                expect(test_division.gov_bodies).to include(@assoc_gov_body)
             end
-
-            it "create a new associated object via instance and get associated object attributes" do
-                check_gov_body_attrs = {name: "Longbow"}
-                check_gov_body = test_division.gov_bodies.create(check_gov_body_attrs)
-                
-                expect(test_division.gov_bodies).to include(check_gov_body)
-                expect(test_division.gov_bodies.last.name).to eq(check_gov_body.name)
-            end
-            
-            it "re-assign instance via the associated object" do
-                assoc_division = valid_division
-                assoc_gov_body = valid_gov_body
-                
-                assoc_gov_body.division = assoc_division
-                assoc_gov_body.save
-
-                expect(test_division.gov_bodies).not_to include(assoc_gov_body)
-                expect(assoc_division.gov_bodies).to include(assoc_gov_body)
-            end
-        end
+        end 
     end
 
     # helper method tests ########################################################
@@ -142,11 +115,6 @@ RSpec.describe Organization::Division, type: :model do
             duplicate[:name] = "longer bow"
             division = Organization::Division.create(duplicate)
             expect(division.name).to eq(duplicate[:name].titlecase)
-        end
-
-        it "helpers TBD" do
-            pending "add as needed"
-            expect(test_division).to be_invalid
         end
     end
 end

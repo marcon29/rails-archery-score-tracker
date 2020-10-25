@@ -26,7 +26,7 @@ module Organization
         end
         
         def format_cat_code
-            self.cat_code = self.cat_code.gsub(" ", "").upcase # if self.cat_code
+            self.cat_code = self.cat_code.gsub(" ", "").upcase if self.cat_code
         end
 
 
@@ -68,6 +68,6 @@ module Organization
         #     self.where("max_age >=?", age).where("min_age <=?", age)
         # end
 
-        
+
     end
 end

@@ -195,8 +195,6 @@ RSpec.describe Organization::ArcherCategory, type: :model do
                 expect(check_archer_category.gender.name).to include(assoc_gender.name)
             end
         end
-
-        
     end
 
     # helper method tests ########################################################

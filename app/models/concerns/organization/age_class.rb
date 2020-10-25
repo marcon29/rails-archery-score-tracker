@@ -24,8 +24,5 @@ module Organization
             self.min_age = 1 unless self.min_age
             self.max_age = 1000 unless self.max_age
         end
-        
-        # helpers (data)
-        
     end
 end

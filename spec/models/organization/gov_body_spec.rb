@@ -14,12 +14,6 @@ RSpec.describe Organization::GovBody, type: :model do
     }
 
     # ###################################################################
-    # define any additional objects to test for this model 
-    # ###################################################################
-    # only add multiple instantiations if need simultaneous instances for testing
-
-
-    # ###################################################################
     # define standard create/update variations
     # ###################################################################
     
@@ -50,7 +44,6 @@ RSpec.describe Organization::GovBody, type: :model do
     # ###################################################################
     let(:missing_name_message) {"You must enter a name."}
     let(:missing_org_type_message) {"You must choose an organization type."}
-    
     let(:duplicate_name_message) {"That name is already taken."}
     
     
@@ -96,8 +89,6 @@ RSpec.describe Organization::GovBody, type: :model do
                 expect(test_gov_body.name).to eq(update[:name])
                 expect(test_gov_body.org_type).to eq(update[:org_type])
                 expect(test_gov_body.geo_area).to eq(update[:geo_area])
-                
-                # not req input tests (no attrs auto-asigned from blank)
             end
         end
 
@@ -113,7 +104,6 @@ RSpec.describe Organization::GovBody, type: :model do
             end
 
             it "unique attributes are duplicated" do
-                # call initial test object to check against for duplication
                 test_gov_body
                 expect(Organization::GovBody.all.count).to eq(1)
                 gov_body = Organization::GovBody.create(duplicate)
@@ -138,120 +128,37 @@ RSpec.describe Organization::GovBody, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            # load the main test instance (for has many_many only)
             test_gov_body
+            
+            @assoc_discipline = valid_discipline
+            @assoc_division = valid_division
+            @assoc_age_class = valid_age_class
+            @assoc_gender = valid_gender
+            @valid_category = valid_category
         end
 
-        describe "has many Disciplines and can" do
+        describe "has many Disciplines" do
             it "find an associated object" do
-                assoc_discipline = valid_discipline
-                expect(test_gov_body.disciplines).to include(assoc_discipline)
-            end
-
-            it "create a new associated object via instance and get associated object attributes" do
-                check_discipline_attrs = {name: "Field"}
-                check_discipline = test_gov_body.disciplines.create(check_discipline_attrs)
-                
-                expect(test_gov_body.disciplines).to include(check_discipline)
-                expect(test_gov_body.disciplines.last.name).to eq(check_discipline.name)
-            end
-            
-            it "re-assign instance via the associated object" do
-                assoc_gov_body = valid_gov_body
-                assoc_discipline = valid_discipline
-                
-                assoc_discipline.gov_body = assoc_gov_body
-                assoc_discipline.save
-
-                expect(test_gov_body.disciplines).not_to include(assoc_discipline)
-                expect(assoc_gov_body.disciplines).to include(assoc_discipline)
+                expect(test_gov_body.disciplines).to include(@assoc_discipline)
             end
         end 
 
-        describe "has many Divisions and can" do
+        describe "has many Divisions" do
             it "find an associated object" do
-                assoc_discipline = valid_discipline
-                expect(test_gov_body.disciplines).to include(assoc_discipline)
-            end
-
-            it "create a new associated object via instance and get associated object attributes" do
-                check_discipline_attrs = {name: "Barebow"}
-                check_discipline = test_gov_body.disciplines.create(check_discipline_attrs)
-                
-                expect(test_gov_body.disciplines).to include(check_discipline)
-                expect(test_gov_body.disciplines.last.name).to eq(check_discipline.name)
-            end
-            
-            it "re-assign instance via the associated object" do
-                assoc_gov_body = valid_gov_body
-                assoc_discipline = valid_discipline
-                
-                assoc_discipline.gov_body = assoc_gov_body
-                assoc_discipline.save
-
-                expect(test_gov_body.disciplines).not_to include(assoc_discipline)
-                expect(assoc_gov_body.disciplines).to include(assoc_discipline)
+                expect(test_gov_body.divisions).to include(@assoc_division)
             end
         end
 
-        describe "has many AgeClasses and can" do
+        describe "has many AgeClasses" do
             it "find an associated object" do
-                assoc_age_class = valid_age_class
-                expect(test_gov_body.age_classes).to include(assoc_age_class)
-            end
-
-            it "create a new associated object via instance and get associated object attributes" do
-                check_age_class_attrs = {name: "Cadet", min_age: "", max_age: 17, open_to_younger: true, open_to_older: false}
-                check_age_class = test_gov_body.age_classes.create(check_age_class_attrs)
-                
-                expect(test_gov_body.age_classes).to include(check_age_class)
-                expect(test_gov_body.age_classes.last.name).to eq(check_age_class.name)
-            end
-            
-            it "re-assign instance via the associated object" do
-                assoc_gov_body = valid_gov_body
-                assoc_age_class = valid_age_class
-                
-                assoc_age_class.gov_body = assoc_gov_body
-                assoc_age_class.save
-
-                expect(test_gov_body.age_classes).not_to include(assoc_age_class)
-                expect(assoc_gov_body.age_classes).to include(assoc_age_class)
+                expect(test_gov_body.age_classes).to include(@assoc_age_class)
             end
         end
 
-        describe "has many Genders and can" do
+        describe "has many Genders" do
             it "find an associated object" do
-                assoc_gender = valid_gender
-                expect(test_gov_body.genders).to include(assoc_gender)
+                expect(test_gov_body.genders).to include(@assoc_gender)
             end
-
-            it "create a new associated object via instance and get associated object attributes" do
-                check_gender_attrs = {name: "Trans"}
-                check_gender = test_gov_body.genders.create(check_gender_attrs)
-                
-                expect(test_gov_body.genders).to include(check_gender)
-                expect(test_gov_body.genders.last.name).to eq(check_gender.name)
-            end
-            
-            it "re-assign instance via the associated object" do
-                assoc_gov_body = valid_gov_body
-                assoc_gender = valid_gender
-                
-                assoc_gender.gov_body = assoc_gov_body
-                assoc_gender.save
-
-                expect(test_gov_body.genders).not_to include(assoc_gender)
-                expect(assoc_gov_body.genders).to include(assoc_gender)
-            end
-        end
-    end
-
-    # helper method tests ########################################################
-    describe "all helper methods work correctly:" do
-        it "helpers TBD" do
-            pending "add as needed"
-            expect(test_gov_body).to be_invalid
         end
     end
 end
