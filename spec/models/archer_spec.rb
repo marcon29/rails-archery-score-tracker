@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+before_archer
+
 RSpec.describe Archer, type: :model do
     # ###################################################################
     # define main test object
@@ -30,19 +32,21 @@ RSpec.describe Archer, type: :model do
     # define any additional objects to test for this model 
     # ###################################################################
     # only add multiple instantiations if need simultaneous instances for testing
-    let(:valid_category_junior) {
-        ArcherCategory.create(
-            cat_code: "WA-RJW", 
-            gov_body: "World Archery", 
-            cat_division: "Recurve", 
-            cat_age_class: "Junior", 
-            min_age: 18, 
-            max_age: 20, 
-            open_to_younger: true, 
-            open_to_older: false, 
-            cat_gender: "Female"
-        )
-    }
+    # let(:valid_division_compound) {
+    #     Organization::Division.create(name: "Compound")
+    # }
+
+    # let(:valid_age_class_junior) {
+    #     Organization::AgeClass.create(name: "Junior", min_age: 18, max_age: 20, open_to_younger: true, open_to_older: false)
+    # }
+    
+    # let(:valid_gender_female) {
+    #     Organization::Gender.create(name: "Female")
+    # }
+
+    # let(:valid_category_jw) {
+    #     Organization::ArcherCategory.create(cat_code: "WA-RJW", gov_body_id: 1, discipline_id: 1, division_id: 1, age_class: valid_age_class_junior, gender_id: valid_gender_female)
+    # }
 
     # ###################################################################
     # define standard create/update variations
@@ -103,8 +107,7 @@ RSpec.describe Archer, type: :model do
     # object creation and validation tests #######################################
     describe "model creates and updates only valid instances - " do
         before(:each) do
-            valid_category
-            valid_category_junior
+            before_archer
         end
 
         describe "valid when " do
@@ -127,7 +130,7 @@ RSpec.describe Archer, type: :model do
                 expect(test_archer.default_age_class).to eq(test_all[:default_age_class])
                 expect(test_archer.default_division).to eq(test_all[:default_division])
             end
-            
+
             it "given only required attributes" do
                 expect(Archer.all.count).to eq(0)
                 archer = Archer.create(test_req)
@@ -290,8 +293,7 @@ RSpec.describe Archer, type: :model do
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
         before(:each) do
-            valid_category
-            valid_category_junior
+            before_archer
         end
 
         it "can return the archer's first and last names with correct capitalization" do
@@ -318,14 +320,24 @@ RSpec.describe Archer, type: :model do
             allow(Date).to receive(:today).and_return Date.new(2020,1,1)
             expect(test_archer.age).to eq(39)
         end
+
+        it "can return all the age classes the archer is elgibile for" do
+            expect(test_archer.eligible_age_classes).to include(valid_category.age_class)
+        end
+
+        it "can return all the age class names the archer is elgibile for" do
+            expect(test_archer.eligible_age_class_names).to include(valid_category.age_class.name)
+        end
         
         it "can return all the categories the archer is elgibile for" do
-            expect(test_archer.eligbile_categories).to include(valid_category.name)
+            expect(test_archer.eligible_categories).to include(valid_category)
+        end
+
+        it "can return all the category names the archer is elgibile for" do
+            expect(test_archer.eligible_category_names).to include(valid_category.name)
         end
     
-        it "can return all the age classes the archer is elgibile for" do
-            expect(test_archer.eligbile_age_classes).to include(valid_category.cat_age_class)
-        end
+        
 
         it "helpers TBD" do
             pending "add as needed"

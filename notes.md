@@ -1,4 +1,13 @@
 # Next to do
+    - finish building Shot model
+        - see notes below
+
+    - set up associations between Shot, Rset, Round, ScoreSession, Archer
+
+    - find gem and set up location information
+        - user home info
+        - score_session location info
+    
     - Architecture overhaul
         - double check Target model
             - namespace into Organization
@@ -6,15 +15,7 @@
             - namespace into Organization
         - get ArcherCategory, Target, DistTargCat completely passing        
         
-    - finish building Shot model
-        - see notes below
     
-    - set up associations between Shot, Rset, Round, ScoreSession, Archer
-
-    - find gem and set up location information
-        - user home info
-        - score_session location info
-
     - start building out controllers/views
         - build Session model
         - build user authentication

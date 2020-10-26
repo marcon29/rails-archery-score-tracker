@@ -7,6 +7,7 @@ class ScoreSession < ApplicationRecord
     
     # all attrs  -  :name :score_session_type :city :state :country :start_date :end_date :rank :active
 
+    
     validates :name, 
         presence: { message: "You must enter a name." }, 
         uniqueness: { case_sensitive: false, message: "That name is already taken." }
