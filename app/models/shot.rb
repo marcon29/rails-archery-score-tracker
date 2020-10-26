@@ -1,7 +1,9 @@
 class Shot < ApplicationRecord
-    
-    # need to add associations        
-        # belongs_to :archer, :score_session, :round, :rset, :end
+    belongs_to :archer
+    belongs_to :score_session
+    belongs_to :round
+    belongs_to :rset
+    belongs_to :end
         
 
     # old all attrs - :archer_id, :score_session_id, :round_id, :rset_id, :end_num, :number, :score, :set_score, shot_date
