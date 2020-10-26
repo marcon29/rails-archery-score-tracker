@@ -1,10 +1,11 @@
 class End < ApplicationRecord
-    # need to add associations
-        # has_many :shots
-        # has_one :archer, :score_session, :round, :rset through: :shots
+    has_many :shots
+    has_one :archer, through: :shots
+    has_one :score_session, through: :shots
+    has_one :round, through: :shots
+    has_one :rset, through: :shots
         
     # all attrs - :number, :set_score
-
 
     # need validations
         # required: :number, :set_score ( if end.round.score_method == "Set" )
@@ -54,7 +55,8 @@ class End < ApplicationRecord
         # self.rset.ends
 
         # use until assoc set
-        ["end1", "end2", "end3", "end4", "end5"]
+        # ["end1", "end2", "end3", "end4", "end5"]
+        ["end1"]
     end
 
     

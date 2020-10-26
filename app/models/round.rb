@@ -1,11 +1,12 @@
 class Round < ApplicationRecord
-
-    # need to add associations
-        # has_many :shots
-        # has_many :rsets, :ends, through: :shots
-        # has_one :archer, :score_session, through: :shots
-        # has_one :archer_category, through: :archer
-        # has_one :discipline, division, age_class, through: :archer_category
+    has_many :shots
+    has_many :rsets, through: :shots
+    has_many :ends, through: :shots
+    has_one :archer, through: :shots
+    has_one :score_session, through: :shots
+    
+    # has_one :archer_category, through: :archer
+    # has_one :discipline, division, age_class, through: :archer_category
     
     # old attrs - :name, :discipline, :round_type, :num_roundsets, :user_edit
 

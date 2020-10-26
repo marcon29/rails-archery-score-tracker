@@ -1,13 +1,14 @@
 class Archer < ApplicationRecord
+    has_many :shots
+    has_many :score_sessions, through: :shots
+    has_many :rounds, through: :shots
+    has_many :rsets, through: :shots
+    has_many :ends, through: :shots
+    has_secure_password 
 
-    # need to add associations
-        # has_many :shots
-        # has_many :score_sessions, :rounds, :rsets, :ends, through: :shots
-        has_secure_password 
-
-        # needed to use instances instead of data: age_class
-        # has_many :distance_target_categories
-        # has_many :archer_categories, through: :distance_target_categories
+    # needed to use instances instead of data: age_class
+    # has_many :distance_target_categories
+    # has_many :archer_categories, through: :distance_target_categories
         
 
     # all authentication attrs - :username :email :password 

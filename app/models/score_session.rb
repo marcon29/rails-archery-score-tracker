@@ -1,13 +1,12 @@
 class ScoreSession < ApplicationRecord
-    # need to add associations
-        # has_many :shots
-        # has_many :rounds, :rsets, :ends, through: :shots
-        # has_one archer, through: :shots
-
+    has_many :shots
+    has_many :rounds, through: :shots
+    has_many :rsets, through: :shots
+    has_many :ends, through: :shots
+    has_one :archer, through: :shots
     
     # all attrs  -  :name :score_session_type :city :state :country :start_date :end_date :rank :active
 
-    
     validates :name, 
         presence: { message: "You must enter a name." }, 
         uniqueness: { case_sensitive: false, message: "That name is already taken." }

@@ -1,10 +1,12 @@
 class Rset < ApplicationRecord
-    # need to add associations
-        # has_many :shots
-        # has_many :ends, through: :shots
-        # has_one :archer, :score_session, :round, through: :shots
-        # has_one :distance_target_category, through: :archer
-        # has_one :target, through: :distance_target_category
+    has_many :shots
+    has_many :ends, through: :shots
+    has_one :archer, through: :shots
+    has_one :score_session, through: :shots
+    has_one :round, through: :shots
+    
+    # has_one :distance_target_category, through: :archer
+    # has_one :target, through: :distance_target_category
     
     # all attrs - :name, :date, :rank
 

@@ -193,10 +193,12 @@ RSpec.describe Rset, type: :model do
         end
 
         it "has one DistanceTargetCategory" do
+            pending "need to add create associated models and add associations"
             expect(test_rset.distance_target_category).to eq(valid_category)
         end
 
         it "has one Target" do
+            pending "need to add create associated models and add associations"
             expect(test_rset.target).to eq(valid_target)
         end
     end
