@@ -81,16 +81,17 @@ RSpec.describe Shot, type: :model do
     # let(:number_attr_message) {}
     # let(:format_attr_message) {}
 
+
     # ###################################################################
     # define tests
     # ###################################################################
     
-
     # object creation and validation tests #######################################
     describe "model creates and updates only valid instances - " do
         before(:each) do
             before_shot
         end
+
         describe "valid when " do
             it "given all required and unrequired attributes" do
                 expect(Shot.all.count).to eq(0)
@@ -201,7 +202,6 @@ RSpec.describe Shot, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            # before_archer
             before_shot
         end
 
@@ -283,30 +283,6 @@ RSpec.describe Shot, type: :model do
                 expect(check_shot.end.number).to eq(@assoc_end.number)
             end
         end
-
-
-
-
-
-        # it "belongs to Archer" do
-        #     expect(test_shot.archer).to eq(valid_archer)
-        # end
-
-        # it "belongs to ScoreSession" do
-        #     expect(test_shot.score_session).to eq(valid_score_session)
-        # end
-      
-        # it "belongs to Round" do
-        #     expect(test_shot.round).to eq(valid_round)
-        # end
-    
-        # it "belongs to Rset" do
-        #     expect(test_shot.rset).to eq(valid_set)
-        # end
-
-        # it "belongs to End" do
-        #     expect(test_shot.end).to eq(valid_end)
-        # end
     end
 
     # helper method tests ########################################################
