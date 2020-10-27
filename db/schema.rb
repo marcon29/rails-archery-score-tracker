@@ -41,12 +41,12 @@ ActiveRecord::Schema.define(version: 2020_10_27_153443) do
   create_table "ends", force: :cascade do |t|
     t.integer "number"
     t.integer "set_score"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.integer "archer_id"
     t.integer "score_session_id"
     t.integer "round_id"
     t.integer "rset_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "formats_round_formats", force: :cascade do |t|
@@ -62,9 +62,9 @@ ActiveRecord::Schema.define(version: 2020_10_27_153443) do
     t.integer "num_ends"
     t.integer "shots_per_end"
     t.integer "round_format_id"
+    t.boolean "user_edit", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "user_edit", default: true
   end
 
   create_table "organization_age_classes", force: :cascade do |t|
@@ -119,21 +119,21 @@ ActiveRecord::Schema.define(version: 2020_10_27_153443) do
     t.string "round_type"
     t.string "score_method"
     t.string "rank"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.integer "archer_id"
     t.integer "score_session_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "rsets", force: :cascade do |t|
     t.string "name"
     t.date "date"
     t.string "rank"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.integer "archer_id"
     t.integer "score_session_id"
     t.integer "round_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "score_sessions", force: :cascade do |t|
@@ -145,20 +145,20 @@ ActiveRecord::Schema.define(version: 2020_10_27_153443) do
     t.date "start_date"
     t.date "end_date"
     t.string "rank"
+    t.integer "archer_id"
     t.boolean "active", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "archer_id"
   end
 
   create_table "shots", force: :cascade do |t|
+    t.string "score_entry"
     t.integer "archer_id"
     t.integer "score_session_id"
     t.integer "round_id"
     t.integer "rset_id"
     t.integer "end_id"
     t.integer "number"
-    t.string "score_entry"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

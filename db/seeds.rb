@@ -149,15 +149,15 @@ wa_cmm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CMM", gov_
 # Round Formats (pre-load)
 # ###########################################################################################
 # add only unique round formats (by governing body)
-# model = Formats::RoundFormat
+# model = Format::RoundFormat
 # all_attrs = (name: "1440 Round", num_sets: 4, user_edit: false)
     # must set user_edit to false
 
 # World & USA Outdoor Rounds
-rf_db_1440 = Formats::RoundFormat.find_or_create_by(name: "Double 1440 Round", num_sets: 8, user_edit: false)
-rf_1440 = Formats::RoundFormat.find_or_create_by(name: "1440 Round", num_sets: 4, user_edit: false)
-rf_db_720 = Formats::RoundFormat.find_or_create_by(name: "Double 720 Round", num_sets: 4, user_edit: false)
-rf_720 = Formats::RoundFormat.find_or_create_by(name: "720 Round", num_sets: 2, user_edit: false)
+rf_db_1440 = Format::RoundFormat.find_or_create_by(name: "Double 1440 Round", num_sets: 8, user_edit: false)
+rf_1440 = Format::RoundFormat.find_or_create_by(name: "1440 Round", num_sets: 4, user_edit: false)
+rf_db_720 = Format::RoundFormat.find_or_create_by(name: "Double 720 Round", num_sets: 4, user_edit: false)
+rf_720 = Format::RoundFormat.find_or_create_by(name: "720 Round", num_sets: 2, user_edit: false)
 
 # World & USA Match Rounds (works for both Outdoor and Indoor)
 # need to sort out how to deal with this - indeterminanent # of Sets - also how to name the Sets
@@ -166,15 +166,15 @@ rf_720 = Formats::RoundFormat.find_or_create_by(name: "720 Round", num_sets: 2, 
         # for naming: pre-load a match round for each bracket, i.e. "1/32 Match Round"
         # then when entering Round score of "Win", automatically creates new round at next bracket
         # would need to add "Bye" as score option (also "DNF" ???)
-# rf_match = Formats::RoundFormat.find_or_create_by(name: "Match Round", num_sets: 1, user_edit: false)
+# rf_match = Format::RoundFormat.find_or_create_by(name: "Match Round", num_sets: 1, user_edit: false)
 
 # World & USA Indoor Rounds
-# rf_18m = Formats::RoundFormat.find_or_create_by(name: "18m Round", num_sets: 2, user_edit: false)
-# rf_25m = Formats::RoundFormat.find_or_create_by(name: "25m Round", num_sets: 2, user_edit: false)
-# rf_combo = Formats::RoundFormat.find_or_create_by(name: "18m/25m Combined Round", num_sets: 2, user_edit: false)
+# rf_18m = Format::RoundFormat.find_or_create_by(name: "18m Round", num_sets: 2, user_edit: false)
+# rf_25m = Format::RoundFormat.find_or_create_by(name: "25m Round", num_sets: 2, user_edit: false)
+# rf_combo = Format::RoundFormat.find_or_create_by(name: "18m/25m Combined Round", num_sets: 2, user_edit: false)
 
 # Other Common Indoor Rounds (based on World)
-# rf_half_18m = Formats::RoundFormat.find_or_create_by(name: "18m 300 Round", num_sets: 1, user_edit: false)
+# rf_half_18m = Format::RoundFormat.find_or_create_by(name: "18m 300 Round", num_sets: 1, user_edit: false)
 
 
 
@@ -182,76 +182,76 @@ rf_720 = Formats::RoundFormat.find_or_create_by(name: "720 Round", num_sets: 2, 
 # Set/End Formats (pre-load - add only unique, but change name to match how/when used)
 # ###########################################################################################
 # add all set formats (by round format), duplicates won't be created - easier to assign to DistanceTargetCategory lookup model this way
-# model = Formats::SetEndFormat
+# model = Format::SetEndFormat
 # all_attrs = (name: "Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format_id: 1)
     # name auto-created (based on associated RoundFormat) - do not enter one when creating
     # must set user_edit to false
 
 # can't use .find_or_create_by because need duplicates, the destroy_all gets around this so you can seed DB without creating unwanted duplicates
-Formats::SetEndFormat.destroy_all
+Format::SetEndFormat.destroy_all
 
 # preliminary model done - need to adapt when getting into UX/views
 # Sets for World & USA Outdoor Rounds
-rdb1440_dist1 = Formats::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
-rdb1440_dist2 = Formats::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
-rdb1440_dist3 = Formats::SetEndFormat.create(num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
-rdb1440_dist4 = Formats::SetEndFormat.create(num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
-rdb1440_dist5 = Formats::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
-rdb1440_dist6 = Formats::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
-rdb1440_dist7 = Formats::SetEndFormat.create(num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
-rdb1440_dist8 = Formats::SetEndFormat.create(num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
+rdb1440_dist1 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
+rdb1440_dist2 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
+rdb1440_dist3 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
+rdb1440_dist4 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
+rdb1440_dist5 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
+rdb1440_dist6 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
+rdb1440_dist7 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
+rdb1440_dist8 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
 
-r1440_dist1 = Formats::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_1440)
-r1440_dist2 = Formats::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_1440)
-r1440_dist3 = Formats::SetEndFormat.create(num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_1440)
-r1440_dist4 = Formats::SetEndFormat.create(num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_1440)
+r1440_dist1 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_1440)
+r1440_dist2 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_1440)
+r1440_dist3 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_1440)
+r1440_dist4 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_1440)
 
-rdb720_dist1 = Formats::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
-rdb720_dist2 = Formats::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
-rdb720_dist3 = Formats::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
-rdb720_dist4 = Formats::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
+rdb720_dist1 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
+rdb720_dist2 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
+rdb720_dist3 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
+rdb720_dist4 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
 
-r720_dist1 = Formats::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_720)
-r720_dist2 = Formats::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_720)
+r720_dist1 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_720)
+r720_dist2 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_720)
 
             # # Sets for World & USA Outdoor Rounds
-            # rdb1440_dist1 = Formats::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
-            # rdb1440_dist2 = Formats::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
-            # rdb1440_dist3 = Formats::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance3", num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
-            # rdb1440_dist4 = Formats::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance4", num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
-            # rdb1440_dist5 = Formats::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance5", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
-            # rdb1440_dist6 = Formats::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance6", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
-            # rdb1440_dist7 = Formats::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance7", num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
-            # rdb1440_dist8 = Formats::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance8", num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
+            # rdb1440_dist1 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
+            # rdb1440_dist2 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
+            # rdb1440_dist3 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance3", num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
+            # rdb1440_dist4 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance4", num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
+            # rdb1440_dist5 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance5", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
+            # rdb1440_dist6 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance6", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_1440)
+            # rdb1440_dist7 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance7", num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
+            # rdb1440_dist8 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance8", num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_db_1440)
 
-            # r1440_dist1 = Formats::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_1440)
-            # r1440_dist2 = Formats::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_1440)
-            # r1440_dist3 = Formats::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance3", num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_1440)
-            # r1440_dist4 = Formats::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance4", num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_1440)
+            # r1440_dist1 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_1440)
+            # r1440_dist2 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_1440)
+            # r1440_dist3 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance3", num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_1440)
+            # r1440_dist4 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance4", num_ends: 12, shots_per_end: 3, user_edit: false, round_format: rf_1440)
 
-            # rdb720_dist1 = Formats::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
-            # rdb720_dist2 = Formats::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
-            # rdb720_dist3 = Formats::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance3", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
-            # rdb720_dist4 = Formats::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance4", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
+            # rdb720_dist1 = Format::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
+            # rdb720_dist2 = Format::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
+            # rdb720_dist3 = Format::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance3", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
+            # rdb720_dist4 = Format::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance4", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_db_720)
 
-            # r720_dist1 = Formats::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_720)
-            # r720_dist2 = Formats::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_720)
+            # r720_dist1 = Format::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_720)
+            # r720_dist2 = Format::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: rf_720)
 
 # Sets for World & USA Match Rounds (works for both Outdoor and Indoor)
-# r_match_dist1 = Formats::SetEndFormat.find_or_create_by(name: "Match Round- Set/Distance1", num_ends: 5, shots_per_end: 3, user_edit: false, round_format: rf_match)
+# r_match_dist1 = Format::SetEndFormat.find_or_create_by(name: "Match Round- Set/Distance1", num_ends: 5, shots_per_end: 3, user_edit: false, round_format: rf_match)
 
 # Sets for World & USA Indoor Rounds
-# r18m_dist1 = Formats::SetEndFormat.find_or_create_by(name: "18m - Set/Distance1", num_ends: 10, shots_per_end: 3, user_edit: false, round_format: rf_18m)
-# r18m_dist2 = Formats::SetEndFormat.find_or_create_by(name: "18m - Set/Distance2", num_ends: 10, shots_per_end: 3, user_edit: false, round_format: rf_18m)
+# r18m_dist1 = Format::SetEndFormat.find_or_create_by(name: "18m - Set/Distance1", num_ends: 10, shots_per_end: 3, user_edit: false, round_format: rf_18m)
+# r18m_dist2 = Format::SetEndFormat.find_or_create_by(name: "18m - Set/Distance2", num_ends: 10, shots_per_end: 3, user_edit: false, round_format: rf_18m)
 
-# r25m_dist1 = Formats::SetEndFormat.find_or_create_by(name: "25m - Set/Distance1", num_ends: 10, shots_per_end: 3, user_edit: false, round_format: rf_25m)
-# r25m_dist2 = Formats::SetEndFormat.find_or_create_by(name: "25m - Set/Distance2", num_ends: 10, shots_per_end: 3, user_edit: false, round_format: rf_25m)
+# r25m_dist1 = Format::SetEndFormat.find_or_create_by(name: "25m - Set/Distance1", num_ends: 10, shots_per_end: 3, user_edit: false, round_format: rf_25m)
+# r25m_dist2 = Format::SetEndFormat.find_or_create_by(name: "25m - Set/Distance2", num_ends: 10, shots_per_end: 3, user_edit: false, round_format: rf_25m)
 
-# r1825c_dist1 = Formats::SetEndFormat.find_or_create_by(name: "18/25 Combo - Set/Distance1", num_ends: 10, shots_per_end: 3, user_edit: false, round_format: rf_combo)
-# r1825c_dist2 = Formats::SetEndFormat.find_or_create_by(name: "18/25 Combo - Set/Distance2", num_ends: 10, shots_per_end: 3, user_edit: false, round_format: rf_combo)
+# r1825c_dist1 = Format::SetEndFormat.find_or_create_by(name: "18/25 Combo - Set/Distance1", num_ends: 10, shots_per_end: 3, user_edit: false, round_format: rf_combo)
+# r1825c_dist2 = Format::SetEndFormat.find_or_create_by(name: "18/25 Combo - Set/Distance2", num_ends: 10, shots_per_end: 3, user_edit: false, round_format: rf_combo)
 
 # Sets for Other Common Indoor Rounds (based on World)
-# r_half_18m_dist1 = Formats::SetEndFormat.find_or_create_by(name: "18m - Set/Distance1", num_ends: 10, shots_per_end: 3, user_edit: false, round_format: rf_half_18m)
+# r_half_18m_dist1 = Format::SetEndFormat.find_or_create_by(name: "18m - Set/Distance1", num_ends: 10, shots_per_end: 3, user_edit: false, round_format: rf_half_18m)
 
 
 
