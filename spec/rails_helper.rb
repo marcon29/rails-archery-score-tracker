@@ -136,7 +136,7 @@ end
 
 def valid_archer
   # same as create below, except doesn't look for password
-  check = Archer.find_by(
+  archer = Archer.find_by(
     username: "validuser", 
     email: "validuser@example.com", 
     first_name: "Valid", 
@@ -150,8 +150,8 @@ def valid_archer
     default_division: "Recurve"
   )
 
-  if !check
-    Archer.create(
+  if !archer
+    archer = Archer.create(
       username: "validuser",
       email: "validuser@example.com", 
       password: "test", 
@@ -166,6 +166,7 @@ def valid_archer
       default_division: "Recurve"
     )
   end
+  archer
 end
 
 def valid_score_session

@@ -252,50 +252,168 @@ RSpec.describe Archer, type: :model do
 
     # association tests ########################################################
     describe "instances are properly associated to other models" do
-        before(:each) do
-            @archer = Archer.create(duplicate)
+        describe "has many ScoreSessions and" do
+            it "can find an associated object" do
+                expect(valid_archer.score_sessions).to include(valid_score_session)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                archer = Archer.create(duplicate)
+
+                check_score_session_attrs = {
+                    name: "2000 World Cup", 
+                    score_session_type: "Tournament", 
+                    city: "New York", 
+                    state: "NY", 
+                    country: "USA", 
+                    start_date: "2000-09-01", 
+                    end_date: "2000-09-05", 
+                    active: true
+                }
+                check_score_session = archer.score_sessions.create(check_score_session_attrs)
+                
+                expect(archer.score_sessions).to include(check_score_session)
+                expect(archer.score_sessions.last.name).to eq(check_score_session.name)
+            end
             
-            # this is because of auto-assign feature keeps creating new objects, so now only called once
-            @end = valid_end   
-            
-            @shot = Shot.create(
-                archer: @archer, 
-                score_session: valid_score_session, 
-                round: valid_round, 
-                rset: valid_rset, 
-                end: @end, 
-                number: 5, 
-                score_entry: "1"
-            )
+            it "can re-assign instance via the associated object" do
+                archer = Archer.create(duplicate)
+                assoc_score_session = valid_score_session
+                expect(valid_archer.score_sessions).to include(assoc_score_session)
+
+                assoc_score_session.archer = archer
+                assoc_score_session.save
+
+                expect(valid_archer.score_sessions).not_to include(assoc_score_session)
+                expect(archer.score_sessions).to include(assoc_score_session)
+            end
         end
 
-        it "has many ScoreSessions" do
-            expect(@archer.score_sessions).to include(valid_score_session)
-            expect(valid_score_session.archers).to include(@archer)
-            # expect(valid_score_session.archer).to eq(@archer)
+        describe "has many Rounds and" do
+            it "can find an associated object" do
+                expect(valid_archer.rounds).to include(valid_round)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                archer = Archer.create(duplicate)
+
+                check_round_attrs = {
+                    name: "2000 World Cup - 1440 Round", 
+                    round_type: "Qualifying", 
+                    score_method: "Points", 
+                    rank: "1st"
+                }
+                check_round = archer.rounds.create(check_round_attrs)
+                
+                expect(archer.rounds).to include(check_round)
+                expect(archer.rounds.last.name).to eq(check_round.name)
+            end
+            
+            it "can re-assign instance via the associated object" do
+                archer = Archer.create(duplicate)
+                assoc_round = valid_round
+                expect(valid_archer.rounds).to include(assoc_round)
+
+                assoc_round.archer = archer
+                assoc_round.save
+
+                expect(valid_archer.rounds).not_to include(assoc_round)
+                expect(archer.rounds).to include(assoc_round)
+            end
         end
     
-        it "has many Rounds" do
-            expect(@archer.rounds).to include(valid_round)
-            expect(valid_round.archers).to include(@archer)
-            # expect(valid_round.archer).to eq(@archer)
-        end
-    
-        it "has many Rsets" do
-            expect(@archer.rsets).to include(valid_rset)
-            expect(valid_rset.archers).to include(@archer)
-            # expect(valid_rset.archer).to eq(@archer)
+        describe "has many Rsets and" do
+            it "can find an associated object" do
+                expect(valid_archer.rsets).to include(valid_rset)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                archer = Archer.create(duplicate)
+
+                check_rset_attrs = {
+                    name: "1440 Round - Set/Distance1", 
+                    date: "2020-09-01", 
+                    score_session: valid_score_session
+                }
+                check_rset = archer.rsets.create(check_rset_attrs)
+                
+                expect(archer.rsets).to include(check_rset)
+                expect(archer.rsets.last.name).to eq(check_rset.name)
+            end
+            
+            it "can re-assign instance via the associated object" do
+                archer = Archer.create(duplicate)
+                assoc_rset = valid_rset
+                expect(valid_archer.rsets).to include(assoc_rset)
+
+                assoc_rset.archer = archer
+                assoc_rset.save
+
+                expect(valid_archer.rsets).not_to include(assoc_rset)
+                expect(archer.rsets).to include(assoc_rset)
+            end
         end
 
-        it "has many Ends" do
-            expect(@archer.ends).to include(@end)
-            expect(@end.archers).to include(@archer)
-            # expect(valid_end.archer).to eq(@archer)
+        describe "has many Ends and" do
+            it "can find an associated object" do
+                expect(valid_archer.ends).to include(valid_end)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                archer = Archer.create(duplicate)
+
+                check_end_attrs = {
+                    number: 2, 
+                    set_score: ""
+                }
+                check_end = archer.ends.create(check_end_attrs)
+                
+                expect(archer.ends).to include(check_end)
+                expect(archer.ends.last.number).to eq(check_end.number)
+            end
+            
+            it "can re-assign instance via the associated object" do
+                archer = Archer.create(duplicate)
+                assoc_end = valid_end
+                expect(valid_archer.ends).to include(assoc_end)
+
+                assoc_end.archer = archer
+                assoc_end.save
+
+                expect(valid_archer.ends).not_to include(assoc_end)
+                expect(archer.ends).to include(assoc_end)
+            end
         end
-    
-        it "has many Shots" do
-            expect(@archer.shots).to include(@shot)
-            expect(@shot.archer).to eq(@archer)
+
+        describe "has many Shots and" do
+            it "can find an associated object" do
+                expect(valid_archer.shots).to include(valid_shot)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                archer = Archer.create(duplicate)
+
+                check_shot_attrs = {
+                    number: 1, 
+                    score_entry: "X"
+                }
+                check_shot = archer.shots.create(check_shot_attrs)
+                
+                expect(archer.shots).to include(check_shot)
+                expect(archer.shots.last.score_entry).to eq(check_shot.score_entry)
+            end
+            
+            it "can re-assign instance via the associated object" do
+                archer = Archer.create(duplicate)
+                assoc_shot = valid_shot
+                expect(valid_archer.shots).to include(assoc_shot)
+
+                assoc_shot.archer = archer
+                assoc_shot.save
+
+                expect(valid_archer.shots).not_to include(assoc_shot)
+                expect(archer.shots).to include(assoc_shot)
+            end
         end
     
         it "has many ArcherCategories" do
