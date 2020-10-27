@@ -4,7 +4,7 @@ class Rset < ApplicationRecord
     belongs_to :archer
     belongs_to :score_session
     belongs_to :round
-    
+
     # has_one :distance_target_category, through: :archer
     # has_one :target, through: :distance_target_category
     
@@ -38,6 +38,10 @@ class Rset < ApplicationRecord
     def assign_name
         # can't use an arg
         # self.name = create_name
+
+        # check if NOT name already been assigned
+            # if !self.name.include(score_session.name)
+        
         
         # using this until associations and controller set up
         self.name = create_name("Set/Distance2") if self.name.blank?
@@ -51,7 +55,13 @@ class Rset < ApplicationRecord
         "#{temp} - #{input}"
     end
        
-    
+    Round.find_or_create_by(
+        name: "2020 World Cup - 1440 Round", 
+        
+        round_type: "Qualifying", 
+        score_method: "Points", 
+        rank: "1st", 
+        archer: valid_archer, score_session: valid_score_session)
     
         
 

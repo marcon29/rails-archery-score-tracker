@@ -7,7 +7,7 @@ RSpec.describe Round, type: :model do
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
     let(:test_all) {
         {
-            name: "100th US Nationals - 1440 Round", 
+            name: "Double 1440 Round", 
             round_type: "Qualifying", 
             score_method: "Points", 
             rank: "1st", 
@@ -32,19 +32,20 @@ RSpec.describe Round, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:valid_req) {
-        {round_type: "Qualifying", score_method: "Points", archer_id: 1, score_session_id: 1}
+        # {round_type: "Qualifying", score_method: "Points", archer_id: 1, score_session_id: 1}
+        {name: "Double 1440 Round", round_type: "Qualifying", score_method: "Points", archer_id: 1, score_session_id: 1}
     }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "100th US Nationals - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 1, score_session_id: 1}
+        {name: "Double 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 1, score_session_id: 1}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {name: "", round_type: "Match", score_method: "Set", rank: "Win", archer_id: 1, score_session_id: 1}
+        {name: "720 Round", round_type: "Match", score_method: "Set", rank: "Win", archer_id: 1, score_session_id: 1}
     }
 
     # every attr blank
@@ -55,7 +56,10 @@ RSpec.describe Round, type: :model do
     # ###################################################################
     # define test results for auto-assign attrs
     # ###################################################################
-    let(:assigned_name) {"100th US Nationals - 1440 Round"}
+    # let(:assigned_name) {"100th US Nationals - 1440 Round"}
+    let(:assigned_name) {"#{valid_score_session.name} - #{test_all[:name]}"}
+    let(:assigned_name_update) {"#{valid_score_session.name} - #{update[:name]}"}
+            
     # let(:default_attr) {}
   
     # ###################################################################
@@ -87,7 +91,7 @@ RSpec.describe Round, type: :model do
                 expect(test_round).to be_valid
                 expect(Round.all.count).to eq(1)
 
-                expect(test_round.name).to eq(test_all[:name])
+                expect(test_round.name).to eq(assigned_name)
                 expect(test_round.round_type).to eq(test_all[:round_type])
                 expect(test_round.score_method).to eq(test_all[:score_method])
                 expect(test_round.rank).to eq(test_all[:rank])
@@ -109,6 +113,35 @@ RSpec.describe Round, type: :model do
                 expect(round.rank).to be_nil
             end
 
+            it "name is duplicated but for different ScoreSessions" do
+                # need two score_sessions
+                second_score_sesion = ScoreSession.create(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", active: true, archer_id: 1)
+                expect(ScoreSession.all.count).to eq(2)
+                expect(Round.all.count).to eq(0)
+
+                # gives me 2 rounds in valid_score_session
+                valid_round
+                test_round
+                expect(Round.all.count).to eq(2)
+                
+                # gives me 1 round in second_score_sesion
+                update[:score_session_id] = 2
+                third_round = Round.create(update)
+                expect(Round.all.count).to eq(3)
+
+                # test duped name from valid_round_format but in second_round_format
+                duplicate[:score_session_id] = 2
+                round = Round.create(duplicate)
+
+                expect(round).to be_valid
+                expect(Round.all.count).to eq(4)
+
+                expect(round.name).to eq("#{second_score_sesion.name} - #{duplicate[:name]}")
+                expect(round.round_type).to eq(duplicate[:round_type])
+                expect(round.score_method).to eq(duplicate[:score_method])
+                expect(round.rank).to eq(duplicate[:rank])
+            end
+
             it "updating all attributes" do
                 test_round.update(update)
                 
@@ -120,7 +153,7 @@ RSpec.describe Round, type: :model do
                 expect(test_round.rank).to eq(update[:rank])
 
                 # user_edit auto-asigned from blank
-                expect(test_round.name).to eq(assigned_name)
+                expect(test_round.name).to eq(assigned_name_update)
             end
         end
 
@@ -215,10 +248,6 @@ RSpec.describe Round, type: :model do
         end
 
         describe "has many Rsets and" do
-            before(:each) do
-                valid_round
-            end
-
             it "can find an associated object" do
                 expect(valid_round.rsets).to include(valid_rset)
             end

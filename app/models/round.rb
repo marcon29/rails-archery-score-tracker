@@ -10,11 +10,9 @@ class Round < ApplicationRecord
 
     # all attrs - :name, :round_type, :score_method, :rank
     
-
-    # validates :name, 
-    #     presence: { message: "You must enter a name." }, 
-    #     uniqueness: { case_sensitive: false, message: "That name is already taken." }
-    validates :name, presence: true, uniqueness: true
+    validates :name, 
+        presence: true, 
+        uniqueness: { case_sensitive: false, scope: :score_session }
     validates :round_type, 
         presence: { message: "You must choose a round type." }, 
         inclusion: { in: ROUND_TYPES }
@@ -30,25 +28,21 @@ class Round < ApplicationRecord
     #     presence: { message: "You must choose a discipline." }, 
     #     inclusion: { in: DISCIPLINES }
 
+
     # callbacks/validation helpers
     
-    # need to auto create name ( ScoreSession.name - RoundFormat.name )
-        # RoundFormat.name will be input by controller, not via assoc.
-        def assign_name
-            # can't use an arg
-            # self.name = create_name
-            
-            # using this until associations and controller set up
-            self.name = create_name("1440 Round") if self.name.blank?
+    # auto create name ( ScoreSession.name - RoundFormat.name )
+    def assign_name
+        if !self.name.blank? && self.score_session
+            if !self.name.include?(score_session.name) # || 
+                # "#{self.score_session.name} - #{round_format.name}"
+
+                # using name input until RoundFormat assoc
+                # could work like this and have controller grab the RoundFormat name instead of via assoc
+                self.name = "#{self.score_session.name} - #{self.name}"
+            end
         end
-    
-        def create_name(input)
-            # "#{self.round.name} - #{input}"
-    
-            # using this until associations and controller set up
-            temp = "100th US Nationals"
-            "#{temp} - #{input}"
-        end
+    end
 
     # need other helper methods
         # it "can calculate the total score for a round" do

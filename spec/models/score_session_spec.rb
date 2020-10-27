@@ -125,7 +125,7 @@ RSpec.describe ScoreSession, type: :model do
                 expect(score_session.active).to eq(default_active)
             end
 
-            it "when duplicated but with different Arhcers" do
+            it "when name duplicated but with different Archers" do
                 pending "need to create test for name uniquness scope - can copy SetEndFormat"
                 expect(score_session).to be_valid
             end
