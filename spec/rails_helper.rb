@@ -178,7 +178,7 @@ def valid_score_session
     start_date: "2020-09-01", 
     end_date: "2020-09-05", 
     rank: "1st", 
-    active: true
+    active: true, 
     archer: valid_archer
   )
 end
@@ -258,8 +258,6 @@ def valid_category_alt
   Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RM", gov_body: valid_gov_body_alt, discipline: valid_discipline_alt, division: valid_division_alt, age_class: valid_age_class_alt, gender: valid_gender_alt)
 end
 
-
-
 def valid_target
   Target.find_or_create_by(name: "122cm/1-spot/10-ring", size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
   # Organization::Target.create(name: "122cm/1-spot/10-ring", size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
@@ -278,10 +276,10 @@ end
 # ##########################################################
 
 def valid_round_format
-  Formats::RoundFormat.find_or_create_by(name: "1440 Round", num_sets: 4, user_edit: false)
+  Format::RoundFormat.find_or_create_by(name: "1440 Round", num_sets: 4, user_edit: false)
 end
 
 def valid_set_end_format
-  Formats::SetEndFormat.find_or_create_by(name: "Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
+  Format::SetEndFormat.find_or_create_by(name: "Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
 end
 

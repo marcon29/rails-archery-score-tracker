@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_27_143311) do
+ActiveRecord::Schema.define(version: 2020_10_27_151038) do
 
   create_table "age_classes", force: :cascade do |t|
     t.string "name"
@@ -82,6 +82,24 @@ ActiveRecord::Schema.define(version: 2020_10_27_143311) do
     t.integer "rset_id"
   end
 
+  create_table "formats_round_formats", force: :cascade do |t|
+    t.string "name"
+    t.integer "num_sets"
+    t.boolean "user_edit", default: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "formats_set_end_formats", force: :cascade do |t|
+    t.string "name"
+    t.integer "num_ends"
+    t.integer "shots_per_end"
+    t.integer "round_format_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "user_edit", default: true
+  end
+
   create_table "genders", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -92,14 +110,6 @@ ActiveRecord::Schema.define(version: 2020_10_27_143311) do
     t.string "name"
     t.string "org_type"
     t.string "geo_area"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "round_formats", force: :cascade do |t|
-    t.string "name"
-    t.integer "num_sets"
-    t.boolean "user_edit", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -139,16 +149,6 @@ ActiveRecord::Schema.define(version: 2020_10_27_143311) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "archer_id"
-  end
-
-  create_table "set_end_formats", force: :cascade do |t|
-    t.string "name"
-    t.integer "num_ends"
-    t.integer "shots_per_end"
-    t.integer "round_format_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.boolean "user_edit", default: true
   end
 
   create_table "shots", force: :cascade do |t|
