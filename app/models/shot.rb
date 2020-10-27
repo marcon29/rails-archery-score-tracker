@@ -4,15 +4,10 @@ class Shot < ApplicationRecord
     belongs_to :round
     belongs_to :rset
     belongs_to :end
-        
-
-    # old all attrs - :archer_id, :score_session_id, :round_id, :rset_id, :end_num, :number, :score, :set_score, shot_date
-    # old all data attrs  - :shot_date, :end_num, :number, :score_entry, :set_score
 
     # all assoc attrs - :archer_id, :score_session_id, :round_id, :rset_id, :end_id
     # all data attrs  - :number, :score_entry
-
-
+    
     # need validations
         # required: :number, :score_entry (update only)
             # "You must enter a score for shot #{shot.number}."

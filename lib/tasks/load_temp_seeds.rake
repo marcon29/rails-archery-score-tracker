@@ -36,9 +36,9 @@ end
 
 def get_div(code)
 	if code.first == "c"
-		"CO"
+		["CO", "Compound"]
 	else
-		"RI"
+		["RI", "Recurve"]
 	end
 end
 
@@ -70,7 +70,8 @@ def get_details(code)
 	end
 end
 
-desc "Load Archer Seeds"
+
+desc "Load Archer Seeds (World Only)"
 task load_archers: :environment do
 	codes = ["rbw", "ruw", "rcw", "rjw", "rsw", "rm50w", "rm60w", "rm70w", "rbm", "rum", "rcm", "rjm", "rsm", "rm50m", "rm60m", "rm70m", "cbw", "cuw", "ccw", "cjw", "csw", "cm50w", "cm60w", "cm70w", "cbm", "cum", "ccm", "cjm", "csm", "cm50m", "cm60m", "cm70m"]
 	count = 0
@@ -85,15 +86,25 @@ task load_archers: :environment do
       birthdate: get_details(c).first, 
       gender: get_gender(c), 
       home_city: get_details(c).last, 
-      home_state: get_div(c), 
+      home_state: get_div(c).first, 
       home_country: "USA", 
-      default_age_class: ""
+	  default_age_class: "", 
+	  default_division: get_div(c).last
     )
   end
 end
 
 desc "Load Score Session Seeds"
 task load_score_sessions: :environment do
+	ScoreSession.find_or_create_by(name: "2020 World Cup", score_session_type: "Tournament", city: "Chula Vista", state: "CA", country: "USA", start_date: "2020-09-01", end_date: "", rank: "", active: true, archer_id: 5)
+	ScoreSession.find_or_create_by(name: "2020 World Cup", score_session_type: "Tournament", city: "Chula Vista", state: "CA", country: "USA", start_date: "2020-09-01", end_date: "", rank: "", active: true, archer_id: 13)
+	ScoreSession.find_or_create_by(name: "2020 World Cup", score_session_type: "Tournament", city: "Chula Vista", state: "CA", country: "USA", start_date: "2020-09-01", end_date: "", rank: "", active: true, archer_id: 21)
+	ScoreSession.find_or_create_by(name: "2020 World Cup", score_session_type: "Tournament", city: "Chula Vista", state: "CA", country: "USA", start_date: "2020-09-01", end_date: "", rank: "", active: true, archer_id: 29)
+
+	ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", active: false, archer_id: 4)
+	ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", active: false, archer_id: 12)
+	ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", active: false, archer_id: 20)
+	ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", active: false, archer_id: 28)
 end
 
 desc "Load Round Seeds"

@@ -304,6 +304,14 @@ RSpec.describe Rset, type: :model do
 
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
+
+        it "can calculate the total score for a set" do
+            pending "need to add associations"
+            # want to be able to to call rset.score
+            # sums all end scores
+            expect(rset.score).to eq(all_ends_scores)
+        end
+
         it "helpers TBD" do
             pending "add as needed"
             expect(test_rset).to be_invalid

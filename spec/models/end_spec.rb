@@ -321,6 +321,14 @@ RSpec.describe End, type: :model do
 
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
+
+        it "can calculate the total score for an end" do
+            pending "need to add associations"
+            # want to be able to to call end.score
+            # sums all end scores
+            expect(endd.score).to eq(all_shots_scores)
+        end
+
         it "helpers TBD" do
             pending "add as needed"
             expect(test_end).to be_invalid

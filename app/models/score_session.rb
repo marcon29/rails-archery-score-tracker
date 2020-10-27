@@ -1,10 +1,4 @@
 class ScoreSession < ApplicationRecord
-    # has_many :shots
-    # has_many :rounds, through: :shots
-    # has_many :rsets, through: :shots
-    # has_many :ends, through: :shots
-    # has_many :archers, through: :shots
-    
     has_many :rounds
     has_many :rsets
     has_many :ends
@@ -15,7 +9,7 @@ class ScoreSession < ApplicationRecord
 
     validates :name, 
         presence: { message: "You must enter a name." }, 
-        uniqueness: { case_sensitive: false, message: "That name is already taken." }
+        uniqueness: { case_sensitive: false, scope: :archer, message: "That name is already taken."  }
     validates :score_session_type, 
         presence: { message: "You must choose a score session type." }, 
         inclusion: { in: SCORE_SESSION_TYPES }

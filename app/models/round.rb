@@ -1,23 +1,15 @@
 class Round < ApplicationRecord
-    # has_many :shots
-    # has_many :rsets, through: :shots
-    # has_many :ends, through: :shots
-    # has_many :archers, through: :shots
-    # has_many :score_sessions, through: :shots
-    
     has_many :rsets
     has_many :ends
     has_many :shots
     belongs_to :archer
     belongs_to :score_session
 
-
-
     # has_one :archer_category, through: :archer
     # has_one :discipline, division, age_class, through: :archer_category
 
     # all attrs - :name, :round_type, :score_method, :rank
-    # format attrs - :name, :num_sets, :user_edit
+    
 
     # validates :name, 
     #     presence: { message: "You must enter a name." }, 

@@ -125,6 +125,11 @@ RSpec.describe ScoreSession, type: :model do
                 expect(score_session.active).to eq(default_active)
             end
 
+            it "when duplicated but with different Arhcers" do
+                pending "need to create test for name uniquness scope - can copy SetEndFormat"
+                expect(score_session).to be_valid
+            end
+
             # it "instance is valid when updating all attrs, re-assigns end date if value deleted" do
             it "updating all attributes" do
                 test_score_session.update(update)
@@ -415,6 +420,13 @@ RSpec.describe ScoreSession, type: :model do
                     expect(score_session.rank).to eq("Loss")
                 end
             end
+        end
+
+        it "can calculate the total score for a score session" do
+            pending "need to add associations"
+            # want to be able to to call score_session.score
+            # sums all round scores
+            expect(score_session.score).to eq(all_rounds_scores)
         end
     
         it "helpers TBD" do

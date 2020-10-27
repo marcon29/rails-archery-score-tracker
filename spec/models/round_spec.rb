@@ -337,6 +337,14 @@ RSpec.describe Round, type: :model do
 
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
+
+        it "can calculate the total score for a round" do
+            pending "need to add associations"
+            # want to be able to to call round.score
+            # sums all rset scores
+            expect(round.score).to eq(all_rsets_scores)
+        end
+
         it "helpers TBD" do
             pending "add as needed"
             expect(test_round).to be_valid
