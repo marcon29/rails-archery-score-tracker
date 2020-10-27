@@ -72,6 +72,10 @@ RSpec.describe ScoreSession, type: :model do
     let(:inclusion_rank_message) {'Enter only a number above 0, "W" or "L".'}
     
 
+    # ###################################################################
+    # define tests
+    # ###################################################################
+
     # object creation and validation tests #######################################
     describe "model creates and updates only valid instances" do
         before(:each) do
