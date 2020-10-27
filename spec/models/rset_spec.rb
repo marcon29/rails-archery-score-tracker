@@ -6,7 +6,14 @@ RSpec.describe Rset, type: :model do
     # ###################################################################
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
     let(:test_all) {
-        {name: "1440 Round - Set/Distance2", date: "2020-09-01", rank: "1st"}
+        {
+            name: "1440 Round - Set/Distance2", 
+            date: "2020-09-01", 
+            rank: "1st", 
+            archer_id: 1, 
+            score_session_id: 1, 
+            round_id: 1
+        }
     }
 
     let(:test_rset) {
@@ -25,24 +32,24 @@ RSpec.describe Rset, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:valid_req) {
-        {date: "2020-09-01"}
+        {date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1}
     }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "1440 Round - Set/Distance2", date: "2020-09-01", rank: "1st"}
+        {name: "1440 Round - Set/Distance2", date: "2020-09-01", rank: "1st", archer_id: 1, score_session_id: 1, round_id: 1}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {name: "", date: "2020-09-05", rank: "3rd"}
+        {name: "", date: "2020-09-05", rank: "3rd", archer_id: 1, score_session_id: 1, round_id: 1}
     }
 
     # every attr blank
     let(:blank) {
-        {name: "", date: "", rank: ""}
+        {name: "", date: "", rank: "", archer_id: "", score_session_id: "", round_id: ""}
     }
     
     # ###################################################################
@@ -63,10 +70,11 @@ RSpec.describe Rset, type: :model do
     # object creation and validation tests #######################################
     describe "model creates and updates only valid instances - " do
         before(:each) do
-            # load test object
-            
-            # load all AssocModels that must be in DB for tests to work
+            # this needs to always run before creating an archer so validations work (creates inclusion lists)
+            before_archer
+            valid_archer
             valid_score_session
+            valid_round
         end
 
         describe "valid when " do
@@ -162,59 +170,131 @@ RSpec.describe Rset, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
+            valid_archer
             valid_score_session
-            @rset = Rset.create(duplicate)
+            valid_round
+        end
+
+        describe "belongs to an Archer and" do
+            it "can find an associated object" do
+                assoc_archer = valid_archer
+                expect(test_rset.archer).to eq(assoc_archer)
+            end
+
+            it "can create a new instance via the associated object and get associated object attributes" do
+                assoc_archer = valid_archer
+                update[:archer_id] = ""
+                check_rset = assoc_archer.rsets.create(update)
+                
+                expect(check_rset.archer).to eq(assoc_archer)
+                expect(check_rset.archer.username).to include(assoc_archer.username)
+            end
+        end
+
+        describe "belongs to a ScoreSession and" do
+            it "can find an associated object" do
+                assoc_score_session = valid_score_session
+                expect(test_rset.score_session).to eq(assoc_score_session)
+            end
+
+            it "can create a new instance via the associated object and get associated object attributes" do
+                assoc_score_session = valid_score_session
+                update[:score_session_id] = ""
+                check_rset = assoc_score_session.rsets.create(update)
+                
+                expect(check_rset.score_session).to eq(assoc_score_session)
+                expect(check_rset.score_session.name).to include(assoc_score_session.name)
+            end
+        end
+
+        describe "belongs to a Round and" do
+            it "can find an associated object" do
+                assoc_round = valid_round
+                expect(test_rset.round).to eq(assoc_round)
+            end
+
+            it "can create a new instance via the associated object and get associated object attributes" do
+                assoc_round = valid_round
+                update[:round_id] = ""
+                check_rset = assoc_round.rsets.create(update)
+                
+                expect(check_rset.round).to eq(assoc_round)
+                expect(check_rset.round.name).to include(assoc_round.name)
+            end
+        end
+
+        describe "has many Ends and" do
+            it "can find an associated object" do
+                expect(valid_rset.ends).to include(valid_end)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                rset = Rset.create(duplicate)
+
+                check_end_attrs = {
+                    number: 2, 
+                    set_score: ""
+                }
+                check_end = rset.ends.create(check_end_attrs)
+                
+                expect(rset.ends).to include(check_end)
+                expect(rset.ends.last.number).to eq(check_end.number)
+            end
             
-            # this is because of auto-assign feature keeps creating new objects, so now only called once
-            @end = valid_end
+            it "can re-assign instance via the associated object" do
+                rset = Rset.create(duplicate)
+                assoc_end = valid_end
+                expect(valid_rset.ends).to include(assoc_end)
+
+                assoc_end.rset = rset
+                assoc_end.save
+
+                expect(valid_rset.ends).not_to include(assoc_end)
+                expect(rset.ends).to include(assoc_end)
+            end
+        end
+
+        describe "has many Shots and" do
+            it "can find an associated object" do
+                expect(valid_rset.shots).to include(valid_shot)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                rset = Rset.create(duplicate)
+
+                check_shot_attrs = {
+                    number: 1, 
+                    score_entry: "X"
+                }
+                check_shot = rset.shots.create(check_shot_attrs)
+                
+                expect(rset.shots).to include(check_shot)
+                expect(rset.shots.last.score_entry).to eq(check_shot.score_entry)
+            end
             
-            # this needs to always run before creating an archer so validations work (creates inclusion lists)
-            before_archer
+            it "can re-assign instance via the associated object" do
+                rset = Rset.create(duplicate)
+                assoc_shot = valid_shot
+                expect(valid_rset.shots).to include(assoc_shot)
 
-            @shot = Shot.create(
-                archer: valid_archer, 
-                score_session: valid_score_session, 
-                round: valid_round, 
-                rset: @rset, 
-                end: @end, 
-                number: 5, 
-                score_entry: "1"
-            )
+                assoc_shot.rset = rset
+                assoc_shot.save
+
+                expect(valid_rset.shots).not_to include(assoc_shot)
+                expect(rset.shots).to include(assoc_shot)
+            end
         end
 
-        it "has many Archers" do
-            expect(@rset.archers).to include(valid_archer)
-            expect(valid_archer.rsets).to include(@rset)
-        end
+        describe "sectioning off for Organization concern" do
+            it "has one DistanceTargetCategory" do
+                pending "need to add create associated models and add associations"
+                expect(test_rset.distance_target_category).to eq(valid_category)
+            end
 
-        it "has many ScoreSessons" do
-            expect(@rset.score_sessions).to include(valid_score_session)
-            expect(valid_score_session.rsets).to include(@rset)
-        end
-
-        it "has many Rounds" do
-            expect(@rset.rounds).to include(valid_round)
-            expect(valid_round.rsets).to include(@rset)
-        end
-
-        it "has many Ends" do
-            expect(@rset.ends).to include(@end)
-            expect(@end.rsets).to include(@rset)
-        end
-    
-        it "has many Shots" do
-            expect(@rset.shots).to include(@shot)
-            expect(@shot.rset).to eq(@rset)
-        end
-
-        it "has one DistanceTargetCategory" do
-            pending "need to add create associated models and add associations"
-            expect(test_rset.distance_target_category).to eq(valid_category)
-        end
-
-        it "has one Target" do
-            pending "need to add create associated models and add associations"
-            expect(test_rset.target).to eq(valid_target)
+            it "has one Target" do
+                pending "need to add create associated models and add associations"
+                expect(test_rset.target).to eq(valid_target)
+            end
         end
     end
 
