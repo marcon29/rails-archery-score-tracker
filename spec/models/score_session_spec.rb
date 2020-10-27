@@ -7,31 +7,22 @@ RSpec.describe ScoreSession, type: :model do
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
     let(:test_all) {
         {
-        name: "2020 World Cup", 
+        name: "2010 World Cup", 
         score_session_type: "Tournament", 
         city: "Oxford", 
         state: "OH", 
         country: "USA", 
-        start_date: "2020-09-01", 
-        end_date: "2020-09-05", 
+        start_date: "2010-09-01", 
+        end_date: "2010-09-05", 
         rank: "1st", 
-        active: true
+        active: true, 
+        archer_id: 1
         }
     }
     
     let(:test_score_session) {
         ScoreSession.create(test_all)
     }
-    
-    # ###################################################################
-    # define any additional objects to test for this model 
-    # ###################################################################
-    # only add multiple instantiations if need simultaneous instances for testing
-    
-    # add the following attr sets if need active and inactive at same time for testing
-    # let(:valid_inactive) {
-    #     {name: "2000 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2000-09-01", end_date: "2000-09-05", rank: "1st", active: false}
-    # }
 
     # ###################################################################
     # define standard create/update variations
@@ -39,24 +30,24 @@ RSpec.describe ScoreSession, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:valid_req) {
-        {name: "2020 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2020-09-01"}
+        {name: "2010 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", archer_id: 1}
     }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "2020 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2020-09-01", end_date: "2020-09-05", rank: "1st", active: true}
+        {name: "2010 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", active: true, archer_id: 1}
     }
     
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {name: "2010 Pan Am Trials", score_session_type: "Competition", city: "Chula Vista", state: "CA", country: "CAN", start_date: "2010-09-01", end_date: "", rank: "3rd", active: false}
+        {name: "2000 Pan Am Trials", score_session_type: "Competition", city: "Chula Vista", state: "CA", country: "CAN", start_date: "2000-09-01", end_date: "", rank: "3rd", active: false, archer_id: 1}
     }
 
     # every attr blank
     let(:blank) {
-        {name: "", score_session_type: "", city: "", state: "", country: "", start_date: "", end_date: "", rank: "", active: ""}
+        {name: "", score_session_type: "", city: "", state: "", country: "", start_date: "", end_date: "", rank: "", active: "", archer_id: ""}
     }
   
     # ###################################################################
@@ -83,6 +74,12 @@ RSpec.describe ScoreSession, type: :model do
 
     # object creation and validation tests #######################################
     describe "model creates and updates only valid instances" do
+        before(:each) do
+            # this needs to always run before creating an archer so validations work (creates inclusion lists)
+            before_archer
+            valid_archer
+        end
+
         describe "valid when " do
             it "given all required and unrequired attributes" do
                 expect(ScoreSession.all.count).to eq(0)
@@ -195,48 +192,154 @@ RSpec.describe ScoreSession, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            @score_session = ScoreSession.create(duplicate)
-            
-            # this is because of auto-assign feature keeps creating new objects, so now only called once
-            @end = valid_end
-            
-            # this needs to always run before creating an archer so validations work (creates inclusion lists)
-            before_archer
-
-            @shot = Shot.create(
-                archer: valid_archer, 
-                score_session: @score_session, 
-                round: valid_round, 
-                rset: valid_rset, 
-                end: @end, 
-                number: 5, 
-                score_entry: "1"
-            )
+            valid_archer
         end
 
-        it "has many Archers" do
-            expect(@score_session.archers).to include(valid_archer)
-            expect(valid_archer.score_sessions).to include(@score_session)
+        describe "belongs to an Archer and" do
+            it "can find an associated object" do
+                assoc_archer = valid_archer
+                expect(test_score_session.archer).to eq(assoc_archer)
+            end
+
+            it "can create a new instance via the associated object and get associated object attributes" do
+                assoc_archer = valid_archer
+                update[:archer_id] = ""
+                check_score_session = assoc_archer.score_sessions.create(update)
+                
+                expect(check_score_session.archer).to eq(assoc_archer)
+                expect(check_score_session.archer.username).to include(assoc_archer.username)
+            end
         end
-      
-        it "has many Rounds" do
-            expect(@score_session.rounds).to include(valid_round)
-            expect(valid_round.score_sessions).to include(@score_session)
+
+        describe "has many Rounds and" do
+            it "can find an associated object" do
+                expect(valid_score_session.rounds).to include(valid_round)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                score_session = ScoreSession.create(duplicate)
+
+                check_round_attrs = {
+                    name: "2000 World Cup - 1440 Round", 
+                    round_type: "Qualifying", 
+                    score_method: "Points", 
+                    rank: "1st"
+                }
+                check_round = score_session.rounds.create(check_round_attrs)
+                
+                expect(score_session.rounds).to include(check_round)
+                expect(score_session.rounds.last.name).to eq(check_round.name)
+            end
+            
+            it "can re-assign instance via the associated object" do
+                score_session = ScoreSession.create(duplicate)
+                assoc_round = valid_round
+                expect(valid_score_session.rounds).to include(assoc_round)
+
+                assoc_round.score_session = score_session
+                assoc_round.save
+                
+                expect(valid_score_session.rounds).not_to include(assoc_round)
+                expect(score_session.rounds).to include(assoc_round)
+            end
         end
     
-        it "has many Rsets" do
-            expect(@score_session.rsets).to include(valid_rset)
-            expect(valid_rset.score_sessions).to include(@score_session)
+        describe "has many Rsets and" do
+            before(:each) do
+                valid_round
+            end
+
+            it "can find an associated object" do
+                expect(valid_score_session.rsets).to include(valid_rset)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                score_session = ScoreSession.create(duplicate)
+
+                check_rset_attrs = {
+                    name: "1440 Round - Set/Distance1", 
+                    date: "2020-09-01", 
+                    score_session: valid_score_session
+                }
+                check_rset = score_session.rsets.create(check_rset_attrs)
+                
+                expect(score_session.rsets).to include(check_rset)
+                expect(score_session.rsets.last.name).to eq(check_rset.name)
+            end
+            
+            it "can re-assign instance via the associated object" do
+                score_session = ScoreSession.create(duplicate)
+                assoc_rset = valid_rset
+                expect(valid_score_session.rsets).to include(assoc_rset)
+
+                assoc_rset.score_session = score_session
+                assoc_rset.save
+
+                expect(valid_score_session.rsets).not_to include(assoc_rset)
+                expect(score_session.rsets).to include(assoc_rset)
+            end
         end
 
-        it "has many Ends" do
-            expect(@score_session.ends).to include(@end)
-            expect(@end.score_sessions).to include(@score_session)
+        describe "has many Ends and" do
+            it "can find an associated object" do
+                expect(valid_score_session.ends).to include(valid_end)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                score_session = ScoreSession.create(duplicate)
+
+                check_end_attrs = {
+                    number: 2, 
+                    set_score: ""
+                }
+                check_end = score_session.ends.create(check_end_attrs)
+                
+                expect(score_session.ends).to include(check_end)
+                expect(score_session.ends.last.number).to eq(check_end.number)
+            end
+            
+            it "can re-assign instance via the associated object" do
+                score_session = ScoreSession.create(duplicate)
+                assoc_end = valid_end
+                expect(valid_score_session.ends).to include(assoc_end)
+
+                assoc_end.score_session = score_session
+                assoc_end.save
+
+                expect(valid_score_session.ends).not_to include(assoc_end)
+                expect(score_session.ends).to include(assoc_end)
+            end
         end
-    
-        it "has many Shots" do
-            expect(@score_session.shots).to include(@shot)
-            expect(@shot.score_session).to eq(@score_session)
+
+        describe "has many Shots and" do
+            it "can find an associated object" do
+                expect(valid_score_session.shots).to include(valid_shot)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                score_session = ScoreSession.create(duplicate)
+
+                check_shot_attrs = {
+                    number: 1, 
+                    score_entry: "X"
+                }
+                check_shot = score_session.shots.create(check_shot_attrs)
+                
+                expect(score_session.shots).to include(check_shot)
+                expect(score_session.shots.last.score_entry).to eq(check_shot.score_entry)
+            end
+            
+            it "can re-assign instance via the associated object" do
+                score_session = ScoreSession.create(duplicate)
+                assoc_shot = valid_shot
+                expect(valid_score_session.shots).to include(assoc_shot)
+
+                assoc_shot.score_session = score_session
+                assoc_shot.save
+
+                expect(valid_score_session.shots).not_to include(assoc_shot)
+                expect(score_session.shots).to include(assoc_shot)
+            end
         end
     end
 
@@ -312,7 +415,7 @@ RSpec.describe ScoreSession, type: :model do
     
         it "helpers TBD" do
             pending "add as needed"
-            expect(test_score_session).to be_invalid
+            expect(test_score_session).to be_valid
         end
     end
 end
