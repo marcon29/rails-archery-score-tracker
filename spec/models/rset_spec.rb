@@ -162,34 +162,49 @@ RSpec.describe Rset, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            # load test object
+            valid_score_session
+            @rset = Rset.create(duplicate)
             
-            # load all AssocModels that must be in DB for tests to work
+            # this is because of auto-assign feature keeps creating new objects, so now only called once
+            @end = valid_end
+            
+            # this needs to always run before creating an archer so validations work (creates inclusion lists)
+            before_archer
+
+            @shot = Shot.create(
+                archer: valid_archer, 
+                score_session: valid_score_session, 
+                round: valid_round, 
+                rset: @rset, 
+                end: @end, 
+                number: 5, 
+                score_entry: "1"
+            )
         end
 
-        it "has one Archer" do
-            pending "need to add create associated models and add associations"
-            expect(test_rset.archer).to eq(valid_archer)
+        it "has many Archers" do
+            expect(@rset.archers).to include(valid_archer)
+            expect(valid_archer.rsets).to include(@rset)
         end
 
-        it "has one ScoreSesson" do
-            pending "need to add create associated models and add associations"
-            expect(test_rset.score_session).to eq(valid_score_session)
+        it "has many ScoreSessons" do
+            expect(@rset.score_sessions).to include(valid_score_session)
+            expect(valid_score_session.rsets).to include(@rset)
         end
 
-        it "has one Round" do
-            pending "need to add create associated models and add associations"
-            expect(test_rset.round).to eq(valid_round)
+        it "has many Rounds" do
+            expect(@rset.rounds).to include(valid_round)
+            expect(valid_round.rsets).to include(@rset)
         end
 
         it "has many Ends" do
-            pending "need to add create associated models and add associations"
-            expect(test_rset.ends).to include(valid_end)
+            expect(@rset.ends).to include(@end)
+            expect(@end.rsets).to include(@rset)
         end
     
         it "has many Shots" do
-            pending "need to add create associated models and add associations"
-            expect(test_rset.shots).to include(valid_shot)
+            expect(@rset.shots).to include(@shot)
+            expect(@shot.rset).to eq(@rset)
         end
 
         it "has one DistanceTargetCategory" do

@@ -198,35 +198,113 @@ RSpec.describe Shot, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            # load test object
-            
-            # load all AssocModels that must be in DB for tests to work
+            # before_archer
+            before_shot
         end
 
-        it "belongs to Archer" do
-            pending "need to add associations"
-            expect(test_shot.archer).to eq(valid_archer)
+        describe "belongs to Archer and" do
+            it "can find an associated object" do
+                assoc_archer = valid_archer
+                expect(test_test_shot.archer).to eq(assoc_archer)
+            end
+
+            it "can create a new instance via the associated object and get associated object attributes" do
+                assoc_archer = valid_archer
+                update[:archer_id] = ""
+                check_test_shot = assoc_archer.test_shots.create(update)
+                
+                expect(check_test_shot.archer).to eq(assoc_archer)
+                expect(check_test_shot.archer.name).to include(assoc_archer.name)
+            end
         end
 
-        it "belongs to ScoreSession" do
-            pending "need to add associations"
-            expect(test_shot.score_session).to eq(valid_score_session)
+        describe "belongs to ScoreSession and" do
+            it "can find an associated object" do
+                assoc_score_session = valid_score_session
+                expect(test_test_shot.score_session).to eq(assoc_score_session)
+            end
+
+            it "can create a new instance via the associated object and get associated object attributes" do
+                assoc_score_session = valid_score_session
+                update[:score_session_id] = ""
+                check_test_shot = assoc_score_session.test_shots.create(update)
+                
+                expect(check_test_shot.score_session).to eq(assoc_score_session)
+                expect(check_test_shot.score_session.name).to include(assoc_score_session.name)
+            end
         end
+
+        describe "belongs to Round and" do
+            it "can find an associated object" do
+                assoc_round = valid_round
+                expect(test_test_shot.round).to eq(assoc_round)
+            end
+
+            it "can create a new instance via the associated object and get associated object attributes" do
+                assoc_round = valid_round
+                update[:round_id] = ""
+                check_test_shot = assoc_round.test_shots.create(update)
+                
+                expect(check_test_shot.round).to eq(assoc_round)
+                expect(check_test_shot.round.name).to include(assoc_round.name)
+            end
+        end
+
+        describe "belongs to Rset and" do
+            it "can find an associated object" do
+                assoc_rset = valid_rset
+                expect(test_test_shot.rset).to eq(assoc_rset)
+            end
+
+            it "can create a new instance via the associated object and get associated object attributes" do
+                assoc_rset = valid_rset
+                update[:rset_id] = ""
+                check_test_shot = assoc_rset.test_shots.create(update)
+                
+                expect(check_test_shot.rset).to eq(assoc_rset)
+                expect(check_test_shot.rset.name).to include(assoc_rset.name)
+            end
+        end
+
+        describe "belongs to End and" do
+            it "can find an associated object" do
+                assoc_end = valid_end
+                expect(test_test_shot.end).to eq(assoc_end)
+            end
+
+            it "can create a new instance via the associated object and get associated object attributes" do
+                assoc_end = valid_end
+                update[:end_id] = ""
+                check_test_shot = assoc_end.test_shots.create(update)
+                
+                expect(check_test_shot.end).to eq(assoc_end)
+                expect(check_test_shot.end.name).to include(assoc_end.name)
+            end
+        end
+
+
+
+
+
+        # it "belongs to Archer" do
+        #     expect(test_shot.archer).to eq(valid_archer)
+        # end
+
+        # it "belongs to ScoreSession" do
+        #     expect(test_shot.score_session).to eq(valid_score_session)
+        # end
       
-        it "belongs to Round" do
-            pending "need to add associations"
-            expect(test_shot.round).to eq(valid_round)
-        end
+        # it "belongs to Round" do
+        #     expect(test_shot.round).to eq(valid_round)
+        # end
     
-        it "belongs to Rset" do
-            pending "need to add associations"
-            expect(test_shot.rset).to eq(valid_set)
-        end
+        # it "belongs to Rset" do
+        #     expect(test_shot.rset).to eq(valid_set)
+        # end
 
-        it "belongs to End" do
-            pending "need to add associations"
-            expect(test_shot.end).to eq(valid_end)
-        end
+        # it "belongs to End" do
+        #     expect(test_shot.end).to eq(valid_end)
+        # end
     end
 
     # helper method tests ########################################################

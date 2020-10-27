@@ -191,34 +191,45 @@ RSpec.describe End, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            # load test object
+            @end = End.create(duplicate)
             
-            # load all AssocModels that must be in DB for tests to work
+            # this needs to always run before creating an archer so validations work (creates inclusion lists)
+            before_archer
+
+            @shot = Shot.create(
+                archer: valid_archer, 
+                score_session: valid_score_session, 
+                round: valid_round, 
+                rset: valid_rset, 
+                end: @end, 
+                number: 5, 
+                score_entry: "1"
+            )
         end
 
         it "has one Archer" do
-            pending "need to add create associated models and add associations"
-            expect(test_end.archer).to eq(valid_archer)
+            expect(@end.archers).to include(valid_archer)
+            expect(valid_archer.ends).to include(@end)
         end
 
         it "has one ScoreSesson" do
-            pending "need to add create associated models and add associations"
-            expect(test_end.score_session).to eq(valid_score_session)
+            expect(@end.score_sessions).to include(valid_score_session)
+            expect(valid_score_session.ends).to include(@end)
         end
 
         it "has one Round" do
-            pending "need to add create associated models and add associations"
-            expect(test_end.round).to eq(valid_round)
+            expect(@end.rounds).to include(valid_round)
+            expect(valid_round.ends).to include(@end)
         end
 
         it "has on Rset" do
-            pending "need to add create associated models and add associations"
-            expect(test_end.rset).to eq(valid_rset)
+            expect(@end.rsets).to include(valid_rset)
+            expect(valid_rset.ends).to include(@end)
         end
     
         it "has many Shots" do
-            pending "need to add create associated models and add associations"
-            expect(test_end.shots).to include(valid_shot)
+            expect(@end.shots).to include(@shot)
+            expect(@shot.end).to eq(@end)
         end
     end
 

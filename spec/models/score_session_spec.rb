@@ -205,7 +205,6 @@ RSpec.describe ScoreSession, type: :model do
 
             @shot = Shot.create(
                 archer: valid_archer, 
-                # score_session: valid_score_session, 
                 score_session: @score_session, 
                 round: valid_round, 
                 rset: valid_rset, 
