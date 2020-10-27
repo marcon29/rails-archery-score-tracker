@@ -10,28 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_27_151038) do
-
-  create_table "age_classes", force: :cascade do |t|
-    t.string "name"
-    t.integer "min_age"
-    t.integer "max_age"
-    t.boolean "open_to_younger"
-    t.boolean "open_to_older"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "archer_categories", force: :cascade do |t|
-    t.string "cat_code"
-    t.integer "gov_body_id"
-    t.integer "discipline_id"
-    t.integer "division_id"
-    t.integer "age_class_id"
-    t.integer "gender_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
+ActiveRecord::Schema.define(version: 2020_10_27_153443) do
 
   create_table "archers", force: :cascade do |t|
     t.string "username"
@@ -50,23 +29,11 @@ ActiveRecord::Schema.define(version: 2020_10_27_151038) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "disciplines", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "distance_target_categories", force: :cascade do |t|
     t.string "distance"
     t.integer "target_id"
     t.integer "archer_category_id"
     t.integer "archer_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "divisions", force: :cascade do |t|
-    t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -100,13 +67,46 @@ ActiveRecord::Schema.define(version: 2020_10_27_151038) do
     t.boolean "user_edit", default: true
   end
 
-  create_table "genders", force: :cascade do |t|
+  create_table "organization_age_classes", force: :cascade do |t|
+    t.string "name"
+    t.integer "min_age"
+    t.integer "max_age"
+    t.boolean "open_to_younger"
+    t.boolean "open_to_older"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "organization_archer_categories", force: :cascade do |t|
+    t.string "cat_code"
+    t.integer "gov_body_id"
+    t.integer "discipline_id"
+    t.integer "division_id"
+    t.integer "age_class_id"
+    t.integer "gender_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "organization_disciplines", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "gov_bodies", force: :cascade do |t|
+  create_table "organization_divisions", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "organization_genders", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "organization_gov_bodies", force: :cascade do |t|
     t.string "name"
     t.string "org_type"
     t.string "geo_area"
