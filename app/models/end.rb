@@ -1,9 +1,19 @@
 class End < ApplicationRecord
     has_many :shots
-    has_one :archer, through: :shots
-    has_one :score_session, through: :shots
-    has_one :round, through: :shots
-    has_one :rset, through: :shots
+
+    has_many :archers, through: :shots
+    has_many :score_sessions, through: :shots
+    has_many :rounds, through: :shots
+    has_many :rsets, through: :shots
+    # has_one :archer, through: :shots
+    # has_one :score_session, through: :shots
+    # has_one :round, through: :shots
+    # has_one :rset, through: :shots
+
+
+
+
+
         
     # all attrs - :number, :set_score
 
@@ -46,7 +56,7 @@ class End < ApplicationRecord
 
     # need helpers (callbacks & validations)
     def assign_number
-        self.number = ends_in_set.count + 1
+        self.number = ends_in_set.count + 1 if self.number.blank?
     end
 
 

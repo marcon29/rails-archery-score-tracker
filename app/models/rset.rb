@@ -1,10 +1,19 @@
 class Rset < ApplicationRecord
     has_many :shots
     has_many :ends, through: :shots
-    has_one :archer, through: :shots
-    has_one :score_session, through: :shots
-    has_one :round, through: :shots
-    
+
+    has_many :archers, through: :shots
+    has_many :score_sessions, through: :shots
+    has_many :rounds, through: :shots
+    # has_one :archer, through: :shots
+    # has_one :score_session, through: :shots
+    # has_one :round, through: :shots
+
+
+
+
+
+
     # has_one :distance_target_category, through: :archer
     # has_one :target, through: :distance_target_category
     
@@ -39,7 +48,7 @@ class Rset < ApplicationRecord
         # self.name = create_name
         
         # using this until associations and controller set up
-        self.name = create_name("Set/Distance2")
+        self.name = create_name("Set/Distance2") if self.name.blank?
     end
 
     def create_name(input)

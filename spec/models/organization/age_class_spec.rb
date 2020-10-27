@@ -158,18 +158,21 @@ RSpec.describe Organization::AgeClass, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            test_age_class
-
-            @assoc_discipline = valid_discipline
-            @assoc_gov_body = valid_gov_body
-            @assoc_division = valid_division
-            @assoc_gender = valid_gender
-            @valid_category = valid_category
+            @age_class = Organization::AgeClass.create(duplicate)
+            archer_category = Organization::ArcherCategory.create(
+                cat_code: "check", 
+                gov_body: valid_gov_body_alt, 
+                discipline: valid_discipline_alt, 
+                division: valid_division_alt, 
+                age_class: @age_class, 
+                gender: valid_gender_alt
+            )
         end 
 
         describe "has many GovBodies and can" do
             it "find an associated object" do
-                expect(test_age_class.gov_bodies).to include(@assoc_gov_body)
+                expect(@age_class.gov_bodies).to include(valid_gov_body_alt)
+                expect(valid_gov_body_alt.age_classes).to include(@age_class)
             end
         end
     end

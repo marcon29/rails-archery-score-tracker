@@ -2,13 +2,17 @@ class Round < ApplicationRecord
     has_many :shots
     has_many :rsets, through: :shots
     has_many :ends, through: :shots
-    has_one :archer, through: :shots
-    has_one :score_session, through: :shots
     
+    has_many :archers, through: :shots
+    has_many :score_sessions, through: :shots
+    # has_one :archer, through: :shots
+    # has_one :score_session, through: :shots
+
+
+
+
     # has_one :archer_category, through: :archer
     # has_one :discipline, division, age_class, through: :archer_category
-    
-    # old attrs - :name, :discipline, :round_type, :num_roundsets, :user_edit
 
     # all attrs - :name, :round_type, :score_method, :rank
     # format attrs - :name, :num_sets, :user_edit
@@ -41,7 +45,7 @@ class Round < ApplicationRecord
             # self.name = create_name
             
             # using this until associations and controller set up
-            self.name = create_name("1440 Round")
+            self.name = create_name("1440 Round") if self.name.blank?
         end
     
         def create_name(input)

@@ -128,36 +128,42 @@ RSpec.describe Organization::GovBody, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            test_gov_body
-            
-            @assoc_discipline = valid_discipline
-            @assoc_division = valid_division
-            @assoc_age_class = valid_age_class
-            @assoc_gender = valid_gender
-            @valid_category = valid_category
+            @gov_body = Organization::GovBody.create(duplicate)
+            archer_category = Organization::ArcherCategory.create(
+                cat_code: "check", 
+                gov_body: @gov_body, 
+                discipline: valid_discipline_alt, 
+                division: valid_division_alt, 
+                age_class: valid_age_class_alt, 
+                gender: valid_gender_alt
+            )
         end
 
         describe "has many Disciplines" do
             it "find an associated object" do
-                expect(test_gov_body.disciplines).to include(@assoc_discipline)
+                expect(@gov_body.disciplines).to include(valid_discipline_alt)
+                expect(valid_discipline_alt.gov_bodies).to include(@gov_body)
             end
         end 
 
         describe "has many Divisions" do
             it "find an associated object" do
-                expect(test_gov_body.divisions).to include(@assoc_division)
+                expect(@gov_body.divisions).to include(valid_division_alt)
+                expect(valid_division_alt.gov_bodies).to include(@gov_body)
             end
         end
 
         describe "has many AgeClasses" do
             it "find an associated object" do
-                expect(test_gov_body.age_classes).to include(@assoc_age_class)
+                expect(@gov_body.age_classes).to include(valid_age_class_alt)
+                expect(valid_age_class_alt.gov_bodies).to include(@gov_body)
             end
         end
 
         describe "has many Genders" do
             it "find an associated object" do
-                expect(test_gov_body.genders).to include(@assoc_gender)
+                expect(@gov_body.genders).to include(valid_gender_alt)
+                expect(valid_gender_alt.gov_bodies).to include(@gov_body)
             end
         end
     end

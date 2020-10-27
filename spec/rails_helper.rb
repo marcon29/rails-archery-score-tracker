@@ -122,10 +122,10 @@ end
 # ##########################################################
 
 def valid_archer
-  Archer.find_or_create_by(
+  # same as create below, except doesn't look for password
+  check = Archer.find_by(
     username: "validuser", 
     email: "validuser@example.com", 
-    password: "test", 
     first_name: "Valid", 
     last_name: "Vuser", 
     birthdate: "1980-07-01", 
@@ -136,6 +136,23 @@ def valid_archer
     default_age_class: "Senior", 
     default_division: "Recurve"
   )
+
+  if !check
+    Archer.create(
+      username: "validuser",
+      email: "validuser@example.com", 
+      password: "test", 
+      first_name: "Valid", 
+      last_name: "Vuser", 
+      birthdate: "1980-07-01", 
+      gender: "Male", 
+      home_city: "Denver", 
+      home_state: "CO", 
+      home_country: "USA", 
+      default_age_class: "Senior", 
+      default_division: "Recurve"
+    )
+  end
 end
 
 def valid_score_session
@@ -153,7 +170,7 @@ def valid_score_session
 end
 
 def valid_round
-  Round.find_or_create_by(name: "135th US Nationals - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st")
+  Round.find_or_create_by(name: "2020 World Cup - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st")
 end
 
 
@@ -170,7 +187,7 @@ end
 # end
 
 def valid_shot
-  Shot.find_or_create_by(number: 1, score_entry: "5")
+  Shot.find_or_create_by(archer_id: valid_archer, score_session_id: valid_score_session, round_id: valid_round, rset_id: valid_rset, end_id: valid_end, number: 1, score_entry: "10")
 end
 
 # ##########################################################

@@ -3,7 +3,9 @@ class ScoreSession < ApplicationRecord
     has_many :rounds, through: :shots
     has_many :rsets, through: :shots
     has_many :ends, through: :shots
-    has_one :archer, through: :shots
+
+    has_many :archers, through: :shots
+    # has_one :archer, through: :shot
     
     # all attrs  -  :name :score_session_type :city :state :country :start_date :end_date :rank :active
 

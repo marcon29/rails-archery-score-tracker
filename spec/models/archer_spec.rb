@@ -253,35 +253,52 @@ RSpec.describe Archer, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            # load test object
+            @archer = Archer.create(duplicate)
             
-            # load all AssocModels that must be in DB for tests to work
-
+            # this is because of auto-assign feature keeps creating new objects, so now only called once
+            @end = valid_end   
+            
+            @shot = Shot.create(
+                # archer: valid_archer_alt, 
+                archer: @archer, 
+                score_session: valid_score_session, 
+                round: valid_round, 
+                rset: valid_rset, 
+                end: @end, 
+                number: 5, 
+                score_entry: "1"
+            )
         end
 
         it "has many ScoreSessions" do
-            pending "need to add create associated models and add associations"
-            expect(test_archer.score_sessions).to include(valid_score_session)
+            expect(@archer.score_sessions).to include(valid_score_session)
+            expect(valid_score_session.archers).to include(@archer)
+            # expect(valid_score_session.archer).to eq(@archer)
         end
     
         it "has many Rounds" do
-            pending "need to add create associated models and add associations"
-            expect(test_archer.rounds).to include(valid_round)
+            
+            expect(@archer.rounds).to include(valid_round)
+            expect(valid_round.archers).to include(@archer)
+            # expect(valid_round.archer).to eq(@archer)
         end
     
         it "has many Rsets" do
-            pending "need to add create associated models and add associations"
-            expect(test_archer.rsets).to include(valid_rset)
+            expect(@archer.rsets).to include(valid_rset)
+            expect(valid_rset.archers).to include(@archer)
+            # expect(valid_rset.archer).to eq(@archer)
         end
 
         it "has many Ends" do
-            pending "need to add create associated models and add associations"
-            expect(test_archer.ends).to include(valid_end)
+            # binding.pry
+            expect(@archer.ends).to include(@end)
+            expect(@end.archers).to include(@archer)
+            # expect(valid_end.archer).to eq(@archer)
         end
     
         it "has many Shots" do
-            pending "need to add create associated models and add associations"
-            expect(test_archer.shots).to include(valid_shot)
+            expect(@archer.shots).to include(@shot)
+            expect(@shot.archer).to eq(@archer)
         end
     
         it "has many ArcherCategories" do
