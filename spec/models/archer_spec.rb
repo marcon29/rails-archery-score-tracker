@@ -259,7 +259,6 @@ RSpec.describe Archer, type: :model do
             @end = valid_end   
             
             @shot = Shot.create(
-                # archer: valid_archer_alt, 
                 archer: @archer, 
                 score_session: valid_score_session, 
                 round: valid_round, 
@@ -277,7 +276,6 @@ RSpec.describe Archer, type: :model do
         end
     
         it "has many Rounds" do
-            
             expect(@archer.rounds).to include(valid_round)
             expect(valid_round.archers).to include(@archer)
             # expect(valid_round.archer).to eq(@archer)
@@ -290,7 +288,6 @@ RSpec.describe Archer, type: :model do
         end
 
         it "has many Ends" do
-            # binding.pry
             expect(@archer.ends).to include(@end)
             expect(@end.archers).to include(@archer)
             # expect(valid_end.archer).to eq(@archer)

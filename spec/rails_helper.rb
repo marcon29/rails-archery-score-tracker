@@ -92,6 +92,8 @@ end
 def before_archer
   valid_category
   valid_category_alt
+  # puts "ran valid_category, which also ran: valid_gov_body, valid_discipline, valid_division, valid_age_class, valid_gender"
+  # puts "ran valid_category_alt, which also ran: valid_gov_body_alt, valid_discipline_alt, valid_division_alt, valid_age_class_alt, valid_gender_alt"
 end
 
 # ##########################################################
@@ -138,7 +140,7 @@ def valid_archer
   )
 
   if !check
-    Archer.create(
+    check = Archer.create(
       username: "validuser",
       email: "validuser@example.com", 
       password: "test", 
@@ -153,6 +155,7 @@ def valid_archer
       default_division: "Recurve"
     )
   end
+  check
 end
 
 def valid_score_session

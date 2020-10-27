@@ -195,32 +195,49 @@ RSpec.describe ScoreSession, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            # load all AssocModels that must be in DB for tests to work
+            @score_session = ScoreSession.create(duplicate)
+            
+            # this is because of auto-assign feature keeps creating new objects, so now only called once
+            @end = valid_end
+            
+            # this needs to always run before creating an archer so validations work (creates inclusion lists)
+            before_archer
+
+            @shot = Shot.create(
+                archer: valid_archer, 
+                # score_session: valid_score_session, 
+                score_session: @score_session, 
+                round: valid_round, 
+                rset: valid_rset, 
+                end: @end, 
+                number: 5, 
+                score_entry: "1"
+            )
         end
 
-        it "has one Archer" do
-            pending "need to add create associated models and add associations"
-            expect(test_score_session.archer).to eq(valid_archer)
+        it "has many Archers" do
+            expect(@score_session.archers).to include(valid_archer)
+            expect(valid_archer.score_sessions).to include(@score_session)
         end
       
         it "has many Rounds" do
-            pending "need to add create associated models and add associations"
-            expect(test_score_session.rounds).to include(valid_round)
+            expect(@score_session.rounds).to include(valid_round)
+            expect(valid_round.score_sessions).to include(@score_session)
         end
     
         it "has many Rsets" do
-            pending "need to add create associated models and add associations"
-            expect(test_score_session.rsets).to include(valid_rset)
+            expect(@score_session.rsets).to include(valid_rset)
+            expect(valid_rset.score_sessions).to include(@score_session)
         end
 
         it "has many Ends" do
-            pending "need to add create associated models and add associations"
-            expect(test_score_session.ends).to include(valid_end)
+            expect(@score_session.ends).to include(@end)
+            expect(@end.score_sessions).to include(@score_session)
         end
     
         it "has many Shots" do
-            pending "need to add create associated models and add associations"
-            expect(test_score_session.shots).to include(valid_shot)
+            expect(@score_session.shots).to include(@shot)
+            expect(@shot.score_session).to eq(@score_session)
         end
     end
 
