@@ -6,7 +6,7 @@ RSpec.describe Shot, type: :model do
     # ###################################################################
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
     let(:test_all) {
-        {number: 2, score_entry: "5"}
+        {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1, number: 2, score_entry: "5"}
     }
 
     let(:test_shot) {
@@ -20,12 +20,12 @@ RSpec.describe Shot, type: :model do
     # this is how 2 ends of three would look, covers all score_entry options
     let(:multi_test_all) {
         {
-            multi_shot_11: {number: 1, score_entry: "X"}, 
-            multi_shot_12: {number: 2, score_entry: "10"}, 
-            multi_shot_13: {number: 3, score_entry: "M"}, 
-            multi_shot_21: {number: 1, score_entry: "9"}, 
-            multi_shot_22: {number: 2, score_entry: "8"}, 
-            multi_shot_23: {number: 3, score_entry: "7"}
+            multi_shot_11: {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1, number: 1, score_entry: "X"}, 
+            multi_shot_12: {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1, number: 2, score_entry: "10"}, 
+            multi_shot_13: {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1, number: 3, score_entry: "M"}, 
+            multi_shot_21: {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2, number: 1, score_entry: "9"}, 
+            multi_shot_22: {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2, number: 2, score_entry: "8"}, 
+            multi_shot_23: {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2, number: 3, score_entry: "7"}
         }
     }
 
@@ -41,24 +41,24 @@ RSpec.describe Shot, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:test_req) {
-        {score_entry: "5"}
+        {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1, score_entry: "5"}
     }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {number: 2, score_entry: "5"}
+        {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1, number: 2, score_entry: "5"}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {number: "", score_entry: "4"}
+        {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1, number: "", score_entry: "4"}
     }
 
     # every attr blank
     let(:blank) {
-        {number: "", score_entry: ""}
+        {archer_id: "", score_session_id: "", round_id: "", rset_id: "", end_id: "", number: "", score_entry: ""}
     }
   
     # ###################################################################
@@ -88,6 +88,9 @@ RSpec.describe Shot, type: :model do
 
     # object creation and validation tests #######################################
     describe "model creates and updates only valid instances - " do
+        before(:each) do
+            before_shot
+        end
         describe "valid when " do
             it "given all required and unrequired attributes" do
                 expect(Shot.all.count).to eq(0)
@@ -205,80 +208,79 @@ RSpec.describe Shot, type: :model do
         describe "belongs to Archer and" do
             it "can find an associated object" do
                 assoc_archer = valid_archer
-                expect(test_test_shot.archer).to eq(assoc_archer)
+                expect(test_shot.archer).to eq(assoc_archer)
             end
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_archer = valid_archer
                 update[:archer_id] = ""
-                check_test_shot = assoc_archer.test_shots.create(update)
+                check_shot = assoc_archer.shots.create(update)
                 
-                expect(check_test_shot.archer).to eq(assoc_archer)
-                expect(check_test_shot.archer.name).to include(assoc_archer.name)
+                expect(check_shot.archer).to eq(assoc_archer)
+                expect(check_shot.archer.username).to include(assoc_archer.username)
             end
         end
 
         describe "belongs to ScoreSession and" do
             it "can find an associated object" do
                 assoc_score_session = valid_score_session
-                expect(test_test_shot.score_session).to eq(assoc_score_session)
+                expect(test_shot.score_session).to eq(assoc_score_session)
             end
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_score_session = valid_score_session
                 update[:score_session_id] = ""
-                check_test_shot = assoc_score_session.test_shots.create(update)
+                check_shot = assoc_score_session.shots.create(update)
                 
-                expect(check_test_shot.score_session).to eq(assoc_score_session)
-                expect(check_test_shot.score_session.name).to include(assoc_score_session.name)
+                expect(check_shot.score_session).to eq(assoc_score_session)
+                expect(check_shot.score_session.name).to include(assoc_score_session.name)
             end
         end
 
         describe "belongs to Round and" do
             it "can find an associated object" do
                 assoc_round = valid_round
-                expect(test_test_shot.round).to eq(assoc_round)
+                expect(test_shot.round).to eq(assoc_round)
             end
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_round = valid_round
                 update[:round_id] = ""
-                check_test_shot = assoc_round.test_shots.create(update)
+                check_shot = assoc_round.shots.create(update)
                 
-                expect(check_test_shot.round).to eq(assoc_round)
-                expect(check_test_shot.round.name).to include(assoc_round.name)
+                expect(check_shot.round).to eq(assoc_round)
+                expect(check_shot.round.name).to include(assoc_round.name)
             end
         end
 
         describe "belongs to Rset and" do
             it "can find an associated object" do
                 assoc_rset = valid_rset
-                expect(test_test_shot.rset).to eq(assoc_rset)
+                expect(test_shot.rset).to eq(assoc_rset)
             end
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_rset = valid_rset
                 update[:rset_id] = ""
-                check_test_shot = assoc_rset.test_shots.create(update)
+                check_shot = assoc_rset.shots.create(update)
                 
-                expect(check_test_shot.rset).to eq(assoc_rset)
-                expect(check_test_shot.rset.name).to include(assoc_rset.name)
+                expect(check_shot.rset).to eq(assoc_rset)
+                expect(check_shot.rset.name).to include(assoc_rset.name)
             end
         end
 
         describe "belongs to End and" do
             it "can find an associated object" do
-                assoc_end = valid_end
-                expect(test_test_shot.end).to eq(assoc_end)
+                expect(test_shot.end.id).to eq(1)
             end
 
             it "can create a new instance via the associated object and get associated object attributes" do
-                assoc_end = valid_end
+                @assoc_end = valid_end
                 update[:end_id] = ""
-                check_test_shot = assoc_end.test_shots.create(update)
+                check_shot = @assoc_end.shots.create(update)
                 
-                expect(check_test_shot.end).to eq(assoc_end)
-                expect(check_test_shot.end.name).to include(assoc_end.name)
+                expect(check_shot.end).to eq(@assoc_end)
+                expect(check_shot.end.number).to eq(@assoc_end.number)
             end
         end
 

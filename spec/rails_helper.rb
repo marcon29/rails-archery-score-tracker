@@ -201,7 +201,7 @@ end
 # end
 
 def valid_shot
-  Shot.find_or_create_by(archer_id: valid_archer, score_session_id: valid_score_session, round_id: valid_round, rset_id: valid_rset, end_id: valid_end, number: 1, score_entry: "10")
+  Shot.find_or_create_by(archer: valid_archer, score_session: valid_score_session, round: valid_round, rset: valid_rset, end: valid_end, number: 1, score_entry: "10")
 end
 
 # ##########################################################

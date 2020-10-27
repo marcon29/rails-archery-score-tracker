@@ -1,8 +1,17 @@
 # Next to do
-    - finish building Shot model
-        - see notes below
+    - finish building out Scoreing Concern models
+        - play with associations
+            - should the has_many lower in heirachy become belongs to?
+        - review helpers for new asssociations in all (see notes below)
+        - Shot model (see notes below)
 
-    - set up associations between Shot, Rset, Round, ScoreSession, Archer
+# Archer Model
+    - need to update assign_default_age_class as you create associations
+
+# ScoreSession Model
+    - force rank as necessary if not practice?
+        - only when all shots are scored? or all shots for each round (or Rset)?
+    - only allow one active object at time
 
     - find gem and set up location information
         - user home info
@@ -14,6 +23,31 @@
         - update DistTargCat model for use with new ArcheryCategory
             - namespace into Organization
         - get ArcherCategory, Target, DistTargCat completely passing        
+
+# Round Model
+    - when instantiating, see if an existing one first
+    - pre-loaded can't be updated (same as pre-load targets)
+        - pre-loaded are only shared 
+    - auto assigns name
+    - when creating via ScoreSession
+        - if existing (incl. preload), associates to ScoreSession
+        - if new, is associated to only that user (no others can access)
+
+# Shot model
+    # it "can identify all possible score values" do
+    #   # max_score..score_areas, M, and X if x_ring
+    # end
+
+    # it "will only allows score values up to the number of score areas, M and X" do
+    # end
+
+    # it "won't allow allow a score value of X if there is no x-ring" do
+    # end
+
+    # it "can calculate the total score for a roundset)" do
+    # end
+
+
         
     
     - start building out controllers/views
@@ -39,39 +73,7 @@
         - All elsee - shared (pre-loaded)
     - update numericality validations to be greater than 0
     
-# Round Model
-    - when instantiating, see if an existing one first
-    - pre-loaded can't be updated (same as pre-load targets)
-        - pre-loaded are only shared 
-    - auto assigns name
-    - when creating via ScoreSession
-        - if existing (incl. preload), associates to ScoreSession
-        - if new, is associated to only that user (no others can access)
-            
-  
 
-# Shot model
-    # it "can identify all possible score values" do
-    #   # max_score..score_areas, M, and X if x_ring
-    # end
-
-    # it "will only allows score values up to the number of score areas, M and X" do
-    # end
-
-    # it "won't allow allow a score value of X if there is no x-ring" do
-    # end
-
-    # it "can calculate the total score for a roundset)" do
-    # end
-
-
-# Archer Model
-    - need to update assign_default_age_class as you create associations
-
-# ScoreSession Model
-    - force rank as necessary if not practice?
-        - only when all shots are scored? or all shots for each round (or Rset)?
-    - only allow one active object at time
 
 # Controller Helpers
     - all date formatting needs to go in here, not models
