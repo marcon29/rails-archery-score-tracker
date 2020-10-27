@@ -6,7 +6,14 @@ RSpec.describe Round, type: :model do
     # ###################################################################
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
     let(:test_all) {
-        {name: "100th US Nationals - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st"}
+        {
+            name: "100th US Nationals - 1440 Round", 
+            round_type: "Qualifying", 
+            score_method: "Points", 
+            rank: "1st", 
+            archer_id: 1, 
+            score_session_id: 1
+        }
     }
     
     let(:test_round) {
@@ -25,24 +32,24 @@ RSpec.describe Round, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:valid_req) {
-        {round_type: "Qualifying", score_method: "Points"}
+        {round_type: "Qualifying", score_method: "Points", archer_id: 1, score_session_id: 1}
     }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "100th US Nationals - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st"}
+        {name: "100th US Nationals - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 1, score_session_id: 1}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {name: "", round_type: "Match", score_method: "Set", rank: "Win"}
+        {name: "", round_type: "Match", score_method: "Set", rank: "Win", archer_id: 1, score_session_id: 1}
     }
 
     # every attr blank
     let(:blank) {
-        {name: "", round_type: "", score_method: "", rank: ""}
+        {name: "", round_type: "", score_method: "", rank: "", archer_id: "", score_session_id: ""}
     }
   
     # ###################################################################
@@ -66,6 +73,13 @@ RSpec.describe Round, type: :model do
 
     # object creation and validation tests #######################################
     describe "model creates and updates only valid instances - " do
+        before(:each) do
+            # this needs to always run before creating an archer so validations work (creates inclusion lists)
+            before_archer
+            valid_archer
+            valid_score_session
+        end
+
         describe "valid when " do
             it "given all required and unrequired attributes" do
                 expect(Round.all.count).to eq(0)
@@ -164,68 +178,160 @@ RSpec.describe Round, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            @round = Round.create(duplicate)
+            valid_archer
+            valid_score_session
+        end
+
+        describe "belongs to an Archer and" do
+            it "can find an associated object" do
+                assoc_archer = valid_archer
+                expect(test_round.archer).to eq(assoc_archer)
+            end
+
+            it "can create a new instance via the associated object and get associated object attributes" do
+                assoc_archer = valid_archer
+                update[:archer_id] = ""
+                check_round = assoc_archer.rounds.create(update)
+                
+                expect(check_round.archer).to eq(assoc_archer)
+                expect(check_round.archer.username).to include(assoc_archer.username)
+            end
+        end
+
+        describe "belongs to a ScoreSession and" do
+            it "can find an associated object" do
+                assoc_score_session = valid_score_session
+                expect(test_round.score_session).to eq(assoc_score_session)
+            end
+
+            it "can create a new instance via the associated object and get associated object attributes" do
+                assoc_score_session = valid_score_session
+                update[:score_session_id] = ""
+                check_round = assoc_score_session.rounds.create(update)
+                
+                expect(check_round.score_session).to eq(assoc_score_session)
+                expect(check_round.score_session.name).to include(assoc_score_session.name)
+            end
+        end
+
+        describe "has many Rsets and" do
+            before(:each) do
+                valid_round
+            end
+
+            it "can find an associated object" do
+                expect(valid_round.rsets).to include(valid_rset)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                round = Round.create(duplicate)
+
+                check_rset_attrs = {
+                    name: "1440 Round - Set/Distance1", 
+                    date: "2020-09-01", 
+                    score_session: valid_score_session
+                }
+                check_rset = round.rsets.create(check_rset_attrs)
+                
+                expect(round.rsets).to include(check_rset)
+                expect(round.rsets.last.name).to eq(check_rset.name)
+            end
             
-            # this is because of auto-assign feature keeps creating new objects, so now only called once
-            @end = valid_end
+            it "can re-assign instance via the associated object" do
+                round = Round.create(duplicate)
+                assoc_rset = valid_rset
+                expect(valid_round.rsets).to include(assoc_rset)
+
+                assoc_rset.round = round
+                assoc_rset.save
+
+                expect(valid_round.rsets).not_to include(assoc_rset)
+                expect(round.rsets).to include(assoc_rset)
+            end
+        end
+
+        describe "has many Ends and" do
+            it "can find an associated object" do
+                expect(valid_round.ends).to include(valid_end)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                round = Round.create(duplicate)
+
+                check_end_attrs = {
+                    number: 2, 
+                    set_score: ""
+                }
+                check_end = round.ends.create(check_end_attrs)
+                
+                expect(round.ends).to include(check_end)
+                expect(round.ends.last.number).to eq(check_end.number)
+            end
             
-            # this needs to always run before creating an archer so validations work (creates inclusion lists)
-            before_archer
+            it "can re-assign instance via the associated object" do
+                round = Round.create(duplicate)
+                assoc_end = valid_end
+                expect(valid_round.ends).to include(assoc_end)
 
-            @shot = Shot.create(
-                archer: valid_archer, 
-                score_session: valid_score_session, 
-                round: @round, 
-                rset: valid_rset, 
-                end: @end, 
-                number: 5, 
-                score_entry: "1"
-            )
-        end
+                assoc_end.round = round
+                assoc_end.save
 
-        it "has many Archers" do
-            expect(@round.archers).to include(valid_archer)
-            expect(valid_archer.rounds).to include(@round)
+                expect(valid_round.ends).not_to include(assoc_end)
+                expect(round.ends).to include(assoc_end)
+            end
         end
 
-        it "has many ScoreSessons" do
-            expect(@round.score_sessions).to include(valid_score_session)
-            expect(valid_score_session.rounds).to include(@round)
+        describe "has many Shots and" do
+            it "can find an associated object" do
+                expect(valid_round.shots).to include(valid_shot)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                round = Round.create(duplicate)
+
+                check_shot_attrs = {
+                    number: 1, 
+                    score_entry: "X"
+                }
+                check_shot = round.shots.create(check_shot_attrs)
+                
+                expect(round.shots).to include(check_shot)
+                expect(round.shots.last.score_entry).to eq(check_shot.score_entry)
+            end
+            
+            it "can re-assign instance via the associated object" do
+                round = Round.create(duplicate)
+                assoc_shot = valid_shot
+                expect(valid_round.shots).to include(assoc_shot)
+
+                assoc_shot.round = round
+                assoc_shot.save
+
+                expect(valid_round.shots).not_to include(assoc_shot)
+                expect(round.shots).to include(assoc_shot)
+            end
         end
 
-        it "has many Rsets" do
-            expect(@round.rsets).to include(valid_rset)
-            expect(valid_rset.rounds).to include(@round)
-        end
+        describe "sectioning off for Organization concern" do
+            it "has one ArcherCategory" do
+                pending "need to create associated models and add associations"
+                expect(test_round.archer_category).to eq(valid_category)
+            end
 
-        it "has many Ends" do
-            expect(@round.ends).to include(@end)
-            expect(@end.rounds).to include(@round)
-        end
-    
-        it "has many Shots" do
-            expect(@round.shots).to include(@shot)
-            expect(@shot.round).to eq(@round)
-        end
-    
-        it "has one ArcherCategory" do
-            pending "need to create associated models and add associations"
-            expect(test_round.archer_category).to eq(valid_category)
-        end
+            it "has one Discipline" do
+                pending "need to create associated models and add associations"
+                expect(test_round.discipline).to eq(valid_discipline)
+            end
 
-        it "has one Discipline" do
-            pending "need to create associated models and add associations"
-            expect(test_round.discipline).to eq(valid_discipline)
-        end
+            it "has one Division" do
+                pending "need to create associated models and add associations"
+                expect(test_round.division).to eq(valid_division)
+            end
 
-        it "has one Division" do
-            pending "need to create associated models and add associations"
-            expect(test_round.division).to eq(valid_division)
-        end
-
-        it "has one Age Class" do
-            pending "need to create associated models and add associations"
-            expect(test_round.age_class).to eq(valid_age_class)
+            it "has one Age Class" do
+                pending "need to create associated models and add associations"
+                expect(test_round.age_class).to eq(valid_age_class)
+            end
         end
     end
 
@@ -233,7 +339,7 @@ RSpec.describe Round, type: :model do
     describe "all helper methods work correctly:" do
         it "helpers TBD" do
             pending "add as needed"
-            expect(test_round).to be_invalid
+            expect(test_round).to be_valid
         end
     end
 end
