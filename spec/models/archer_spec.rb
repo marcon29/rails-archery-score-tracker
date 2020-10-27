@@ -27,27 +27,7 @@ RSpec.describe Archer, type: :model do
     let(:test_archer) {
         Archer.create(test_all)
     }
-
-    # ###################################################################
-    # define any additional objects to test for this model 
-    # ###################################################################
-    # only add multiple instantiations if need simultaneous instances for testing
-    # let(:valid_division_compound) {
-    #     Organization::Division.create(name: "Compound")
-    # }
-
-    # let(:valid_age_class_junior) {
-    #     Organization::AgeClass.create(name: "Junior", min_age: 18, max_age: 20, open_to_younger: true, open_to_older: false)
-    # }
     
-    # let(:valid_gender_female) {
-    #     Organization::Gender.create(name: "Female")
-    # }
-
-    # let(:valid_category_jw) {
-    #     Organization::ArcherCategory.create(cat_code: "WA-RJW", gov_body_id: 1, discipline_id: 1, division_id: 1, age_class: valid_age_class_junior, gender_id: valid_gender_female)
-    # }
-
     # ###################################################################
     # define standard create/update variations
     # ###################################################################
@@ -468,8 +448,6 @@ RSpec.describe Archer, type: :model do
         it "can return all the category names the archer is elgibile for" do
             expect(test_archer.eligible_category_names).to include(valid_category.name)
         end
-    
-        
 
         it "helpers TBD" do
             pending "add as needed"
