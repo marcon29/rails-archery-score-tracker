@@ -1,13 +1,15 @@
 class Round < ApplicationRecord
-    has_many :shots
-    has_many :rsets, through: :shots
-    has_many :ends, through: :shots
+    # has_many :shots
+    # has_many :rsets, through: :shots
+    # has_many :ends, through: :shots
+    # has_many :archers, through: :shots
+    # has_many :score_sessions, through: :shots
     
-    has_many :archers, through: :shots
-    has_many :score_sessions, through: :shots
-    # has_one :archer, through: :shots
-    # has_one :score_session, through: :shots
-
+    has_many :rsets
+    has_many :ends
+    has_many :shots
+    belongs_to :archer
+    belongs_to :score_session
 
 
 

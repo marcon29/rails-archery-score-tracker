@@ -1,23 +1,23 @@
 class Rset < ApplicationRecord
+    # has_many :shots
+    # has_many :ends, through: :shots
+    # has_many :archers, through: :shots
+    # has_many :score_sessions, through: :shots
+    # has_many :rounds, through: :shots
+    
+    has_many :ends
     has_many :shots
-    has_many :ends, through: :shots
-
-    has_many :archers, through: :shots
-    has_many :score_sessions, through: :shots
-    has_many :rounds, through: :shots
-    # has_one :archer, through: :shots
-    # has_one :score_session, through: :shots
-    # has_one :round, through: :shots
-
-
-
-
+    belongs_to :archer
+    belongs_to :score_session
+    belongs_to :round
+    
 
 
     # has_one :distance_target_category, through: :archer
     # has_one :target, through: :distance_target_category
     
     # all attrs - :name, :date, :rank
+    # dependencies: ScoreSession, Round
 
     validates :name, presence: true, uniqueness: true
     validate :check_date, :check_and_assign_rank

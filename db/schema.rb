@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_25_171259) do
+ActiveRecord::Schema.define(version: 2020_10_27_143311) do
 
   create_table "age_classes", force: :cascade do |t|
     t.string "name"
@@ -76,6 +76,10 @@ ActiveRecord::Schema.define(version: 2020_10_25_171259) do
     t.integer "set_score"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "archer_id"
+    t.integer "score_session_id"
+    t.integer "round_id"
+    t.integer "rset_id"
   end
 
   create_table "genders", force: :cascade do |t|
@@ -107,6 +111,8 @@ ActiveRecord::Schema.define(version: 2020_10_25_171259) do
     t.string "rank"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "archer_id"
+    t.integer "score_session_id"
   end
 
   create_table "rsets", force: :cascade do |t|
@@ -115,6 +121,9 @@ ActiveRecord::Schema.define(version: 2020_10_25_171259) do
     t.string "rank"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "archer_id"
+    t.integer "score_session_id"
+    t.integer "round_id"
   end
 
   create_table "score_sessions", force: :cascade do |t|
@@ -129,6 +138,7 @@ ActiveRecord::Schema.define(version: 2020_10_25_171259) do
     t.boolean "active", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "archer_id"
   end
 
   create_table "set_end_formats", force: :cascade do |t|

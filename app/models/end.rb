@@ -1,18 +1,15 @@
 class End < ApplicationRecord
+    # has_many :shots
+    # has_many :archers, through: :shots
+    # has_many :score_sessions, through: :shots
+    # has_many :rounds, through: :shots
+    # has_many :rsets, through: :shots
+    
     has_many :shots
-
-    has_many :archers, through: :shots
-    has_many :score_sessions, through: :shots
-    has_many :rounds, through: :shots
-    has_many :rsets, through: :shots
-    # has_one :archer, through: :shots
-    # has_one :score_session, through: :shots
-    # has_one :round, through: :shots
-    # has_one :rset, through: :shots
-
-
-
-
+    belongs_to :archer
+    belongs_to :score_session
+    belongs_to :round
+    belongs_to :rset
 
         
     # all attrs - :number, :set_score

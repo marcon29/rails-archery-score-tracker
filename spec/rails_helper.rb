@@ -151,7 +151,7 @@ def valid_archer
   )
 
   if !check
-    check = Archer.create(
+    Archer.create(
       username: "validuser",
       email: "validuser@example.com", 
       password: "test", 
@@ -166,7 +166,6 @@ def valid_archer
       default_division: "Recurve"
     )
   end
-  check
 end
 
 def valid_score_session
@@ -180,20 +179,21 @@ def valid_score_session
     end_date: "2020-09-05", 
     rank: "1st", 
     active: true
+    archer: valid_archer
   )
 end
 
 def valid_round
-  Round.find_or_create_by(name: "2020 World Cup - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st")
+  Round.find_or_create_by(name: "2020 World Cup - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session)
 end
 
 
 def valid_rset
-  Rset.find_or_create_by(name: "1440 Round - Set/Distance1", date: "2020-09-01", rank: "1st")
+  Rset.find_or_create_by(name: "1440 Round - Set/Distance1", date: "2020-09-01", rank: "1st", archer: valid_archer, score_session: valid_score_session, round: valid_round)
 end
 
 def valid_end
-  End.find_or_create_by(number: 1, set_score: "")
+  End.find_or_create_by(number: 1, set_score: "", archer: valid_archer, score_session: valid_score_session, round: valid_round, rset: valid_rset)
 end
 
 # def valid_end_set

@@ -1,9 +1,15 @@
 class Archer < ApplicationRecord
+    # has_many :shots
+    # has_many :score_sessions, through: :shots
+    # has_many :rounds, through: :shots
+    # has_many :rsets, through: :shots
+    # has_many :ends, through: :shots
+    
+    has_many :score_sessions
+    has_many :rounds
+    has_many :rsets
+    has_many :ends
     has_many :shots
-    has_many :score_sessions, through: :shots
-    has_many :rounds, through: :shots
-    has_many :rsets, through: :shots
-    has_many :ends, through: :shots
     has_secure_password 
 
     # needed to use instances instead of data: age_class
