@@ -185,9 +185,8 @@ def valid_round
   Round.find_or_create_by(name: "2020 World Cup - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session)
 end
 
-
 def valid_rset
-  Rset.find_or_create_by(name: "1440 Round - Set/Distance1", date: "2020-09-01", rank: "1st", archer: valid_archer, score_session: valid_score_session, round: valid_round)
+  Rset.find_or_create_by(name: "2020 World Cup - 1440 Round - Set/Distance1", date: "2020-09-01", rank: "1st", archer: valid_archer, score_session: valid_score_session, round: valid_round)
 end
 
 def valid_end
@@ -199,7 +198,7 @@ end
 # end
 
 def valid_shot
-  Shot.find_or_create_by(archer: valid_archer, score_session: valid_score_session, round: valid_round, rset: valid_rset, end: valid_end, number: 1, score_entry: "10")
+  Shot.find_or_create_by(number: 1, score_entry: "10", archer: valid_archer, score_session: valid_score_session, round: valid_round, rset: valid_rset, end: valid_end)
 end
 
 # ##########################################################

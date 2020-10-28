@@ -7,7 +7,7 @@ RSpec.describe Rset, type: :model do
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
     let(:test_all) {
         {
-            name: "1440 Round - Set/Distance2", 
+            name: "2020 World Cup - 1440 Round - Set/Distance2", 
             date: "2020-09-01", 
             rank: "1st", 
             archer_id: 1, 
@@ -39,12 +39,12 @@ RSpec.describe Rset, type: :model do
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "1440 Round - Set/Distance2", date: "2020-09-01", rank: "1st", archer_id: 1, score_session_id: 1, round_id: 1}
+        {name: "2020 World Cup - 1440 Round - Set/Distance2", date: "2020-09-01", rank: "1st", archer_id: 1, score_session_id: 1, round_id: 1}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {name: "", date: "2020-09-05", rank: "3rd", archer_id: 1, score_session_id: 1, round_id: 1}
+        {date: "2020-09-05", rank: "3rd", archer_id: 1, score_session_id: 1, round_id: 1}
     }
 
     # every attr blank
@@ -55,7 +55,10 @@ RSpec.describe Rset, type: :model do
     # ###################################################################
     # define test results for auto-assign attrs
     # ###################################################################
-    let(:assigned_name) {"1440 Round - Set/Distance2"}
+    let(:assigned_name_test) {"2020 World Cup - 1440 Round - Set/Distance2"}
+    let(:assigned_name_valid) {"2020 World Cup - 1440 Round - Set/Distance1"}
+    let(:assigned_name_dupe) {"2020 World Cup - 720 Round - Set/Distance2"}
+
     # let(:assigned_name_update) {"40cm/3-spot/6-ring"}
   
     # ###################################################################
@@ -79,14 +82,15 @@ RSpec.describe Rset, type: :model do
             valid_archer
             valid_score_session
             valid_round
+            valid_rset
         end
 
         describe "valid when " do
             it "given all required and unrequired attributes" do
-                expect(Rset.all.count).to eq(0)
+                expect(Rset.all.count).to eq(1)
 
                 expect(test_rset).to be_valid
-                expect(Rset.all.count).to eq(1)
+                expect(Rset.all.count).to eq(2)
                 
                 expect(test_rset.name).to eq(test_all[:name])
                 expect(test_rset.date).to eq(test_all[:date].to_date)
@@ -94,18 +98,46 @@ RSpec.describe Rset, type: :model do
             end
 
             it "given only required attributes" do
-                expect(Rset.all.count).to eq(0)
+                expect(Rset.all.count).to eq(1)
                 rset = Rset.create(valid_req)
 
                 expect(rset).to be_valid
-                expect(Rset.all.count).to eq(1)
+                expect(Rset.all.count).to eq(2)
 
                 # req input tests (should have value in valid_req)
                 expect(rset.date).to eq(valid_req[:date].to_date)
                 
                 # not req input tests (name auto-asigned from missing)
-                expect(rset.name).to eq(assigned_name)
+                expect(rset.name).to eq(assigned_name_test)
                 expect(rset.rank).to be_nil
+            end
+
+            it "name is duplicated but for different Round" do
+                # need second round
+                second_round = Round.find_or_create_by(name: "720 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session)
+                expect(Round.all.count).to eq(2)
+                expect(Rset.all.count).to eq(1)
+
+                # gives me 2 rsets in valid_round
+                test_rset
+                expect(Rset.all.count).to eq(2)
+                
+                # gives me 1 rset in second_round
+                update[:round_id] = 2
+                third_rset = Rset.create(update)
+                expect(Rset.all.count).to eq(3)
+
+                # test duped name from valid_rset but in second_round
+                duplicate[:name] = ""
+                duplicate[:round_id] = 2
+                rset = Rset.create(duplicate)
+
+                expect(rset).to be_valid
+                expect(Rset.all.count).to eq(4)
+
+                expect(rset.name).to eq(assigned_name_dupe)
+                expect(rset.date).to eq(duplicate[:date].to_date)
+                expect(rset.rank).to eq(duplicate[:rank])
             end
 
             it "updating all attributes" do
@@ -116,19 +148,27 @@ RSpec.describe Rset, type: :model do
                 expect(test_rset.rank).to eq(update[:rank])
                 
                 # not req input tests (active auto-asigned from blank)
-                expect(test_rset.name).to eq(assigned_name)
+                expect(test_rset.name).to eq(assigned_name_test)
             end
         end
     
         describe "invalid and has correct error message when" do
+            before(:each) do
+                # this needs to always run before creating an archer so validations work (creates inclusion lists)
+                before_archer
+                valid_archer
+                valid_score_session
+                valid_round
+                valid_rset
+            end
+
             it "missing required attributes" do
                 rset = Rset.create(blank)
 
                 expect(rset).to be_invalid
-                expect(Rset.all.count).to eq(0)
+                expect(Rset.all.count).to eq(1)
                 
-                # expect(rset.errors.messages[:name]).to include(default_missing_message)
-                # expect(rset.name).to eq(assigned_name)
+                expect(rset.errors.messages[:name]).to include(default_missing_message)
                 expect(rset.errors.messages[:date]).to include(missing_date_message)
                 expect(rset.rank).to be_blank
             end
@@ -136,11 +176,11 @@ RSpec.describe Rset, type: :model do
             it "unique attributes are duplicated" do
                 # need to call initial test object to check against for duplication
                 test_rset
-                expect(Rset.all.count).to eq(1)
+                expect(Rset.all.count).to eq(2)
                 rset = Rset.create(duplicate)
 
                 expect(rset).to be_invalid
-                expect(Rset.all.count).to eq(1)
+                expect(Rset.all.count).to eq(2)
                 expect(rset.errors.messages[:name]).to include(default_duplicate_message)
             end
 
@@ -151,7 +191,7 @@ RSpec.describe Rset, type: :model do
                     duplicate[:date] = test_value
                     rset = Rset.create(duplicate)
                     expect(rset).to be_invalid
-                    expect(Rset.all.count).to eq(0)
+                    expect(Rset.all.count).to eq(1)
                     expect(rset.errors.messages[:date]).to include(inclusion_date_message)
                 end
             end
@@ -163,7 +203,7 @@ RSpec.describe Rset, type: :model do
                     duplicate[:rank] = test_value
                     rset = Rset.create(duplicate)
                     expect(rset).to be_invalid
-                    expect(Rset.all.count).to eq(0)
+                    expect(Rset.all.count).to eq(1)
                     
                     expect(rset.errors.messages[:rank]).to include(inclusion_rank_message)
                 end
@@ -304,6 +344,20 @@ RSpec.describe Rset, type: :model do
 
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
+        it "can find all rsets belonging to the same round" do
+            first_rset = valid_rset
+            second_rset = Rset.create(date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1)
+            third_rset = Rset.create(date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1)
+            
+            second_round = Round.find_or_create_by(name: "720 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session)
+            other_rset = Rset.create(date: "2020-01-01", archer_id: 1, score_session_id: 1, round_id: 2)
+            
+            expect(first_rset.sets_in_round.count).to eq(3)
+            expect(first_rset.sets_in_round).to include(first_rset)
+            expect(first_rset.sets_in_round).to include(second_rset)
+            expect(first_rset.sets_in_round).to include(third_rset)
+            expect(first_rset.sets_in_round).not_to include(other_rset)
+        end
 
         it "can calculate the total score for a set" do
             pending "need to add associations"

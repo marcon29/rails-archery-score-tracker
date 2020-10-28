@@ -109,6 +109,52 @@ end
 
 desc "Load Round Seeds"
 task load_rounds: :environment do
+	Round.find_or_create_by(name: "720 Round", round_type: "Qualifying", score_method: "Points", rank: "", archer_id: 5, score_session_id: 1)
+	Round.find_or_create_by(name: "720 Round", round_type: "Qualifying", score_method: "Points", rank: "", archer_id: 13, score_session_id: 2)
+	Round.find_or_create_by(name: "720 Round", round_type: "Qualifying", score_method: "Points", rank: "", archer_id: 21, score_session_id: 3)
+	Round.find_or_create_by(name: "720 Round", round_type: "Qualifying", score_method: "Points", rank: "", archer_id: 29, score_session_id: 4)
+
+	Round.find_or_create_by(name: "1/16 Match", round_type: "Match", score_method: "Set", rank: "", archer_id: 5, score_session_id: 1)
+	Round.find_or_create_by(name: "1/16 Match", round_type: "Match", score_method: "Set", rank: "", archer_id: 13, score_session_id: 2)
+
+	Round.find_or_create_by(name: "1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 4, score_session_id: 5)
+	Round.find_or_create_by(name: "1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 12, score_session_id: 6)
+	Round.find_or_create_by(name: "1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 20, score_session_id: 7)
+	Round.find_or_create_by(name: "1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 28, score_session_id: 8)
+end
+
+desc "Load Set Seeds"
+task load_rsets: :environment do
+	Rset.destroy_all
+	Rset.create(date: "2020-09-01", rank: "1st", archer_id: 5, score_session_id: 1, round_id: 1)
+	Rset.create(date: "2020-09-01", rank: "1st", archer_id: 13, score_session_id: 2, round_id: 2)
+	Rset.create(date: "2020-09-01", rank: "1st", archer_id: 21, score_session_id: 3, round_id: 3)
+	Rset.create(date: "2020-09-01", rank: "1st", archer_id: 29, score_session_id: 4, round_id: 4)
+
+
+	Rset.create(date: "2010-09-01", rank: "1st", archer_id: 4, score_session_id: 5, round_id: 7)
+	Rset.create(date: "2010-09-01", rank: "1st", archer_id: 12, score_session_id: 6, round_id: 8)
+	Rset.create(date: "2010-09-01", rank: "1st", archer_id: 20, score_session_id: 7, round_id: 9)
+	Rset.create(date: "2010-09-01", rank: "1st", archer_id: 28, score_session_id: 8, round_id: 10)
+
+	Rset.create(date: "2010-09-02", rank: "1st", archer_id: 4, score_session_id: 5, round_id: 7)
+	Rset.create(date: "2010-09-02", rank: "1st", archer_id: 12, score_session_id: 6, round_id: 8)
+	Rset.create(date: "2010-09-02", rank: "1st", archer_id: 20, score_session_id: 7, round_id: 9)
+	Rset.create(date: "2010-09-02", rank: "1st", archer_id: 28, score_session_id: 8, round_id: 10)
+
+	Rset.create(date: "2010-09-03", rank: "1st", archer_id: 4, score_session_id: 5, round_id: 7)
+	Rset.create(date: "2010-09-03", rank: "1st", archer_id: 12, score_session_id: 6, round_id: 8)
+	Rset.create(date: "2010-09-03", rank: "1st", archer_id: 20, score_session_id: 7, round_id: 9)
+	Rset.create(date: "2010-09-03", rank: "1st", archer_id: 28, score_session_id: 8, round_id: 10)
+
+	Rset.create(date: "2010-09-04", rank: "1st", archer_id: 4, score_session_id: 5, round_id: 7)
+	Rset.create(date: "2010-09-04", rank: "1st", archer_id: 12, score_session_id: 6, round_id: 8)
+	Rset.create(date: "2010-09-04", rank: "1st", archer_id: 20, score_session_id: 7, round_id: 9)
+	Rset.create(date: "2010-09-04", rank: "1st", archer_id: 28, score_session_id: 8, round_id: 10)
+end
+
+desc "Load End Seeds"
+task load_shots: :environment do
 end
 
 desc "Load Shot Seeds"

@@ -34,7 +34,7 @@ class Round < ApplicationRecord
     # auto create name ( ScoreSession.name - RoundFormat.name )
     def assign_name
         if !self.name.blank? && self.score_session
-            if !self.name.include?(score_session.name) # || 
+            if !self.name.include?(score_session.name)
                 # "#{self.score_session.name} - #{round_format.name}"
 
                 # using name input until RoundFormat assoc

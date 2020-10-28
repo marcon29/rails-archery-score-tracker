@@ -9,21 +9,19 @@ class Rset < ApplicationRecord
     # has_one :target, through: :distance_target_category
     
     # all attrs - :name, :date, :rank
-    # dependencies: ScoreSession, Round
+    # dependencies: ScoreSession (for validating date), Round (for name creation)
 
-    validates :name, presence: true, uniqueness: true
+    validates :name, 
+        presence: true, 
+        uniqueness: { case_sensitive: false, scope: :round }
     validate :check_date, :check_and_assign_rank
     before_validation :assign_name
     
 
     # need helpers (callbacks & validations)
     def check_date
-        # start_date = self.score_session.start_date
-        # end_date = self.score_session.end_date
-
-        # using this until associations and controller set up
-        start_date = ScoreSession.first.start_date
-        end_date = ScoreSession.first.end_date
+        start_date = self.score_session.start_date if self.score_session
+        end_date = self.score_session.end_date if self.score_session
 
         if self.date.blank?
             errors.add(:date, "You must choose a start date.")
@@ -32,52 +30,38 @@ class Rset < ApplicationRecord
         end
     end
     
-    # need to auto create name ( Round.name - SetEndFormat.name )
-        # SetEndFormat.name will be input by controller, not via assoc.
-        
+    # auto create name ( ScoreSession.name - Round.name - Rset.name )
     def assign_name
-        # can't use an arg
-        # self.name = create_name
-
-        # check if NOT name already been assigned
-            # if !self.name.include(score_session.name)
-        
-        
-        # using this until associations and controller set up
-        self.name = create_name("Set/Distance2") if self.name.blank?
+        if self.name.blank?
+            self.name =create_name
+        elsif !self.name.include?(self.round.name) && !self.name.include?("Set/Distance")
+            self.name =create_name
+        end
     end
 
-    def create_name(input)
-        # "#{self.round.name} - #{input}"
-
-        # using this until associations and controller set up
-        temp = "1440 Round"
-        "#{temp} - #{input}"
+    def create_name
+        "#{self.round.name} - Set/Distance#{self.set_number}" if self.round
     end
-       
-    Round.find_or_create_by(
-        name: "2020 World Cup - 1440 Round", 
-        
-        round_type: "Qualifying", 
-        score_method: "Points", 
-        rank: "1st", 
-        archer: valid_archer, score_session: valid_score_session)
-    
-        
+
+    def set_number
+        sets_in_round.count + 1
+    end
+
+    def sets_in_round
+        self.round.rsets if self.round
+    end 
 
     # need helpers
-        # need to get distance and target (same process for each)
-            # find archer_category from Archer that matches:
-                # assoc_round.discipline && assoc_round.division && assoc_round.age_class
-            # look up distance and target from distance_target_category that matches found archer_category
-        
-        # it "can calculate the total score for a rset" do
-            # pending "need to add associations"
-            # want to be able to to call rset.score
-            # sums all end scores
-        # end
+    # it "can calculate the total score for a rset" do
+        # pending "need to add associations"
+        # want to be able to to call rset.score
+        # sums all end scores
+    # end
 
+    # need to get distance and target (same process for each)
+        # find archer_category from Archer that matches:
+            # assoc_round.discipline && assoc_round.division && assoc_round.age_class
+        # look up distance and target from distance_target_category that matches found archer_category
         
-  
-
+        
 end

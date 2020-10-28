@@ -110,6 +110,11 @@
 # Archer Controller 
     - this is where to test attr formatting methods with actual input
 
+# ScoreSession Controller
+    - for match Rsets and set scoring_method
+        - first to 6 set points wins (don't need to complete all ends)
+        - so when tracking shot.set_score, if 6, destroy any unshot ends for that SetRound
+
 # Round Controller 
     - can't allow an empty value for user_edit to be passed to model
         - i.e. no user_edit = "", must not use at all and allow DB default or explictly setting only
@@ -132,11 +137,11 @@
         - may need new model to make this work (might not be necessary)
         - could just have the rank in ScoreSession only that updates as go
     - if round_type is "Match", restrict rank options to "Win" or "Loss"
-        
-# ScoreSession Controller
-    - for match Rsets and set scoring_method
-        - first to 6 set points wins (don't need to complete all ends)
-        - so when tracking shot.set_score, if 6, destroy any unshot ends for that SetRound
+
+# Rset Controller 
+    - can't allow ability to change Rset name via update
+        - should be able to do by not allowing via strong params
+
 
 # Sessions Controller 
     - since Archer.default_cat will auto-update over time, need way to check if default_age_class must also update upon login
