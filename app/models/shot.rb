@@ -9,27 +9,43 @@ class Shot < ApplicationRecord
     # all data attrs  - :number, :score_entry
     
     # need validations
-        # required: :number, :score_entry (update only)
-            # "You must enter a score for shot #{shot.number}."
-        # inclusion: 
-        #     :number ( 1 - end.shots_per_end ), 
-        #     :score_entry ( target.score_areas through target.max_score, M, X if target.x_ring )
-                    # message if x-ring: "Enter only X, M or a number between #{shot.target.score_areas} and #{shot.target.max_score}."
-                    # message if no x-ring: "Enter only M or a number between #{shot.target.score_areas} and #{shot.target.max_score}."
-                    
-                    
-        # format: :number (number), :score_entry (cap)
-
-        # number validation rules
+    validates :number, 
+        numericality: {only_integer: true, greater_than: 0 }, 
+        uniqueness: { scope: :end }
+        # make inclusion so can't be more than # of shots per ends? (not part of tests right now)
             # need to find Set_End_format corresponding to rset
             # needs to be between 1 and Set_End_format.shots_per_end
-
+    
+    validates :score_entry, 
+        format: { with: /\A\d|X|M\z/, allow_nil: true, allow_blank: true, message: "Enter only X, M or a number." }, 
+        on: :create
+    validates :score_entry, 
+        # presence: { message: "You must enter a score for shot #{self.number}." }, 
+        presence: { message: "You must enter a score." }, 
+        format: { with: /\A\d|X|M|x|m\z/, message: "Enter only X, M or a number." }, 
+        on: :update
         # score_entry validation rules
             # must be able to be blank on instantiation
             # upon update, must be included in possible_scores
+                # possible scores: target.score_areas through target.max_score, M, X if target.x_ring )
+                    # message if x-ring: "Enter only X, M or a number between #{shot.target.score_areas} and #{shot.target.max_score}."
+                    # message if no x-ring: "Enter only M or a number between #{shot.target.score_areas} and #{shot.target.max_score}."
+        
+    before_validation :assign_number
+    # before_validation :format_score_entry
 
     # need helpers (callbacks & validations)
-        # need to assign number (same as end_num for End)
+    # need to assign number (same as end_num for End)
+    def assign_number
+        if self.number.blank? && self.end
+            self.number = shots_in_end.count + 1 
+        end
+    end
+
+    def shots_in_end
+        self.end.shots if self.end
+    end
+
         # to validate score_entry
             # it "can identify all possible score values" do
             #     want to be able to to call shot.possible_scores

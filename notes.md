@@ -145,6 +145,12 @@
 # End Controller 
     - can't allow ability to change End number via update (or create either)
         - should be able to do by not allowing via strong params
+        - can't be number = "" - that won't work, can't be anything at all
+
+# Shot Controller 
+    - can't allow ability to change End number via update (or create either)
+        - should be able to do by not allowing via strong params
+        - can't be number = "" - that won't work, can't be anything at all
 
 
 # Sessions Controller 

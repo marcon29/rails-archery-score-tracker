@@ -8,7 +8,10 @@ class End < ApplicationRecord
     # all attrs - :number, :set_score
     # dependencies: Rset (for number creation), Round & ScoreSession (for Rset), Round (for set_score)
 
-    validates :number, numericality: {only_integer: true, greater_than: 0 }
+    validates :number, 
+        numericality: {only_integer: true, greater_than: 0 }, 
+        uniqueness: { scope: :rset }
+        # make inclusion so can't be more than # of ends per rset? (not part of tests right now)
     validates :set_score, 
         numericality: { 
             only_integer: true, 

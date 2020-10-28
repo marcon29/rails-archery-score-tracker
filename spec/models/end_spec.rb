@@ -48,7 +48,7 @@ RSpec.describe End, type: :model do
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {number: "", set_score: 1, archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1}
+        {set_score: 1}
     }
 
     # every attr blank
@@ -59,7 +59,7 @@ RSpec.describe End, type: :model do
     # ###################################################################
     # define test results for auto-assign attrs
     # ###################################################################
-    let(:assigned_num) {2}
+    let(:assigned_num) {1}
     # let(:assigned_set_score) {nil}
     # let(:default_attr) {}
   
@@ -108,11 +108,53 @@ RSpec.describe End, type: :model do
                 expect(endd).to be_valid
                 expect(End.all.count).to eq(1)
 
-                # req input tests (should have value in test_req)
-                expect(test_end.set_score).to be_blank
+                # req input tests (has value in test_req but auto-assigned to nil for example)
+                expect(endd.set_score).to be_blank
 
                 # not req input tests (number auto-asigned from missing)
-                expect(test_end.number).to eq(assigned_num)
+                expect(endd.number).to eq(assigned_num)
+            end
+
+            it "number is duplicated but for different Rset" do
+                # need second rset
+                second_rset = Rset.find_or_create_by(name: "2020 World Cup - 1440 Round - Set/Distance2", date: "2020-09-01", rank: "1st", archer: valid_archer, score_session: valid_score_session, round: valid_round)
+                expect(Rset.all.count).to eq(2)
+                expect(End.all.count).to eq(0)
+
+                # gives me 2 ends in valid_rset
+                valid_end
+                test_end
+                expect(End.all.count).to eq(2)
+                
+                # gives me 1 end in second_rset
+                test_req[:rset_id] = 2
+                third_end = End.create(test_req)
+                expect(End.all.count).to eq(3)
+
+                # test duped name from valid_end but in second_rset
+                duplicate[:number] = ""
+                duplicate[:rset_id] = 2
+                endd = End.create(duplicate)
+
+                expect(endd).to be_valid
+                expect(End.all.count).to eq(4)
+
+                expect(endd.number).to eq(2)
+                expect(endd.set_score).to be_nil
+            end
+
+            it "belonging to round with 'Points' for score_method, it updates set_score to blank" do
+                valid_round
+                endd = End.create(test_req)
+                endd.update(update)
+
+                expect(endd).to be_valid
+
+                # req input tests (should have value in test_req)
+                expect(endd.set_score).to be_blank
+
+                # not req input tests (number auto-asigned from missing)
+                expect(endd.number).to eq(assigned_num)
             end
 
             it "belonging to round with 'Points' for score_method and missing set_score at instantiation" do
@@ -121,39 +163,23 @@ RSpec.describe End, type: :model do
 
                 expect(endd).to be_valid
                 expect(End.all.count).to eq(1)
-
-                # req input tests (should have value in test_req)
+                
                 expect(endd.set_score).to be_blank
-
-                # not req input tests (number auto-asigned from missing)
-                expect(endd.number).to eq(1)
+                expect(endd.number).to eq(assigned_num)
             end
 
             it "belonging to round with 'Set' for score_method, it updates set_score" do
                 valid_round.update(score_method: "Set")
-                test_end.update(update)
+                endd = End.create(test_req)
+                endd.update(update)
                 
-                expect(test_end).to be_valid
+                expect(endd).to be_valid
                 
                 # req input tests (should have value in update)
-                expect(test_end.set_score).to eq(update[:set_score])
+                expect(endd.set_score).to eq(update[:set_score])
                 
                 # not req input tests (number auto-asigned from blank)
-                expect(test_end.number).to eq(assigned_num)
-            end
-
-            it "belonging to round with 'Points' for score_method, it updates set_score to blank" do
-                valid_round
-
-                test_end.update(test_req)
-                
-                expect(test_end).to be_valid
-
-                # req input tests (should have value in test_req)
-                expect(test_end.set_score).to be_blank
-
-                # not req input tests (number auto-asigned from missing)
-                expect(test_end.number).to eq(assigned_num)
+                expect(endd.number).to eq(assigned_num)
             end
         end
 
@@ -165,6 +191,29 @@ RSpec.describe End, type: :model do
                 valid_score_session
                 valid_round
                 valid_rset
+            end
+
+            it "number is outside allowable inputs" do
+                bad_scenarios = [0, -1, "one"]
+                
+                bad_scenarios.each do | test_value |
+                    duplicate[:number] = test_value
+                    endd = End.create(duplicate)
+                    expect(endd).to be_invalid
+                    expect(End.all.count).to eq(0)
+                    expect(endd.errors.messages[:number]).to be_present
+                end
+            end
+
+            it "unique attributes are duplicated" do
+                # need to call initial test object to check against for duplication
+                test_end
+                expect(End.all.count).to eq(1)
+                endd = End.create(duplicate)
+
+                expect(endd).to be_invalid
+                expect(End.all.count).to eq(1)
+                expect(endd.errors.messages[:number]).to include(default_duplicate_message)
             end
 
             it "belonging to round with 'Set' for score_method and missing set_score upon update" do
@@ -184,18 +233,6 @@ RSpec.describe End, type: :model do
                 expect(endd).to be_invalid
                 expect(endd.errors.messages[:set_score]).to include(number_set_score_message)
                 expect(endd.number).to eq(1)
-            end
-
-            it "number is outside allowable inputs" do
-                bad_scenarios = [0, -1, "one"]
-                
-                bad_scenarios.each do | test_value |
-                    duplicate[:number] = test_value
-                    endd = End.create(duplicate)
-                    expect(endd).to be_invalid
-                    expect(End.all.count).to eq(0)
-                    expect(endd.errors.messages[:number]).to be_present
-                end
             end
 
             it "set_score is outside allowable inputs" do

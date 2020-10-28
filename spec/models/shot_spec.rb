@@ -6,7 +6,7 @@ RSpec.describe Shot, type: :model do
     # ###################################################################
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
     let(:test_all) {
-        {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1, number: 2, score_entry: "5"}
+        {number: 2, score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}
     }
 
     let(:test_shot) {
@@ -18,22 +18,31 @@ RSpec.describe Shot, type: :model do
     # ###################################################################
     # only add multiple instantiations if need simultaneous instances for testing
     # this is how 2 ends of three would look, covers all score_entry options
-    let(:multi_test_all) {
-        {
-            multi_shot_11: {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1, number: 1, score_entry: "X"}, 
-            multi_shot_12: {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1, number: 2, score_entry: "10"}, 
-            multi_shot_13: {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1, number: 3, score_entry: "M"}, 
-            multi_shot_21: {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2, number: 1, score_entry: "9"}, 
-            multi_shot_22: {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2, number: 2, score_entry: "8"}, 
-            multi_shot_23: {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2, number: 3, score_entry: "7"}
-        }
-    }
+    # let(:multi_test_all) {
+    #     {
+    #         multi_shot_11: {number: 1, score_entry: "X", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}, 
+    #         multi_shot_12: {number: 2, score_entry: "10", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}, 
+    #         multi_shot_13: {number: 3, score_entry: "M", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}, 
+    #         multi_shot_21: {number: 1, score_entry: "9", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2}, 
+    #         multi_shot_22: {number: 2, score_entry: "8", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2}, 
+    #         multi_shot_23: {number: 3, score_entry: "7", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2}
+    #     }
+    # }
 
-    let(:test_multi) {
-        multi_test_all.each do | shot, attrs |
-            let(:shot) { Shot.create(attrs) }
-        end
-    }
+    # let(:test_multi) {
+    #     multi_test_all.each do | shot, attrs |
+    #         let(:shot) { Shot.create(attrs) }
+    #     end
+    # }
+
+    
+    let(:multi_shot_11) { Shot.create(score_entry: "X", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1) }
+    let(:multi_shot_12) { Shot.create(score_entry: "10", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1) }
+    let(:multi_shot_13) { Shot.create(score_entry: "M", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1) }
+    let(:multi_shot_21) { Shot.create(score_entry: "9", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2) }
+    let(:multi_shot_22) { Shot.create(score_entry: "8", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2) }
+    let(:multi_shot_23) { Shot.create(score_entry: "7", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2) }
+    
 
     # ###################################################################
     # define standard create/update variations
@@ -41,36 +50,41 @@ RSpec.describe Shot, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:test_req) {
-        {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1, score_entry: "5"}
+        {score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}
     }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1, number: 2, score_entry: "5"}
+        {number: 2, score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1, number: "", score_entry: "4"}
+        {score_entry: "4"}
     }
 
+    let(:update_blank) {
+        {score_entry: ""}
+    }
+    
     # every attr blank
-    let(:blank) {
-        {archer_id: "", score_session_id: "", round_id: "", rset_id: "", end_id: "", number: "", score_entry: ""}
+    let(:all_blank) {
+        {number: "", score_entry: "", archer_id: "", score_session_id: "", round_id: "", rset_id: "", end_id: ""}
     }
   
     # ###################################################################
     # define test results for auto-assign attrs
     # ###################################################################
-    let(:assigned_num) {2}
+    let(:assigned_num) {1}
     # let(:default_attr) {}
   
     # ###################################################################
     # define custom error messages
     # ###################################################################
-    let(:missing_score_entry_message) {"You must enter a score for shot #{shot.number}."}
+    # let(:missing_score_entry_message) {"You must enter a score for shot #{shot.number}."}
+    let(:missing_score_entry_message) {"You must enter a score."}
 
     let(:inclusion_score_entry_message) {"Enter only X, M or a number between #{shot.target.score_areas} and #{shot.target.max_score}."}
     let(:inclusion_score_entry_message_no_x) {"Enter only M or a number between #{shot.target.score_areas} and #{shot.target.max_score}."}
@@ -117,58 +131,97 @@ RSpec.describe Shot, type: :model do
                 expect(shot.number).to eq(assigned_num)
             end
 
-            it "given no attributes at instantiation" do
+            it "number is duplicated but for different End" do
+                # need second end
+                second_end = End.find_or_create_by(number: 2, set_score: "", archer: valid_archer, score_session: valid_score_session, round: valid_round, rset: valid_rset)
+                expect(End.all.count).to eq(2)
                 expect(Shot.all.count).to eq(0)
-                shot = Shot.create(blank)
+
+                # gives me 2 shots in valid_end
+                valid_shot
+                test_shot
+                expect(Shot.all.count).to eq(2)
+                
+                # gives me 1 shot in second_end
+                test_req[:end_id] = 2
+                third_shot = Shot.create(test_req)
+                expect(Shot.all.count).to eq(3)
+
+                # test duped name from valid_shot but in second_end
+                duplicate[:number] = ""
+                duplicate[:end_id] = 2
+                shot = Shot.create(duplicate)
 
                 expect(shot).to be_valid
+                expect(Shot.all.count).to eq(4)
+
+                expect(shot.number).to eq(2)
+                expect(shot.score_entry).to eq(duplicate[:score_entry])
+            end
+
+            it "missing score_entry at instantiation" do
+                test_req[:score_entry] = ""
+
+                # shot = Shot.new(test_req)
+                # expect(shot).to be_valid
+                # shot.save
+                shot = Shot.create(test_req)
+                # expect(shot).to be_valid
                 expect(Shot.all.count).to eq(1)
-
-                # req input tests (should have value in test_req)
+                
                 expect(shot.score_entry).to be_blank
-
-                # not req input tests (number auto-asigned from missing)
                 expect(shot.number).to eq(assigned_num)
             end
 
             it "updating all attributes" do
-                test_shot.update(update)
+                shot = Shot.create(test_req)
+                shot.update(update)
 
-                expect(test_shot).to be_valid
-
+                expect(shot).to be_valid
+                
                 # req input tests (should have value in update)
-                expect(test_shot.score_entry).to eq(update[:score_entry])
+                expect(shot.score_entry).to eq(update[:score_entry])
                 
                 # not req input tests (number auto-asigned from blank)
-                expect(test_shot.number).to eq(assigned_num)
+                expect(shot.number).to eq(assigned_num)
             end
         end
 
         describe "invalid and has correct error message when" do
-            it "missing score_entry upon update" do
-                shot = Shot.create(blank)
-                expect(shot).to be_valid
-                expect(Shot.all.count).to eq(1)
-
-                shot.update(blank)
-
-                expect(shot).to be_invalid
-                expect(shot.errors.messages[:score_entry]).to include(missing_score_entry_message)
-                expect(shot.number).to eq(assigned_num)
-            end
-
             it "number is outside allowable inputs" do
-                valid_score_session
-                over_max = valid_rset.ends.first.shots.count + 1
-                bad_scenarios = [0, -1, over_max, "one"]
+                bad_scenarios = [0, -1, "one"]
                 
                 bad_scenarios.each do | test_value |
                     duplicate[:number] = test_value
                     shot = Shot.create(duplicate)
                     expect(shot).to be_invalid
                     expect(Shot.all.count).to eq(0)
-                    expect(shot.errors.messages[:number]).to include(default_number_message)
+                    expect(shot.errors.messages[:number]).to be_present
                 end
+            end
+
+            it "unique attributes are duplicated" do
+                # need to call initial test object to check against for duplication
+                test_shot
+                expect(Shot.all.count).to eq(1)
+                shot = Shot.create(duplicate)
+
+                expect(shot).to be_invalid
+                expect(Shot.all.count).to eq(1)
+                expect(shot.errors.messages[:number]).to include(default_duplicate_message)
+            end
+
+            it "missing score_entry upon update" do
+                test_req[:score_entry] = ""
+                shot = Shot.create(test_req)
+                # expect(shot).to be_valid
+                expect(Shot.all.count).to eq(1)
+
+                shot.update(update_blank)
+
+                expect(shot).to be_invalid
+                expect(shot.errors.messages[:score_entry]).to include(missing_score_entry_message)
+                expect(shot.number).to eq(assigned_num)
             end
 
             it "score_entry is outside allowable inputs" do
@@ -275,25 +328,50 @@ RSpec.describe Shot, type: :model do
             end
 
             it "can create a new instance via the associated object and get associated object attributes" do
-                @assoc_end = valid_end
+                assoc_end = End.first
                 update[:end_id] = ""
-                check_shot = @assoc_end.shots.create(update)
+                check_shot = assoc_end.shots.create(update)
                 
-                expect(check_shot.end).to eq(@assoc_end)
-                expect(check_shot.end.number).to eq(@assoc_end.number)
+                expect(check_shot.end).to eq(assoc_end)
+                expect(check_shot.end.number).to eq(assoc_end.number)
             end
         end
     end
 
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
-        # before(:each) do
-        #     valid_score_session
-        #     valid_round
-        #     valid_set
-        #     valid_target
-        #     test_multi
-        # end
+        before(:each) do
+            before_archer
+            valid_archer
+            valid_score_session
+            valid_round
+            valid_rset
+            valid_end
+            # valid_target
+            # test_multi
+        end
+
+        it "can find all shots that belong to same end" do
+            second_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1)
+            multi_shot_11
+            multi_shot_12
+            multi_shot_13
+            multi_shot_21
+            multi_shot_22
+            multi_shot_23
+            
+            expect(Shot.all.count).to eq(6)
+            expect(multi_shot_11.shots_in_end.count).to eq(3)
+            expect(multi_shot_21.shots_in_end.count).to eq(3)
+            expect(multi_shot_11.shots_in_end).to include(multi_shot_11)
+            expect(multi_shot_11.shots_in_end).to include(multi_shot_12)
+            expect(multi_shot_11.shots_in_end).to include(multi_shot_12)
+            expect(multi_shot_11.shots_in_end).not_to include(multi_shot_21)
+            expect(multi_shot_11.shots_in_end).not_to include(multi_shot_22)
+            expect(multi_shot_11.shots_in_end).not_to include(multi_shot_23)
+        end
+
+        
 
         # it "can auto-assign the set_score for all shots from same end at same time if entered at last shot" do
         #     multi_test_all[:multi_shot_23][:set_score] = 1
@@ -323,10 +401,6 @@ RSpec.describe Shot, type: :model do
         #     want to be able to to call shot.rs_end
         # end
 
-        # # it "can find all shots that belong to same end" do
-        #     # want to be able to to call shot.end_shots
-        # # end
-
         # it "can calculate the total score for an end" do
         #     test_end_one_score = multi_shot_11.score + multi_shot_12.score + multi_shot_13.score
         #     test_end_two_score = multi_test_all[:multi_shot_21][:score_entry].to_i + multi_test_all[:multi_shot_22][:score_entry].to_i + multi_test_all[:multi_shot_23][:score_entry].to_i
@@ -342,10 +416,6 @@ RSpec.describe Shot, type: :model do
 
         # # #####################################################
         # # should I build an end model?????
-        
-        # # it "can find all shots that belong to same end" do
-        # #     expect(multi_shot_11.set_score).to eq(multi_test_all[:multi_shot_11][:set_score])
-        # # end
 
         # # it "can track if end it is in is complete or not" do
         #     # can use this to identify the active end so only display form for that end
