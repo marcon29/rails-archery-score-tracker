@@ -139,7 +139,11 @@
     - if round_type is "Match", restrict rank options to "Win" or "Loss"
 
 # Rset Controller 
-    - can't allow ability to change Rset name via update
+    - can't allow ability to change Rset name via update (or create either)
+        - should be able to do by not allowing via strong params
+
+# End Controller 
+    - can't allow ability to change End number via update (or create either)
         - should be able to do by not allowing via strong params
 
 

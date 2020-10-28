@@ -4,67 +4,44 @@ class End < ApplicationRecord
     belongs_to :score_session
     belongs_to :round
     belongs_to :rset
-
         
     # all attrs - :number, :set_score
+    # dependencies: Rset (for number creation), Round & ScoreSession (for Rset), Round (for set_score)
 
-    # need validations
-        # required: :number, :set_score ( if end.round.score_method == "Set" )
-            # "You must enter a set score for the end."
-        # inclusion: 
-        #     :number ( 1 through rset.ends.count ), 
-        #     :set_score ( 0 - 2 )
-        # format: :number (number), :set_score (number)
-
-    validates :number, 
-        numericality: {
-            only_integer: true, 
-            greater_than: 0, 
-            # real code
-            # less_than_or_equal_to: ends_in_set.count
-            # use until assoc set
-            less_than_or_equal_to: 6
-        }
+    validates :number, numericality: {only_integer: true, greater_than: 0 }
     validates :set_score, 
-        numericality: {
+        numericality: { 
             only_integer: true, 
-            greater_thanor_equal_to: 0, 
+            greater_than_or_equal_to: 0, 
             less_than_or_equal_to: 2, 
             allow_nil: true, 
-            message: "You must enter 0, 1, or 2."
-        }
-    before_validation :assign_number
+            allow_blank: true, 
+            message: "You must enter 0, 1, or 2." },
+        on: :create
+    validates :set_score, 
+        numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 2, message: "You must enter 0, 1, or 2." },
+        on: :update,
+        unless: :score_method_is_points?
+    before_validation :assign_number, :clear_set_score_if_points
     
-    # #################################################
-    # need associations set up before I can really do anything
-    # #################################################
-
-    # set_score validation rules
-        # must be able to be blank on instantiation
-        # if end.round.score_method == "Set", can't be blank (only when updating)
-        # if end.round.score_method == "Points", must be blank (just delete any entry)
-
-
     # need helpers (callbacks & validations)
     def assign_number
-        self.number = ends_in_set.count + 1 if self.number.blank?
+        if self.number.blank? && self.rset
+            self.number = ends_in_set.count + 1 
+        end
     end
-
 
     def ends_in_set
-        # real code
-        # self.rset.ends
-
-        # use until assoc set
-        # ["end1", "end2", "end3", "end4", "end5"]
-        ["end1"]
+        self.rset.ends if self.rset
     end
 
-    
-        
-        # need to auto create number ( sequential by rset )
-            # endd.name will be input by controller, not via assoc.
+    def score_method_is_points?
+        self.round && self.round.score_method == "Points"
+    end
 
+    def clear_set_score_if_points
+        self.set_score = nil if score_method_is_points?
+    end 
 
     # need helpers
         # need to get distance and target (same process for each)
