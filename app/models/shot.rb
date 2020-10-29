@@ -25,10 +25,10 @@ class Shot < ApplicationRecord
         presence: { message: -> (shot, data) {"You must enter a score for shot #{shot.number}."} }, 
         inclusion: { in: :possible_scores, message: -> (shot, data) {"#{shot.score_entry_error_message}"} }, 
         on: :update
-    before_validation :assign_number
+    before_validation :assign_number, :format_score_entry
     # before_validation :format_score_entry
 
-    # need helpers (callbacks & validations)
+    # ##### helpers (callbacks & validations)
     # assigns number (same as number for End)
     def assign_number
         if self.number.blank? && self.end
@@ -56,50 +56,40 @@ class Shot < ApplicationRecord
         # Target.find(3)
     end
 
+    def format_score_entry
+        self.score_entry = self.score_entry.capitalize if self.score_entry
+    end
+
     def score_entry_error_message
         max_score = self.target.max_score
         min_score = self.target.max_score - self.target.score_areas + 1
 
         "Enter only M#{', X,' if self.target.x_ring} or a number between #{min_score} and #{max_score}."
     end
-
-
         
-    # need helpers (data control)
-        # it "can calculate a score (point value) for a shot" do
-            # want to be able to to call shot.score
-            # needs assoc: rset
-            # converts score_entry into integer
-                # if score_entry == "X", score = shot.target_method.max_score
-                # if score_entry == "M", score = 0
-                # else score = score_entry.to_i
-        # end
+    # ##### helpers (data control)
+    # converts score_entry into integer
+    def score
+        if score_entry == "X"
+            self.target.max_score 
+        elsif score_entry == "M"
+            0 
+        else
+            score_entry.to_i
+        end
+    end
 
-        # it "can find the date a shot was made" do
-            # want to be able to to call shot.date
-            # needs assoc: rset
-            # date = shot.rset.date
-        # end
+    def date
+        self.rset.date
+    end
+    
 
-        # it "can find the date a shot was made" do
-            # want to be able to to call shot.date
-            # needs assoc: rset
-            # date = shot.rset.date
-        # end
 
-        
-
+    # ######### helpers to add once DistanceTarget and associations finished ###################
         # it "can find the distance at which shot was made" do
             # want to be able to to call shot.date
             # needs assoc: rset
             # distance = shot.rset.distance
-        # end
-
-        # it "can find the end number shot belongs to" do
-            # do I really need this - originally for calculating end score before creating model?
-            # want to be able to to call shot.end_num
-            # needs assoc: end
-            # end_num = shot.end.number
         # end
 
         # it "can find the discipline in which the shot was made" do
@@ -120,7 +110,7 @@ class Shot < ApplicationRecord
             # age_class = shot.round.age_class
         # end
 
-        # it "can identify its archer's archer_category for the round it's in" do
+        # it "can find its archer's archer_category for the round it's in" do
             # do I really need this - purpose other than finding division, age_class?
             # want to be able to to call shot.archer_category
             # needs assoc: round, archer?

@@ -381,6 +381,12 @@ RSpec.describe End, type: :model do
             expect(endd.score).to eq(all_shots_scores)
         end
 
+        it "can track if end it is in is complete or not" do
+            pending "need to finish shot model"
+            # can use this to identify the active end so only display form for that end
+            # want to be able to to call shot.end_complete?
+        end
+
         it "helpers TBD" do
             pending "add as needed"
             expect(endd).to be_invalid
