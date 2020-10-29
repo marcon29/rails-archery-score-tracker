@@ -29,7 +29,7 @@ class Shot < ApplicationRecord
     # before_validation :format_score_entry
 
     # need helpers (callbacks & validations)
-    # need to assign number (same as end_num for End)
+    # assigns number (same as number for End)
     def assign_number
         if self.number.blank? && self.end
             self.number = shots_in_end.count + 1 
@@ -42,18 +42,8 @@ class Shot < ApplicationRecord
 
     # to validate score_entry
     # identifies all possible score entries, needs Target object, returns array
-    # this would probably be better in the Target model, then just call that method here
     def possible_scores
-        entries = ["M"]
-        entries << "X" if target.x_ring
-        
-        score = target.max_score
-        target.score_areas.times do
-                entries << score.to_s
-                score -= 1
-        end
-        
-        entries
+        self.target.possible_scores
     end
 
     # can find the target into which shot was made (comes from assoc Rset)
@@ -72,17 +62,6 @@ class Shot < ApplicationRecord
 
         "Enter only M#{', X,' if self.target.x_ring} or a number between #{min_score} and #{max_score}."
     end
-
-    
-
-    
-        
-
-        # it "knows if target on which shot was made has an x-ring" do
-        #     want to be able to to call shot.target.x_ring?
-        #     true if shot.target.x_ring == true, else false
-        # end
-
 
 
         

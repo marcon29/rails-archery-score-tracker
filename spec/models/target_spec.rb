@@ -6,7 +6,7 @@ RSpec.describe Target, type: :model do
     # ###################################################################
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
     let(:test_all) {
-        {name: "80cm/1-spot/10-ring", size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false}
+        {name: "80cm/1-spot/10-ring", size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: true}
     }
 
     let(:test_target) {
@@ -32,7 +32,7 @@ RSpec.describe Target, type: :model do
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "80cm/1-spot/10-ring", size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false}
+        {name: "80cm/1-spot/10-ring", size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: true}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
@@ -186,6 +186,26 @@ RSpec.describe Target, type: :model do
 
         it "has many ArcherCategories" do
             expect(test_target.archer_categories).to include(valid_category)
+        end
+    end
+
+    # helper method tests ########################################################
+    describe "all helper methods work correctly:" do
+        it "can identify all possible score entries" do
+            fita122_scores = ["M", "X", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
+            no_x_ring_scores =  ["M", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
+            fita80_6ring_scores = ["M", "X", "10", "9", "8", "7", "6", "5"]
+            
+            target = Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: true)
+            expect(Target.all.count).to eq(1)
+
+            expect(target.possible_scores).to eq(fita122_scores)
+
+            target.update(x_ring: false)
+            expect(target.possible_scores).to eq(no_x_ring_scores)
+
+            target.update(score_areas: 6, rings: 6, x_ring: true,)
+            expect(target.possible_scores).to eq(fita80_6ring_scores)
         end
     end
 end
