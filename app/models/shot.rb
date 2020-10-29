@@ -8,7 +8,6 @@ class Shot < ApplicationRecord
     # all assoc attrs - :archer_id, :score_session_id, :round_id, :rset_id, :end_id
     # all data attrs  - :number, :score_entry
     
-    # need validations
     validates :number, 
         numericality: {only_integer: true, greater_than: 0 }, 
         uniqueness: { scope: :end }
@@ -20,13 +19,11 @@ class Shot < ApplicationRecord
         inclusion: { in: :possible_scores, allow_blank: true, message: -> (shot, data) {"#{shot.score_entry_error_message}"} }, 
         on: :create
     validates :score_entry, 
-        # presence: { message: "You must enter a score for shot #{self.number}." }, 
-        # presence: { message: "You must enter a score." }, 
         presence: { message: -> (shot, data) {"You must enter a score for shot #{shot.number}."} }, 
         inclusion: { in: :possible_scores, message: -> (shot, data) {"#{shot.score_entry_error_message}"} }, 
         on: :update
     before_validation :assign_number, :format_score_entry
-    # before_validation :format_score_entry
+    
 
     # ##### helpers (callbacks & validations)
     # assigns number (same as number for End)
@@ -40,13 +37,11 @@ class Shot < ApplicationRecord
         self.end.shots if self.end
     end
 
-    # to validate score_entry
-    # identifies all possible score entries, needs Target object, returns array
     def possible_scores
         self.target.possible_scores
+        # returns array
     end
 
-    # can find the target into which shot was made (comes from assoc Rset)
     def target
         # real code
         # self.rset.target
@@ -82,10 +77,11 @@ class Shot < ApplicationRecord
     def date
         self.rset.date
     end
-    
 
 
     # ######### helpers to add once DistanceTarget and associations finished ###################
+        # need to redo #target method above
+
         # it "can find the distance at which shot was made" do
             # want to be able to to call shot.date
             # needs assoc: rset

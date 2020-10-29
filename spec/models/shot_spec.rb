@@ -17,7 +17,7 @@ RSpec.describe Shot, type: :model do
     # define any additional objects to test for this model 
     # ###################################################################
     # only add multiple instantiations if need simultaneous instances for testing
-    # this is how 2 ends of three would look, covers all score_entry options
+    # this is how 2 ends of 3 shots would look, covers all score_entry options
     let(:multi_shot_11_attrs) { {score_entry: "X", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1} }
     let(:multi_shot_12_attrs) { {score_entry: "10", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1} }
     let(:multi_shot_13_attrs) { {score_entry: "M", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1} }
