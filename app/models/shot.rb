@@ -17,20 +17,14 @@ class Shot < ApplicationRecord
             # needs to be between 1 and Set_End_format.shots_per_end
     
     validates :score_entry, 
-        format: { with: /\A\d|X|M\z/, allow_nil: true, allow_blank: true, message: "Enter only X, M or a number." }, 
+        inclusion: { in: :possible_scores, allow_blank: true, message: -> (shot, data) {"#{shot.score_entry_error_message}"} }, 
         on: :create
     validates :score_entry, 
         # presence: { message: "You must enter a score for shot #{self.number}." }, 
-        presence: { message: "You must enter a score." }, 
-        format: { with: /\A\d|X|M|x|m\z/, message: "Enter only X, M or a number." }, 
+        # presence: { message: "You must enter a score." }, 
+        presence: { message: -> (shot, data) {"You must enter a score for shot #{shot.number}."} }, 
+        inclusion: { in: :possible_scores, message: -> (shot, data) {"#{shot.score_entry_error_message}"} }, 
         on: :update
-        # score_entry validation rules
-            # must be able to be blank on instantiation
-            # upon update, must be included in possible_scores
-                # possible scores: target.score_areas through target.max_score, M, X if target.x_ring )
-                    # message if x-ring: "Enter only X, M or a number between #{shot.target.score_areas} and #{shot.target.max_score}."
-                    # message if no x-ring: "Enter only M or a number between #{shot.target.score_areas} and #{shot.target.max_score}."
-        
     before_validation :assign_number
     # before_validation :format_score_entry
 
@@ -46,16 +40,50 @@ class Shot < ApplicationRecord
         self.end.shots if self.end
     end
 
-        # to validate score_entry
-            # it "can identify all possible score values" do
-            #     want to be able to to call shot.possible_scores
-            #     max_score..score_areas, M, and X if x_ring
-            # end
+    # to validate score_entry
+    # identifies all possible score entries, needs Target object, returns array
+    # this would probably be better in the Target model, then just call that method here
+    def possible_scores
+        entries = ["M"]
+        entries << "X" if target.x_ring
+        
+        score = target.max_score
+        target.score_areas.times do
+                entries << score.to_s
+                score -= 1
+        end
+        
+        entries
+    end
 
-            # it "knows if target on which shot was made has an x-ring" do
-            #     want to be able to to call shot.target.x_ring?
-            #     true if shot.target.x_ring == true, else false
-            # end
+    # can find the target into which shot was made (comes from assoc Rset)
+    def target
+        # real code
+        # self.rset.target
+
+        # use til target assoc setup for Rset
+        Target.first
+        # Target.find(3)
+    end
+
+    def score_entry_error_message
+        max_score = self.target.max_score
+        min_score = self.target.max_score - self.target.score_areas + 1
+
+        "Enter only M#{', X,' if self.target.x_ring} or a number between #{min_score} and #{max_score}."
+    end
+
+    
+
+    
+        
+
+        # it "knows if target on which shot was made has an x-ring" do
+        #     want to be able to to call shot.target.x_ring?
+        #     true if shot.target.x_ring == true, else false
+        # end
+
+
 
         
     # need helpers (data control)
@@ -80,11 +108,7 @@ class Shot < ApplicationRecord
             # date = shot.rset.date
         # end
 
-        # it "can find the target into which shot was made" do
-            # want to be able to to call shot.target
-            # needs assoc: rset
-            # target = shot.rset.target
-        # end
+        
 
         # it "can find the distance at which shot was made" do
             # want to be able to to call shot.date

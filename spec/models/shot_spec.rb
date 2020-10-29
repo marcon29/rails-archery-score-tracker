@@ -18,24 +18,6 @@ RSpec.describe Shot, type: :model do
     # ###################################################################
     # only add multiple instantiations if need simultaneous instances for testing
     # this is how 2 ends of three would look, covers all score_entry options
-    # let(:multi_test_all) {
-    #     {
-    #         multi_shot_11: {number: 1, score_entry: "X", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}, 
-    #         multi_shot_12: {number: 2, score_entry: "10", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}, 
-    #         multi_shot_13: {number: 3, score_entry: "M", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}, 
-    #         multi_shot_21: {number: 1, score_entry: "9", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2}, 
-    #         multi_shot_22: {number: 2, score_entry: "8", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2}, 
-    #         multi_shot_23: {number: 3, score_entry: "7", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 2}
-    #     }
-    # }
-
-    # let(:test_multi) {
-    #     multi_test_all.each do | shot, attrs |
-    #         let(:shot) { Shot.create(attrs) }
-    #     end
-    # }
-
-    
     let(:multi_shot_11) { Shot.create(score_entry: "X", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1) }
     let(:multi_shot_12) { Shot.create(score_entry: "10", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1) }
     let(:multi_shot_13) { Shot.create(score_entry: "M", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1) }
@@ -78,23 +60,7 @@ RSpec.describe Shot, type: :model do
     # define test results for auto-assign attrs
     # ###################################################################
     let(:assigned_num) {1}
-    # let(:default_attr) {}
-  
-    # ###################################################################
-    # define custom error messages
-    # ###################################################################
-    # let(:missing_score_entry_message) {"You must enter a score for shot #{shot.number}."}
-    let(:missing_score_entry_message) {"You must enter a score."}
-
-    let(:inclusion_score_entry_message) {"Enter only X, M or a number between #{shot.target.score_areas} and #{shot.target.max_score}."}
-    let(:inclusion_score_entry_message_no_x) {"Enter only M or a number between #{shot.target.score_areas} and #{shot.target.max_score}."}
     
-    # let(:missing_attr_message) {}
-    # let(:duplicate_attr_message) {}
-    # let(:inclusion_attr_message) {}
-    # let(:number_attr_message) {}
-    # let(:format_attr_message) {}
-
 
     # ###################################################################
     # define tests
@@ -104,6 +70,7 @@ RSpec.describe Shot, type: :model do
     describe "model creates and updates only valid instances - " do
         before(:each) do
             before_shot
+            valid_target
         end
 
         describe "valid when " do
@@ -162,6 +129,7 @@ RSpec.describe Shot, type: :model do
             it "missing score_entry at instantiation" do
                 test_req[:score_entry] = ""
 
+                # keeping this until figure out why it won't run validity test correctly (works fine in console)
                 # shot = Shot.new(test_req)
                 # expect(shot).to be_valid
                 # shot.save
@@ -201,7 +169,6 @@ RSpec.describe Shot, type: :model do
             end
 
             it "unique attributes are duplicated" do
-                # need to call initial test object to check against for duplication
                 test_shot
                 expect(Shot.all.count).to eq(1)
                 shot = Shot.create(duplicate)
@@ -214,40 +181,51 @@ RSpec.describe Shot, type: :model do
             it "missing score_entry upon update" do
                 test_req[:score_entry] = ""
                 shot = Shot.create(test_req)
+
+                # keeping this until figure out why it won't run validity test correctly (works fine in console)
                 # expect(shot).to be_valid
+
                 expect(Shot.all.count).to eq(1)
 
                 shot.update(update_blank)
 
                 expect(shot).to be_invalid
-                expect(shot.errors.messages[:score_entry]).to include(missing_score_entry_message)
+                expect(shot.errors.messages[:score_entry]).to include("You must enter a score for shot #{shot.number}.")
                 expect(shot.number).to eq(assigned_num)
             end
 
             it "score_entry is outside allowable inputs" do
                 # shot instance must have same target as test_shot
-                under_min = test_shot.target.score_areas - 1
+                under_min = (test_shot.target.max_score - test_shot.target.score_areas + 1) - 1
                 over_max = test_shot.target.max_score + 1
                 bad_scenarios = ["0", "-1", under_min, over_max, "bad", "MX"]
-                
+
                 bad_scenarios.each do | test_value |
+                    expect(Shot.all.count).to eq(1)
                     duplicate[:score_entry] = test_value
                     shot = Shot.create(duplicate)
                     expect(shot).to be_invalid
-                    expect(Shot.all.count).to eq(0)
-                    expect(shot.errors.messages[:score_entry]).to include(inclusion_score_entry_message)
+                    expect(Shot.all.count).to eq(1)
+                    expect(shot.errors.messages[:score_entry]).to include("Enter only M, X, or a number between #{shot.target.max_score - shot.target.score_areas + 1} and #{shot.target.max_score}.")
                 end
             end
 
             it "the score_entry value is X when there is no x-ring" do
-                valid_target.x_ring = false
-                valid_target.save
+                # include a test for both instantiation and updating
+                Target.destroy_all
+                test_target = Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: false, max_score: 10, spots: 1, user_edit: true)
+                expect(Target.all.count).to eq(1)
                 
                 duplicate[:score_entry] = "X"
                 shot = Shot.create(duplicate)
                 expect(shot).to be_invalid
                 expect(Shot.all.count).to eq(0)
-                expect(shot.errors.messages[:score_entry]).to include(inclusion_score_entry_message_no_x)
+                expect(shot.errors.messages[:score_entry]).to include("Enter only M or a number between #{shot.target.max_score - shot.target.score_areas + 1} and #{shot.target.max_score}.")
+
+                test_shot.update(score_entry: "X")
+                expect(test_shot).to be_invalid
+                expect(Shot.all.count).to eq(1)
+                expect(test_shot.errors.messages[:score_entry]).to include("Enter only M or a number between #{test_shot.target.max_score - test_shot.target.score_areas + 1} and #{test_shot.target.max_score}.")
             end
         end
     end
@@ -256,6 +234,7 @@ RSpec.describe Shot, type: :model do
     describe "instances are properly associated to other models" do
         before(:each) do
             before_shot
+            valid_target
         end
 
         describe "belongs to Archer and" do
@@ -347,8 +326,7 @@ RSpec.describe Shot, type: :model do
             valid_round
             valid_rset
             valid_end
-            # valid_target
-            # test_multi
+            valid_target
         end
 
         it "can find all shots that belong to same end" do
@@ -371,25 +349,35 @@ RSpec.describe Shot, type: :model do
             expect(multi_shot_11.shots_in_end).not_to include(multi_shot_23)
         end
 
+        it "can find the target into which shot was made" do
+            expect(test_shot.target).to eq(valid_target)
+        end
+
+        it "can identify all possible score entries" do
+            fita122_scores = ["M", "X", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
+            no_x_ring_scores =  ["M", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
+            fita80_6ring_scores = ["M", "X", "10", "9", "8", "7", "6", "5"]
+
+            
+            Target.destroy_all
+            test_target = Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: true)
+            expect(Target.all.count).to eq(1)
+            
+            shot = Shot.create(archer: valid_archer, score_session: valid_score_session, round: valid_round, rset: valid_rset, end: valid_end)
+            expect(shot.possible_scores).to eq(fita122_scores)
+
+            test_target.update(x_ring: false)
+            expect(shot.possible_scores).to eq(no_x_ring_scores)
+
+            test_target.update(score_areas: 6, rings: 6, x_ring: true,)
+            expect(shot.possible_scores).to eq(fita80_6ring_scores)
+        end
+
         
 
-        # it "can auto-assign the set_score for all shots from same end at same time if entered at last shot" do
-        #     multi_test_all[:multi_shot_23][:set_score] = 1
+        
 
-        #     expect(multi_shot_11.set_score).to eq(multi_test_all[:multi_shot_11][:set_score])
-        #     expect(multi_shot_21.set_score).to eq(1)
-        #     expect(multi_shot_22.set_score).to eq(1)
-        #     expect(multi_shot_21.set_score).to eq(1)
-        # end
 
-        # it "set_score won't update for any shot if it doesn't come from the last shot of the end" do
-        #     multi_test_all[:multi_shot_21][:set_score] = 1
-
-        #     expect(multi_shot_11.set_score).to eq(multi_test_all[:multi_shot_11][:set_score])
-        #     expect(multi_shot_21.set_score).to eq(multi_test_all[:multi_shot_21][:set_score])
-        #     expect(multi_shot_22.set_score).to eq(multi_test_all[:multi_shot_22][:set_score])
-        #     expect(multi_shot_23.set_score).to eq(multi_test_all[:multi_shot_23][:set_score])
-        # end
 
         # it "can calculate a point value (as score) from the score entry" do
         #     expect(multi_shot_11.score).to eq(target.max_score)
@@ -422,49 +410,16 @@ RSpec.describe Shot, type: :model do
         #     # want to be able to to call shot.end_complete?
         # # end
         # # #####################################################
-
-
-        # # #####################################################
-        # # reference
-
-        # multi_test_all[:multi_shot_21][:set_score] = 1
-        #     expect(multi_shot_11.set_score).to eq(multi_test_all[:multi_shot_11][:set_score])
-        #     expect(multi_shot_21.set_score).to eq(multi_test_all[:multi_shot_21][:set_score])
-        #     expect(multi_shot_22.set_score).to eq(multi_test_all[:multi_shot_21][:set_score])
-        #     expect(multi_shot_23.set_score).to eq(multi_test_all[:multi_shot_21][:set_score])
-            
-        #     multi_test_all[:multi_shot_21][:set_score]
-        #     multi_test_all[:multi_shot_22][:set_score]
-        #     multi_test_all[:multi_shot_23][:set_score]
-
-        #     multi_test_all = 
-        #     multi_shot_11: {end_num: 1, number: 1, score_entry: "X",  set_score: 2}
-        #     multi_shot_12: {end_num: 1, number: 2, score_entry: "10", set_score: 2}
-        #     multi_shot_13: {end_num: 1, number: 3, score_entry: "M",  set_score: 2}
-        #     multi_shot_21: {end_num: 2, number: 1, score_entry: "9",  set_score: ""}
-        #     multi_shot_22: {end_num: 2, number: 2, score_entry: "9",  set_score: ""}
-        #     multi_shot_23: {end_num: 2, number: 3, score_entry: "9",  set_score: ""}
-        # # #####################################################
-
         
         # it "can identify its distance" do
         #     pending "need to add associations"
         #     expect(test_shot.distance).to eq(valid_dist_targ.distance)
         # end
 
-        # it "can identify its target" do
-        #     pending "need to add associations"
-        #     expect(test_shot.target).to eq(valid_dist_targ.target)
-        # end
-
         # # it "can identify its archer's archer_category for the round it's in" do
         # #     pending "need to add associations"
         # #     want to be able to to call shot.archer_category
         # # end
-
-
-        
-        
         
 
         it "helpers TBD" do

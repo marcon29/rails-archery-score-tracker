@@ -7,7 +7,8 @@ class Target < ApplicationRecord
 
     validates :name, presence: true, uniqueness: true
     validates :size, presence: { message: "You must provide a target size." }
-    validates :x_ring, presence: { message: "You must specifiy if there is an X ring." }
+    # validates :x_ring, presence: { message: "You must specifiy if there is an X ring." }
+    validates :x_ring, inclusion: { in: [true, false], message: "You must specifiy if there is an X ring." }
     validates :score_areas, :rings, :max_score, :spots, 
         numericality: { only_integer: true, greater_than: 0, message: "You must enter a number greater than 0." }
     before_validation :assign_name

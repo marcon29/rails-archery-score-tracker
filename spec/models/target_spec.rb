@@ -37,7 +37,7 @@ RSpec.describe Target, type: :model do
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {name: "", size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3}
+        {name: "", size: "20in", score_areas: 5, rings: 5, x_ring: false, max_score: 5, spots: 3}
     }
 
     # every attr blank
@@ -49,7 +49,7 @@ RSpec.describe Target, type: :model do
     # define test results for auto-assign attrs
     # ###################################################################
     let(:assigned_name) {"80cm/1-spot/10-ring"}
-    let(:assigned_name_update) {"40cm/3-spot/6-ring"}
+    let(:assigned_name_update) {"20in/3-spot/5-ring"}
     let(:default_user_edit) {true}
 
     # ###################################################################
