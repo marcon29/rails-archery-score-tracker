@@ -183,20 +183,32 @@
 
 
 # Target Controller tests
-    # let(:update_values) {
-    #   {size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3}
-    # }
-    # it "won't update a pre-loaded (non-user-editable) target" do
-    #   pre_load_target.update(update_values)
+    - model can keep non-editable target from updating, except for chaning the user_edit field
+        - that must be a controller function
+            - 1. dissallow the field via strong params
+            - 2. check DB value first, than compare with params (can't do in model)
+            # it "trying to change a restricted, pre-load target to be editable" do
+            #     expect(Target.all.count).to eq(0)
 
-    #   expect(pre_load_target.name).to eq("122cm/1-spot/10-ring")
-    #   expect(pre_load_target.size).to eq("122cm")
-    #   expect(pre_load_target.score_areas).to eq(10)
-    #   expect(pre_load_target.rings).to eq(10)
-    #   expect(pre_load_target.x_ring).to eq(true)
-    #   expect(pre_load_target.max_score).to eq(10)
-    #   expect(pre_load_target.spots).to eq(1)
-    # end
+            #     target = Target.create(
+            #         name: test_all[:name], 
+            #         size: test_all[:size], 
+            #         score_areas: test_all[:score_areas], 
+            #         rings: test_all[:rings], 
+            #         x_ring: test_all[:x_ring], 
+            #         max_score: test_all[:max_score], 
+            #         spots: test_all[:spots], 
+            #         user_edit: false
+            #         )
+                
+                
+            #     expect(Target.all.count).to eq(1)
+            #     target.update(user_edit: true)
+                
+            #     expect(target).to be_invalid
+            #     expect(target.errors.messages[:user_edit]).to include(restricted_update_message)
+            #     expect(target.user_edit).to eq(test_all[:user_edit])
+            # end
 
 
 # DistanceTarget Controller ???

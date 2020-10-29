@@ -60,6 +60,8 @@ RSpec.describe Target, type: :model do
 
     let(:number_all_message) {"You must enter a number greater than 0."}
 
+    let(:restricted_update_message) {"You can't change a pre-loaded target."}
+
 
     # ###################################################################
     # define tests
@@ -164,6 +166,54 @@ RSpec.describe Target, type: :model do
                 expect(target.errors.messages[:rings]).to include(number_all_message)
                 expect(target.errors.messages[:max_score]).to include(number_all_message)
                 expect(target.errors.messages[:spots]).to include(number_all_message)
+            end
+
+            it "trying to edit a restricted, pre-load target" do
+                # can create a target with user_edit == false, but not edit after
+                expect(Target.all.count).to eq(0)
+
+                target = Target.create(
+                    name: test_all[:name], 
+                    size: test_all[:size], 
+                    score_areas: test_all[:score_areas], 
+                    rings: test_all[:rings], 
+                    x_ring: test_all[:x_ring], 
+                    max_score: test_all[:max_score], 
+                    spots: test_all[:spots], 
+                    user_edit: false
+                    )
+                
+                
+                expect(Target.all.count).to eq(1)
+                # keeping this until figure out why it won't run validity test correctly (works fine in console)
+                # expect(target).to be_valid
+                
+                target.update(update)
+                expect(target).to be_invalid
+                expect(target.errors.messages[:user_edit]).to include(restricted_update_message)
+
+                target.reload
+
+                expect(target.errors.messages[:name]).to include(restricted_update_message)
+                expect(target.name).to eq(test_all[:name])
+
+                expect(target.errors.messages[:size]).to include(restricted_update_message)
+                expect(target.size).to eq(test_all[:size])
+
+                expect(target.errors.messages[:score_areas]).to include(restricted_update_message)
+                expect(target.score_areas).to eq(test_all[:score_areas])
+
+                expect(target.errors.messages[:rings]).to include(restricted_update_message)
+                expect(target.rings).to eq(test_all[:rings])
+
+                expect(target.errors.messages[:x_ring]).to include(restricted_update_message)
+                expect(target.x_ring).to eq(test_all[:x_ring])
+
+                expect(target.errors.messages[:max_score]).to include(restricted_update_message)
+                expect(target.max_score).to eq(test_all[:max_score])
+
+                expect(target.errors.messages[:spots]).to include(restricted_update_message)
+                expect(target.spots).to eq(test_all[:spots])
             end
         end
     end
