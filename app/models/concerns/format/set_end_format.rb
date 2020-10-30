@@ -1,5 +1,6 @@
 class Format::SetEndFormat < ApplicationRecord
     belongs_to :round_format
+    has_many :rsets
     
     # all attrs - :name, :num_ends, :shots_per_end, :user_edit
 
@@ -12,13 +13,21 @@ class Format::SetEndFormat < ApplicationRecord
 
 
     # helpers (callbacks & validations)
-    def assign_name
-        if self.name.blank?
-            self.name = "Set/Distance#{self.all_sets_in_same_round.count + 1}" if self.round_format
+    def assign_name 
+        if self.name.blank? && self.round_format
+            self.name = create_name
         end
     end
 
-    def all_sets_in_same_round
-        self.round_format.set_end_formats if self.round_format
+    def create_name
+        "Set/Distance#{self.set_number}"
     end
+
+    def set_number
+        sets_in_round.count + 1
+    end
+
+    def sets_in_round
+        self.round_format.set_end_formats if self.round_format
+    end 
 end

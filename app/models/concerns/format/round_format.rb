@@ -1,6 +1,7 @@
 class Format::RoundFormat < ApplicationRecord
     has_many :set_end_formats
-
+    has_many :rounds
+    
     # all attrs - :name, :num_sets, :user_edit
 
     validates :name, 

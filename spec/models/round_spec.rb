@@ -7,15 +7,16 @@ RSpec.describe Round, type: :model do
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
     let(:test_all) {
         {
-            name: "Double 1440 Round", 
+            name: "2020 World Cup - Double 1440 Round", 
             round_type: "Qualifying", 
             score_method: "Points", 
             rank: "1st", 
             archer_id: 1, 
-            score_session_id: 1
+            score_session_id: 1, 
+            round_format_id: 1
         }
     }
-    
+
     let(:test_round) {
         Round.create(test_all)
     }
@@ -33,32 +34,32 @@ RSpec.describe Round, type: :model do
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:valid_req) {
         # {round_type: "Qualifying", score_method: "Points", archer_id: 1, score_session_id: 1}
-        {name: "Double 1440 Round", round_type: "Qualifying", score_method: "Points", archer_id: 1, score_session_id: 1}
+        {round_type: "Qualifying", score_method: "Points", archer_id: 1, score_session_id: 1, round_format_id: 1}
     }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "Double 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 1, score_session_id: 1}
+        {name: "2020 World Cup - Double 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 1, score_session_id: 1, round_format_id: 1}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {name: "720 Round", round_type: "Match", score_method: "Set", rank: "Win", archer_id: 1, score_session_id: 1}
+        {name: "", round_type: "Match", score_method: "Set", rank: "Win", archer_id: 1, score_session_id: 1, round_format_id: 1}
     }
 
     # every attr blank
     let(:blank) {
-        {name: "", round_type: "", score_method: "", rank: "", archer_id: "", score_session_id: ""}
+        {name: "", round_type: "", score_method: "", rank: "", archer_id: "", score_session_id: "", round_format_id: ""}
     }
   
     # ###################################################################
     # define test results for auto-assign attrs
     # ###################################################################
     # let(:assigned_name) {"100th US Nationals - 1440 Round"}
-    let(:assigned_name) {"#{valid_score_session.name} - #{test_all[:name]}"}
-    let(:assigned_name_update) {"#{valid_score_session.name} - #{update[:name]}"}
+    let(:assigned_name) {"#{valid_score_session.name} - #{valid_round_format.name}"}
+    
             
     # let(:default_attr) {}
   
@@ -78,20 +79,19 @@ RSpec.describe Round, type: :model do
     # object creation and validation tests #######################################
     describe "model creates and updates only valid instances - " do
         before(:each) do
-            # this needs to always run before creating an archer so validations work (creates inclusion lists)
-            before_archer
-            valid_archer
-            valid_score_session
+            before_round
         end
 
         describe "valid when " do
             it "given all required and unrequired attributes" do
                 expect(Round.all.count).to eq(0)
 
+                # binding.pry
+
                 expect(test_round).to be_valid
                 expect(Round.all.count).to eq(1)
 
-                expect(test_round.name).to eq(assigned_name)
+                expect(test_round.name).to eq(test_all[:name])
                 expect(test_round.round_type).to eq(test_all[:round_type])
                 expect(test_round.score_method).to eq(test_all[:score_method])
                 expect(test_round.rank).to eq(test_all[:rank])
@@ -114,6 +114,9 @@ RSpec.describe Round, type: :model do
             end
 
             it "name is duplicated but for different ScoreSessions" do
+                # need two round_formats
+                second_round_format = Format::RoundFormat.create(name: "720 Round", num_sets: 1, user_edit: false)
+
                 # need two score_sessions
                 second_score_sesion = ScoreSession.create(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", active: true, archer_id: 1)
                 expect(ScoreSession.all.count).to eq(2)
@@ -131,12 +134,13 @@ RSpec.describe Round, type: :model do
 
                 # test duped name from valid_round_format but in second_round_format
                 duplicate[:score_session_id] = 2
+                duplicate[:round_format_id] = 2
                 round = Round.create(duplicate)
 
                 expect(round).to be_valid
                 expect(Round.all.count).to eq(4)
 
-                expect(round.name).to eq("#{second_score_sesion.name} - #{duplicate[:name]}")
+                expect(round.name).to eq("#{round.score_session.name} - #{round.round_format.name}")
                 expect(round.round_type).to eq(duplicate[:round_type])
                 expect(round.score_method).to eq(duplicate[:score_method])
                 expect(round.rank).to eq(duplicate[:rank])
@@ -153,7 +157,7 @@ RSpec.describe Round, type: :model do
                 expect(test_round.rank).to eq(update[:rank])
 
                 # user_edit auto-asigned from blank
-                expect(test_round.name).to eq(assigned_name_update)
+                expect(test_round.name).to eq(assigned_name)
             end
         end
 
@@ -211,10 +215,7 @@ RSpec.describe Round, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            valid_archer
-            valid_score_session
-            valid_set_end_format
-            valid_target
+            before_round
         end
 
         describe "belongs to an Archer and" do
@@ -340,6 +341,13 @@ RSpec.describe Round, type: :model do
 
                 expect(valid_round.shots).not_to include(assoc_shot)
                 expect(round.shots).to include(assoc_shot)
+            end
+        end
+
+        describe "belongs to a RoundFormat and" do
+            it "can find an associated object" do
+                assoc_round_format = valid_round_format
+                expect(test_round.round_format).to eq(assoc_round_format)
             end
         end
 

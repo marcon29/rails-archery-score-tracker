@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_27_153443) do
+ActiveRecord::Schema.define(version: 2020_10_30_035151) do
 
   create_table "archers", force: :cascade do |t|
     t.string "username"
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 2020_10_27_153443) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "formats_round_formats", force: :cascade do |t|
+  create_table "format_round_formats", force: :cascade do |t|
     t.string "name"
     t.integer "num_sets"
     t.boolean "user_edit", default: true
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 2020_10_27_153443) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "formats_set_end_formats", force: :cascade do |t|
+  create_table "format_set_end_formats", force: :cascade do |t|
     t.string "name"
     t.integer "num_ends"
     t.integer "shots_per_end"
@@ -123,6 +123,8 @@ ActiveRecord::Schema.define(version: 2020_10_27_153443) do
     t.integer "score_session_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "round_format_id"
+    t.index ["round_format_id"], name: "index_rounds_on_round_format_id"
   end
 
   create_table "rsets", force: :cascade do |t|
@@ -134,6 +136,8 @@ ActiveRecord::Schema.define(version: 2020_10_27_153443) do
     t.integer "round_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "set_end_format_id"
+    t.index ["set_end_format_id"], name: "index_rsets_on_set_end_format_id"
   end
 
   create_table "score_sessions", force: :cascade do |t|

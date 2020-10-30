@@ -4,6 +4,7 @@ class Rset < ApplicationRecord
     belongs_to :archer
     belongs_to :score_session
     belongs_to :round
+    belongs_to :set_end_format, class_name: "Format::SetEndFormat"
 
     # has_one :distance_target_category, through: :archer
     # has_one :target, through: :distance_target_category
@@ -32,15 +33,17 @@ class Rset < ApplicationRecord
     
     # auto create name ( ScoreSession.name - Round.name - Rset.name )
     def assign_name
-        if self.name.blank?
-            self.name = create_name
-        elsif !self.name.include?(self.round.name) || !self.name.include?("Set/Distance")
-            self.name = create_name
+        if self.round && self.set_end_format
+            if self.name.blank?
+                self.name = create_name
+            elsif !self.name.include?(self.round.name) || !self.name.include?("Set/Distance")
+                self.name = create_name
+            end
         end
     end
 
     def create_name
-        "#{self.round.name} - Set/Distance#{self.set_number}" if self.round
+        "#{self.round.name} - Set/Distance#{self.set_number}" # if self.round
     end
 
     def set_number

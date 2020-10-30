@@ -194,7 +194,7 @@ RSpec.describe Format::SetEndFormat, type: :model do
 
             all_sets = Format::SetEndFormat.all
 
-            expect(test_set_end_format.all_sets_in_same_round).to eq(all_sets)
+            expect(test_set_end_format.sets_in_round).to eq(all_sets)
         end
     end
 end

@@ -4,6 +4,7 @@ class Round < ApplicationRecord
     has_many :shots
     belongs_to :archer
     belongs_to :score_session
+    belongs_to :round_format, class_name: "Format::RoundFormat"
 
     # has_one :archer_category, through: :archer
     # has_one :discipline, division, age_class, through: :archer_category
@@ -29,27 +30,28 @@ class Round < ApplicationRecord
     #     inclusion: { in: DISCIPLINES }
 
 
-    # callbacks/validation helpers
-    
+    # ##### helpers (callbacks & validations)
     # auto create name ( ScoreSession.name - RoundFormat.name )
     def assign_name
-        if !self.name.blank? && self.score_session
-            if !self.name.include?(score_session.name)
-                # "#{self.score_session.name} - #{round_format.name}"
-
-                # using name input until RoundFormat assoc
-                # could work like this and have controller grab the RoundFormat name instead of via assoc
-                self.name = "#{self.score_session.name} - #{self.name}"
+        if self.score_session && self.round_format
+            if self.name.blank?
+                self.name = create_name
+            elsif !self.name.include?(self.score_session.name) || !self.name.include?(self.round_format.name)
+                self.name = create_name
             end
         end
     end
 
-    # need other helper methods
-        # it "can calculate the total score for a round" do
-            # pending "need to add associations"
-            # want to be able to to call round.score
-            # sums all rset scores
-        # end
+    def create_name
+        "#{self.score_session.name} - #{self.round_format.name}" # if self.round
+    end
+
+    # ##### helpers (data control)
+    # it "can calculate the total score for a round" do
+        # pending "need to add associations"
+        # want to be able to to call round.score
+        # sums all rset scores
+    # end
 
         # ##########################
         # check out ArcherCategory (model and specs) for ideas and started code

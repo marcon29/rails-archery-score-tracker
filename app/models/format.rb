@@ -1,5 +1,5 @@
 module Format
   def self.table_name_prefix
-    'formats_'
+    'format_'
   end
 end

@@ -12,7 +12,8 @@ RSpec.describe Rset, type: :model do
             rank: "1st", 
             archer_id: 1, 
             score_session_id: 1, 
-            round_id: 1
+            round_id: 1, 
+            set_end_format_id: 1
         }
     }
 
@@ -32,24 +33,24 @@ RSpec.describe Rset, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:valid_req) {
-        {date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1}
+        {date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 1}
     }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "2020 World Cup - 1440 Round - Set/Distance2", date: "2020-09-01", rank: "1st", archer_id: 1, score_session_id: 1, round_id: 1}
+        {name: "2020 World Cup - 1440 Round - Set/Distance2", date: "2020-09-01", rank: "1st", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 1}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {date: "2020-09-05", rank: "3rd", archer_id: 1, score_session_id: 1, round_id: 1}
+        {date: "2020-09-05", rank: "3rd", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 1}
     }
 
     # every attr blank
     let(:blank) {
-        {name: "", date: "", rank: "", archer_id: "", score_session_id: "", round_id: ""}
+        {name: "", date: "", rank: "", archer_id: "", score_session_id: "", round_id: "", set_end_format_id: ""}
     }
     
     # ###################################################################
@@ -77,20 +78,15 @@ RSpec.describe Rset, type: :model do
     # object creation and validation tests #######################################
     describe "model creates and updates only valid instances - " do
         before(:each) do
-            # this needs to always run before creating an archer so validations work (creates inclusion lists)
-            before_archer
-            valid_archer
-            valid_score_session
-            valid_round
-            valid_rset
+            before_rset
         end
 
         describe "valid when " do
             it "given all required and unrequired attributes" do
-                expect(Rset.all.count).to eq(1)
+                expect(Rset.all.count).to eq(0)
 
                 expect(test_rset).to be_valid
-                expect(Rset.all.count).to eq(2)
+                expect(Rset.all.count).to eq(1)
                 
                 expect(test_rset.name).to eq(test_all[:name])
                 expect(test_rset.date).to eq(test_all[:date].to_date)
@@ -98,6 +94,7 @@ RSpec.describe Rset, type: :model do
             end
 
             it "given only required attributes" do
+                valid_rset
                 expect(Rset.all.count).to eq(1)
                 rset = Rset.create(valid_req)
 
@@ -112,13 +109,21 @@ RSpec.describe Rset, type: :model do
                 expect(rset.rank).to be_nil
             end
 
+
+            
+            # second_set_end_format = Format::SetEndFormat.create(name: "Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: second_round_format)
+
             it "name is duplicated but for different Round" do
+                # need second round format (for second round)
+                second_round_format = Format::RoundFormat.create(name: "720 Round", num_sets: 1, user_edit: false)
+
                 # need second round
-                second_round = Round.find_or_create_by(name: "720 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session)
+                second_round = Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session, round_format: second_round_format)
                 expect(Round.all.count).to eq(2)
-                expect(Rset.all.count).to eq(1)
+                expect(Rset.all.count).to eq(0)
 
                 # gives me 2 rsets in valid_round
+                valid_rset
                 test_rset
                 expect(Rset.all.count).to eq(2)
                 
@@ -214,11 +219,7 @@ RSpec.describe Rset, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            valid_archer
-            valid_score_session
-            valid_round
-            valid_set_end_format
-            valid_target
+            before_rset
         end
 
         describe "belongs to an Archer and" do
@@ -331,6 +332,13 @@ RSpec.describe Rset, type: :model do
             end
         end
 
+        describe "belongs to a SetEndFormat and" do
+            it "can find an associated object" do
+                assoc_set_end_format = valid_set_end_format
+                expect(test_rset.set_end_format).to eq(assoc_set_end_format)
+            end
+        end
+
         describe "sectioning off for Organization concern" do
             it "has one DistanceTargetCategory" do
                 pending "need to add create associated models and add associations"
@@ -348,11 +356,13 @@ RSpec.describe Rset, type: :model do
     describe "all helper methods work correctly:" do
         it "can find all rsets belonging to the same round" do
             first_rset = valid_rset
-            second_rset = Rset.create(date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1)
-            third_rset = Rset.create(date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1)
+            second_rset = Rset.create(date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 1)
+            third_rset = Rset.create(date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 1)
             
-            second_round = Round.find_or_create_by(name: "720 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session)
-            other_rset = Rset.create(date: "2020-01-01", archer_id: 1, score_session_id: 1, round_id: 2)
+            second_round_format = Format::RoundFormat.create(name: "720 Round", num_sets: 1, user_edit: false)
+            second_round = Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session, round_format: second_round_format)
+            # second_set_end_format = Format::SetEndFormat.create(name: "Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: second_round_format)
+            other_rset = Rset.create(date: "2020-01-01", archer_id: 1, score_session_id: 1, round_id: 2, set_end_format_id: 1)
             
             expect(first_rset.sets_in_round.count).to eq(3)
             expect(first_rset.sets_in_round).to include(first_rset)

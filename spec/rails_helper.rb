@@ -92,17 +92,34 @@ end
 def before_archer
   valid_category
   valid_category_alt
+  valid_round_format
+  valid_set_end_format
+  valid_target
+end
+
+def before_score_session
+  before_archer
+  valid_archer
+end
+
+def before_round
+  before_score_session
+  valid_score_session
+end
+
+def before_rset
+  before_round
+  valid_round
+end
+
+def before_end
+  before_rset
+  valid_rset
 end
 
 def before_shot
-  before_archer
-  valid_archer
-  valid_score_session
-  valid_round
-  valid_rset
-  valid_set_end_format
+  before_end
   valid_end
-  valid_target
 end
 
 
@@ -128,6 +145,20 @@ end
 def default_format_message
   "is invalid"
 end
+
+
+# ##########################################################
+# Format Module Objects
+# ##########################################################
+
+def valid_round_format
+  Format::RoundFormat.find_or_create_by(name: "1440 Round", num_sets: 4, user_edit: false)
+end
+
+def valid_set_end_format
+  Format::SetEndFormat.find_or_create_by(name: "Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
+end
+
 
 # ##########################################################
 # Score Tracking Objects
@@ -184,11 +215,11 @@ def valid_score_session
 end
 
 def valid_round
-  Round.find_or_create_by(name: "2020 World Cup - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session)
+  Round.find_or_create_by(name: "2020 World Cup - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session, round_format: valid_round_format)
 end
 
 def valid_rset
-  Rset.find_or_create_by(name: "2020 World Cup - 1440 Round - Set/Distance1", date: "2020-09-01", rank: "1st", archer: valid_archer, score_session: valid_score_session, round: valid_round)
+  Rset.find_or_create_by(name: "2020 World Cup - 1440 Round - Set/Distance1", date: "2020-09-01", rank: "1st", archer: valid_archer, score_session: valid_score_session, round: valid_round, set_end_format: valid_set_end_format)
 end
 
 def valid_end
@@ -202,6 +233,7 @@ end
 def valid_shot
   Shot.find_or_create_by(number: 1, score_entry: "10", archer: valid_archer, score_session: valid_score_session, round: valid_round, rset: valid_rset, end: valid_end)
 end
+
 
 # ##########################################################
 # Organization Module Objects
@@ -270,15 +302,4 @@ def valid_dist_targ_cat
   # Organization::DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, archer_id: 1)
 end
 
-# ##########################################################
-# Format Module Objects
-# ##########################################################
-
-def valid_round_format
-  Format::RoundFormat.find_or_create_by(name: "1440 Round", num_sets: 4, user_edit: false)
-end
-
-def valid_set_end_format
-  Format::SetEndFormat.find_or_create_by(name: "Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
-end
 
