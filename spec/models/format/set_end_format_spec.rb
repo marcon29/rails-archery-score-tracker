@@ -36,7 +36,7 @@ RSpec.describe Format::SetEndFormat, type: :model do
 
     # every attr blank
     let(:blank) {
-        {name: "", num_ends: "", shots_per_end: "", user_edit: "", round_format_id: ""}
+        {name: "", num_ends: "", shots_per_end: "", user_edit: "", round_format_id: 1}
     }
     
     # ###################################################################
@@ -48,6 +48,7 @@ RSpec.describe Format::SetEndFormat, type: :model do
     # ###################################################################
     # define custom error messages
     # ###################################################################
+    let(:too_many_sets_message) {"You can't exceed the number of sets for this round format."}
     let(:number_all_message) {"You must enter a number greater than 0."}
     
     
@@ -104,7 +105,7 @@ RSpec.describe Format::SetEndFormat, type: :model do
 
             it "name is duplicated but for different Format::RoundFormat" do
                 # need two round_formats
-                Format::RoundFormat.create(name: "720 Round", num_sets: 2, user_edit: false)
+                Format::RoundFormat.create(name: "720 Round", num_sets: 4, user_edit: false)
                 expect(Format::RoundFormat.all.count).to eq(2)
                 expect(Format::SetEndFormat.all.count).to eq(0)
 
@@ -153,6 +154,18 @@ RSpec.describe Format::SetEndFormat, type: :model do
                 expect(set_end_format.errors.messages[:name]).to include(default_duplicate_message)
             end
 
+            it "exceeds the total number of SetEndFormats allowable for the RoundFormat" do
+                expect(Format::SetEndFormat.all.count).to eq(0)
+                valid_round_format.num_sets.times { Format::SetEndFormat.create(test_req) }
+                expect(Format::SetEndFormat.all.count).to eq(4)
+
+                set_end_format = Format::SetEndFormat.create(test_req)
+
+                expect(set_end_format).to be_invalid
+                expect(Format::SetEndFormat.all.count).to eq(4)
+                expect(set_end_format.errors.messages[:name]).to include(too_many_sets_message)
+            end
+
             it "attributes are outside allowable inputs" do
                 duplicate[:num_ends] = "six"
                 duplicate[:shots_per_end] = "six"
@@ -189,12 +202,23 @@ RSpec.describe Format::SetEndFormat, type: :model do
     describe "all helper methods work correctly:" do
         it "can find all the Format::SetEndFormats belonging to the same Format::RoundFormat" do
             valid_round_format
-            valid_set_end_format
-            test_set_end_format
+            second_round_format = Format::RoundFormat.create(name: "720 Round", num_sets: 1, user_edit: false)
+            expect(Format::RoundFormat.count).to eq(2)
 
-            all_sets = Format::SetEndFormat.all
+            first_set_end_foramt = valid_set_end_format
+            second_set_end_foramt = test_set_end_format
+            other_set_end_format = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: second_round_format)
+            expect(Format::SetEndFormat.count).to eq(3)
 
-            expect(test_set_end_format.sets_in_round).to eq(all_sets)
+            expect(first_set_end_foramt.sets_in_round.count).to eq(2)
+            expect(first_set_end_foramt.sets_in_round).to include(first_set_end_foramt)
+            expect(first_set_end_foramt.sets_in_round).to include(second_set_end_foramt)
+            expect(first_set_end_foramt.sets_in_round).not_to include(other_set_end_format)
+        end
+
+        it "can identify the total number of Format::SetEndFormats allowed in its Format::RoundFormat" do
+            valid_round_format
+            expect(test_set_end_format.allowable_sets_per_round).to eq(valid_round_format.num_sets)
         end
     end
 end
