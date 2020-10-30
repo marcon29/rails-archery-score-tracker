@@ -101,7 +101,8 @@ RSpec.describe End, type: :model do
 
             it "number is duplicated but for different Rset" do
                 # need second rset
-                second_rset = Rset.find_or_create_by(name: "2020 World Cup - 1440 Round - Set/Distance2", date: "2020-09-01", rank: "1st", archer: valid_archer, score_session: valid_score_session, round: valid_round)
+                second_set_end_format = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
+                second_rset = Rset.find_or_create_by(date: "2020-09-01", rank: "1st", archer: valid_archer, score_session: valid_score_session, round: valid_round, set_end_format: second_set_end_format)
                 expect(Rset.all.count).to eq(2)
                 expect(End.all.count).to eq(0)
 
