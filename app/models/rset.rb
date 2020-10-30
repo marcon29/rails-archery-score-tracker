@@ -34,23 +34,20 @@ class Rset < ApplicationRecord
         "#{self.round.name} - #{self.set_end_format.name}"
     end
 
-    # do i need these, since not creating name anymore??? - may use somewhere else, but remove if not
-    # def set_number
-    #     sets_in_round.count + 1
-    # end
-
-    # def sets_in_round
-    #     self.round.rsets if self.round
-    # end
-
     def round_format
         self.round.round_format
     end
 
-    # shouldn't need this - since pulling name from SetEndFormat, quantity control belongs there
-    # def allowable_sets_per_round
-    #     self.round_format.num_sets
-    # end
+    def num_ends
+        self.set_end_format.num_ends
+    end
+
+    def shots_per_end
+        self.set_end_format.shots_per_end
+    end
+
+
+    
 
     def check_date
         start_date = self.score_session.start_date if self.score_session

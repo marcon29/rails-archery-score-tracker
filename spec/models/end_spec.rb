@@ -319,8 +319,8 @@ RSpec.describe End, type: :model do
 
             it "can create a new associated object via instance and get associated object attributes" do
                 endd = End.create(duplicate)
-
-                check_shot_attrs = {number: 1, score_entry: "X"}
+                
+                check_shot_attrs = {score_entry: "X", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1}
                 check_shot = endd.shots.create(check_shot_attrs)
                 
                 expect(endd.shots).to include(check_shot)
@@ -363,11 +363,6 @@ RSpec.describe End, type: :model do
                 expect(first_end.ends_in_set).to include(second_end)
                 expect(first_end.ends_in_set).to include(third_end)
                 expect(first_end.ends_in_set).not_to include(other_end)
-            end
-
-            it "can identify the SetEndFormat of the Rset it belongs to" do
-                check_set_end_format = valid_rset.set_end_format
-                expect(test_end.set_end_format).to eq(check_set_end_format)
             end
 
             it "can identify the total number of ends allowed in its Rset" do

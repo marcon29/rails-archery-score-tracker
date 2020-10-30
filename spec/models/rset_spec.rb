@@ -367,46 +367,32 @@ RSpec.describe Rset, type: :model do
     describe "all helper methods work correctly:" do
         before(:each) do
             before_rset
+            second_set_end_format
         end
 
         describe "methods primarily for callbacks and validations" do
-            it "can find all rsets belonging to the same round" do
+            
+        end
 
-                pending "may not need the methods this test (see comments in model)  - remove if not needed"
-
-                second_round_format = Format::RoundFormat.create(name: "720 Round", num_sets: 1, user_edit: false)
-                second_set_end_format = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
-                third_set_end_format = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
-                other_set_end_format = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: second_round_format)
-
-                first_rset = valid_rset
-                second_rset = Rset.create(name: "", date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2)
-                third_rset = Rset.create(name: "", date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 3)
-                
-                second_round = Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session, round_format: second_round_format)
-                other_rset = Rset.create(date: "2020-01-01", archer_id: 1, score_session_id: 1, round_id: 2, set_end_format_id: 4)
-                
-                expect(Format::SetEndFormat.count).to eq(4)
-                expect(first_rset.sets_in_round.count).to eq(3)
-                expect(first_rset.sets_in_round).to include(first_rset)
-                expect(first_rset.sets_in_round).to include(second_rset)
-                expect(first_rset.sets_in_round).to include(third_rset)
-                expect(first_rset.sets_in_round).not_to include(other_rset)
-            end
-
+        describe "methods primarily for getting useful data" do
             it "can identify the RoundFormat of the Round it belongs to" do
                 expect(test_rset.round_format).to eq(valid_round_format)
             end
 
-            it "can identify the total number of rsets allowed in its Round" do
-                
-                pending "may not need the methods this test (see comments in model) - remove if not needed"
-
-                expect(test_rset.allowable_sets_per_round).to eq(valid_round_format.num_sets)
+            it "can identify the number of ends it should have from SetEndFormat" do
+                # binding.pry
+                expect(test_rset.num_ends).to eq(valid_set_end_format.num_ends)
             end
-        end
 
-        describe "methods primarily for getting useful data" do
+            it "can identify the number of shots its ends should have from SetEndFormat" do
+                expect(test_rset.shots_per_end).to eq(valid_set_end_format.shots_per_end)
+            end
+
+
+
+
+
+
             it "can calculate the total score for a set" do
                 pending "need to add associations"
                 # want to be able to to call rset.score

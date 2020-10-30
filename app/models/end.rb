@@ -38,12 +38,8 @@ class End < ApplicationRecord
         self.rset.ends if self.rset
     end
 
-    def set_end_format
-        self.rset.set_end_format if rset.set_end_format
-    end
-
     def allowable_ends_per_set
-        self.set_end_format.num_ends
+        self.rset.num_ends
     end
 
     def score_method_is_points?
@@ -64,13 +60,13 @@ class End < ApplicationRecord
     end
 
     def shots_per_end
-        self.set_end_format.shots_per_end
+        self.rset.shots_per_end
     end
 
     def complete?
         scored_shots.count < self.shots_per_end ? false : true
     end
-        
 
+    
 
 end

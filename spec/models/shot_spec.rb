@@ -325,8 +325,8 @@ RSpec.describe Shot, type: :model do
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_end = End.first
-                update[:end_id] = ""
-                check_shot = assoc_end.shots.create(update)
+                test_req[:end_id] = ""
+                check_shot = assoc_end.shots.create(test_req)
                 
                 expect(check_shot.end).to eq(assoc_end)
                 expect(check_shot.end.number).to eq(assoc_end.number)
@@ -359,10 +359,6 @@ RSpec.describe Shot, type: :model do
                 expect(multi_shot_11.shots_in_end).not_to include(multi_shot_21)
                 expect(multi_shot_11.shots_in_end).not_to include(multi_shot_22)
                 expect(multi_shot_11.shots_in_end).not_to include(multi_shot_23)
-            end
-
-            it "can identify the SetEndFormat of the Rset it belongs to" do
-                expect(test_shot.set_end_format).to eq(valid_set_end_format)
             end
 
             it "can identify the total number of shots allowed in its End" do

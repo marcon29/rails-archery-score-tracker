@@ -43,6 +43,6 @@ yarn-debug.log*
 # Ignore all scratch and dev notes files.
 scratch_tests.rb
 scratch_tests_orig.rb
-notes.md
-organization-from-gen.rb
+notes2.md
+scratch_code.rb
 old_arch_cat_spec.rb

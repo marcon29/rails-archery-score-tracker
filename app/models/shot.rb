@@ -34,12 +34,8 @@ class Shot < ApplicationRecord
         self.end.shots if self.end
     end
 
-    def set_end_format
-        self.end.rset.set_end_format
-    end
-
     def allowable_shots_per_end
-        self.set_end_format.shots_per_end
+        self.rset.shots_per_end
     end
 
     def target
@@ -83,10 +79,6 @@ class Shot < ApplicationRecord
     def date
         self.rset.date
     end
-
-
-    # ######### helpers to add once RoundFormat and SetEndFormat associations finished ###################
-        # need to redo #set_end_format method above
         
 
     # ######### helpers to add once DistanceTarget and associations finished ###################
