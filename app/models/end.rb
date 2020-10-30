@@ -49,7 +49,7 @@ class End < ApplicationRecord
     def allowable_ends_per_set
         self.set_end_format.num_ends
     end
-
+    
     def score_method_is_points?
         self.round && self.round.score_method == "Points"
     end

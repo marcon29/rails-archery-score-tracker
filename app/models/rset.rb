@@ -19,7 +19,39 @@ class Rset < ApplicationRecord
     before_validation :assign_name
     
 
-    # need helpers (callbacks & validations)
+    # ##### helpers (callbacks & validations)
+    def assign_name
+        if self.round && self.set_end_format
+            if self.name.blank?
+                self.name = create_name
+            elsif !self.name.include?(self.round.name) || !self.name.include?(self.set_end_format.name)
+                self.name = create_name
+            end
+        end
+    end
+
+    def create_name
+        "#{self.round.name} - #{self.set_end_format.name}"
+    end
+
+    # do i need these, since not creating name anymore??? - may use somewhere else, but remove if not
+    # def set_number
+    #     sets_in_round.count + 1
+    # end
+
+    # def sets_in_round
+    #     self.round.rsets if self.round
+    # end
+
+    def round_format
+        self.round.round_format
+    end
+
+    # shouldn't need this - since pulling name from SetEndFormat, quantity control belongs there
+    # def allowable_sets_per_round
+    #     self.round_format.num_sets
+    # end
+
     def check_date
         start_date = self.score_session.start_date if self.score_session
         end_date = self.score_session.end_date if self.score_session
@@ -30,31 +62,8 @@ class Rset < ApplicationRecord
             errors.add(:date, "Date must be between #{start_date} and #{end_date}.")
         end
     end
-    
-    # auto create name ( ScoreSession.name - Round.name - Rset.name )
-    def assign_name
-        if self.round && self.set_end_format
-            if self.name.blank?
-                self.name = create_name
-            elsif !self.name.include?(self.round.name) || !self.name.include?("Set/Distance")
-                self.name = create_name
-            end
-        end
-    end
 
-    def create_name
-        "#{self.round.name} - Set/Distance#{self.set_number}" # if self.round
-    end
-
-    def set_number
-        sets_in_round.count + 1
-    end
-
-    def sets_in_round
-        self.round.rsets if self.round
-    end 
-
-    # need helpers
+    # ##### helpers (data control)
     # it "can calculate the total score for a rset" do
         # pending "need to add associations"
         # want to be able to to call rset.score

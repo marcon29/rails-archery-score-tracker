@@ -209,9 +209,7 @@ RSpec.describe End, type: :model do
                 test_req[:set_score] = ""
                 endd = End.create(test_req)
                 
-                # this should be fine, but it won't pass
-                # keeps saying can't create an End with a set_score that's not a number
-                # works fine in the console, only problem is here and I'm sick of fucking dealing with it
+                # keeping this until figure out why it won't run validity test correctly (works fine in console)
                 # expect(endd).to be_valid
                 expect(End.all.count).to eq(1)
                 

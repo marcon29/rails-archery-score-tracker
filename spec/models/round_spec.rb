@@ -86,8 +86,6 @@ RSpec.describe Round, type: :model do
             it "given all required and unrequired attributes" do
                 expect(Round.all.count).to eq(0)
 
-                # binding.pry
-
                 expect(test_round).to be_valid
                 expect(Round.all.count).to eq(1)
 
