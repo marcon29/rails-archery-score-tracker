@@ -56,7 +56,7 @@ RSpec.describe Rset, type: :model do
 
     # every attr blank
     let(:blank) {
-        {name: "", date: "", rank: "", archer_id: "", score_session_id: "", round_id: "", set_end_format_id: ""}
+        {date: "", rank: "", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2}
     }
     
     # ###################################################################
@@ -69,7 +69,6 @@ RSpec.describe Rset, type: :model do
     # define custom error messages
     # ###################################################################
     let(:missing_date_message) {"You must choose a start date."}
-    
     let(:inclusion_date_message) {"Date must be between #{valid_score_session.start_date} and #{valid_score_session.end_date}."}
     let(:inclusion_rank_message) {'Enter only a number above 0, "W" or "L".'}
 
@@ -158,14 +157,13 @@ RSpec.describe Rset, type: :model do
                 expect(rset).to be_invalid
                 expect(Rset.all.count).to eq(1)
                 
-                expect(rset.errors.messages[:name]).to include(default_missing_message)
+                expect(rset.name).to eq(assigned_name)
                 expect(rset.errors.messages[:date]).to include(missing_date_message)
                 expect(rset.rank).to be_blank
             end
             
             it "unique attributes are duplicated" do
                 expect(Rset.all.count).to eq(1)
-                # need to call initial test object to check against for duplication
                 test_rset
                 expect(Rset.all.count).to eq(2)
                 rset = Rset.create(duplicate)
@@ -358,7 +356,8 @@ RSpec.describe Rset, type: :model do
 
             it "has one Target" do
                 pending "need to add create associated models and add associations"
-                expect(test_rset.target).to eq(valid_target)
+                # expect(test_rset.target).to eq(valid_target)
+                expect(test_rset.target).to eq(something_to_fail)
             end
         end
     end
@@ -371,7 +370,6 @@ RSpec.describe Rset, type: :model do
         end
 
         describe "methods primarily for callbacks and validations" do
-            
         end
 
         describe "methods primarily for getting useful data" do
@@ -380,7 +378,6 @@ RSpec.describe Rset, type: :model do
             end
 
             it "can identify the number of ends it should have from SetEndFormat" do
-                # binding.pry
                 expect(test_rset.num_ends).to eq(valid_set_end_format.num_ends)
             end
 
@@ -388,13 +385,7 @@ RSpec.describe Rset, type: :model do
                 expect(test_rset.shots_per_end).to eq(valid_set_end_format.shots_per_end)
             end
 
-
-
-
-
-
             it "can calculate the total score for a set" do
-                pending "need to add associations"
                 # want to be able to to call rset.score
                 # sums all end scores
                 expect(rset.score).to eq(all_ends_scores)

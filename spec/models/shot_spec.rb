@@ -53,14 +53,10 @@ RSpec.describe Shot, type: :model do
     let(:update) {
         {score_entry: "4"}
     }
-
-    let(:update_blank) {
-        {score_entry: ""}
-    }
     
     # every attr blank
-    let(:all_blank) {
-        {number: "", score_entry: "", archer_id: "", score_session_id: "", round_id: "", rset_id: "", end_id: ""}
+    let(:blank) {
+        {score_entry: "", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}
     }
   
     # ###################################################################
@@ -205,7 +201,7 @@ RSpec.describe Shot, type: :model do
 
                 expect(Shot.all.count).to eq(1)
 
-                shot.update(update_blank)
+                shot.update(blank)
 
                 expect(shot).to be_invalid
                 expect(shot.errors.messages[:score_entry]).to include("You must enter a score for shot #{shot.number}.")
@@ -364,15 +360,6 @@ RSpec.describe Shot, type: :model do
             it "can identify the total number of shots allowed in its End" do
                 expect(test_shot.allowable_shots_per_end).to eq(valid_set_end_format.shots_per_end)
             end
-
-            it "can find the distance at which shot was made" do
-                expect(test_shot.distance).to eq("90m")
-                # expect(test_shot.distance).to eq(valid_dist_targ_cat.distance)
-            end
-            
-            it "can find the target into which shot was made" do
-                expect(test_shot.target).to eq(valid_target)
-            end
     
             it "can identify all possible score entries" do
                 fita122_scores = ["M", "X", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
@@ -428,6 +415,15 @@ RSpec.describe Shot, type: :model do
             
             it "can find the date a shot was made" do
                 expect(test_shot.date).to eq(valid_rset.date)
+            end
+
+            it "can find the distance at which shot was made" do
+                expect(test_shot.distance).to eq("90m")
+                # expect(test_shot.distance).to eq(valid_dist_targ_cat.distance)
+            end
+            
+            it "can find the target into which shot was made" do
+                expect(test_shot.target).to eq(valid_target)
             end
         end
 

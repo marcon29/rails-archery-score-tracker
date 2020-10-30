@@ -20,12 +20,6 @@ RSpec.describe Round, type: :model do
     let(:test_round) {
         Round.create(test_all)
     }
-    
-    # ###################################################################
-    # define any additional objects to test for this model 
-    # ###################################################################
-    # only add multiple instantiations if need simultaneous instances for testing
-
 
     # ###################################################################
     # define standard create/update variations
@@ -51,24 +45,19 @@ RSpec.describe Round, type: :model do
 
     # every attr blank
     let(:blank) {
-        {name: "", round_type: "", score_method: "", rank: "", archer_id: "", score_session_id: "", round_format_id: ""}
+        {name: "", round_type: "", score_method: "", rank: "", archer_id: 1, score_session_id: 1, round_format_id: 1}
     }
   
     # ###################################################################
     # define test results for auto-assign attrs
     # ###################################################################
-    # let(:assigned_name) {"100th US Nationals - 1440 Round"}
     let(:assigned_name) {"#{valid_score_session.name} - #{valid_round_format.name}"}
-    
-            
-    # let(:default_attr) {}
   
     # ###################################################################
     # define custom error messages
     # ###################################################################
     let(:missing_round_type_message) {"You must choose a round type."}
     let(:missing_score_method_message) {"You must choose a score method."}
-    
     let(:inclusion_rank_message) {'Enter only a number above 0, "W" or "L".'}
     
 
@@ -166,8 +155,7 @@ RSpec.describe Round, type: :model do
                 expect(round).to be_invalid
                 expect(Round.all.count).to eq(0)
 
-                # expect(round.errors.messages[:name]).to include(default_missing_message)
-                # expect(round.name).to eq(assigned_name)
+                expect(round.name).to eq(assigned_name)
                 expect(round.errors.messages[:round_type]).to include(missing_round_type_message)
                 expect(round.errors.messages[:score_method]).to include(missing_score_method_message)
                 expect(round.rank).to be_blank
@@ -288,10 +276,7 @@ RSpec.describe Round, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 round = Round.create(duplicate)
 
-                check_end_attrs = {
-                    number: 2, 
-                    set_score: ""
-                }
+                check_end_attrs = {set_score: 2, archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1}
                 check_end = round.ends.create(check_end_attrs)
                 
                 expect(round.ends).to include(check_end)
@@ -312,6 +297,10 @@ RSpec.describe Round, type: :model do
         end
 
         describe "has many Shots and" do
+            before(:each) do
+                before_end
+            end
+
             it "can find an associated object" do
                 expect(valid_round.shots).to include(valid_shot)
             end
@@ -319,10 +308,7 @@ RSpec.describe Round, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 round = Round.create(duplicate)
 
-                check_shot_attrs = {
-                    number: 1, 
-                    score_entry: "X"
-                }
+                check_shot_attrs = {score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}
                 check_shot = round.shots.create(check_shot_attrs)
                 
                 expect(round.shots).to include(check_shot)
@@ -376,7 +362,6 @@ RSpec.describe Round, type: :model do
     describe "all helper methods work correctly:" do
 
         it "can calculate the total score for a round" do
-            pending "need to add associations"
             # want to be able to to call round.score
             # sums all rset scores
             expect(round.score).to eq(all_rsets_scores)

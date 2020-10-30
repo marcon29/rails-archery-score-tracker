@@ -50,6 +50,8 @@ class End < ApplicationRecord
         self.set_score = nil if score_method_is_points?
     end 
 
+
+    
     # ##### helpers (data control)
     def score
         self.shots.collect { |shot| shot.score }.sum
@@ -67,6 +69,6 @@ class End < ApplicationRecord
         scored_shots.count < self.shots_per_end ? false : true
     end
 
-    
+
 
 end

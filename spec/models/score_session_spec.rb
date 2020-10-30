@@ -47,7 +47,7 @@ RSpec.describe ScoreSession, type: :model do
 
     # every attr blank
     let(:blank) {
-        {name: "", score_session_type: "", city: "", state: "", country: "", start_date: "", end_date: "", rank: "", active: "", archer_id: ""}
+        {name: "", score_session_type: "", city: "", state: "", country: "", start_date: "", end_date: "", rank: "", active: "", archer_id: 1}
     }
   
     # ###################################################################
@@ -66,9 +66,7 @@ RSpec.describe ScoreSession, type: :model do
     let(:missing_state_message) {"You must enter a state."}
     let(:missing_country_message) {"You must enter a country."}
     let(:missing_start_date_message) {"You must choose a start date."}
-
     let(:duplicate_name_message) {"That name is already taken."}
-
     let(:inclusion_rank_message) {'Enter only a number above 0, "W" or "L".'}
     
 
@@ -79,9 +77,7 @@ RSpec.describe ScoreSession, type: :model do
     # object creation and validation tests #######################################
     describe "model creates and updates only valid instances" do
         before(:each) do
-            # this needs to always run before creating an archer so validations work (creates inclusion lists)
-            before_archer
-            valid_archer
+            before_score_session
         end
 
         describe "valid when " do
@@ -102,7 +98,6 @@ RSpec.describe ScoreSession, type: :model do
                 expect(test_score_session.active).to eq(test_all[:active])
             end
             
-            # it "instance is valid with only required attributes, auto-assigns end date and active status" do
             it "given only required attributes" do
                 expect(ScoreSession.all.count).to eq(0)
                 score_session = ScoreSession.create(valid_req)
@@ -126,11 +121,9 @@ RSpec.describe ScoreSession, type: :model do
             end
 
             it "when name duplicated but with different Archers" do
-                pending "need to create test for name uniquness scope - can copy SetEndFormat"
                 expect(score_session).to be_valid
             end
-
-            # it "instance is valid when updating all attrs, re-assigns end date if value deleted" do
+            
             it "updating all attributes" do
                 test_score_session.update(update)
                 
@@ -256,10 +249,6 @@ RSpec.describe ScoreSession, type: :model do
         end
     
         describe "has many Rsets and" do
-            before(:each) do
-                # valid_round
-            end
-
             it "can find an associated object" do
                 expect(valid_score_session.rsets).to include(valid_rset)
             end
@@ -273,7 +262,6 @@ RSpec.describe ScoreSession, type: :model do
                     round: valid_round
                 }
                 check_rset = score_session.rsets.create(check_rset_attrs)
-                
                 
                 expect(score_session.rsets).to include(check_rset)
                 expect(score_session.rsets.last.name).to eq(check_rset.name)
@@ -301,10 +289,7 @@ RSpec.describe ScoreSession, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 score_session = ScoreSession.create(duplicate)
 
-                check_end_attrs = {
-                    number: 2, 
-                    set_score: ""
-                }
+                check_end_attrs = {set_score: 2, archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1}
                 check_end = score_session.ends.create(check_end_attrs)
                 
                 expect(score_session.ends).to include(check_end)
@@ -325,17 +310,18 @@ RSpec.describe ScoreSession, type: :model do
         end
 
         describe "has many Shots and" do
+            before(:each) do
+                before_end
+            end
+            
             it "can find an associated object" do
                 expect(valid_score_session.shots).to include(valid_shot)
             end
 
             it "can create a new associated object via instance and get associated object attributes" do
                 score_session = ScoreSession.create(duplicate)
-
-                check_shot_attrs = {
-                    number: 1, 
-                    score_entry: "X"
-                }
+                
+                check_shot_attrs = {score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}
                 check_shot = score_session.shots.create(check_shot_attrs)
                 
                 expect(score_session.shots).to include(check_shot)
@@ -427,7 +413,6 @@ RSpec.describe ScoreSession, type: :model do
         end
 
         it "can calculate the total score for a score session" do
-            pending "need to add associations"
             # want to be able to to call score_session.score
             # sums all round scores
             expect(score_session.score).to eq(all_rounds_scores)

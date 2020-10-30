@@ -38,14 +38,6 @@ class Shot < ApplicationRecord
         self.rset.shots_per_end
     end
 
-    def distance
-        self.rset.distance
-    end
-
-    def target
-        self.rset.target
-    end
-
     def possible_scores
         self.target.possible_scores
         # returns array
@@ -64,7 +56,6 @@ class Shot < ApplicationRecord
     
     
     # ##### helpers (data control)
-    # converts score_entry into integer
     def score
         if score_entry == "X"
             self.target.max_score 
@@ -78,16 +69,17 @@ class Shot < ApplicationRecord
     def date
         self.rset.date
     end
+
+    def distance
+        self.rset.distance
+    end
+
+    def target
+        self.rset.target
+    end
         
 
     # ######### helpers to add once DistanceTarget and associations finished ###################
-        # need to redo #target method above
-
-        # it "can find the distance at which shot was made" do
-            # want to be able to to call shot.date
-            # needs assoc: rset
-            # distance = shot.rset.distance
-        # end
 
         # it "can find the discipline in which the shot was made" do
             # want to be able to to call shot.discipline

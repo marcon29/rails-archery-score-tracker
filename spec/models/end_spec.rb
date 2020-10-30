@@ -43,7 +43,7 @@ RSpec.describe End, type: :model do
 
     # every attr blank
     let(:blank) {
-        {number: "", set_score: "", archer_id: "", score_session_id: "", round_id: "", rset_id: ""}
+        {number: "", set_score: "", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1}
     }
 
     # ###################################################################
@@ -54,7 +54,6 @@ RSpec.describe End, type: :model do
     # ###################################################################
     # define custom error messages
     # ###################################################################
-    # let(:missing_set_score_message) {"You must enter a set score for the end."}
     let(:number_set_score_message) {"You must enter 0, 1, or 2."}
         
 
@@ -305,11 +304,7 @@ RSpec.describe End, type: :model do
 
         describe "has many Shots and" do
             before(:each) do
-                before_archer
-                valid_archer
-                valid_score_session
-                valid_round
-                valid_rset
+                before_end
             end
 
             it "can find an associated object" do
@@ -319,7 +314,7 @@ RSpec.describe End, type: :model do
 
             it "can create a new associated object via instance and get associated object attributes" do
                 endd = End.create(duplicate)
-                
+
                 check_shot_attrs = {score_entry: "X", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1}
                 check_shot = endd.shots.create(check_shot_attrs)
                 

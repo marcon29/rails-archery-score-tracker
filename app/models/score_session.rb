@@ -20,7 +20,7 @@ class ScoreSession < ApplicationRecord
     before_validation :format_name
 
     
-    # callbacks/validation helpers 
+    # ##### helpers (callbacks & validations)
     def assign_dates
         if self.start_date.blank?
             errors.add(:start_date, "You must choose a start date.")
@@ -33,18 +33,18 @@ class ScoreSession < ApplicationRecord
         self.name = self.name.titlecase
     end
 
-    # need helpers
+    # ##### helpers (data control)
+    # it "can calculate the total score for a score session" do
+        # pending "need to add associations"
+        # want to be able to to call score_session.score
+        # sums all round scores
+    # end
+
+
         # date range - collect all dates between start and end (inclusive)
             # hold - may not need this - html can restrict date range (can just use start and end)
             # will use to restrict date options for round
-        
-
-        # it "can calculate the total score for a score session" do
-            # pending "need to add associations"
-            # want to be able to to call score_session.score
-            # sums all round scores
-        # end
-
+    
         
     
     # all location info

@@ -37,11 +37,6 @@ class Archer < ApplicationRecord
 
 
     # helpers (callbacks & validations)
-    def format_names
-        self.first_name = self.first_name.capitalize
-        self.last_name = self.last_name.capitalize
-    end
-
     def format_username
         self.username = self.username.downcase.gsub(" ","")
     end
@@ -49,6 +44,11 @@ class Archer < ApplicationRecord
     def format_email
         self.email = self.email.downcase.gsub(" ","")
     end    
+
+    def format_names
+        self.first_name = self.first_name.capitalize
+        self.last_name = self.last_name.capitalize
+    end
 
     # need to update this as you create associations
     def assign_default_age_class
@@ -70,7 +70,7 @@ class Archer < ApplicationRecord
         Date.today.year-self.birthdate.year if self.birthdate
     end
 
-    # other helpers (for data retrieval)
+    # ##### helpers (data control)
     def full_name
         "#{self.first_name.capitalize} #{self.last_name.capitalize}"
     end

@@ -75,7 +75,6 @@ RSpec.describe Archer, type: :model do
     let(:duplicate_email_message) {"That email is already taken."}
     
     let(:inclusion_gender_message) {"You can only choose male or female."}
-
     let(:format_username_message) {"Username can only use letters and numbers without spaces."}
     let(:format_email_message) {"Email doesn't look valid. Please use another."}
     
@@ -201,8 +200,6 @@ RSpec.describe Archer, type: :model do
                 expect(archer.errors.messages[:default_age_class]).to include(default_inclusion_message)
                 expect(archer.errors.messages[:default_division]).to include(default_inclusion_message)
             end
-
-            # this is the complex version - use for multiple/specific conditions on same attr (inclusion or format)
             
             it "username is the wrong format" do
                 bad_scenarios = ["bad user", "ba$d%u$er", "bad.user!"]
@@ -348,10 +345,7 @@ RSpec.describe Archer, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 archer = Archer.create(duplicate)
 
-                check_end_attrs = {
-                    number: 2, 
-                    set_score: ""
-                }
+                check_end_attrs = {set_score: 2, archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1}
                 check_end = archer.ends.create(check_end_attrs)
                 
                 expect(archer.ends).to include(check_end)
@@ -372,6 +366,10 @@ RSpec.describe Archer, type: :model do
         end
 
         describe "has many Shots and" do
+            before(:each) do
+                before_end
+            end
+
             it "can find an associated object" do
                 expect(valid_archer.shots).to include(valid_shot)
             end
@@ -379,10 +377,7 @@ RSpec.describe Archer, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 archer = Archer.create(duplicate)
 
-                check_shot_attrs = {
-                    number: 1, 
-                    score_entry: "X"
-                }
+                check_shot_attrs = {score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}
                 check_shot = archer.shots.create(check_shot_attrs)
                 
                 expect(archer.shots).to include(check_shot)
@@ -414,45 +409,49 @@ RSpec.describe Archer, type: :model do
             before_archer
         end
 
-        it "can return the archer's first and last names with correct capitalization" do
-            duplicate[:first_name] = "some"
-            duplicate[:last_name] = "tester"
-            archer = Archer.create(duplicate)
+        describe "methods primarily for callbacks and validations" do
+            it "can return the archer's first and last names with correct capitalization" do
+                duplicate[:first_name] = "some"
+                duplicate[:last_name] = "tester"
+                archer = Archer.create(duplicate)
+                
+                expect(archer.first_name).to eq("Some")
+                expect(archer.last_name).to eq("Tester")
+            end
+        end
+        
+        describe "methods primarily for getting useful data" do
+            it "can return the archer's full name with correct capitalization" do
+                duplicate[:first_name] = "some"
+                duplicate[:last_name] = "tester"
+                archer = Archer.create(duplicate)
+
+                expect(archer.full_name).to eq("Some Tester")
+            end
+        
+            it "can return the archer's actual age" do
+                allow(Date).to receive(:today).and_return Date.new(2020,10,1)
+                expect(test_archer.age).to eq(40)
             
-            expect(archer.first_name).to eq("Some")
-            expect(archer.last_name).to eq("Tester")
-        end
-    
-        it "can return the archer's full name with correct capitalization" do
-            duplicate[:first_name] = "some"
-            duplicate[:last_name] = "tester"
-            archer = Archer.create(duplicate)
+                allow(Date).to receive(:today).and_return Date.new(2020,1,1)
+                expect(test_archer.age).to eq(39)
+            end
 
-            expect(archer.full_name).to eq("Some Tester")
-        end
-    
-        it "can return the archer's actual age" do
-            allow(Date).to receive(:today).and_return Date.new(2020,10,1)
-            expect(test_archer.age).to eq(40)
-        
-            allow(Date).to receive(:today).and_return Date.new(2020,1,1)
-            expect(test_archer.age).to eq(39)
-        end
+            it "can return all the age classes the archer is elgibile for" do
+                expect(test_archer.eligible_age_classes).to include(valid_category.age_class)
+            end
 
-        it "can return all the age classes the archer is elgibile for" do
-            expect(test_archer.eligible_age_classes).to include(valid_category.age_class)
-        end
+            it "can return all the age class names the archer is elgibile for" do
+                expect(test_archer.eligible_age_class_names).to include(valid_category.age_class.name)
+            end
+            
+            it "can return all the categories the archer is elgibile for" do
+                expect(test_archer.eligible_categories).to include(valid_category)
+            end
 
-        it "can return all the age class names the archer is elgibile for" do
-            expect(test_archer.eligible_age_class_names).to include(valid_category.age_class.name)
-        end
-        
-        it "can return all the categories the archer is elgibile for" do
-            expect(test_archer.eligible_categories).to include(valid_category)
-        end
-
-        it "can return all the category names the archer is elgibile for" do
-            expect(test_archer.eligible_category_names).to include(valid_category.name)
+            it "can return all the category names the archer is elgibile for" do
+                expect(test_archer.eligible_category_names).to include(valid_category.name)
+            end
         end
 
         it "helpers TBD" do

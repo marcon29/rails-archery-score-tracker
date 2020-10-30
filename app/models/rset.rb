@@ -53,18 +53,6 @@ class Rset < ApplicationRecord
         "#{self.round.name} - #{self.set_end_format.name}"
     end
 
-    def round_format
-        self.round.round_format
-    end
-
-    def num_ends
-        self.set_end_format.num_ends
-    end
-
-    def shots_per_end
-        self.set_end_format.shots_per_end
-    end
-
     def check_date
         start_date = self.score_session.start_date if self.score_session
         end_date = self.score_session.end_date if self.score_session
@@ -77,6 +65,18 @@ class Rset < ApplicationRecord
     end
 
     # ##### helpers (data control)
+    def round_format
+        self.round.round_format
+    end
+
+    def num_ends
+        self.set_end_format.num_ends
+    end
+
+    def shots_per_end
+        self.set_end_format.shots_per_end
+    end
+    
     # it "can calculate the total score for a rset" do
         # pending "need to add associations"
         # want to be able to to call rset.score
