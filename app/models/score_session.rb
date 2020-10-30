@@ -37,7 +37,6 @@ class ScoreSession < ApplicationRecord
         # date range - collect all dates between start and end (inclusive)
             # hold - may not need this - html can restrict date range (can just use start and end)
             # will use to restrict date options for round
-    
         
     
     # all location info

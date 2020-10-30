@@ -29,7 +29,7 @@ RSpec.describe ScoreSession, type: :model do
     # ###################################################################
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
-    let(:valid_req) {
+    let(:test_req) {
         {name: "2010 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", archer_id: 1}
     }
 
@@ -100,28 +100,54 @@ RSpec.describe ScoreSession, type: :model do
             
             it "given only required attributes" do
                 expect(ScoreSession.all.count).to eq(0)
-                score_session = ScoreSession.create(valid_req)
+                score_session = ScoreSession.create(test_req)
 
                 expect(score_session).to be_valid
                 expect(ScoreSession.all.count).to eq(1)
                 
                 # req input tests (should have value in test_req)
-                expect(score_session.name).to eq(valid_req[:name])
-                expect(score_session.score_session_type).to eq(valid_req[:score_session_type])
-                expect(score_session.city).to eq(valid_req[:city])
-                expect(score_session.state).to eq(valid_req[:state])
-                expect(score_session.country).to eq(valid_req[:country])
-                expect(score_session.start_date).to eq(valid_req[:start_date].to_date)
-                expect(score_session.end_date).to eq(valid_req[:start_date].to_date)
-                expect(score_session.rank).to eq(valid_req[:rank])
+                expect(score_session.name).to eq(test_req[:name])
+                expect(score_session.score_session_type).to eq(test_req[:score_session_type])
+                expect(score_session.city).to eq(test_req[:city])
+                expect(score_session.state).to eq(test_req[:state])
+                expect(score_session.country).to eq(test_req[:country])
+                expect(score_session.start_date).to eq(test_req[:start_date].to_date)
+                expect(score_session.end_date).to eq(test_req[:start_date].to_date)
+                expect(score_session.rank).to eq(test_req[:rank])
                 
                 # not req input tests (active and end date auto-asigned from missing)
-                expect(score_session.end_date).to eq(valid_req[:start_date].to_date)
+                expect(score_session.end_date).to eq(test_req[:start_date].to_date)
                 expect(score_session.active).to eq(default_active)
             end
 
-            it "when name duplicated but with different Archers" do
+            it "name is duplicated but for different ScoreSessions" do
+                # need second Archer
+                second_archer = Archer.create(username: "testuser", email: "testuser@example.com", password: "test", first_name: "Test", last_name: "Tuser", birthdate: "1980-07-01", gender: "Male", default_division: "Recurve")
+                expect(Archer.all.count).to eq(2)
+                expect(ScoreSession.all.count).to eq(0)
+
+                # gives me 2 score_sessions in valid_archer
+                valid_score_session
+                test_score_session
+                expect(ScoreSession.all.count).to eq(2)
+                
+                # gives me score_session with same name as test_score_session but in second_archer
+                test_req[:archer_id] = 2
+                score_session = ScoreSession.create(test_req)
+
+                expect(score_session.name).to eq(test_score_session.name)
                 expect(score_session).to be_valid
+                expect(ScoreSession.all.count).to eq(3)
+
+                expect(score_session.name).to eq(test_req[:name])
+                expect(score_session.score_session_type).to eq(test_req[:score_session_type])
+                expect(score_session.city).to eq(test_req[:city])
+                expect(score_session.state).to eq(test_req[:state])
+                expect(score_session.country).to eq(test_req[:country])
+                expect(score_session.start_date).to eq(test_req[:start_date].to_date)
+                expect(score_session.end_date).to eq(test_req[:start_date].to_date)
+                expect(score_session.rank).to eq(test_req[:rank])
+                expect(score_session.active).to eq(default_active)
             end
             
             it "updating all attributes" do
