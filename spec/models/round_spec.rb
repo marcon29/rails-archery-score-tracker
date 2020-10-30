@@ -213,6 +213,8 @@ RSpec.describe Round, type: :model do
         before(:each) do
             valid_archer
             valid_score_session
+            valid_set_end_format
+            valid_target
         end
 
         describe "belongs to an Archer and" do

@@ -217,6 +217,8 @@ RSpec.describe Rset, type: :model do
             valid_archer
             valid_score_session
             valid_round
+            valid_set_end_format
+            valid_target
         end
 
         describe "belongs to an Archer and" do

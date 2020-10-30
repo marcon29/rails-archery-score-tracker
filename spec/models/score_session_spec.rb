@@ -202,6 +202,8 @@ RSpec.describe ScoreSession, type: :model do
     describe "instances are properly associated to other models" do
         before(:each) do
             valid_archer
+            valid_set_end_format
+            valid_target
         end
 
         describe "belongs to an Archer and" do
@@ -255,7 +257,7 @@ RSpec.describe ScoreSession, type: :model do
     
         describe "has many Rsets and" do
             before(:each) do
-                valid_round
+                # valid_round
             end
 
             it "can find an associated object" do
@@ -268,9 +270,10 @@ RSpec.describe ScoreSession, type: :model do
                 check_rset_attrs = {
                     name: "1440 Round - Set/Distance1", 
                     date: "2020-09-01", 
-                    score_session: valid_score_session
+                    round: valid_round
                 }
                 check_rset = score_session.rsets.create(check_rset_attrs)
+                
                 
                 expect(score_session.rsets).to include(check_rset)
                 expect(score_session.rsets.last.name).to eq(check_rset.name)
@@ -281,6 +284,7 @@ RSpec.describe ScoreSession, type: :model do
                 assoc_rset = valid_rset
                 expect(valid_score_session.rsets).to include(assoc_rset)
 
+                assoc_rset.update(date: "2010-09-01")
                 assoc_rset.score_session = score_session
                 assoc_rset.save
 

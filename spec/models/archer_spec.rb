@@ -232,6 +232,11 @@ RSpec.describe Archer, type: :model do
 
     # association tests ########################################################
     describe "instances are properly associated to other models" do
+        before(:each) do
+            valid_set_end_format
+            valid_target
+        end
+
         describe "has many ScoreSessions and" do
             it "can find an associated object" do
                 expect(valid_archer.score_sessions).to include(valid_score_session)
@@ -313,7 +318,8 @@ RSpec.describe Archer, type: :model do
                 check_rset_attrs = {
                     name: "1440 Round - Set/Distance1", 
                     date: "2020-09-01", 
-                    score_session: valid_score_session
+                    score_session: valid_score_session, 
+                    round: valid_round
                 }
                 check_rset = archer.rsets.create(check_rset_attrs)
                 

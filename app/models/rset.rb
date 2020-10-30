@@ -33,9 +33,9 @@ class Rset < ApplicationRecord
     # auto create name ( ScoreSession.name - Round.name - Rset.name )
     def assign_name
         if self.name.blank?
-            self.name =create_name
-        elsif !self.name.include?(self.round.name) && !self.name.include?("Set/Distance")
-            self.name =create_name
+            self.name = create_name
+        elsif !self.name.include?(self.round.name) || !self.name.include?("Set/Distance")
+            self.name = create_name
         end
     end
 
