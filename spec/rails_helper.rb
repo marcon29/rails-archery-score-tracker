@@ -101,6 +101,7 @@ def before_shot
   valid_round
   valid_rset
   valid_end
+  valid_target
 end
 
 

@@ -319,10 +319,12 @@ RSpec.describe End, type: :model do
 
         describe "has many Shots and" do
             before(:each) do
+                before_archer
                 valid_archer
                 valid_score_session
                 valid_round
                 valid_rset
+                valid_target
             end
 
             it "can find an associated object" do
@@ -333,10 +335,7 @@ RSpec.describe End, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 endd = End.create(duplicate)
 
-                check_shot_attrs = {
-                    number: 1, 
-                    score_entry: "X"
-                }
+                check_shot_attrs = {number: 1, score_entry: "X"}
                 check_shot = endd.shots.create(check_shot_attrs)
                 
                 expect(endd.shots).to include(check_shot)
@@ -359,32 +358,84 @@ RSpec.describe End, type: :model do
 
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
-        it "can find all ends belonging to the same rset" do
-            first_end = valid_end
-            second_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1)
-            third_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1)
-            
-            second_rset = Rset.create(date: "2020-09-01", rank: "", archer: valid_archer, score_session: valid_score_session, round: valid_round)
-            other_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 2)
-            
-            expect(first_end.ends_in_set.count).to eq(3)
-            expect(first_end.ends_in_set).to include(first_end)
-            expect(first_end.ends_in_set).to include(second_end)
-            expect(first_end.ends_in_set).to include(third_end)
-            expect(first_end.ends_in_set).not_to include(other_end)
+        before(:each) do
+            valid_set_end_format
+            valid_target
         end
 
-        it "can calculate the total score for an end" do
-            pending "need to add associations"
-            # want to be able to to call end.score
-            # sums all end scores
-            expect(endd.score).to eq(all_shots_scores)
+        describe "methods primarily for callbacks and validations" do
+            it "can find all ends belonging to the same rset" do
+                first_end = valid_end
+                second_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1)
+                third_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1)
+                
+                second_rset = Rset.create(date: "2020-09-01", rank: "", archer: valid_archer, score_session: valid_score_session, round: valid_round)
+                other_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 2)
+                
+                expect(first_end.ends_in_set.count).to eq(3)
+                expect(first_end.ends_in_set).to include(first_end)
+                expect(first_end.ends_in_set).to include(second_end)
+                expect(first_end.ends_in_set).to include(third_end)
+                expect(first_end.ends_in_set).not_to include(other_end)
+            end
+
+            it "can identify the SetEndFormat of the Rset it belongs to" do
+                expect(test_end.set_end_format).to eq(valid_set_end_format)
+            end
+
+            it "can identify the total number of shots it should have" do
+                expect(test_end.shots_per_end).to eq(valid_set_end_format.shots_per_end)
+            end
         end
 
-        it "can track if end it is in is complete or not" do
-            pending "need to finish shot model"
-            # can use this to identify the active end so only display form for that end
-            # want to be able to to call shot.end_complete?
+        describe "methods primarily for getting useful data" do
+            it "can calculate the total score for an end" do
+                endd = valid_end
+                expect(End.all.count).to eq(1)
+                expect(Shot.all.count).to eq(0)
+                
+                Shot.create(score_entry: "X", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end: endd)
+                Shot.create(score_entry: "10", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end: endd)
+                Shot.create(score_entry: "M", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end: endd)
+                expect(Shot.all.count).to eq(3)
+                expect(endd.score).to eq(20)
+            end
+
+            it "can identify all shots that have been scored" do
+                endd = valid_end
+                expect(End.all.count).to eq(1)
+                expect(Shot.all.count).to eq(0)
+                
+                first_shot = Shot.create(score_entry: "X", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end: endd)
+                second_shot = Shot.create(score_entry: "10", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end: endd)
+                third_shot = Shot.create(score_entry: "M", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end: endd)
+                expect(Shot.all.count).to eq(3)
+
+                expect(endd.scored_shots.count).to eq(3)
+                expect(endd.scored_shots).to include(first_shot)
+                expect(endd.scored_shots).to include(second_shot)
+                expect(endd.scored_shots).to include(third_shot)
+            end
+
+            it "can identify if end is complete (all shots scored) or not" do
+                endd = valid_end
+                expect(End.all.count).to eq(1)
+                expect(Shot.all.count).to eq(0)
+
+                multi_shot_attrs = {score_entry: "X", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end: endd}
+                5.times { Shot.create(multi_shot_attrs) }
+                expect(Shot.all.count).to eq(5)
+                expect(endd.scored_shots.count).to eq(5)
+                expect(endd.complete?).to eq(false)
+                
+                Shot.create(multi_shot_attrs)
+                endd.reload
+                expect(Shot.all.count).to eq(6)
+                expect(endd.scored_shots.count).to eq(6)
+                expect(endd.complete?).to eq(true)
+            end
+
+            
         end
 
         it "helpers TBD" do

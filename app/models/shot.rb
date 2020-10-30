@@ -12,7 +12,7 @@ class Shot < ApplicationRecord
         numericality: {only_integer: true, greater_than: 0 }, 
         uniqueness: { scope: :end }
         # make inclusion so can't be more than # of shots per ends? (not part of tests right now)
-            # need to find Set_End_format corresponding to rset
+            # need to find Set_End_format corresponding to Rset
             # needs to be between 1 and Set_End_format.shots_per_end
     
     validates :score_entry, 
@@ -112,6 +112,9 @@ class Shot < ApplicationRecord
             # needs assoc: round, archer?
             # age_class = shot.round.archer_category
         # end
+    
+    # ######### helpers to add once RoundFormat and SetEndFormat associations finished ###################
+        # update number validation above - don't allow more shots than Rset/SetEndFormat shots_per_end
     
 
 end
