@@ -39,17 +39,13 @@ class End < ApplicationRecord
     end
 
     def set_end_format
-        # real code
-        # self.rset.set_end_format
-
-        # use til target assoc setup for Rset
-        Format::SetEndFormat.first
+        self.rset.set_end_format if rset.set_end_format
     end
 
     def allowable_ends_per_set
         self.set_end_format.num_ends
     end
-    
+
     def score_method_is_points?
         self.round && self.round.score_method == "Points"
     end
@@ -74,12 +70,6 @@ class End < ApplicationRecord
     def complete?
         scored_shots.count < self.shots_per_end ? false : true
     end
-
-    
-
-    # ######### helpers to add once RoundFormat and SetEndFormat associations finished ###################
-        # need to redo #set_end_format method above
-
         
 
 

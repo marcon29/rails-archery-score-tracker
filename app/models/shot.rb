@@ -35,11 +35,7 @@ class Shot < ApplicationRecord
     end
 
     def set_end_format
-        # real code
-        # self.rset.set_end_format
-
-        # use til target assoc setup for Rset
-        Format::SetEndFormat.first
+        self.end.rset.set_end_format
     end
 
     def allowable_shots_per_end

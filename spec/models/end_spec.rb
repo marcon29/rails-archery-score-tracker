@@ -65,13 +65,7 @@ RSpec.describe End, type: :model do
     # object creation and validation tests #######################################
     describe "model creates and updates only valid instances - " do
         before(:each) do
-            # this needs to always run before creating an archer so validations work (creates inclusion lists)
-            before_archer
-            valid_archer
-            valid_score_session
-            valid_round
-            valid_rset
-            valid_set_end_format
+            before_end
         end
 
         describe "valid when " do
@@ -241,6 +235,7 @@ RSpec.describe End, type: :model do
     describe "instances are properly associated to other models" do
         before(:each) do
             valid_set_end_format
+            valid_rset
             valid_target
         end
 
@@ -350,6 +345,7 @@ RSpec.describe End, type: :model do
     describe "all helper methods work correctly:" do
         before(:each) do
             valid_set_end_format
+            valid_rset
             valid_target
         end
 
@@ -370,7 +366,8 @@ RSpec.describe End, type: :model do
             end
 
             it "can identify the SetEndFormat of the Rset it belongs to" do
-                expect(test_end.set_end_format).to eq(valid_set_end_format)
+                check_set_end_format = valid_rset.set_end_format
+                expect(test_end.set_end_format).to eq(check_set_end_format)
             end
 
             it "can identify the total number of ends allowed in its Rset" do
