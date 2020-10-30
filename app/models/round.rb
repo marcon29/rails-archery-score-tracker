@@ -47,11 +47,9 @@ class Round < ApplicationRecord
     end
 
     # ##### helpers (data control)
-    # it "can calculate the total score for a round" do
-        # pending "need to add associations"
-        # want to be able to to call round.score
-        # sums all rset scores
-    # end
+    def score
+        self.rsets.collect { |rset| rset.score }.sum
+    end
 
         # ##########################
         # check out ArcherCategory (model and specs) for ideas and started code

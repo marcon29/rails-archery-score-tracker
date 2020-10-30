@@ -34,13 +34,6 @@ class ScoreSession < ApplicationRecord
     end
 
     # ##### helpers (data control)
-    # it "can calculate the total score for a score session" do
-        # pending "need to add associations"
-        # want to be able to to call score_session.score
-        # sums all round scores
-    # end
-
-
         # date range - collect all dates between start and end (inclusive)
             # hold - may not need this - html can restrict date range (can just use start and end)
             # will use to restrict date options for round

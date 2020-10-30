@@ -313,7 +313,7 @@ RSpec.describe ScoreSession, type: :model do
             before(:each) do
                 before_end
             end
-            
+
             it "can find an associated object" do
                 expect(valid_score_session.shots).to include(valid_shot)
             end
@@ -410,12 +410,6 @@ RSpec.describe ScoreSession, type: :model do
                     expect(score_session.rank).to eq("Loss")
                 end
             end
-        end
-
-        it "can calculate the total score for a score session" do
-            # want to be able to to call score_session.score
-            # sums all round scores
-            expect(score_session.score).to eq(all_rounds_scores)
         end
     
         it "helpers TBD" do

@@ -287,10 +287,7 @@ RSpec.describe Rset, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 rset = Rset.create(duplicate)
 
-                check_end_attrs = {
-                    number: 2, 
-                    set_score: ""
-                }
+                check_end_attrs = {set_score: 2, archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1}
                 check_end = rset.ends.create(check_end_attrs)
                 
                 expect(rset.ends).to include(check_end)
@@ -311,6 +308,10 @@ RSpec.describe Rset, type: :model do
         end
 
         describe "has many Shots and" do
+            before(:each) do
+                before_end
+            end
+
             it "can find an associated object" do
                 expect(valid_rset.shots).to include(valid_shot)
             end
@@ -318,10 +319,7 @@ RSpec.describe Rset, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 rset = Rset.create(duplicate)
 
-                check_shot_attrs = {
-                    number: 1, 
-                    score_entry: "X"
-                }
+                check_shot_attrs = {score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}
                 check_shot = rset.shots.create(check_shot_attrs)
                 
                 expect(rset.shots).to include(check_shot)
@@ -386,9 +384,32 @@ RSpec.describe Rset, type: :model do
             end
 
             it "can calculate the total score for a set" do
-                # want to be able to to call rset.score
-                # sums all end scores
-                expect(rset.score).to eq(all_ends_scores)
+                before_shot
+                Rset.destroy_all
+                End.destroy_all
+                Shot.destroy_all
+
+                rset = Rset.create(test_req)
+
+                expect(Rset.all.count).to eq(1)
+                expect(End.all.count).to eq(0)
+                expect(Shot.all.count).to eq(0)
+                
+                first_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset: rset)
+                second_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset: rset)
+                expect(End.all.count).to eq(2)
+                expect(rset.ends.count).to eq(2)
+
+                Shot.create(score_entry: "X", archer_id: 1, score_session_id: 1, round_id: 1, rset: rset, end: first_end)
+                Shot.create(score_entry: "10", archer_id: 1, score_session_id: 1, round_id: 1, rset: rset, end: first_end)
+                Shot.create(score_entry: "M", archer_id: 1, score_session_id: 1, round_id: 1, rset: rset, end: first_end)
+                Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, rset: rset, end: second_end)
+                Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, rset: rset, end: second_end)
+                Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, rset: rset, end: second_end)
+                expect(Shot.all.count).to eq(6)
+                expect(rset.shots.count).to eq(6)
+                
+                expect(rset.score).to eq(35)
             end
         end
 

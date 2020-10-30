@@ -26,7 +26,7 @@ RSpec.describe Round, type: :model do
     # ###################################################################
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
-    let(:valid_req) {
+    let(:test_req) {
         # {round_type: "Qualifying", score_method: "Points", archer_id: 1, score_session_id: 1}
         {round_type: "Qualifying", score_method: "Points", archer_id: 1, score_session_id: 1, round_format_id: 1}
     }
@@ -86,14 +86,14 @@ RSpec.describe Round, type: :model do
             
             it "given only required attributes" do
                 expect(Round.all.count).to eq(0)
-                round = Round.create(valid_req)
+                round = Round.create(test_req)
 
                 expect(round).to be_valid
                 expect(Round.all.count).to eq(1)
 
-                # req input tests (should have value in valid_req)
-                expect(round.round_type).to eq(valid_req[:round_type])
-                expect(round.score_method).to eq(valid_req[:score_method])
+                # req input tests (should have value in test_req)
+                expect(round.round_type).to eq(test_req[:round_type])
+                expect(round.score_method).to eq(test_req[:score_method])
 
                 # not req input tests (name auto-asigned from missing)
                 expect(round.name).to eq(assigned_name)
@@ -360,11 +360,60 @@ RSpec.describe Round, type: :model do
 
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
-
         it "can calculate the total score for a round" do
-            # want to be able to to call round.score
-            # sums all rset scores
-            expect(round.score).to eq(all_rsets_scores)
+            before_shot
+            Round.destroy_all
+            Rset.destroy_all
+            End.destroy_all
+            Shot.destroy_all
+
+            round = Round.create(test_req)
+            expect(Round.all.count).to eq(1)
+            expect(Rset.all.count).to eq(0)
+            expect(End.all.count).to eq(0)
+            expect(Shot.all.count).to eq(0)
+
+            second_set_end_format = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
+            first_rset = Rset.create(date: "2020-09-01", archer_id: 1, score_session_id: 1, round: round, set_end_format: valid_set_end_format)
+            second_rset = Rset.create(date: "2020-09-01", archer_id: 1, score_session_id: 1, round: round, set_end_format: second_set_end_format)
+            expect(Rset.all.count).to eq(2)
+            expect(round.rsets.count).to eq(2)
+            
+            # set up first Rset
+            first_end = End.create(archer_id: 1, score_session_id: 1, round: round, rset: first_rset)
+            second_end = End.create(archer_id: 1, score_session_id: 1, round: round, rset: first_rset)
+            expect(End.all.count).to eq(2)
+            expect(first_rset.ends.count).to eq(2)
+            expect(round.ends.count).to eq(2)
+
+            Shot.create(score_entry: "X", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: first_end)
+            Shot.create(score_entry: "10", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: first_end)
+            Shot.create(score_entry: "M", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: first_end)
+            Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: second_end)
+            Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: second_end)
+            Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: second_end)
+            expect(Shot.all.count).to eq(6)
+            expect(first_rset.shots.count).to eq(6)
+            expect(round.shots.count).to eq(6)
+
+            # set up second Rset
+            third_end = End.create(archer_id: 1, score_session_id: 1, round: round, rset: second_rset)
+            fourth_end = End.create(archer_id: 1, score_session_id: 1, round: round, rset: second_rset)
+            expect(End.all.count).to eq(4)
+            expect(second_rset.ends.count).to eq(2)
+            expect(round.ends.count).to eq(4)
+
+            Shot.create(score_entry: "X", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: third_end)
+            Shot.create(score_entry: "10", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: third_end)
+            Shot.create(score_entry: "M", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: third_end)
+            Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: fourth_end)
+            Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: fourth_end)
+            Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: fourth_end)
+            expect(Shot.all.count).to eq(12)
+            expect(second_rset.shots.count).to eq(6)
+            expect(round.shots.count).to eq(12)
+
+            expect(round.score).to eq(70)
         end
 
         it "helpers TBD" do

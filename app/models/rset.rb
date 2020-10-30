@@ -76,7 +76,11 @@ class Rset < ApplicationRecord
     def shots_per_end
         self.set_end_format.shots_per_end
     end
-    
+
+    def score
+        self.ends.collect { |endd| endd.score }.sum
+    end
+
     # it "can calculate the total score for a rset" do
         # pending "need to add associations"
         # want to be able to to call rset.score
