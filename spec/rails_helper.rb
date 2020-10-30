@@ -100,6 +100,7 @@ def before_shot
   valid_score_session
   valid_round
   valid_rset
+  valid_set_end_format
   valid_end
   valid_target
 end

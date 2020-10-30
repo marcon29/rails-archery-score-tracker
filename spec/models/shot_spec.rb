@@ -77,7 +77,6 @@ RSpec.describe Shot, type: :model do
     describe "model creates and updates only valid instances - " do
         before(:each) do
             before_shot
-            valid_target
         end
 
         describe "valid when " do
@@ -175,6 +174,18 @@ RSpec.describe Shot, type: :model do
                 end
             end
 
+            it "exceeds the total number of ends allowable for the Rset" do
+                expect(Shot.all.count).to eq(0)
+                valid_set_end_format.shots_per_end.times { Shot.create(test_req) }
+                expect(Shot.all.count).to eq(6)
+                
+                shot = Shot.create(test_req)
+
+                expect(shot).to be_invalid
+                expect(Shot.all.count).to eq(6)
+                expect(shot.errors.messages[:number]).to be_present
+            end
+
             it "unique attributes are duplicated" do
                 test_shot
                 expect(Shot.all.count).to eq(1)
@@ -241,7 +252,6 @@ RSpec.describe Shot, type: :model do
     describe "instances are properly associated to other models" do
         before(:each) do
             before_shot
-            valid_target
         end
 
         describe "belongs to Archer and" do
@@ -327,95 +337,98 @@ RSpec.describe Shot, type: :model do
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
         before(:each) do
-            before_archer
-            valid_archer
-            valid_score_session
-            valid_round
-            valid_rset
-            valid_end
-            valid_target
+            before_shot
         end
 
-        it "can find all shots that belong to same end" do
-            second_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1)
-            multi_shot_11
-            multi_shot_12
-            multi_shot_13
-            multi_shot_21
-            multi_shot_22
-            multi_shot_23
+        describe "methods primarily for callbacks and validations" do
+            it "can find all shots that belong to same end" do
+                second_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1)
+                multi_shot_11
+                multi_shot_12
+                multi_shot_13
+                multi_shot_21
+                multi_shot_22
+                multi_shot_23
+                
+                expect(Shot.all.count).to eq(6)
+                expect(multi_shot_11.shots_in_end.count).to eq(3)
+                expect(multi_shot_21.shots_in_end.count).to eq(3)
+                expect(multi_shot_11.shots_in_end).to include(multi_shot_11)
+                expect(multi_shot_11.shots_in_end).to include(multi_shot_12)
+                expect(multi_shot_11.shots_in_end).to include(multi_shot_12)
+                expect(multi_shot_11.shots_in_end).not_to include(multi_shot_21)
+                expect(multi_shot_11.shots_in_end).not_to include(multi_shot_22)
+                expect(multi_shot_11.shots_in_end).not_to include(multi_shot_23)
+            end
+
+            it "can identify the SetEndFormat of the Rset it belongs to" do
+                expect(test_shot.set_end_format).to eq(valid_set_end_format)
+            end
+
+            it "can identify the total number of shots allowed in its End" do
+                expect(test_shot.allowable_shots_per_end).to eq(valid_set_end_format.shots_per_end)
+            end
             
-            expect(Shot.all.count).to eq(6)
-            expect(multi_shot_11.shots_in_end.count).to eq(3)
-            expect(multi_shot_21.shots_in_end.count).to eq(3)
-            expect(multi_shot_11.shots_in_end).to include(multi_shot_11)
-            expect(multi_shot_11.shots_in_end).to include(multi_shot_12)
-            expect(multi_shot_11.shots_in_end).to include(multi_shot_12)
-            expect(multi_shot_11.shots_in_end).not_to include(multi_shot_21)
-            expect(multi_shot_11.shots_in_end).not_to include(multi_shot_22)
-            expect(multi_shot_11.shots_in_end).not_to include(multi_shot_23)
+            it "can find the target into which shot was made" do
+                expect(test_shot.target).to eq(valid_target)
+            end
+    
+            it "can identify all possible score entries" do
+                fita122_scores = ["M", "X", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
+                no_x_ring_scores =  ["M", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
+                fita80_6ring_scores = ["M", "X", "10", "9", "8", "7", "6", "5"]
+                
+                Target.destroy_all
+                test_target = Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: true)
+                expect(Target.all.count).to eq(1)
+                
+                shot = Shot.create(archer: valid_archer, score_session: valid_score_session, round: valid_round, rset: valid_rset, end: valid_end)
+                expect(shot.possible_scores).to eq(fita122_scores)
+    
+                test_target.update(x_ring: false)
+                expect(shot.possible_scores).to eq(no_x_ring_scores)
+    
+                test_target.update(score_areas: 6, rings: 6, x_ring: true,)
+                expect(shot.possible_scores).to eq(fita80_6ring_scores)
+            end
+
+            it "can properly format a score entry" do
+                test_req[:score_entry] = "x"
+                shot_text = Shot.create(test_req)
+    
+                # keeping this until figure out why it won't run validity test correctly (works fine in console)
+                # expect(shot_text).to be_valid
+                expect(Shot.all.count).to eq(1)
+                expect(shot_text.score_entry).to eq("X")
+                expect(shot_text.score).to eq(10)
+    
+                test_req[:score_entry] = "5"
+                shot_num = Shot.create(test_req)
+                
+                # keeping this until figure out why it won't run validity test correctly (works fine in console)
+                # expect(shot_num).to be_valid
+                expect(Shot.all.count).to eq(2)
+                expect(shot_num.score_entry).to eq("5")
+                expect(shot_num.score).to eq(5)
+            end
         end
 
-        it "can find the target into which shot was made" do
-            expect(test_shot.target).to eq(valid_target)
-        end
-
-        it "can identify all possible score entries" do
-            fita122_scores = ["M", "X", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
-            no_x_ring_scores =  ["M", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
-            fita80_6ring_scores = ["M", "X", "10", "9", "8", "7", "6", "5"]
+        describe "methods primarily for getting useful data" do
+            it "can calculate a score (point value) for a shot" do
+                valid_target
+                multi_shot_11
+                multi_shot_12
+                multi_shot_13
+    
+                expect(multi_shot_11.score).to eq(valid_target.max_score)
+                expect(multi_shot_12.score).to eq(multi_shot_12_attrs[:score_entry].to_i)
+                expect(multi_shot_13.score).to eq(0)
+            end
             
-            Target.destroy_all
-            test_target = Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: true)
-            expect(Target.all.count).to eq(1)
-            
-            shot = Shot.create(archer: valid_archer, score_session: valid_score_session, round: valid_round, rset: valid_rset, end: valid_end)
-            expect(shot.possible_scores).to eq(fita122_scores)
-
-            test_target.update(x_ring: false)
-            expect(shot.possible_scores).to eq(no_x_ring_scores)
-
-            test_target.update(score_areas: 6, rings: 6, x_ring: true,)
-            expect(shot.possible_scores).to eq(fita80_6ring_scores)
+            it "can find the date a shot was made" do
+                expect(test_shot.date).to eq(valid_rset.date)
+            end
         end
-
-        it "can properly format a score entry" do
-            test_req[:score_entry] = "x"
-            shot_text = Shot.create(test_req)
-
-            # keeping this until figure out why it won't run validity test correctly (works fine in console)
-            # expect(shot_text).to be_valid
-            expect(Shot.all.count).to eq(1)
-            expect(shot_text.score_entry).to eq("X")
-            expect(shot_text.score).to eq(10)
-
-            test_req[:score_entry] = "5"
-            shot_num = Shot.create(test_req)
-            
-            # keeping this until figure out why it won't run validity test correctly (works fine in console)
-            # expect(shot_num).to be_valid
-            expect(Shot.all.count).to eq(2)
-            expect(shot_num.score_entry).to eq("5")
-            expect(shot_num.score).to eq(5)
-        end
-
-        it "can calculate a score (point value) for a shot" do
-            valid_target
-            multi_shot_11
-            multi_shot_12
-            multi_shot_13
-
-            expect(multi_shot_11.score).to eq(valid_target.max_score)
-            expect(multi_shot_12.score).to eq(multi_shot_12_attrs[:score_entry].to_i)
-            expect(multi_shot_13.score).to eq(0)
-        end
-        
-        it "can find the date a shot was made" do
-            expect(test_shot.date).to eq(valid_rset.date)
-        end
-
-        
-        
 
         it "helpers TBD" do
             pending "add as needed"

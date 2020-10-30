@@ -18,17 +18,7 @@ RSpec.describe End, type: :model do
         
     let(:test_end) {
         End.create(test_all)
-    }
-
-    # ###################################################################
-    # define any additional objects to test for this model 
-    # ###################################################################
-    # only add multiple instantiations if need simultaneous instances for testing
-
-    # let(:test_end_set) {
-    #     End.create(number: 1, score_method: "Set",  set_score: 2)
-    # }
-
+    }    
 
     # ###################################################################
     # define standard create/update variations
@@ -60,20 +50,13 @@ RSpec.describe End, type: :model do
     # define test results for auto-assign attrs
     # ###################################################################
     let(:assigned_num) {1}
-    # let(:assigned_set_score) {nil}
-    # let(:default_attr) {}
   
     # ###################################################################
     # define custom error messages
     # ###################################################################
     # let(:missing_set_score_message) {"You must enter a set score for the end."}
     let(:number_set_score_message) {"You must enter 0, 1, or 2."}
-    
-    # let(:duplicate_attr_message) {}
-    # let(:inclusion_attr_message) {}
-    # let(:number_attr_message) {}
-    # let(:format_attr_message) {}
-    
+        
 
     # ###################################################################
     # define tests
@@ -88,6 +71,7 @@ RSpec.describe End, type: :model do
             valid_score_session
             valid_round
             valid_rset
+            valid_set_end_format
         end
 
         describe "valid when " do
@@ -184,15 +168,6 @@ RSpec.describe End, type: :model do
         end
 
         describe "invalid and has correct error message when" do
-            before(:each) do
-                # this needs to always run before creating an archer so validations work (creates inclusion lists)
-                before_archer
-                valid_archer
-                valid_score_session
-                valid_round
-                valid_rset
-            end
-
             it "number is outside allowable inputs" do
                 bad_scenarios = [0, -1, "one"]
                 
@@ -203,6 +178,18 @@ RSpec.describe End, type: :model do
                     expect(End.all.count).to eq(0)
                     expect(endd.errors.messages[:number]).to be_present
                 end
+            end
+
+            it "exceeds the total number of ends allowable for the Rset" do
+                expect(End.all.count).to eq(0)
+                valid_set_end_format.num_ends.times { End.create(test_req) }
+                expect(End.all.count).to eq(6)
+                
+                endd = End.create(test_req)
+
+                expect(endd).to be_invalid
+                expect(End.all.count).to eq(6)
+                expect(endd.errors.messages[:number]).to be_present
             end
 
             it "unique attributes are duplicated" do
@@ -253,6 +240,11 @@ RSpec.describe End, type: :model do
 
     # association tests ########################################################
     describe "instances are properly associated to other models" do
+        before(:each) do
+            valid_set_end_format
+            valid_target
+        end
+
         describe "belongs to an Archer and" do
             it "can find an associated object" do
                 assoc_archer = valid_archer
@@ -324,7 +316,6 @@ RSpec.describe End, type: :model do
                 valid_score_session
                 valid_round
                 valid_rset
-                valid_target
             end
 
             it "can find an associated object" do
@@ -383,8 +374,8 @@ RSpec.describe End, type: :model do
                 expect(test_end.set_end_format).to eq(valid_set_end_format)
             end
 
-            it "can identify the total number of shots it should have" do
-                expect(test_end.shots_per_end).to eq(valid_set_end_format.shots_per_end)
+            it "can identify the total number of ends allowed in its Rset" do
+                expect(test_end.allowable_ends_per_set).to eq(valid_set_end_format.num_ends)
             end
         end
 
@@ -417,6 +408,10 @@ RSpec.describe End, type: :model do
                 expect(endd.scored_shots).to include(third_shot)
             end
 
+            it "can identify the total number of shots it should have" do
+                expect(test_end.shots_per_end).to eq(valid_set_end_format.shots_per_end)
+            end
+
             it "can identify if end is complete (all shots scored) or not" do
                 endd = valid_end
                 expect(End.all.count).to eq(1)
@@ -434,8 +429,6 @@ RSpec.describe End, type: :model do
                 expect(endd.scored_shots.count).to eq(6)
                 expect(endd.complete?).to eq(true)
             end
-
-            
         end
 
         it "helpers TBD" do

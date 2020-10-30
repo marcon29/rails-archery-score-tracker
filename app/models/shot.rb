@@ -7,14 +7,11 @@ class Shot < ApplicationRecord
 
     # all assoc attrs - :archer_id, :score_session_id, :round_id, :rset_id, :end_id
     # all data attrs  - :number, :score_entry
+    # dependencies: Rset (for number creation, Target & SetEndFormat), Round & ScoreSession (for Rset)
     
     validates :number, 
-        numericality: {only_integer: true, greater_than: 0 }, 
+        numericality: {only_integer: true, greater_than: 0, less_than_or_equal_to: :allowable_shots_per_end }, 
         uniqueness: { scope: :end }
-        # make inclusion so can't be more than # of shots per ends? (not part of tests right now)
-            # need to find Set_End_format corresponding to Rset
-            # needs to be between 1 and Set_End_format.shots_per_end
-    
     validates :score_entry, 
         inclusion: { in: :possible_scores, allow_blank: true, message: -> (shot, data) {"#{shot.score_entry_error_message}"} }, 
         on: :create
@@ -37,9 +34,16 @@ class Shot < ApplicationRecord
         self.end.shots if self.end
     end
 
-    def possible_scores
-        self.target.possible_scores
-        # returns array
+    def set_end_format
+        # real code
+        # self.rset.set_end_format
+
+        # use til target assoc setup for Rset
+        Format::SetEndFormat.first
+    end
+
+    def allowable_shots_per_end
+        self.set_end_format.shots_per_end
     end
 
     def target
@@ -51,8 +55,9 @@ class Shot < ApplicationRecord
         # Target.find(3)
     end
 
-    def format_score_entry
-        self.score_entry = self.score_entry.capitalize if self.score_entry
+    def possible_scores
+        self.target.possible_scores
+        # returns array
     end
 
     def score_entry_error_message
@@ -61,7 +66,12 @@ class Shot < ApplicationRecord
 
         "Enter only M#{', X,' if self.target.x_ring} or a number between #{min_score} and #{max_score}."
     end
-        
+
+    def format_score_entry
+        self.score_entry = self.score_entry.capitalize if self.score_entry
+    end
+    
+    
     # ##### helpers (data control)
     # converts score_entry into integer
     def score
@@ -78,6 +88,10 @@ class Shot < ApplicationRecord
         self.rset.date
     end
 
+
+    # ######### helpers to add once RoundFormat and SetEndFormat associations finished ###################
+        # need to redo #set_end_format method above
+        
 
     # ######### helpers to add once DistanceTarget and associations finished ###################
         # need to redo #target method above
@@ -113,8 +127,7 @@ class Shot < ApplicationRecord
             # age_class = shot.round.archer_category
         # end
     
-    # ######### helpers to add once RoundFormat and SetEndFormat associations finished ###################
-        # update number validation above - don't allow more shots than Rset/SetEndFormat shots_per_end
+    
     
 
 end
