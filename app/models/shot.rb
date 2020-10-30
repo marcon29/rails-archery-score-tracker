@@ -38,13 +38,12 @@ class Shot < ApplicationRecord
         self.rset.shots_per_end
     end
 
-    def target
-        # real code
-        # self.rset.target
+    def distance
+        self.rset.distance
+    end
 
-        # use til target assoc setup for Rset
-        Target.first
-        # Target.find(3)
+    def target
+        self.rset.target
     end
 
     def possible_scores

@@ -262,8 +262,8 @@ RSpec.describe Shot, type: :model do
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_archer = valid_archer
-                update[:archer_id] = ""
-                check_shot = assoc_archer.shots.create(update)
+                test_req[:archer_id] = ""
+                check_shot = assoc_archer.shots.create(test_req)
                 
                 expect(check_shot.archer).to eq(assoc_archer)
                 expect(check_shot.archer.username).to include(assoc_archer.username)
@@ -278,8 +278,8 @@ RSpec.describe Shot, type: :model do
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_score_session = valid_score_session
-                update[:score_session_id] = ""
-                check_shot = assoc_score_session.shots.create(update)
+                test_req[:score_session_id] = ""
+                check_shot = assoc_score_session.shots.create(test_req)
                 
                 expect(check_shot.score_session).to eq(assoc_score_session)
                 expect(check_shot.score_session.name).to include(assoc_score_session.name)
@@ -294,8 +294,8 @@ RSpec.describe Shot, type: :model do
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_round = valid_round
-                update[:round_id] = ""
-                check_shot = assoc_round.shots.create(update)
+                test_req[:round_id] = ""
+                check_shot = assoc_round.shots.create(test_req)
                 
                 expect(check_shot.round).to eq(assoc_round)
                 expect(check_shot.round.name).to include(assoc_round.name)
@@ -310,8 +310,8 @@ RSpec.describe Shot, type: :model do
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_rset = valid_rset
-                update[:rset_id] = ""
-                check_shot = assoc_rset.shots.create(update)
+                test_req[:rset_id] = ""
+                check_shot = assoc_rset.shots.create(test_req)
                 
                 expect(check_shot.rset).to eq(assoc_rset)
                 expect(check_shot.rset.name).to include(assoc_rset.name)
@@ -363,6 +363,11 @@ RSpec.describe Shot, type: :model do
 
             it "can identify the total number of shots allowed in its End" do
                 expect(test_shot.allowable_shots_per_end).to eq(valid_set_end_format.shots_per_end)
+            end
+
+            it "can find the distance at which shot was made" do
+                expect(test_shot.distance).to eq("90m")
+                # expect(test_shot.distance).to eq(valid_dist_targ_cat.distance)
             end
             
             it "can find the target into which shot was made" do

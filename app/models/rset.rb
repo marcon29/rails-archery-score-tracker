@@ -20,6 +20,25 @@ class Rset < ApplicationRecord
     
 
     # ##### helpers (callbacks & validations)
+
+    #####  placeholders to get Shot working independently ######
+    ######## remove/edit once DistTargCat assoc working ########
+    # shouldn't need this at all, will have direct assoc that Shot can call
+    def target
+        Target.first
+    end
+
+    # should need this so Shot can pull info from Rset instead of assoc
+    def distance
+        # real code
+        # DistanceTargetCategory.first.distance
+
+        # use til DistTargCat assoc setup for Rset
+        "90m"
+    end
+    ############################################################
+
+
     def assign_name
         if self.round && self.set_end_format
             if self.name.blank?
@@ -45,9 +64,6 @@ class Rset < ApplicationRecord
     def shots_per_end
         self.set_end_format.shots_per_end
     end
-
-
-    
 
     def check_date
         start_date = self.score_session.start_date if self.score_session
