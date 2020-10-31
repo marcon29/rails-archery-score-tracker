@@ -177,6 +177,26 @@ RSpec.describe Format::RoundFormat, type: :model do
                 expect(assoc_round_format.set_end_formats).to include(assoc_set_end_format)
             end
         end
+
+        describe "has many Rounds and" do
+            before(:each) do
+                before_round
+            end
+
+            it "can find an associated object" do
+                expect(valid_round_format.rounds).to include(valid_round)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                round_format = Format::RoundFormat.create(duplicate)
+
+                check_round_attrs = {round_type: "Qualifying", score_method: "Points", archer: valid_archer, score_session: valid_score_session}
+                check_round = round_format.rounds.create(check_round_attrs)
+                
+                expect(round_format.rounds).to include(check_round)
+                expect(round_format.rounds.last.name).to eq(check_round.name)
+            end
+        end
     end
 
     # helper method tests ########################################################
