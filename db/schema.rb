@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_30_035151) do
+ActiveRecord::Schema.define(version: 2020_10_31_170338) do
 
   create_table "archers", force: :cascade do |t|
     t.string "username"
@@ -62,6 +62,19 @@ ActiveRecord::Schema.define(version: 2020_10_30_035151) do
     t.integer "num_ends"
     t.integer "shots_per_end"
     t.integer "round_format_id"
+    t.boolean "user_edit", default: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "format_targets", force: :cascade do |t|
+    t.string "name"
+    t.string "size"
+    t.integer "score_areas"
+    t.integer "rings"
+    t.boolean "x_ring"
+    t.integer "max_score"
+    t.integer "spots"
     t.boolean "user_edit", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -163,19 +176,6 @@ ActiveRecord::Schema.define(version: 2020_10_30_035151) do
     t.integer "rset_id"
     t.integer "end_id"
     t.integer "number"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "targets", force: :cascade do |t|
-    t.string "name"
-    t.string "size"
-    t.integer "score_areas"
-    t.integer "rings"
-    t.boolean "x_ring"
-    t.integer "max_score"
-    t.integer "spots"
-    t.boolean "user_edit", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

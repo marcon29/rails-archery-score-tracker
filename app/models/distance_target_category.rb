@@ -23,18 +23,21 @@ class DistanceTargetCategory < ApplicationRecord
     # needs to lookup the category by age/div/gender (input at Round creation)
     
     # knowing the Round, the Set and the Archer Category can proide the Distance and Target
-    # Round         Set             Category          Distance        Target
-    # 1440          Distance 1      R Sr. M            90m             122cm
-    # 1440          Distance 3      C Cad. W           40m             80cm
-    # 720           Distance 2      R Mast. M          60m             122cm
-    # 720           Distance 2      C Mast. M          60m             122cm
+    # Round             Set                 Category                Distance        Target          Alt Target
+    # ---------------   ----------------    ------------------      --------        ---------       -------------
+    # round_format_id   set_end_fomat_id    archer_category_id      attr            target_id       alt_target_id
+    # ---------------   ----------------    ------------------      --------        ---------       -------------
+    # 1440              Distance 1          R Sr. M                 90m             122cm           nil
+    # 1440              Distance 3          C Cad. W                40m             80cm            80cm/6-ring
+    # 720               Distance 2          R Mast. M               60m             122cm           nil
+    # 720               Distance 2          C Mast. M               60m             122cm           nil
 
     # wrinkles to think out
     # target options??? - can often choose between single and multi-spot
         # will need multiple entries
-            # alternate target column? - less records
-            # multiple columns with only target difference
-                # will then need logic to recognize multiple returns and display options to select
+            # alternate target column - less records
+            # https://dev.to/luchiago/multiple-foreign-keys-for-the-same-model-in-rails-6-7ml
+            # will then need logic to recognize alt target and allow user to select
     
     
     # below is controller behavior, not model. Just need to ensure for models

@@ -1,4 +1,4 @@
-class Target < ApplicationRecord
+class Format::Target < ApplicationRecord
     has_many :distance_target_categoriess
     has_many :archer_categories, through: :distance_target_categoriess
     has_many :archers, through: :distance_target_categoriess

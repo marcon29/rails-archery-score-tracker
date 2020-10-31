@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Target, type: :model do
+RSpec.describe Format::Target, type: :model do
     # ###################################################################
     # define main test object
     # ###################################################################
@@ -10,7 +10,7 @@ RSpec.describe Target, type: :model do
     }
 
     let(:test_target) {
-        Target.create(test_all)
+        Format::Target.create(test_all)
     }
     
     # ###################################################################
@@ -69,10 +69,10 @@ RSpec.describe Target, type: :model do
     describe "model creates and updates only valid instances - " do
         describe "valid when" do
             it "given all required and unrequired attributes" do
-                expect(Target.all.count).to eq(0)
+                expect(Format::Target.all.count).to eq(0)
 
                 expect(test_target).to be_valid
-                expect(Target.all.count).to eq(1)
+                expect(Format::Target.all.count).to eq(1)
 
                 expect(test_target.name).to eq(assigned_name)
                 expect(test_target.size).to eq(test_all[:size])
@@ -85,11 +85,11 @@ RSpec.describe Target, type: :model do
             end
             
             it "given only required attributes" do
-                expect(Target.all.count).to eq(0)
-                target = Target.create(test_req)
+                expect(Format::Target.all.count).to eq(0)
+                target = Format::Target.create(test_req)
 
                 expect(target).to be_valid
-                expect(Target.all.count).to eq(1)
+                expect(Format::Target.all.count).to eq(1)
 
                 # req input tests (should have value in test_req)
                 expect(target.size).to eq(test_req[:size])
@@ -125,10 +125,10 @@ RSpec.describe Target, type: :model do
 
         describe "invalid and has correct error message when" do
             it "missing required attributes" do
-                target = Target.create(blank)
+                target = Format::Target.create(blank)
 
                 expect(target).to be_invalid
-                expect(Target.all.count).to eq(0)
+                expect(Format::Target.all.count).to eq(0)
 
                 expect(target.errors.messages[:size]).to include(missing_size_message)
                 expect(target.errors.messages[:score_areas]).to include(number_all_message)
@@ -141,11 +141,11 @@ RSpec.describe Target, type: :model do
             it "unique attributes are duplicated" do
                 # call initial test object to check against for duplication
                 test_target
-                expect(Target.all.count).to eq(1)
-                target = Target.create(duplicate)
+                expect(Format::Target.all.count).to eq(1)
+                target = Format::Target.create(duplicate)
 
                 expect(target).to be_invalid
-                expect(Target.all.count).to eq(1)
+                expect(Format::Target.all.count).to eq(1)
                 expect(target.errors.messages[:name]).to include(default_duplicate_message)
             end
 
@@ -155,10 +155,10 @@ RSpec.describe Target, type: :model do
                 duplicate[:max_score] = "six"
                 duplicate[:spots] = "six"
 
-                target = Target.create(duplicate)
+                target = Format::Target.create(duplicate)
 
                 expect(target).to be_invalid
-                expect(Target.all.count).to eq(0)
+                expect(Format::Target.all.count).to eq(0)
                 
                 expect(target.errors.messages[:score_areas]).to include(number_all_message)
                 expect(target.errors.messages[:rings]).to include(number_all_message)
@@ -168,9 +168,9 @@ RSpec.describe Target, type: :model do
 
             it "trying to edit a restricted, pre-load target" do
                 # can create an instance with user_edit == false, but not edit after
-                expect(Target.all.count).to eq(0)
+                expect(Format::Target.all.count).to eq(0)
 
-                target = Target.create(
+                target = Format::Target.create(
                     name: test_all[:name], 
                     size: test_all[:size], 
                     score_areas: test_all[:score_areas], 
@@ -180,7 +180,7 @@ RSpec.describe Target, type: :model do
                     spots: test_all[:spots], 
                     user_edit: false
                     )
-                expect(Target.all.count).to eq(1)
+                expect(Format::Target.all.count).to eq(1)
                 # keeping this until figure out why it won't run validity test correctly (works fine in console)
                 # expect(target).to be_valid
                 
@@ -242,8 +242,8 @@ RSpec.describe Target, type: :model do
             no_x_ring_scores =  ["M", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
             fita80_6ring_scores = ["M", "X", "10", "9", "8", "7", "6", "5"]
             
-            target = Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: true)
-            expect(Target.all.count).to eq(1)
+            target = Format::Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: true)
+            expect(Format::Target.all.count).to eq(1)
 
             expect(target.possible_scores).to eq(fita122_scores)
 

@@ -259,29 +259,29 @@ r720_dist2 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edi
 # Targets (pre-load - add only unique targets)
 # ##########################################################
 # add only unique targets (by governing body)
-# model = Organization::Target
+# model = Format::Target
 # all_attrs = (name: "122cm/1-spot/10-ring", size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
     # name auto-created (based on input data) - do not enter one when creating
     # must set user_edit to false
 # need to finish model
 
 # both World Archery and USA Archery use these
-# t122cm_1spot_10ring = Organization::Target.find_or_create_by(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-# t80cm_1spot_10ring = Organization::Target.find_or_create_by(size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-# t80cm_1spot_6ring = Organization::Target.find_or_create_by(size: "80cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-# t60cm_1spot_10ring = Organization::Target.find_or_create_by(size: "60cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-# t60cm_3spot_6ring = Organization::Target.find_or_create_by(size: "60cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3, user_edit: false)
-# t40cm_1spot_10ring = Organization::Target.find_or_create_by(size: "40cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-# t40cm_3spot_6ring = Organization::Target.find_or_create_by(size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3, user_edit: false)
+# t122cm_1spot_10ring = Format::Target.find_or_create_by(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+# t80cm_1spot_10ring = Format::Target.find_or_create_by(size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+# t80cm_1spot_6ring = Format::Target.find_or_create_by(size: "80cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+# t60cm_1spot_10ring = Format::Target.find_or_create_by(size: "60cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+# t60cm_3spot_6ring = Format::Target.find_or_create_by(size: "60cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3, user_edit: false)
+# t40cm_1spot_10ring = Format::Target.find_or_create_by(size: "40cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+# t40cm_3spot_6ring = Format::Target.find_or_create_by(size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3, user_edit: false)
 
 # preliminary until model finished (namespace) - use above once done
-t122cm_1spot_10ring = Target.find_or_create_by(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-t80cm_1spot_10ring = Target.find_or_create_by(size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-t80cm_1spot_6ring = Target.find_or_create_by(size: "80cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-t60cm_1spot_10ring = Target.find_or_create_by(size: "60cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-t60cm_3spot_6ring = Target.find_or_create_by(size: "60cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3, user_edit: false)
-t40cm_1spot_10ring = Target.find_or_create_by(size: "40cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-t40cm_3spot_6ring = Target.find_or_create_by(size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3, user_edit: false)
+t122cm_1spot_10ring = Format::Target.find_or_create_by(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+t80cm_1spot_10ring = Format::Target.find_or_create_by(size: "80cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+t80cm_1spot_6ring = Format::Target.find_or_create_by(size: "80cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+t60cm_1spot_10ring = Format::Target.find_or_create_by(size: "60cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+t60cm_3spot_6ring = Format::Target.find_or_create_by(size: "60cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3, user_edit: false)
+t40cm_1spot_10ring = Format::Target.find_or_create_by(size: "40cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+t40cm_3spot_6ring = Format::Target.find_or_create_by(size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3, user_edit: false)
 
 
 

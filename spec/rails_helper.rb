@@ -290,8 +290,7 @@ def valid_category_alt
 end
 
 def valid_target
-  Target.find_or_create_by(name: "122cm/1-spot/10-ring", size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-  # Organization::Target.create(name: "122cm/1-spot/10-ring", size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+  Format::Target.find_or_create_by(name: "122cm/1-spot/10-ring", size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
 end
 
 def valid_dist_targ_cat

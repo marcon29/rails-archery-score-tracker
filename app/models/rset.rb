@@ -30,13 +30,13 @@ class Rset < ApplicationRecord
     ######## remove/edit once DistTargCat assoc working ########
     # shouldn't need this at all, will have direct assoc that Shot can call
     def target
-        Target.first
+        Format::Target.first
     end
 
     # should need this so Shot can pull info from Rset instead of assoc
     def distance
         # real code
-        # DistanceTargetCategory.first.distance
+        # DistanceFormat::TargetCategory.first.distance
 
         # use til DistTargCat assoc setup for Rset
         "90m"

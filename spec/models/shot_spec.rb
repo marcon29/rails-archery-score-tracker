@@ -232,9 +232,9 @@ RSpec.describe Shot, type: :model do
 
             it "the score_entry value is X when there is no x-ring" do
                 # include a test for both instantiation and updating
-                Target.destroy_all
-                test_target = Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: false, max_score: 10, spots: 1, user_edit: true)
-                expect(Target.all.count).to eq(1)
+                Format::Target.destroy_all
+                test_target = Format::Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: false, max_score: 10, spots: 1, user_edit: true)
+                expect(Format::Target.all.count).to eq(1)
                 
                 duplicate[:score_entry] = "X"
                 shot = Shot.create(duplicate)
@@ -395,9 +395,9 @@ RSpec.describe Shot, type: :model do
                 no_x_ring_scores =  ["M", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
                 fita80_6ring_scores = ["M", "X", "10", "9", "8", "7", "6", "5"]
                 
-                Target.destroy_all
-                test_target = Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: true)
-                expect(Target.all.count).to eq(1)
+                Format::Target.destroy_all
+                test_target = Format::Target.create(size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: true)
+                expect(Format::Target.all.count).to eq(1)
                 
                 shot = Shot.create(archer: valid_archer, score_session: valid_score_session, round: valid_round, rset: valid_rset, end: valid_end)
                 expect(shot.possible_scores).to eq(fita122_scores)
