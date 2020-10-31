@@ -257,18 +257,6 @@ RSpec.describe Archer, type: :model do
                 expect(archer.score_sessions).to include(check_score_session)
                 expect(archer.score_sessions.last.name).to eq(check_score_session.name)
             end
-            
-            it "can re-assign instance via the associated object" do
-                archer = Archer.create(duplicate)
-                assoc_score_session = valid_score_session
-                expect(valid_archer.score_sessions).to include(assoc_score_session)
-
-                assoc_score_session.archer = archer
-                assoc_score_session.save
-
-                expect(valid_archer.score_sessions).not_to include(assoc_score_session)
-                expect(archer.score_sessions).to include(assoc_score_session)
-            end
         end
 
         describe "has many Rounds and" do
@@ -279,28 +267,11 @@ RSpec.describe Archer, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 archer = Archer.create(duplicate)
 
-                check_round_attrs = {
-                    name: "2000 World Cup - 1440 Round", 
-                    round_type: "Qualifying", 
-                    score_method: "Points", 
-                    rank: "1st"
-                }
+                check_round_attrs = {round_type: "Qualifying", score_method: "Points", rank: "1st", score_session: valid_score_session, round_format: valid_round_format}
                 check_round = archer.rounds.create(check_round_attrs)
                 
                 expect(archer.rounds).to include(check_round)
                 expect(archer.rounds.last.name).to eq(check_round.name)
-            end
-            
-            it "can re-assign instance via the associated object" do
-                archer = Archer.create(duplicate)
-                assoc_round = valid_round
-                expect(valid_archer.rounds).to include(assoc_round)
-
-                assoc_round.archer = archer
-                assoc_round.save
-
-                expect(valid_archer.rounds).not_to include(assoc_round)
-                expect(archer.rounds).to include(assoc_round)
             end
         end
     
@@ -323,21 +294,13 @@ RSpec.describe Archer, type: :model do
                 expect(archer.rsets).to include(check_rset)
                 expect(archer.rsets.last.name).to eq(check_rset.name)
             end
-            
-            it "can re-assign instance via the associated object" do
-                archer = Archer.create(duplicate)
-                assoc_rset = valid_rset
-                expect(valid_archer.rsets).to include(assoc_rset)
-
-                assoc_rset.archer = archer
-                assoc_rset.save
-
-                expect(valid_archer.rsets).not_to include(assoc_rset)
-                expect(archer.rsets).to include(assoc_rset)
-            end
         end
 
         describe "has many Ends and" do
+            before(:each) do
+                before_end
+            end
+
             it "can find an associated object" do
                 expect(valid_archer.ends).to include(valid_end)
             end
@@ -345,29 +308,17 @@ RSpec.describe Archer, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 archer = Archer.create(duplicate)
 
-                check_end_attrs = {set_score: 2, archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1}
+                check_end_attrs = {set_score: 2, score_session_id: 1, round_id: 1, rset_id: 1}
                 check_end = archer.ends.create(check_end_attrs)
                 
                 expect(archer.ends).to include(check_end)
                 expect(archer.ends.last.number).to eq(check_end.number)
             end
-            
-            it "can re-assign instance via the associated object" do
-                archer = Archer.create(duplicate)
-                assoc_end = valid_end
-                expect(valid_archer.ends).to include(assoc_end)
-
-                assoc_end.archer = archer
-                assoc_end.save
-
-                expect(valid_archer.ends).not_to include(assoc_end)
-                expect(archer.ends).to include(assoc_end)
-            end
         end
 
         describe "has many Shots and" do
             before(:each) do
-                before_end
+                before_shot
             end
 
             it "can find an associated object" do
@@ -377,23 +328,11 @@ RSpec.describe Archer, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 archer = Archer.create(duplicate)
 
-                check_shot_attrs = {score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}
+                check_shot_attrs = {score_entry: "5", score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}
                 check_shot = archer.shots.create(check_shot_attrs)
                 
                 expect(archer.shots).to include(check_shot)
                 expect(archer.shots.last.score_entry).to eq(check_shot.score_entry)
-            end
-            
-            it "can re-assign instance via the associated object" do
-                archer = Archer.create(duplicate)
-                assoc_shot = valid_shot
-                expect(valid_archer.shots).to include(assoc_shot)
-
-                assoc_shot.archer = archer
-                assoc_shot.save
-
-                expect(valid_archer.shots).not_to include(assoc_shot)
-                expect(archer.shots).to include(assoc_shot)
             end
         end
     

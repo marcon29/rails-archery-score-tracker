@@ -249,28 +249,11 @@ RSpec.describe ScoreSession, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 score_session = ScoreSession.create(duplicate)
 
-                check_round_attrs = {
-                    name: "2000 World Cup - 1440 Round", 
-                    round_type: "Qualifying", 
-                    score_method: "Points", 
-                    rank: "1st"
-                }
+                check_round_attrs = {round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, round_format: valid_round_format}
                 check_round = score_session.rounds.create(check_round_attrs)
                 
                 expect(score_session.rounds).to include(check_round)
                 expect(score_session.rounds.last.name).to eq(check_round.name)
-            end
-            
-            it "can re-assign instance via the associated object" do
-                score_session = ScoreSession.create(duplicate)
-                assoc_round = valid_round
-                expect(valid_score_session.rounds).to include(assoc_round)
-
-                assoc_round.score_session = score_session
-                assoc_round.save
-                
-                expect(valid_score_session.rounds).not_to include(assoc_round)
-                expect(score_session.rounds).to include(assoc_round)
             end
         end
     
@@ -281,33 +264,20 @@ RSpec.describe ScoreSession, type: :model do
 
             it "can create a new associated object via instance and get associated object attributes" do
                 score_session = ScoreSession.create(duplicate)
-
-                check_rset_attrs = {
-                    name: "1440 Round - Set/Distance1", 
-                    date: "2020-09-01", 
-                    round: valid_round
-                }
+                
+                check_rset_attrs = {date: "2020-09-01", archer: valid_archer, round: valid_round, set_end_format: valid_set_end_format}
                 check_rset = score_session.rsets.create(check_rset_attrs)
                 
                 expect(score_session.rsets).to include(check_rset)
                 expect(score_session.rsets.last.name).to eq(check_rset.name)
             end
-            
-            it "can re-assign instance via the associated object" do
-                score_session = ScoreSession.create(duplicate)
-                assoc_rset = valid_rset
-                expect(valid_score_session.rsets).to include(assoc_rset)
-
-                assoc_rset.update(date: "2010-09-01")
-                assoc_rset.score_session = score_session
-                assoc_rset.save
-
-                expect(valid_score_session.rsets).not_to include(assoc_rset)
-                expect(score_session.rsets).to include(assoc_rset)
-            end
         end
 
         describe "has many Ends and" do
+            before(:each) do
+                before_end
+            end
+
             it "can find an associated object" do
                 expect(valid_score_session.ends).to include(valid_end)
             end
@@ -315,29 +285,17 @@ RSpec.describe ScoreSession, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 score_session = ScoreSession.create(duplicate)
 
-                check_end_attrs = {set_score: 2, archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1}
+                check_end_attrs = {set_score: 2, archer_id: 1, round_id: 1, rset_id: 1}
                 check_end = score_session.ends.create(check_end_attrs)
                 
                 expect(score_session.ends).to include(check_end)
                 expect(score_session.ends.last.number).to eq(check_end.number)
             end
-            
-            it "can re-assign instance via the associated object" do
-                score_session = ScoreSession.create(duplicate)
-                assoc_end = valid_end
-                expect(valid_score_session.ends).to include(assoc_end)
-
-                assoc_end.score_session = score_session
-                assoc_end.save
-
-                expect(valid_score_session.ends).not_to include(assoc_end)
-                expect(score_session.ends).to include(assoc_end)
-            end
         end
 
         describe "has many Shots and" do
             before(:each) do
-                before_end
+                before_shot
             end
 
             it "can find an associated object" do
@@ -347,23 +305,11 @@ RSpec.describe ScoreSession, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 score_session = ScoreSession.create(duplicate)
                 
-                check_shot_attrs = {score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}
+                check_shot_attrs = {score_entry: "5", archer_id: 1, round_id: 1, rset_id: 1, end_id: 1}
                 check_shot = score_session.shots.create(check_shot_attrs)
                 
                 expect(score_session.shots).to include(check_shot)
                 expect(score_session.shots.last.score_entry).to eq(check_shot.score_entry)
-            end
-            
-            it "can re-assign instance via the associated object" do
-                score_session = ScoreSession.create(duplicate)
-                assoc_shot = valid_shot
-                expect(valid_score_session.shots).to include(assoc_shot)
-
-                assoc_shot.score_session = score_session
-                assoc_shot.save
-
-                expect(valid_score_session.shots).not_to include(assoc_shot)
-                expect(score_session.shots).to include(assoc_shot)
             end
         end
     end

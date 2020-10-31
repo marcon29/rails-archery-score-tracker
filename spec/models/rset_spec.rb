@@ -320,18 +320,6 @@ RSpec.describe Rset, type: :model do
                 expect(rset.ends).to include(check_end)
                 expect(rset.ends.last.number).to eq(check_end.number)
             end
-            
-            it "can re-assign instance via the associated object" do
-                rset = Rset.create(duplicate)
-                assoc_end = valid_end
-                expect(valid_rset.ends).to include(assoc_end)
-
-                assoc_end.rset = rset
-                assoc_end.save
-
-                expect(valid_rset.ends).not_to include(assoc_end)
-                expect(rset.ends).to include(assoc_end)
-            end
         end
 
         describe "has many Shots and" do
@@ -351,19 +339,6 @@ RSpec.describe Rset, type: :model do
                 
                 expect(rset.shots).to include(check_shot)
                 expect(rset.shots.last.score_entry).to eq(check_shot.score_entry)
-            end
-            
-            it "can re-assign instance via the associated object" do
-                rset = Rset.create(duplicate)
-                assoc_shot = valid_shot
-                endd = End.find(2)
-                expect(valid_rset.shots).to include(assoc_shot)
-
-                endd.update(rset: rset)
-                assoc_shot.update(rset: rset, end: endd)
-                
-                expect(valid_rset.shots).not_to include(assoc_shot)
-                expect(rset.shots).to include(assoc_shot)
             end
         end
 

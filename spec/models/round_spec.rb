@@ -27,7 +27,6 @@ RSpec.describe Round, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:test_req) {
-        # {round_type: "Qualifying", score_method: "Points", archer_id: 1, score_session_id: 1}
         {round_type: "Qualifying", score_method: "Points", archer_id: 1, score_session_id: 1, round_format_id: 1}
     }
 
@@ -273,27 +272,11 @@ RSpec.describe Round, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 round = Round.create(duplicate)
 
-                check_rset_attrs = {
-                    name: "1440 Round - Set/Distance1", 
-                    date: "2020-09-01", 
-                    score_session: valid_score_session
-                }
+                check_rset_attrs = {date: "2020-09-01", archer: valid_archer, score_session: valid_score_session, set_end_format: valid_set_end_format}
                 check_rset = round.rsets.create(check_rset_attrs)
                 
                 expect(round.rsets).to include(check_rset)
                 expect(round.rsets.last.name).to eq(check_rset.name)
-            end
-            
-            it "can re-assign instance via the associated object" do
-                round = Round.create(duplicate)
-                assoc_rset = valid_rset
-                expect(valid_round.rsets).to include(assoc_rset)
-
-                assoc_rset.round = round
-                assoc_rset.save
-
-                expect(valid_round.rsets).not_to include(assoc_rset)
-                expect(round.rsets).to include(assoc_rset)
             end
         end
 
@@ -309,24 +292,11 @@ RSpec.describe Round, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 round = Round.create(duplicate)
 
-                check_end_attrs = {set_score: 2, archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1}
+                check_end_attrs = {set_score: 2, archer_id: 1, score_session_id: 1, rset_id: 1}
                 check_end = round.ends.create(check_end_attrs)
                 
                 expect(round.ends).to include(check_end)
                 expect(round.ends.last.number).to eq(check_end.number)
-            end
-            
-            it "can re-assign instance via the associated object" do
-                round = Round.create(duplicate)
-                assoc_end = valid_end
-                rset = Rset.first
-                expect(valid_round.ends).to include(assoc_end)
-
-                rset.update(round: round)
-                assoc_end.update(round: round, rset: rset)
-
-                expect(valid_round.ends).not_to include(assoc_end)
-                expect(round.ends).to include(assoc_end)
             end
         end
 
@@ -342,26 +312,11 @@ RSpec.describe Round, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 round = Round.create(duplicate)
 
-                check_shot_attrs = {score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}
+                check_shot_attrs = {score_entry: "5", archer_id: 1, score_session_id: 1, rset_id: 1, end_id: 1}
                 check_shot = round.shots.create(check_shot_attrs)
                 
                 expect(round.shots).to include(check_shot)
                 expect(round.shots.last.score_entry).to eq(check_shot.score_entry)
-            end
-            
-            it "can re-assign instance via the associated object" do
-                round = Round.create(duplicate)
-                assoc_shot = valid_shot
-                endd = End.find(2)
-                rset = Rset.first
-                expect(valid_round.shots).to include(assoc_shot)
-
-                rset.update(round: round)
-                endd.update(round: round, rset: rset)
-                assoc_shot.update(round: round, rset: rset, end: endd)
-                
-                expect(valid_round.shots).not_to include(assoc_shot)
-                expect(round.shots).to include(assoc_shot)
             end
         end
 

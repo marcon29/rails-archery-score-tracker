@@ -345,18 +345,6 @@ RSpec.describe End, type: :model do
                 expect(endd.shots).to include(check_shot)
                 expect(endd.shots.last.score_entry).to eq(check_shot.score_entry)
             end
-            
-            it "can re-assign instance via the associated object" do
-                endd = End.create(duplicate)
-                assoc_shot = valid_shot
-                expect(End.last.shots).to include(assoc_shot)
-
-                assoc_shot.end = endd
-                assoc_shot.save
-
-                expect(End.last.shots).not_to include(assoc_shot)
-                expect(endd.shots).to include(assoc_shot)
-            end
         end
     end
 
