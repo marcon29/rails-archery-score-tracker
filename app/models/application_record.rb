@@ -31,4 +31,55 @@ class ApplicationRecord < ActiveRecord::Base
 		end
 		self.rank = string
 	end
+
+	def check_associations
+		array = []
+
+		if self.class == Shot || self.class == End || self.class ==  Rset || self.class ==  Round
+			array << (self.archer == self.score_session.archer)
+		end
+
+		if self.class == Shot || self.class == End || self.class ==  Rset
+			array << (self.score_session == self.round.score_session)
+			array << (self.archer == self.round.archer)
+		end
+
+		if self.class == Shot || self.class == End
+			array << (self.round == self.rset.round)
+			array << (self.score_session == self.rset.score_session)
+			array << (self.archer == self.rset.archer)
+		end
+
+		if self.class == Shot
+			array << (self.rset == self.end.rset)
+			array << (self.round == self.end.round)
+			array << (self.score_session == self.end.score_session)
+			array << (self.archer == self.end.archer)
+		end
+		
+		if array.include?(false)
+			errors.add(:score_session, "Must have the same Archer as the Score Session.") if array[0] == false
+			errors.add(:round, "Must have the same Score Session as the Round.") if array[1] == false
+			errors.add(:round, "Must have the same Archer as the Round.") if array[2] == false
+			errors.add(:rset, "Must have the same Round as the Set.") if array[3] == false
+			errors.add(:rset, "Must have the same Score Session as the Set.") if array[4] == false
+			errors.add(:rset, "Must have the same Archer as the Set.") if array[5] == false
+			errors.add(:end, "Must have the same Set as the End.") if array[6] == false
+			errors.add(:end, "Must have the same Round as the End.") if array[7] == false
+			errors.add(:end, "Must have the same Score Session as the End.") if array[8] == false
+			errors.add(:end, "Must have the same Archer as the End.") if array[9] == false
+		else
+			array
+		end
+	end
+
+	
+	
+	
+	
+
+
+
+
+
 end

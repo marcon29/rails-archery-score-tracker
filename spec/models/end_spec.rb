@@ -159,6 +159,12 @@ RSpec.describe End, type: :model do
                 # not req input tests (number auto-asigned from blank)
                 expect(endd.number).to eq(assigned_num)
             end
+
+            it "all associated objects have the same parents" do
+                expect(test_end.check_associations.count).to eq(6)
+                expect(test_end.check_associations).not_to include(false)
+                expect(test_end).to be_valid
+            end
         end
 
         describe "invalid and has correct error message when" do
@@ -227,14 +233,32 @@ RSpec.describe End, type: :model do
                     expect(endd.errors.messages[:set_score]).to include(number_set_score_message)
                 end
             end
+
+            it "an associated object has a different parent" do
+                second_score_session = ScoreSession.create(
+                    name: "1900 World Cup", 
+                    score_session_type: "Tournament", 
+                    city: "Oxford", 
+                    state: "OH", 
+                    country: "USA", 
+                    start_date: "2020-09-01", 
+                    end_date: "2020-09-05", 
+                    rank: "1st", 
+                    active: true, 
+                    archer: valid_archer
+                )
+                test_end.update(score_session: second_score_session)
+
+                expect(test_end).to be_invalid
+                expect(test_end.errors.messages).to be_present
+            end
         end
     end
 
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            valid_set_end_format
-            valid_rset
+            before_end
             valid_target
         end
 
@@ -246,8 +270,8 @@ RSpec.describe End, type: :model do
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_archer = valid_archer
-                update[:archer_id] = ""
-                check_end = assoc_archer.ends.create(update)
+                test_req[:archer_id] = ""
+                check_end = assoc_archer.ends.create(test_req)
                 
                 expect(check_end.archer).to eq(assoc_archer)
                 expect(check_end.archer.username).to include(assoc_archer.username)
@@ -262,8 +286,8 @@ RSpec.describe End, type: :model do
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_score_session = valid_score_session
-                update[:score_session_id] = ""
-                check_end = assoc_score_session.ends.create(update)
+                test_req[:score_session_id] = ""
+                check_end = assoc_score_session.ends.create(test_req)
                 
                 expect(check_end.score_session).to eq(assoc_score_session)
                 expect(check_end.score_session.name).to include(assoc_score_session.name)
@@ -278,8 +302,8 @@ RSpec.describe End, type: :model do
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_round = valid_round
-                update[:round_id] = ""
-                check_end = assoc_round.ends.create(update)
+                test_req[:round_id] = ""
+                check_end = assoc_round.ends.create(test_req)
                 
                 expect(check_end.round).to eq(assoc_round)
                 expect(check_end.round.name).to include(assoc_round.name)
@@ -294,8 +318,8 @@ RSpec.describe End, type: :model do
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_rset = valid_rset
-                update[:rset_id] = ""
-                check_end = assoc_rset.ends.create(update)
+                test_req[:rset_id] = ""
+                check_end = assoc_rset.ends.create(test_req)
                 
                 expect(check_end.rset).to eq(assoc_rset)
                 expect(check_end.rset.name).to include(assoc_rset.name)
@@ -350,7 +374,8 @@ RSpec.describe End, type: :model do
                 second_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1)
                 third_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1)
                 
-                second_rset = Rset.create(date: "2020-09-01", rank: "", archer: valid_archer, score_session: valid_score_session, round: valid_round)
+                second_set_end_format = Format::SetEndFormat.create(name: "Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
+                second_rset = Rset.create(date: "2020-09-01", rank: "", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format: second_set_end_format)
                 other_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 2)
                 
                 expect(first_end.ends_in_set.count).to eq(3)

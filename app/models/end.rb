@@ -5,8 +5,13 @@ class End < ApplicationRecord
     belongs_to :round
     belongs_to :rset
         
-    # all attrs - :number, :set_score
-    # dependencies: Rset (for number creation & SetEndFormat), Round & ScoreSession (for Rset), Round (for set_score)
+    # assoc attrs - :archer_id, :score_session_id, :round_id, :rset_id
+    # data attrs - :number, :set_score
+    # user attrs - :set_score
+    # DEPENDENCIES: 
+        # Primary: Round (for set_score validation); Rset, SetEndFormat (auto-assign number) - need one SetEndFormat per Rset in same Round
+        # Secondary: Archer, ScoreSession (for Round); RoundFormat (for Round and SetEndFormat)
+        # Tertiary: Division, AgeClass, Gender (for Archer - non-assoc)
 
     validates :number, 
         numericality: {only_integer: true, greater_than: 0, less_than_or_equal_to: :allowable_ends_per_set }, 
@@ -24,6 +29,7 @@ class End < ApplicationRecord
         numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 2, message: "You must enter 0, 1, or 2." },
         on: :update,
         unless: :score_method_is_points?
+    validate :check_associations
     before_validation :assign_number, :clear_set_score_if_points
     
 
@@ -51,7 +57,7 @@ class End < ApplicationRecord
     end 
 
 
-    
+
     # ##### helpers (data control)
     def score
         self.shots.collect { |shot| shot.score }.sum

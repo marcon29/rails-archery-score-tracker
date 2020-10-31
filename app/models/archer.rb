@@ -7,11 +7,13 @@ class Archer < ApplicationRecord
     has_secure_password
 
     # all authentication attrs - :username :email :password 
-    # all data attrs - :first_name :last_name :birthdate :gender :home_city :home_state :home_country :default_age_class, :default_division
+    # data/user attrs - :first_name :last_name :birthdate :gender :home_city :home_state :home_country :default_age_class, :default_division
+    # DEPENDENCIES: 
+        # Tertiary: Division, AgeClass, Gender (validations)
     
+    @@all_divisions = Organization::Division.all.collect { |obj| obj.name }
     @@all_age_classes = Organization::AgeClass.all.collect { |obj| obj.name }
     @@all_genders = Organization::Gender.all.collect { |obj| obj.name }
-    @@all_divisions = Organization::Division.all.collect { |obj| obj.name }
 
     validates :username, 
         presence: { message: "You must provide a username." }, 

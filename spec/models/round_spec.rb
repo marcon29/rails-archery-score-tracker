@@ -146,6 +146,12 @@ RSpec.describe Round, type: :model do
                 # user_edit auto-asigned from blank
                 expect(test_round.name).to eq(assigned_name)
             end
+
+            it "all associated objects have the same parents" do
+                expect(test_round.check_associations.count).to eq(1)
+                expect(test_round.check_associations).not_to include(false)
+                expect(test_round).to be_valid
+            end
         end
 
         describe "invalid and has correct error message when" do
@@ -194,6 +200,29 @@ RSpec.describe Round, type: :model do
                     
                     expect(round.errors.messages[:rank]).to include(inclusion_rank_message)
                 end
+            end
+
+            it "an associated object has a different parent" do
+                before_archer
+
+                second_archer = Archer.create(
+                    username: "testuser", 
+                    email: "testuser@example.com", 
+                    password: "test", 
+                    first_name: "Test", 
+                    last_name: "Tuser", 
+                    birthdate: "1980-07-01", 
+                    gender: "Male", 
+                    home_city: "Denver", 
+                    home_state: "CO", 
+                    home_country: "USA", 
+                    default_age_class: "Senior", 
+                    default_division: "Recurve"
+                )
+                test_round.update(archer: second_archer)
+
+                expect(test_round).to be_invalid
+                expect(test_round.errors.messages).to be_present
             end
         end
     end
@@ -269,6 +298,10 @@ RSpec.describe Round, type: :model do
         end
 
         describe "has many Ends and" do
+            before(:each) do
+                before_end
+            end
+
             it "can find an associated object" do
                 expect(valid_round.ends).to include(valid_end)
             end
@@ -286,10 +319,11 @@ RSpec.describe Round, type: :model do
             it "can re-assign instance via the associated object" do
                 round = Round.create(duplicate)
                 assoc_end = valid_end
+                rset = Rset.first
                 expect(valid_round.ends).to include(assoc_end)
 
-                assoc_end.round = round
-                assoc_end.save
+                rset.update(round: round)
+                assoc_end.update(round: round, rset: rset)
 
                 expect(valid_round.ends).not_to include(assoc_end)
                 expect(round.ends).to include(assoc_end)
@@ -298,7 +332,7 @@ RSpec.describe Round, type: :model do
 
         describe "has many Shots and" do
             before(:each) do
-                before_end
+                before_shot
             end
 
             it "can find an associated object" do
@@ -318,11 +352,14 @@ RSpec.describe Round, type: :model do
             it "can re-assign instance via the associated object" do
                 round = Round.create(duplicate)
                 assoc_shot = valid_shot
+                endd = End.find(2)
+                rset = Rset.first
                 expect(valid_round.shots).to include(assoc_shot)
 
-                assoc_shot.round = round
-                assoc_shot.save
-
+                rset.update(round: round)
+                endd.update(round: round, rset: rset)
+                assoc_shot.update(round: round, rset: rset, end: endd)
+                
                 expect(valid_round.shots).not_to include(assoc_shot)
                 expect(round.shots).to include(assoc_shot)
             end

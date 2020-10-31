@@ -147,6 +147,12 @@ RSpec.describe Rset, type: :model do
                 expect(test_rset.date).to eq(update[:date].to_date)
                 expect(test_rset.rank).to eq(update[:rank])
             end
+
+            it "all associated objects have the same parents" do
+                expect(test_rset.check_associations.count).to eq(3)
+                expect(test_rset.check_associations).not_to include(false)
+                expect(test_rset).to be_valid
+            end
         end
     
         describe "invalid and has correct error message when" do
@@ -221,6 +227,27 @@ RSpec.describe Rset, type: :model do
                     expect(rset.errors.messages[:rank]).to include(inclusion_rank_message)
                 end
             end
+
+            it "an associated object has a different parent" do
+                second_score_session = ScoreSession.create(
+                    name: "1900 World Cup", 
+                    score_session_type: "Tournament", 
+                    city: "Oxford", 
+                    state: "OH", 
+                    country: "USA", 
+                    start_date: "2020-09-01", 
+                    end_date: "2020-09-05", 
+                    rank: "1st", 
+                    active: true, 
+                    archer: valid_archer
+                )
+                test_rset.update(score_session: second_score_session)
+
+                expect(test_rset).to be_invalid
+                expect(test_rset.errors.messages).to be_present
+
+                # expect(test_round.check_associations.count).to eq(1)
+            end
         end
     end
 
@@ -239,8 +266,8 @@ RSpec.describe Rset, type: :model do
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_archer = valid_archer
-                update[:archer_id] = ""
-                check_rset = assoc_archer.rsets.create(update)
+                test_req[:archer_id] = ""
+                check_rset = assoc_archer.rsets.create(test_req)
                 
                 expect(check_rset.archer).to eq(assoc_archer)
                 expect(check_rset.archer.username).to include(assoc_archer.username)
@@ -255,8 +282,8 @@ RSpec.describe Rset, type: :model do
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_score_session = valid_score_session
-                update[:score_session_id] = ""
-                check_rset = assoc_score_session.rsets.create(update)
+                test_req[:score_session_id] = ""
+                check_rset = assoc_score_session.rsets.create(test_req)
                 
                 expect(check_rset.score_session).to eq(assoc_score_session)
                 expect(check_rset.score_session.name).to include(assoc_score_session.name)
@@ -271,8 +298,8 @@ RSpec.describe Rset, type: :model do
 
             it "can create a new instance via the associated object and get associated object attributes" do
                 assoc_round = valid_round
-                update[:round_id] = ""
-                check_rset = assoc_round.rsets.create(update)
+                test_req[:round_id] = ""
+                check_rset = assoc_round.rsets.create(test_req)
                 
                 expect(check_rset.round).to eq(assoc_round)
                 expect(check_rset.round.name).to include(assoc_round.name)
@@ -287,7 +314,7 @@ RSpec.describe Rset, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 rset = Rset.create(duplicate)
 
-                check_end_attrs = {set_score: 2, archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1}
+                check_end_attrs = {set_score: 2, archer_id: 1, score_session_id: 1, round_id: 1}
                 check_end = rset.ends.create(check_end_attrs)
                 
                 expect(rset.ends).to include(check_end)
@@ -309,7 +336,7 @@ RSpec.describe Rset, type: :model do
 
         describe "has many Shots and" do
             before(:each) do
-                before_end
+                before_shot
             end
 
             it "can find an associated object" do
@@ -319,7 +346,7 @@ RSpec.describe Rset, type: :model do
             it "can create a new associated object via instance and get associated object attributes" do
                 rset = Rset.create(duplicate)
 
-                check_shot_attrs = {score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1, end_id: 1}
+                check_shot_attrs = {score_entry: "5", archer_id: 1, score_session_id: 1, round_id: 1, end_id: 1}
                 check_shot = rset.shots.create(check_shot_attrs)
                 
                 expect(rset.shots).to include(check_shot)
@@ -329,11 +356,12 @@ RSpec.describe Rset, type: :model do
             it "can re-assign instance via the associated object" do
                 rset = Rset.create(duplicate)
                 assoc_shot = valid_shot
+                endd = End.find(2)
                 expect(valid_rset.shots).to include(assoc_shot)
 
-                assoc_shot.rset = rset
-                assoc_shot.save
-
+                endd.update(rset: rset)
+                assoc_shot.update(rset: rset, end: endd)
+                
                 expect(valid_rset.shots).not_to include(assoc_shot)
                 expect(rset.shots).to include(assoc_shot)
             end

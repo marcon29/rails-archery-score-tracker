@@ -90,7 +90,7 @@ end
 # ##########################################################
 
 def before_archer
-  valid_category
+  valid_category  # this will add the Division, AgeClass, and Gender it really needs
   valid_category_alt
   valid_round_format
   valid_set_end_format
@@ -223,7 +223,7 @@ def valid_rset
 end
 
 def valid_end
-  End.find_or_create_by(number: 1, set_score: "", archer: valid_archer, score_session: valid_score_session, round: valid_round, rset: valid_rset)
+  End.find_or_create_by(set_score: "", archer: valid_archer, score_session: valid_score_session, round: valid_round, rset: valid_rset)
 end
 
 # def valid_end_set
@@ -231,7 +231,7 @@ end
 # end
 
 def valid_shot
-  Shot.find_or_create_by(number: 1, score_entry: "10", archer: valid_archer, score_session: valid_score_session, round: valid_round, rset: valid_rset, end: valid_end)
+  Shot.find_or_create_by(score_entry: "10", archer: valid_archer, score_session: valid_score_session, round: valid_round, rset: valid_rset, end: valid_end)
 end
 
 

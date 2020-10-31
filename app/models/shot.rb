@@ -5,9 +5,13 @@ class Shot < ApplicationRecord
     belongs_to :rset
     belongs_to :end
 
-    # all assoc attrs - :archer_id, :score_session_id, :round_id, :rset_id, :end_id
-    # all data attrs  - :number, :score_entry
-    # dependencies: Rset (for number creation, Target & SetEndFormat), Round & ScoreSession (for Rset)
+    # assoc attrs - :archer_id, :score_session_id, :round_id, :rset_id, :end_id
+    # data attrs  - :number, :score_entry
+    # user attrs - :score_entry
+    # DEPENDENCIES: 
+        # Primary: Target (via Rset for score_entry validation); Rset, End, SetEndFormat (auto-assign number) - need one SetEndFormat per Rset in same Round
+        # Secondary: Archer, ScoreSession, Round (for Rset); RoundFormat (for Round and SetEndFormat)
+        # Tertiary: Division, AgeClass, Gender (for Archer - non-assoc)
     
     validates :number, 
         numericality: {only_integer: true, greater_than: 0, less_than_or_equal_to: :allowable_shots_per_end }, 
@@ -19,6 +23,7 @@ class Shot < ApplicationRecord
         presence: { message: -> (shot, data) {"You must enter a score for shot #{shot.number}."} }, 
         inclusion: { in: :possible_scores, message: -> (shot, data) {"#{shot.score_entry_error_message}"} }, 
         on: :update
+    validate :check_associations
     before_validation :assign_number, :format_score_entry
     
 

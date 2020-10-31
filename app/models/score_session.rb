@@ -4,8 +4,10 @@ class ScoreSession < ApplicationRecord
     has_many :ends
     has_many :shots
     belongs_to :archer
-
-    # all attrs  -  :name :score_session_type :city :state :country :start_date :end_date :rank :active
+    
+    # assoc attrs - :archer_id
+    # data/user attrs - :name :score_session_type :city :state :country :start_date :end_date :rank :active
+    # DEPENDENCIES: none
 
     validates :name, 
         presence: { message: "You must enter a name." }, 

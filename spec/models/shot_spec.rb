@@ -155,6 +155,12 @@ RSpec.describe Shot, type: :model do
                 # not req input tests (number auto-asigned from blank)
                 expect(shot.number).to eq(assigned_num)
             end
+
+            it "all associated objects have the same parents" do
+                expect(test_shot.check_associations.count).to eq(10)
+                expect(test_shot.check_associations).not_to include(false)
+                expect(test_shot).to be_valid
+            end
         end
 
         describe "invalid and has correct error message when" do
@@ -240,6 +246,29 @@ RSpec.describe Shot, type: :model do
                 expect(test_shot).to be_invalid
                 expect(Shot.all.count).to eq(1)
                 expect(test_shot.errors.messages[:score_entry]).to include("Enter only M or a number between #{test_shot.target.max_score - test_shot.target.score_areas + 1} and #{test_shot.target.max_score}.")
+            end
+
+            it "an associated object has a different parent" do
+                second_score_session = ScoreSession.create(
+                    name: "1900 World Cup", 
+                    score_session_type: "Tournament", 
+                    city: "Oxford", 
+                    state: "OH", 
+                    country: "USA", 
+                    start_date: "2020-09-01", 
+                    end_date: "2020-09-05", 
+                    rank: "1st", 
+                    active: true, 
+                    archer: valid_archer
+                )
+                test_shot.update(score_session: second_score_session)
+
+                expect(test_shot).to be_invalid
+                expect(test_shot.errors.messages).to be_present
+
+                # expect(test_round.check_associations.count).to eq(1)
+                # expect(test_rset.check_associations.count).to eq(3)
+                # expect(test_endd.check_associations.count).to eq(6)
             end
         end
     end

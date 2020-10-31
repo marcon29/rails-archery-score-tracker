@@ -8,8 +8,14 @@ class Round < ApplicationRecord
 
     # has_one :archer_category, through: :archer
     # has_one :discipline, division, age_class, through: :archer_category
-
-    # all attrs - :name, :round_type, :score_method, :rank
+    
+    # assoc attrs - :archer_id, :score_session_id, :round_format_id
+    # data attrs - :name, :round_type, :score_method, :rank
+    # user attrs - :round_type, :score_method, :rank
+    # DEPENDENCIES: 
+        # Primary: ScoreSession, RoundFormat (auto-assign name)
+        # Secondary: Archer (for ScoreSession)
+        # Tertiary: Division, AgeClass, Gender (for Archer - non-assoc)
     
     validates :name, 
         presence: true, 
@@ -20,7 +26,7 @@ class Round < ApplicationRecord
     validates :score_method, 
         presence: { message: "You must choose a score method." }, 
         inclusion: { in: SCORE_METHODS }
-    validate :check_and_assign_rank
+    validate :check_associations, :check_and_assign_rank
     before_validation :assign_name
     
     

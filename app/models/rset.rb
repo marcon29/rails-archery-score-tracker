@@ -9,13 +9,18 @@ class Rset < ApplicationRecord
     # has_one :distance_target_category, through: :archer
     # has_one :target, through: :distance_target_category
     
-    # all attrs - :name, :date, :rank
-    # dependencies: ScoreSession (for validating date), Round (for name creation)
+    # assoc attrs - :archer_id, :score_session_id, :round_id, :set_end_format_id
+    # data attrs - :name, :date, :rank
+    # user attrs - :date, :rank
+    # DEPENDENCIES: 
+        # Primary: ScoreSession (for date validation), Round, SetEndFormat (auto-assign name) - need one SetEndFormat per Rset in same Round
+        # Secondary: Archer (for Round), RoundFormat (for SetEndFormat)
+        # Tertiary: Division, AgeClass, Gender (for Archer - non-assoc)
 
     validates :name, 
         presence: true, 
         uniqueness: { case_sensitive: false, scope: :round }
-    validate :check_date, :check_and_assign_rank
+    validate :check_associations, :check_date, :check_and_assign_rank
     before_validation :assign_name
     
 
