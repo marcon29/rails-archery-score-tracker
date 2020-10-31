@@ -87,11 +87,11 @@ class Rset < ApplicationRecord
         self.ends.collect { |endd| endd.score }.sum
     end
 
-    # it "can calculate the total score for a rset" do
-        # pending "need to add associations"
-        # want to be able to to call rset.score
-        # sums all end scores
-    # end
+    # ############ to do after Org concern is done ################
+    # getting distance_target_category
+        # use found ArcherCategory (from Round), RoundFormat (from Round) and SetEndFormat (from self) to find distance, Target, and alt_Target
+        # use distance_target_category.round_format to help find correct SetEndFormat
+    
 
     # need to get distance and target (same process for each)
         # find archer_category from Archer that matches:

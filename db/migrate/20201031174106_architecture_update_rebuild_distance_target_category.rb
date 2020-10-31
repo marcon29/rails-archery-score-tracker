@@ -3,7 +3,6 @@ class ArchitectureUpdateRebuildDistanceTargetCategory < ActiveRecord::Migration[
     drop_table :distance_target_categories
 
     create_table :organization_dist_targ_cats do |t|
-      t.references :round_format, foreign_key: { to_table: :format_round_formats }
       t.references :set_end_format, foreign_key: { to_table: :format_set_end_formats }
       t.integer "archer_category_id"
       t.string "distance"

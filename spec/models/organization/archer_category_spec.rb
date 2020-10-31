@@ -217,6 +217,11 @@ RSpec.describe Organization::ArcherCategory, type: :model do
             expect(archer_category.cat_code).to eq("WA-CJW")
         end
 
+        it "can find an ArcherCategory by Division/AgeClass/Gender" do
+            pending "need to build and make sure it goes in this model"
+            expect(test_dtc.category_from_div_age_gen).to eq(valid_category)
+        end
+
 
         it "helpers TBD" do
             pending "add as needed"

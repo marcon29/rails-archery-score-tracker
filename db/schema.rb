@@ -99,14 +99,12 @@ ActiveRecord::Schema.define(version: 2020_10_31_174106) do
   end
 
   create_table "organization_dist_targ_cats", force: :cascade do |t|
-    t.integer "round_format_id"
     t.integer "set_end_format_id"
     t.integer "archer_category_id"
     t.string "distance"
     t.integer "target_id"
     t.integer "alt_target_id"
     t.index ["alt_target_id"], name: "index_organization_dist_targ_cats_on_alt_target_id"
-    t.index ["round_format_id"], name: "index_organization_dist_targ_cats_on_round_format_id"
     t.index ["set_end_format_id"], name: "index_organization_dist_targ_cats_on_set_end_format_id"
     t.index ["target_id"], name: "index_organization_dist_targ_cats_on_target_id"
   end
@@ -184,7 +182,6 @@ ActiveRecord::Schema.define(version: 2020_10_31_174106) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "organization_dist_targ_cats", "format_round_formats", column: "round_format_id"
   add_foreign_key "organization_dist_targ_cats", "format_set_end_formats", column: "set_end_format_id"
   add_foreign_key "organization_dist_targ_cats", "format_targets", column: "alt_target_id"
   add_foreign_key "organization_dist_targ_cats", "format_targets", column: "target_id"

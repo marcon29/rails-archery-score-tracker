@@ -159,6 +159,34 @@ def valid_set_end_format
   Format::SetEndFormat.find_or_create_by(name: "Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
 end
 
+def second_valid_set_end_format
+  Format::SetEndFormat.find_or_create_by(name: "Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
+end
+
+def third_valid_set_end_format
+  Format::SetEndFormat.find_or_create_by(name: "Set/Distance3", num_ends: 12, shots_per_end: 3, user_edit: false, round_format: valid_round_format)
+end
+
+def fourth_valid_set_end_format
+  Format::SetEndFormat.find_or_create_by(name: "Set/Distance4", num_ends: 12, shots_per_end: 3, user_edit: false, round_format: valid_round_format)
+end
+
+def valid_target
+  Format::Target.find_or_create_by(name: "122cm/1-spot/10-ring", size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+end
+
+def valid_target_alt
+  Format::Target.find_or_create_by(name: "80cm/1-spot/6-ring", size: "80cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+end
+
+def valid_dist_targ_cat
+  Organization::DistanceTargetCategory.find_or_create_by(set_end_format: valid_set_end_format, archer_category: valid_category, distance: "90m", target: valid_target)
+end
+
+def valid_dist_targ_cat_alt
+  Organization::DistanceTargetCategory.find_or_create_by(set_end_format: second_valid_set_end_format, archer_category: valid_category, distance: "50m", target: valid_target, alt_target: valid_target_alt)
+end
+
 
 # ##########################################################
 # Score Tracking Objects
@@ -289,16 +317,9 @@ def valid_category_alt
   Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RM", gov_body: valid_gov_body_alt, discipline: valid_discipline_alt, division: valid_division_alt, age_class: valid_age_class_alt, gender: valid_gender_alt)
 end
 
-def valid_target
-  Format::Target.find_or_create_by(name: "122cm/1-spot/10-ring", size: "122cm", score_areas: 10, rings: 10, x_ring: true, max_score: 10, spots: 1, user_edit: false)
-end
 
-def valid_dist_targ_cat
-  DistanceTargetCategory.find_or_create_by(distance: "90m", target_id: 1, archer_category_id: 1, archer_id: 1)
-  # Organization::DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, archer_id: 1)
 
-  # DistanceTargetCategory.find_or_create_by(distance: "90m", target_id: 1, archer_category_id: valid_category, archer_id: valid_archer)
-  # Organization::DistanceTargetCategory.create(distance: "90m", target_id: 1, archer_category_id: 1, archer_id: 1)
-end
+
+
 
 

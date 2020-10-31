@@ -43,6 +43,11 @@ class Organization::ArcherCategory < ApplicationRecord
     
 
     # ########### to find dligibe age_classes and cateogries ###############
+    # need to find a category by age/age_class, division and gender
+    # similar to default below - used to find the category to assign to Rset
+    # def category_from_div_age_gen
+    # end
+    
     # def self.default(division, age, gender)
     #     self.where("max_age >=?", age).where("min_age <=?", age).where(cat_gender: gender, cat_division: division)
     # end

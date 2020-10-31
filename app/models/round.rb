@@ -57,6 +57,13 @@ class Round < ApplicationRecord
         self.rsets.collect { |rset| rset.score }.sum
     end
 
+    # ############ to do after Org concern is done ################
+    # helping Rset get distance_target_category
+        # use age (from Archer) to find AgeClass
+        # use Division (from Self), AgeClass (calc) and Gender (from Archer) to find ArcherCategory
+        # Rset will use found ArcherCategory to get distance and Target
+        # method for logic belongs in ArcherCategory (class method), call here and pass in args: ArcherCategory.category_from_div_age_gen
+
         # ##########################
         # check out ArcherCategory (model and specs) for ideas and started code
 
