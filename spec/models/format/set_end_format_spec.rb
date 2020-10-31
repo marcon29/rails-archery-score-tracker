@@ -222,6 +222,34 @@ RSpec.describe Format::SetEndFormat, type: :model do
                 expect(check_set_end_format.round_format.name).to include(assoc_round_format.name)
             end
         end
+
+        describe "has many Rsets and" do
+            before(:each) do
+                before_rset
+            end
+
+            it "can find an associated object" do
+                expect(valid_set_end_format.rsets).to include(valid_rset)
+            end
+
+            it "can create a new associated object via instance and get associated object attributes" do
+                set_end_format = Format::SetEndFormat.create(duplicate)
+
+                check_rset_attrs = {date: "2020-09-01", archer: valid_archer, score_session: valid_score_session, round: valid_round}
+                check_rset = set_end_format.rsets.create(check_rset_attrs)
+                
+                expect(set_end_format.rsets).to include(check_rset)
+                expect(set_end_format.rsets.last.name).to eq(check_rset.name)
+            end
+        end
+
+        describe "has many DistanceTargetCategories and" do
+            it "can find an associated object" do
+                valid_dist_targ_cat
+                set_end_format = Format::SetEndFormat.create(duplicate)
+                expect(valid_set_end_format.distance_target_categories).to include(valid_dist_targ_cat)
+            end
+        end
     end
 
     # helper method tests ########################################################
