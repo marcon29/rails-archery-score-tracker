@@ -245,8 +245,6 @@ RSpec.describe Format::SetEndFormat, type: :model do
 
         describe "has many DistanceTargetCategories and" do
             it "can find an associated object" do
-                valid_dist_targ_cat
-                set_end_format = Format::SetEndFormat.create(duplicate)
                 expect(valid_set_end_format.distance_target_categories).to include(valid_dist_targ_cat)
             end
         end

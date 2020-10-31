@@ -195,6 +195,12 @@ RSpec.describe Organization::ArcherCategory, type: :model do
                 expect(check_archer_category.gender.name).to include(assoc_gender.name)
             end
         end
+
+        describe "has many DistanceTargetCategories and" do
+            it "can find an associated object" do
+                expect(valid_category.distance_target_categories).to include(valid_dist_targ_cat)
+            end
+        end
     end
 
     # helper method tests ########################################################

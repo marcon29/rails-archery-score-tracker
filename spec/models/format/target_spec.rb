@@ -216,22 +216,14 @@ RSpec.describe Format::Target, type: :model do
 
     # association tests ########################################################
     describe "instances are properly associated to other models" do
-        before(:each) do
-            # load test object
-            test_target
+        describe "has many DistanceTargetCategories and" do
+            it "can find an associated object via the primary target" do
+                expect(valid_target.distance_target_categories).to include(valid_dist_targ_cat)
+            end
 
-            # load all AssocModels that must be in DB for tests to work
-            valid_archer
-            valid_category
-            valid_dist_targ_cat
-        end
-
-        it "has many Archers" do
-            expect(test_target.archers).to include(valid_archer)
-        end
-
-        it "has many ArcherCategories" do
-            expect(test_target.archer_categories).to include(valid_category)
+            it "can find an associated object via the alternate target" do
+                expect(valid_target_alt.alt_distance_target_categories).to include(valid_dist_targ_cat_alt)
+            end
         end
     end
 
