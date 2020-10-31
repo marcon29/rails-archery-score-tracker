@@ -1,12 +1,13 @@
 class Organization::ArcherCategory < ApplicationRecord
-    # has_many :distance_target_categoriess
-    # has_many :targets, through: :distance_target_categoriess
-    # has_many :archers, through: :distance_target_categoriess
+    # has_many :distance_target_categories
+    # has_many :targets, through: :distance_target_categories
+    # has_many :archers, through: :distance_target_categories
     belongs_to :gov_body
     belongs_to :discipline
     belongs_to :division
     belongs_to :age_class
     belongs_to :gender
+    has_many :distance_target_categories
 
     # assoc attrs - :gov_body_id, :discipline_id, :division_id, :age_class_id, :gender_id
     # data attrs - :cat_code

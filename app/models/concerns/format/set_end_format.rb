@@ -1,6 +1,7 @@
 class Format::SetEndFormat < ApplicationRecord
     belongs_to :round_format
     has_many :rsets
+    has_many :distance_target_categories, class_name: "Organization::DistanceTargetCategory"
     
     # all attrs - :name, :num_ends, :shots_per_end, :user_edit
 

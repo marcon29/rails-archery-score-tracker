@@ -1,8 +1,11 @@
 class Format::Target < ApplicationRecord
-    has_many :distance_target_categoriess
-    has_many :archer_categories, through: :distance_target_categoriess
-    has_many :archers, through: :distance_target_categoriess
+    has_many :distance_target_categories, class_name: "Organization::DistanceTargetCategory"
+    has_many :alt_distance_target_categories, class_name: "Organization::DistanceTargetCategory", foreign_key: "alt_target_id"
+    # if target instance is the main target, use regular :distance_target_categories
+    # if targetinstance is the alternate target, use :alt_distance_target_categories
     
+
+
     # all data attrs  - :name, :size, :score_areas, :rings, :x_ring, :max_score, :spots, :user_edit
     
     validates :name, presence: true, uniqueness: true

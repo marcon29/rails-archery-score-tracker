@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_31_170338) do
+ActiveRecord::Schema.define(version: 2020_10_31_174106) do
 
   create_table "archers", force: :cascade do |t|
     t.string "username"
@@ -25,15 +25,6 @@ ActiveRecord::Schema.define(version: 2020_10_31_170338) do
     t.string "home_country"
     t.string "default_age_class"
     t.string "default_division"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "distance_target_categories", force: :cascade do |t|
-    t.string "distance"
-    t.integer "target_id"
-    t.integer "archer_category_id"
-    t.integer "archer_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -105,6 +96,19 @@ ActiveRecord::Schema.define(version: 2020_10_31_170338) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "organization_dist_targ_cats", force: :cascade do |t|
+    t.integer "round_format_id"
+    t.integer "set_end_format_id"
+    t.integer "archer_category_id"
+    t.string "distance"
+    t.integer "target_id"
+    t.integer "alt_target_id"
+    t.index ["alt_target_id"], name: "index_organization_dist_targ_cats_on_alt_target_id"
+    t.index ["round_format_id"], name: "index_organization_dist_targ_cats_on_round_format_id"
+    t.index ["set_end_format_id"], name: "index_organization_dist_targ_cats_on_set_end_format_id"
+    t.index ["target_id"], name: "index_organization_dist_targ_cats_on_target_id"
   end
 
   create_table "organization_divisions", force: :cascade do |t|
@@ -180,4 +184,8 @@ ActiveRecord::Schema.define(version: 2020_10_31_170338) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "organization_dist_targ_cats", "format_round_formats", column: "round_format_id"
+  add_foreign_key "organization_dist_targ_cats", "format_set_end_formats", column: "set_end_format_id"
+  add_foreign_key "organization_dist_targ_cats", "format_targets", column: "alt_target_id"
+  add_foreign_key "organization_dist_targ_cats", "format_targets", column: "target_id"
 end

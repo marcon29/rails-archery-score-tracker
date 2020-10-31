@@ -5,6 +5,7 @@ class Rset < ApplicationRecord
     belongs_to :score_session
     belongs_to :round
     belongs_to :set_end_format, class_name: "Format::SetEndFormat"
+    # belongs_to :distance_target_category, class_name: "Organization::DistanceTargetCategory"
 
     # has_one :distance_target_category, through: :archer
     # has_one :target, through: :distance_target_category

@@ -1,6 +1,8 @@
 class Format::RoundFormat < ApplicationRecord
     has_many :set_end_formats
     has_many :rounds
+    has_many :distance_target_categories, class_name: "Organization::DistanceTargetCategory"
+    
     
     # all attrs - :name, :num_sets, :user_edit
 

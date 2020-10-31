@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe DistanceTargetCategory, type: :model do
+RSpec.describe Organization::DistanceTargetCategory, type: :model do
     # ###################################################################
     # define main test object
     # ###################################################################
@@ -10,7 +10,7 @@ RSpec.describe DistanceTargetCategory, type: :model do
     }
         
     let(:test_distance_target_category) {
-        DistanceTargetCategory.create(test_all)
+        Organization::DistanceTargetCategory.create(test_all)
     }
 
    
@@ -49,10 +49,10 @@ RSpec.describe DistanceTargetCategory, type: :model do
 
         describe "valid when " do
             it "given all required and unrequired attributes (all attrs are required)" do
-                expect(DistanceTargetCategory.all.count).to eq(0)
+                expect(Organization::DistanceTargetCategory.all.count).to eq(0)
 
                 expect(test_distance_target_category).to be_valid
-                expect(DistanceTargetCategory.all.count).to eq(1)
+                expect(Organization::DistanceTargetCategory.all.count).to eq(1)
                 expect(test_distance_target_category.distance).to eq(test_all[:distance])
                 expect(test_distance_target_category.target_id).to eq(test_all[:target_id])
                 expect(test_distance_target_category.archer_category_id).to eq(test_all[:archer_category_id])
@@ -72,10 +72,10 @@ RSpec.describe DistanceTargetCategory, type: :model do
 
         describe "invalid and has correct error message when" do
             it "missing required attributes" do
-                distance_target_category = DistanceTargetCategory.create(blank)
+                distance_target_category = Organization::DistanceTargetCategory.create(blank)
 
                 expect(distance_target_category).to be_invalid
-                expect(DistanceTargetCategory.all.count).to eq(0)
+                expect(Organization::DistanceTargetCategory.all.count).to eq(0)
 
                 expect(distance_target_category.errors.messages[:distance]).to include(default_missing_message)
                 expect(distance_target_category.errors.messages[:target_id]).to include(default_missing_message)
