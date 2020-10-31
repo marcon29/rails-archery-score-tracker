@@ -9,6 +9,7 @@ class Format::RoundFormat < ApplicationRecord
         uniqueness: { case_sensitive: false, message: "That name is already taken." }
     validates :num_sets, 
         numericality: { only_integer: true, greater_than: 0, message: "You must enter a number greater than 0." }
+    validate :check_user_edit, on: :update
     before_validation :format_name
 
     # helpers (callbacks & validations)

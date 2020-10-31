@@ -6,7 +6,7 @@ RSpec.describe Format::SetEndFormat, type: :model do
     # ###################################################################
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
     let(:test_all) {
-        {name: "Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format_id: 1}
+        {name: "Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: true, round_format_id: 1}
     }
 
     let(:test_set_end_format) {
@@ -26,12 +26,12 @@ RSpec.describe Format::SetEndFormat, type: :model do
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format_id: 1}
+        {name: "Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: true, round_format_id: 1}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {name: "", num_ends: 12, shots_per_end: 3, round_format_id: 1}
+        {num_ends: 12, shots_per_end: 3, round_format_id: 1}
     }
 
     # every attr blank
@@ -42,7 +42,8 @@ RSpec.describe Format::SetEndFormat, type: :model do
     # ###################################################################
     # define test results for auto-assign attrs
     # ###################################################################
-    let(:assigned_name) {"Set/Distance2"}
+    let(:assigned_name_first) {"Set/Distance1"}
+    let(:assigned_name_second) {"Set/Distance2"}
     let(:default_user_edit) {true}
   
     # ###################################################################
@@ -50,6 +51,7 @@ RSpec.describe Format::SetEndFormat, type: :model do
     # ###################################################################
     let(:too_many_sets_message) {"You can't exceed the number of sets for this round format."}
     let(:number_all_message) {"You must enter a number greater than 0."}
+    let(:restricted_update_message) {"You can't change a pre-loaded #{valid_set_end_format.class.to_s}."}
     
     
     # object creation and validation tests #######################################
@@ -85,7 +87,7 @@ RSpec.describe Format::SetEndFormat, type: :model do
                 expect(set_end_format.shots_per_end).to eq(test_req[:shots_per_end])
                 
                 # not req input tests (name and user_edit auto-asigned from missing)
-                expect(set_end_format.name).to eq(assigned_name)
+                expect(set_end_format.name).to eq(assigned_name_second)
                 expect(set_end_format.user_edit).to eq(default_user_edit)
             end
 
@@ -99,7 +101,7 @@ RSpec.describe Format::SetEndFormat, type: :model do
                 expect(test_set_end_format.shots_per_end).to eq(update[:shots_per_end])
                 
                 # not req input tests (name auto-asigned from blank, user_edit originally manually set and unchanged, so should be original)
-                expect(test_set_end_format.name).to eq(assigned_name)
+                expect(test_set_end_format.name).to eq(assigned_name_second)
                 expect(test_set_end_format.user_edit).to eq(test_all[:user_edit])
             end
 
@@ -125,7 +127,7 @@ RSpec.describe Format::SetEndFormat, type: :model do
                 expect(set_end_format).to be_valid
                 expect(Format::SetEndFormat.all.count).to eq(4)
 
-                expect(set_end_format.name).to eq(assigned_name)
+                expect(set_end_format.name).to eq(assigned_name_second)
                 expect(set_end_format.num_ends).to eq(duplicate[:num_ends])
                 expect(set_end_format.shots_per_end).to eq(duplicate[:shots_per_end])
                 expect(set_end_format.user_edit).to eq(duplicate[:user_edit])
@@ -175,6 +177,30 @@ RSpec.describe Format::SetEndFormat, type: :model do
                 expect(Format::SetEndFormat.all.count).to eq(0)
                 expect(set_end_format.errors.messages[:num_ends]).to include(number_all_message)
                 expect(set_end_format.errors.messages[:shots_per_end]).to include(number_all_message)
+            end
+
+            it "trying to edit a restricted, pre-load round format" do
+                # can create an instance with user_edit == false, but not edit after
+                expect(Format::SetEndFormat.all.count).to eq(0)
+                set_end_format = Format::SetEndFormat.create(num_ends: test_all[:num_ends], shots_per_end: test_all[:shots_per_end], user_edit: false, round_format_id: 1)
+                expect(Format::SetEndFormat.all.count).to eq(1)
+                # keeping this until figure out why it won't run validity test correctly (works fine in console)
+                # expect(set_end_format).to be_valid
+                
+                set_end_format.update(update)
+                set_end_format.reload
+
+                expect(set_end_format).to be_invalid
+                expect(set_end_format.errors.messages[:user_edit]).to include(restricted_update_message)
+
+                expect(set_end_format.errors.messages[:name]).to include(restricted_update_message)
+                expect(set_end_format.name).to eq(assigned_name_first)
+
+                expect(set_end_format.errors.messages[:num_ends]).to include(restricted_update_message)
+                expect(set_end_format.num_ends).to eq(test_all[:num_ends])
+
+                expect(set_end_format.errors.messages[:shots_per_end]).to include(restricted_update_message)
+                expect(set_end_format.shots_per_end).to eq(test_all[:shots_per_end])
             end
         end
     end

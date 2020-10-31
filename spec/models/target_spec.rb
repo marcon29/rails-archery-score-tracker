@@ -57,10 +57,8 @@ RSpec.describe Target, type: :model do
     # ###################################################################
     let(:missing_size_message) {"You must provide a target size."}
     let(:missing_x_ring_message) {"You must specifiy if there is an X ring."}
-
     let(:number_all_message) {"You must enter a number greater than 0."}
-
-    let(:restricted_update_message) {"You can't change a pre-loaded target."}
+    let(:restricted_update_message) {"You can't change a pre-loaded #{valid_target.class.to_s}."}
 
 
     # ###################################################################
@@ -169,7 +167,7 @@ RSpec.describe Target, type: :model do
             end
 
             it "trying to edit a restricted, pre-load target" do
-                # can create a target with user_edit == false, but not edit after
+                # can create an instance with user_edit == false, but not edit after
                 expect(Target.all.count).to eq(0)
 
                 target = Target.create(
@@ -182,17 +180,15 @@ RSpec.describe Target, type: :model do
                     spots: test_all[:spots], 
                     user_edit: false
                     )
-                
-                
                 expect(Target.all.count).to eq(1)
                 # keeping this until figure out why it won't run validity test correctly (works fine in console)
                 # expect(target).to be_valid
                 
                 target.update(update)
+                target.reload
+
                 expect(target).to be_invalid
                 expect(target.errors.messages[:user_edit]).to include(restricted_update_message)
-
-                target.reload
 
                 expect(target.errors.messages[:name]).to include(restricted_update_message)
                 expect(target.name).to eq(test_all[:name])

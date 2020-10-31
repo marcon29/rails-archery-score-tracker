@@ -6,7 +6,7 @@ RSpec.describe Format::RoundFormat, type: :model do
     # ###################################################################
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
     let(:test_all) {
-        {name: "720 Round", num_sets: 2, user_edit: false}
+        {name: "720 Round", num_sets: 2, user_edit: true}
     }
     
     let(:test_round_format) {
@@ -26,7 +26,7 @@ RSpec.describe Format::RoundFormat, type: :model do
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "720 Round", num_sets: 2, user_edit: false}
+        {name: "720 Round", num_sets: 2, user_edit: true}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
@@ -48,10 +48,9 @@ RSpec.describe Format::RoundFormat, type: :model do
     # define custom error messages
     # ###################################################################
     let(:missing_name_message) {"You must enter a name."}
-    
     let(:duplicate_name_message) {"That name is already taken."}
-    
     let(:number_all_message) {"You must enter a number greater than 0."}
+    let(:restricted_update_message) {"You can't change a pre-loaded #{valid_round_format.class.to_s}."}
 
 
     # object creation and validation tests #######################################
@@ -126,6 +125,28 @@ RSpec.describe Format::RoundFormat, type: :model do
                 expect(round_format).to be_invalid
                 expect(Format::RoundFormat.all.count).to eq(0)
                 expect(round_format.errors.messages[:num_sets]).to include(number_all_message)
+            end
+
+            it "trying to edit a restricted, pre-load round format" do
+                # can create an instance with user_edit == false, but not edit after
+                expect(Format::RoundFormat.all.count).to eq(0)
+                
+                round_format = Format::RoundFormat.create(name: test_all[:name], num_sets: test_all[:num_sets], user_edit: false)
+                expect(Format::RoundFormat.all.count).to eq(1)
+                # keeping this until figure out why it won't run validity test correctly (works fine in console)
+                # expect(round_format).to be_valid
+                
+                round_format.update(update)
+                round_format.reload
+
+                expect(round_format).to be_invalid
+                expect(round_format.errors.messages[:user_edit]).to include(restricted_update_message)
+
+                expect(round_format.errors.messages[:name]).to include(restricted_update_message)
+                expect(round_format.name).to eq(test_all[:name])
+
+                expect(round_format.errors.messages[:num_sets]).to include(restricted_update_message)
+                expect(round_format.num_sets).to eq(test_all[:num_sets])
             end
         end
     end

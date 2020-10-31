@@ -73,9 +73,22 @@ class ApplicationRecord < ActiveRecord::Base
 		end
 	end
 
+	def get_data_columns
+		self.class.column_names.select do |col| 
+			col != "id" && col != "created_at" && col != "updated_at" && !col.ends_with?("_id")
+		end
+	end
 	
+	def check_user_edit
+		if self.user_edit == false
+			message = "You can't change a pre-loaded #{self.class.to_s}."
+			get_data_columns.each { |col| errors.add("#{col}", message) }
+		end
+	end
 	
+
 	
+
 	
 
 

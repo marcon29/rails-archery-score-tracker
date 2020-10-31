@@ -10,6 +10,7 @@ class Format::SetEndFormat < ApplicationRecord
     validates :num_ends, :shots_per_end, 
         numericality: { only_integer: true, greater_than: 0, message: "You must enter a number greater than 0." }
     validate :check_and_assign_name
+    validate :check_user_edit, on: :update
     before_validation :assign_name
 
 
