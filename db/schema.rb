@@ -104,9 +104,9 @@ ActiveRecord::Schema.define(version: 2020_10_31_174106) do
     t.string "distance"
     t.integer "target_id"
     t.integer "alt_target_id"
-    t.index ["alt_target_id"], name: "index_organization_dist_targ_cats_on_alt_target_id"
     t.index ["set_end_format_id"], name: "index_organization_dist_targ_cats_on_set_end_format_id"
     t.index ["target_id"], name: "index_organization_dist_targ_cats_on_target_id"
+    t.index ["alt_target_id"], name: "index_organization_dist_targ_cats_on_alt_target_id"
   end
 
   create_table "organization_divisions", force: :cascade do |t|
@@ -136,9 +136,9 @@ ActiveRecord::Schema.define(version: 2020_10_31_174106) do
     t.string "rank"
     t.integer "archer_id"
     t.integer "score_session_id"
+    t.integer "round_format_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "round_format_id"
     t.index ["round_format_id"], name: "index_rounds_on_round_format_id"
   end
 
@@ -149,9 +149,9 @@ ActiveRecord::Schema.define(version: 2020_10_31_174106) do
     t.integer "archer_id"
     t.integer "score_session_id"
     t.integer "round_id"
+    t.integer "set_end_format_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "set_end_format_id"
     t.index ["set_end_format_id"], name: "index_rsets_on_set_end_format_id"
   end
 
