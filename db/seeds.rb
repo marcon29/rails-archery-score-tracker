@@ -73,9 +73,9 @@
     # add only unique genders
     # model = Organization::Gender
     # all_attrs = (name: "Male")
-
-    male = Organization::Gender.find_or_create_by(name: "Male")
+    
     female = Organization::Gender.find_or_create_by(name: "Female")
+    male = Organization::Gender.find_or_create_by(name: "Male")
 
 
 # ##########################################################
@@ -186,55 +186,32 @@
     # all_attrs = (name: "Set/Distance1", num_ends: 6, shots_per_end: 6, user_edit: false, round_format_id: 1)
         # name auto-created (based on associated RoundFormat) - do not enter one when creating
         # must set user_edit to false
-
-    # can't use .find_or_create_by because need duplicates, the destroy_all gets around this so you can seed DB without creating unwanted duplicates
-    Format::SetEndFormat.destroy_all
+    # can't use .find_or_create_by because need duplicates, so add every new set into a conditional so old ones aren't duplicated
 
     # Sets for World & USA Outdoor Rounds
-        rdb1440_dist1 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_1440, user_edit: false)
-        rdb1440_dist2 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_1440, user_edit: false)
-        rdb1440_dist3 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, round_format: rf_db_1440, user_edit: false)
-        rdb1440_dist4 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, round_format: rf_db_1440, user_edit: false)
-        rdb1440_dist5 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_1440, user_edit: false)
-        rdb1440_dist6 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_1440, user_edit: false)
-        rdb1440_dist7 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, round_format: rf_db_1440, user_edit: false)
-        rdb1440_dist8 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, round_format: rf_db_1440, user_edit: false)
+        if Format::SetEndFormat.count < 18      # should be the total number of Rsets to be created up to this point
+            rdb1440_dist1 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_1440, user_edit: false)
+            rdb1440_dist2 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_1440, user_edit: false)
+            rdb1440_dist3 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, round_format: rf_db_1440, user_edit: false)
+            rdb1440_dist4 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, round_format: rf_db_1440, user_edit: false)
+            rdb1440_dist5 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_1440, user_edit: false)
+            rdb1440_dist6 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_1440, user_edit: false)
+            rdb1440_dist7 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, round_format: rf_db_1440, user_edit: false)
+            rdb1440_dist8 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, round_format: rf_db_1440, user_edit: false)
 
-        r1440_dist1 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_1440, user_edit: false)
-        r1440_dist2 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_1440, user_edit: false)
-        r1440_dist3 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, round_format: rf_1440, user_edit: false)
-        r1440_dist4 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, round_format: rf_1440, user_edit: false)
+            r1440_dist1 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_1440, user_edit: false)
+            r1440_dist2 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_1440, user_edit: false)
+            r1440_dist3 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, round_format: rf_1440, user_edit: false)
+            r1440_dist4 = Format::SetEndFormat.create(num_ends: 12, shots_per_end: 3, round_format: rf_1440, user_edit: false)
 
-        rdb720_dist1 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_720, user_edit: false)
-        rdb720_dist2 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_720, user_edit: false)
-        rdb720_dist3 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_720, user_edit: false)
-        rdb720_dist4 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_720, user_edit: false)
+            rdb720_dist1 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_720, user_edit: false)
+            rdb720_dist2 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_720, user_edit: false)
+            rdb720_dist3 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_720, user_edit: false)
+            rdb720_dist4 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_db_720, user_edit: false)
 
-        r720_dist1 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_720, user_edit: false)
-        r720_dist2 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_720, user_edit: false)
-
-    # Sets for World & USA Outdoor Rounds
-        # rdb1440_dist1 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance1", num_ends: 6, shots_per_end: 6, round_format: rf_db_1440, user_edit: false)
-        # rdb1440_dist2 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance2", num_ends: 6, shots_per_end: 6, round_format: rf_db_1440, user_edit: false)
-        # rdb1440_dist3 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance3", num_ends: 12, shots_per_end: 3, round_format: rf_db_1440, user_edit: false)
-        # rdb1440_dist4 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance4", num_ends: 12, shots_per_end: 3, round_format: rf_db_1440, user_edit: false)
-        # rdb1440_dist5 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance5", num_ends: 6, shots_per_end: 6, round_format: rf_db_1440, user_edit: false)
-        # rdb1440_dist6 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance6", num_ends: 6, shots_per_end: 6, round_format: rf_db_1440, user_edit: false)
-        # rdb1440_dist7 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance7", num_ends: 12, shots_per_end: 3, round_format: rf_db_1440, user_edit: false)
-        # rdb1440_dist8 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance8", num_ends: 12, shots_per_end: 3, round_format: rf_db_1440, user_edit: false)
-
-        # r1440_dist1 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance1", num_ends: 6, shots_per_end: 6, round_format: rf_1440, user_edit: false)
-        # r1440_dist2 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance2", num_ends: 6, shots_per_end: 6, round_format: rf_1440, user_edit: false)
-        # r1440_dist3 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance3", num_ends: 12, shots_per_end: 3, round_format: rf_1440, user_edit: false)
-        # r1440_dist4 = Format::SetEndFormat.find_or_create_by(name: "1440 Round - Set/Distance4", num_ends: 12, shots_per_end: 3, round_format: rf_1440, user_edit: false)
-
-        # rdb720_dist1 = Format::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance1", num_ends: 6, shots_per_end: 6, round_format: rf_db_720, user_edit: false)
-        # rdb720_dist2 = Format::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance2", num_ends: 6, shots_per_end: 6, round_format: rf_db_720, user_edit: false)
-        # rdb720_dist3 = Format::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance3", num_ends: 6, shots_per_end: 6, round_format: rf_db_720, user_edit: false)
-        # rdb720_dist4 = Format::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance4", num_ends: 6, shots_per_end: 6, round_format: rf_db_720, user_edit: false)
-
-        # r720_dist1 = Format::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance1", num_ends: 6, shots_per_end: 6, round_format: rf_720, user_edit: false)
-        # r720_dist2 = Format::SetEndFormat.find_or_create_by(name: "720 Round - Set/Distance2", num_ends: 6, shots_per_end: 6, round_format: rf_720, user_edit: false)
+            r720_dist1 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_720, user_edit: false)
+            r720_dist2 = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, round_format: rf_720, user_edit: false)
+        end
 
     # Sets for World & USA Match Rounds (works for both Outdoor and Indoor)
         # r_match_dist1 = Format::SetEndFormat.find_or_create_by(name: "Match Round- Set/Distance1", num_ends: 5, shots_per_end: 3, round_format: rf_match, user_edit: false)
@@ -273,7 +250,6 @@
         t40cm_3spot_6ring = Format::Target.find_or_create_by(size: "40cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 3, user_edit: false)
 
 
-
 # ##########################################################
 # Distance/Target Lookup (pre-load - add all lookups)
 # ##########################################################
@@ -282,352 +258,370 @@
     # all_attrs = (set_end_format_id: 1, archer_category_id: 1, distance: "90m", target_id: 1, alt_target_id: 2)
 
     # Double 1440 Round
+        wa_db1440_dtcs = {
         # Set/Distance 1 (122cm target (no alt), Men Jr/Sr shoot 90m, Men Cad/Mas & Women Jr/Sr shoot 70m, Women Cad/Mas shoot 60m)
-            wa_db1440_dist1_rec_cad_w: (set_end_format: rdb1440_dist1, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist1_rec_jr_w: (set_end_format: rdb1440_dist1, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist1_rec_sr_w: (set_end_format: rdb1440_dist1, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist1_rec_mas_w: (set_end_format: rdb1440_dist1, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist1_rec_cad_m: (set_end_format: rdb1440_dist1, archer_category: wa_rcm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist1_rec_jr_m: (set_end_format: rdb1440_dist1, archer_category: wa_rjm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist1_rec_sr_m: (set_end_format: rdb1440_dist1, archer_category: wa_rsm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist1_rec_mas_m: (set_end_format: rdb1440_dist1, archer_category: wa_rmm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_db1440_dist1_rec_cad_w: {set_end_format: rdb1440_dist1, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist1_rec_jr_w: {set_end_format: rdb1440_dist1, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist1_rec_sr_w: {set_end_format: rdb1440_dist1, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist1_rec_mas_w: {set_end_format: rdb1440_dist1, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist1_rec_cad_m: {set_end_format: rdb1440_dist1, archer_category: wa_rcm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist1_rec_jr_m: {set_end_format: rdb1440_dist1, archer_category: wa_rjm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist1_rec_sr_m: {set_end_format: rdb1440_dist1, archer_category: wa_rsm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist1_rec_mas_m: {set_end_format: rdb1440_dist1, archer_category: wa_rmm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
             
-            wa_db1440_dist1_com_cad_w: (set_end_format: rdb1440_dist1, archer_category: wa_ccw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist1_com_jr_w: (set_end_format: rdb1440_dist1, archer_category: wa_cjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist1_com_sr_w: (set_end_format: rdb1440_dist1, archer_category: wa_csw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist1_com_mas_w: (set_end_format: rdb1440_dist1, archer_category: wa_cmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist1_com_cad_m: (set_end_format: rdb1440_dist1, archer_category: wa_ccm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist1_com_jr_m: (set_end_format: rdb1440_dist1, archer_category: wa_cjm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist1_com_sr_m: (set_end_format: rdb1440_dist1, archer_category: wa_csm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist1_com_mas_m: (set_end_format: rdb1440_dist1, archer_category: wa_cmm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_db1440_dist1_com_cad_w: {set_end_format: rdb1440_dist1, archer_category: wa_ccw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist1_com_jr_w: {set_end_format: rdb1440_dist1, archer_category: wa_cjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist1_com_sr_w: {set_end_format: rdb1440_dist1, archer_category: wa_csw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist1_com_mas_w: {set_end_format: rdb1440_dist1, archer_category: wa_cmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist1_com_cad_m: {set_end_format: rdb1440_dist1, archer_category: wa_ccm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist1_com_jr_m: {set_end_format: rdb1440_dist1, archer_category: wa_cjm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist1_com_sr_m: {set_end_format: rdb1440_dist1, archer_category: wa_csm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist1_com_mas_m: {set_end_format: rdb1440_dist1, archer_category: wa_cmm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
         # Set/Distance 2 (same as set/dist 1 except: change number (var and sef), Men Jr/Sr shoot 70m, Men Cad/Mas & Women Jr/Sr shoot 60m, Women Cad/Mas shoot 50m)
-            wa_db1440_dist2_rec_cad_w: (set_end_format: rdb1440_dist2, archer_category: wa_rcw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist2_rec_jr_w: (set_end_format: rdb1440_dist2, archer_category: wa_rjw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist2_rec_sr_w: (set_end_format: rdb1440_dist2, archer_category: wa_rsw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist2_rec_mas_w: (set_end_format: rdb1440_dist2, archer_category: wa_rmw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist2_rec_cad_m: (set_end_format: rdb1440_dist2, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist2_rec_jr_m: (set_end_format: rdb1440_dist2, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist2_rec_sr_m: (set_end_format: rdb1440_dist2, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist2_rec_mas_m: (set_end_format: rdb1440_dist2, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_db1440_dist2_rec_cad_w: {set_end_format: rdb1440_dist2, archer_category: wa_rcw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist2_rec_jr_w: {set_end_format: rdb1440_dist2, archer_category: wa_rjw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist2_rec_sr_w: {set_end_format: rdb1440_dist2, archer_category: wa_rsw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist2_rec_mas_w: {set_end_format: rdb1440_dist2, archer_category: wa_rmw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist2_rec_cad_m: {set_end_format: rdb1440_dist2, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist2_rec_jr_m: {set_end_format: rdb1440_dist2, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist2_rec_sr_m: {set_end_format: rdb1440_dist2, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist2_rec_mas_m: {set_end_format: rdb1440_dist2, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
-            wa_db1440_dist2_com_cad_w: (set_end_format: rdb1440_dist2, archer_category: wa_ccw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist2_com_jr_w: (set_end_format: rdb1440_dist2, archer_category: wa_cjw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist2_com_sr_w: (set_end_format: rdb1440_dist2, archer_category: wa_csw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist2_com_mas_w: (set_end_format: rdb1440_dist2, archer_category: wa_cmw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist2_com_cad_m: (set_end_format: rdb1440_dist2, archer_category: wa_ccm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist2_com_jr_m: (set_end_format: rdb1440_dist2, archer_category: wa_cjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist2_com_sr_m: (set_end_format: rdb1440_dist2, archer_category: wa_csm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist2_com_mas_m: (set_end_format: rdb1440_dist2, archer_category: wa_cmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_db1440_dist2_com_cad_w: {set_end_format: rdb1440_dist2, archer_category: wa_ccw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist2_com_jr_w: {set_end_format: rdb1440_dist2, archer_category: wa_cjw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist2_com_sr_w: {set_end_format: rdb1440_dist2, archer_category: wa_csw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist2_com_mas_w: {set_end_format: rdb1440_dist2, archer_category: wa_cmw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist2_com_cad_m: {set_end_format: rdb1440_dist2, archer_category: wa_ccm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist2_com_jr_m: {set_end_format: rdb1440_dist2, archer_category: wa_cjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist2_com_sr_m: {set_end_format: rdb1440_dist2, archer_category: wa_csm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist2_com_mas_m: {set_end_format: rdb1440_dist2, archer_category: wa_cmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
         # Set/Distance 3 (same as set/dist 2 except: change number (var and sef), 80cm target (w/ alt), All Men & Women Jr/Sr shoot 50m, Women Cad/Mas shoot 40m))
-            wa_db1440_dist3_rec_cad_w: (set_end_format: rdb1440_dist3, archer_category: wa_rcw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist3_rec_jr_w: (set_end_format: rdb1440_dist3, archer_category: wa_rjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist3_rec_sr_w: (set_end_format: rdb1440_dist3, archer_category: wa_rsw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist3_rec_mas_w: (set_end_format: rdb1440_dist3, archer_category: wa_rmw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist3_rec_cad_m: (set_end_format: rdb1440_dist3, archer_category: wa_rcm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist3_rec_jr_m: (set_end_format: rdb1440_dist3, archer_category: wa_rjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist3_rec_sr_m: (set_end_format: rdb1440_dist3, archer_category: wa_rsm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist3_rec_mas_m: (set_end_format: rdb1440_dist3, archer_category: wa_rmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_db1440_dist3_rec_cad_w: {set_end_format: rdb1440_dist3, archer_category: wa_rcw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist3_rec_jr_w: {set_end_format: rdb1440_dist3, archer_category: wa_rjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist3_rec_sr_w: {set_end_format: rdb1440_dist3, archer_category: wa_rsw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist3_rec_mas_w: {set_end_format: rdb1440_dist3, archer_category: wa_rmw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist3_rec_cad_m: {set_end_format: rdb1440_dist3, archer_category: wa_rcm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist3_rec_jr_m: {set_end_format: rdb1440_dist3, archer_category: wa_rjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist3_rec_sr_m: {set_end_format: rdb1440_dist3, archer_category: wa_rsm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist3_rec_mas_m: {set_end_format: rdb1440_dist3, archer_category: wa_rmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
 
-            wa_db1440_dist3_com_cad_w: (set_end_format: rdb1440_dist3, archer_category: wa_ccw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist3_com_jr_w: (set_end_format: rdb1440_dist3, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist3_com_sr_w: (set_end_format: rdb1440_dist3, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist3_com_mas_w: (set_end_format: rdb1440_dist3, archer_category: wa_cmw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist3_com_cad_m: (set_end_format: rdb1440_dist3, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist3_com_jr_m: (set_end_format: rdb1440_dist3, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist3_com_sr_m: (set_end_format: rdb1440_dist3, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist3_com_mas_m: (set_end_format: rdb1440_dist3, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_db1440_dist3_com_cad_w: {set_end_format: rdb1440_dist3, archer_category: wa_ccw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist3_com_jr_w: {set_end_format: rdb1440_dist3, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist3_com_sr_w: {set_end_format: rdb1440_dist3, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist3_com_mas_w: {set_end_format: rdb1440_dist3, archer_category: wa_cmw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist3_com_cad_m: {set_end_format: rdb1440_dist3, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist3_com_jr_m: {set_end_format: rdb1440_dist3, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist3_com_sr_m: {set_end_format: rdb1440_dist3, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist3_com_mas_m: {set_end_format: rdb1440_dist3, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
 
         # Set/Distance 4 (same as set/dist 3 except: change number (var and sef), all shoot 30m)
-            wa_db1440_dist4_rec_cad_w: (set_end_format: rdb1440_dist4, archer_category: wa_rcw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist4_rec_jr_w: (set_end_format: rdb1440_dist4, archer_category: wa_rjw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist4_rec_sr_w: (set_end_format: rdb1440_dist4, archer_category: wa_rsw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist4_rec_mas_w: (set_end_format: rdb1440_dist4, archer_category: wa_rmw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist4_rec_cad_m: (set_end_format: rdb1440_dist4, archer_category: wa_rcm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist4_rec_jr_m: (set_end_format: rdb1440_dist4, archer_category: wa_rjm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist4_rec_sr_m: (set_end_format: rdb1440_dist4, archer_category: wa_rsm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist4_rec_mas_m: (set_end_format: rdb1440_dist4, archer_category: wa_rmm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_db1440_dist4_rec_cad_w: {set_end_format: rdb1440_dist4, archer_category: wa_rcw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist4_rec_jr_w: {set_end_format: rdb1440_dist4, archer_category: wa_rjw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist4_rec_sr_w: {set_end_format: rdb1440_dist4, archer_category: wa_rsw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist4_rec_mas_w: {set_end_format: rdb1440_dist4, archer_category: wa_rmw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist4_rec_cad_m: {set_end_format: rdb1440_dist4, archer_category: wa_rcm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist4_rec_jr_m: {set_end_format: rdb1440_dist4, archer_category: wa_rjm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist4_rec_sr_m: {set_end_format: rdb1440_dist4, archer_category: wa_rsm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist4_rec_mas_m: {set_end_format: rdb1440_dist4, archer_category: wa_rmm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
 
-            wa_db1440_dist4_com_cad_w: (set_end_format: rdb1440_dist4, archer_category: wa_ccw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist4_com_jr_w: (set_end_format: rdb1440_dist4, archer_category: wa_cjw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist4_com_sr_w: (set_end_format: rdb1440_dist4, archer_category: wa_csw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist4_com_mas_w: (set_end_format: rdb1440_dist4, archer_category: wa_cmw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist4_com_cad_m: (set_end_format: rdb1440_dist4, archer_category: wa_ccm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist4_com_jr_m: (set_end_format: rdb1440_dist4, archer_category: wa_cjm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist4_com_sr_m: (set_end_format: rdb1440_dist4, archer_category: wa_csm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist4_com_mas_m: (set_end_format: rdb1440_dist4, archer_category: wa_cmm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_db1440_dist4_com_cad_w: {set_end_format: rdb1440_dist4, archer_category: wa_ccw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist4_com_jr_w: {set_end_format: rdb1440_dist4, archer_category: wa_cjw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist4_com_sr_w: {set_end_format: rdb1440_dist4, archer_category: wa_csw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist4_com_mas_w: {set_end_format: rdb1440_dist4, archer_category: wa_cmw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist4_com_cad_m: {set_end_format: rdb1440_dist4, archer_category: wa_ccm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist4_com_jr_m: {set_end_format: rdb1440_dist4, archer_category: wa_cjm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist4_com_sr_m: {set_end_format: rdb1440_dist4, archer_category: wa_csm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist4_com_mas_m: {set_end_format: rdb1440_dist4, archer_category: wa_cmm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
 
         # Set/Distance 5 (repeat set/dist 1, change number (var and sef))
-            wa_db1440_dist5_rec_cad_w: (set_end_format: rdb1440_dist5, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist5_rec_jr_w: (set_end_format: rdb1440_dist5, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist5_rec_sr_w: (set_end_format: rdb1440_dist5, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist5_rec_mas_w: (set_end_format: rdb1440_dist5, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist5_rec_cad_m: (set_end_format: rdb1440_dist5, archer_category: wa_rcm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist5_rec_jr_m: (set_end_format: rdb1440_dist5, archer_category: wa_rjm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist5_rec_sr_m: (set_end_format: rdb1440_dist5, archer_category: wa_rsm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist5_rec_mas_m: (set_end_format: rdb1440_dist5, archer_category: wa_rmm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_db1440_dist5_rec_cad_w: {set_end_format: rdb1440_dist5, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist5_rec_jr_w: {set_end_format: rdb1440_dist5, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist5_rec_sr_w: {set_end_format: rdb1440_dist5, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist5_rec_mas_w: {set_end_format: rdb1440_dist5, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist5_rec_cad_m: {set_end_format: rdb1440_dist5, archer_category: wa_rcm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist5_rec_jr_m: {set_end_format: rdb1440_dist5, archer_category: wa_rjm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist5_rec_sr_m: {set_end_format: rdb1440_dist5, archer_category: wa_rsm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist5_rec_mas_m: {set_end_format: rdb1440_dist5, archer_category: wa_rmm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
             
-            wa_db1440_dist5_com_cad_w: (set_end_format: rdb1440_dist5, archer_category: wa_ccw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist5_com_jr_w: (set_end_format: rdb1440_dist5, archer_category: wa_cjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist5_com_sr_w: (set_end_format: rdb1440_dist5, archer_category: wa_csw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist5_com_mas_w: (set_end_format: rdb1440_dist5, archer_category: wa_cmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist5_com_cad_m: (set_end_format: rdb1440_dist5, archer_category: wa_ccm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist5_com_jr_m: (set_end_format: rdb1440_dist5, archer_category: wa_cjm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist5_com_sr_m: (set_end_format: rdb1440_dist5, archer_category: wa_csm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist5_com_mas_m: (set_end_format: rdb1440_dist5, archer_category: wa_cmm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_db1440_dist5_com_cad_w: {set_end_format: rdb1440_dist5, archer_category: wa_ccw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist5_com_jr_w: {set_end_format: rdb1440_dist5, archer_category: wa_cjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist5_com_sr_w: {set_end_format: rdb1440_dist5, archer_category: wa_csw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist5_com_mas_w: {set_end_format: rdb1440_dist5, archer_category: wa_cmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist5_com_cad_m: {set_end_format: rdb1440_dist5, archer_category: wa_ccm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist5_com_jr_m: {set_end_format: rdb1440_dist5, archer_category: wa_cjm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist5_com_sr_m: {set_end_format: rdb1440_dist5, archer_category: wa_csm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist5_com_mas_m: {set_end_format: rdb1440_dist5, archer_category: wa_cmm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
         # Set/Distance 6 (repeat set/dist 2, change number (var and sef))
-            wa_db1440_dist6_rec_cad_w: (set_end_format: rdb1440_dist6, archer_category: wa_rcw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist6_rec_jr_w: (set_end_format: rdb1440_dist6, archer_category: wa_rjw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist6_rec_sr_w: (set_end_format: rdb1440_dist6, archer_category: wa_rsw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist6_rec_mas_w: (set_end_format: rdb1440_dist6, archer_category: wa_rmw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist6_rec_cad_m: (set_end_format: rdb1440_dist6, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist6_rec_jr_m: (set_end_format: rdb1440_dist6, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist6_rec_sr_m: (set_end_format: rdb1440_dist6, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist6_rec_mas_m: (set_end_format: rdb1440_dist6, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_db1440_dist6_rec_cad_w: {set_end_format: rdb1440_dist6, archer_category: wa_rcw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist6_rec_jr_w: {set_end_format: rdb1440_dist6, archer_category: wa_rjw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist6_rec_sr_w: {set_end_format: rdb1440_dist6, archer_category: wa_rsw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist6_rec_mas_w: {set_end_format: rdb1440_dist6, archer_category: wa_rmw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist6_rec_cad_m: {set_end_format: rdb1440_dist6, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist6_rec_jr_m: {set_end_format: rdb1440_dist6, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist6_rec_sr_m: {set_end_format: rdb1440_dist6, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist6_rec_mas_m: {set_end_format: rdb1440_dist6, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
-            wa_db1440_dist6_com_cad_w: (set_end_format: rdb1440_dist6, archer_category: wa_ccw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist6_com_jr_w: (set_end_format: rdb1440_dist6, archer_category: wa_cjw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist6_com_sr_w: (set_end_format: rdb1440_dist6, archer_category: wa_csw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist6_com_mas_w: (set_end_format: rdb1440_dist6, archer_category: wa_cmw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist6_com_cad_m: (set_end_format: rdb1440_dist6, archer_category: wa_ccm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist6_com_jr_m: (set_end_format: rdb1440_dist6, archer_category: wa_cjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist6_com_sr_m: (set_end_format: rdb1440_dist6, archer_category: wa_csm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db1440_dist6_com_mas_m: (set_end_format: rdb1440_dist6, archer_category: wa_cmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_db1440_dist6_com_cad_w: {set_end_format: rdb1440_dist6, archer_category: wa_ccw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist6_com_jr_w: {set_end_format: rdb1440_dist6, archer_category: wa_cjw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist6_com_sr_w: {set_end_format: rdb1440_dist6, archer_category: wa_csw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist6_com_mas_w: {set_end_format: rdb1440_dist6, archer_category: wa_cmw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist6_com_cad_m: {set_end_format: rdb1440_dist6, archer_category: wa_ccm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist6_com_jr_m: {set_end_format: rdb1440_dist6, archer_category: wa_cjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist6_com_sr_m: {set_end_format: rdb1440_dist6, archer_category: wa_csm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db1440_dist6_com_mas_m: {set_end_format: rdb1440_dist6, archer_category: wa_cmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
         # Set/Distance 7 (repeat set/dist 3, change number (var and sef))
-            wa_db1440_dist7_rec_cad_w: (set_end_format: rdb1440_dist7, archer_category: wa_rcw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist7_rec_jr_w: (set_end_format: rdb1440_dist7, archer_category: wa_rjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist7_rec_sr_w: (set_end_format: rdb1440_dist7, archer_category: wa_rsw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist7_rec_mas_w: (set_end_format: rdb1440_dist7, archer_category: wa_rmw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist7_rec_cad_m: (set_end_format: rdb1440_dist7, archer_category: wa_rcm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist7_rec_jr_m: (set_end_format: rdb1440_dist7, archer_category: wa_rjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist7_rec_sr_m: (set_end_format: rdb1440_dist7, archer_category: wa_rsm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist7_rec_mas_m: (set_end_format: rdb1440_dist7, archer_category: wa_rmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_db1440_dist7_rec_cad_w: {set_end_format: rdb1440_dist7, archer_category: wa_rcw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist7_rec_jr_w: {set_end_format: rdb1440_dist7, archer_category: wa_rjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist7_rec_sr_w: {set_end_format: rdb1440_dist7, archer_category: wa_rsw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist7_rec_mas_w: {set_end_format: rdb1440_dist7, archer_category: wa_rmw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist7_rec_cad_m: {set_end_format: rdb1440_dist7, archer_category: wa_rcm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist7_rec_jr_m: {set_end_format: rdb1440_dist7, archer_category: wa_rjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist7_rec_sr_m: {set_end_format: rdb1440_dist7, archer_category: wa_rsm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist7_rec_mas_m: {set_end_format: rdb1440_dist7, archer_category: wa_rmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
 
-            wa_db1440_dist7_com_cad_w: (set_end_format: rdb1440_dist7, archer_category: wa_ccw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist7_com_jr_w: (set_end_format: rdb1440_dist7, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist7_com_sr_w: (set_end_format: rdb1440_dist7, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist7_com_mas_w: (set_end_format: rdb1440_dist7, archer_category: wa_cmw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist7_com_cad_m: (set_end_format: rdb1440_dist7, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist7_com_jr_m: (set_end_format: rdb1440_dist7, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist7_com_sr_m: (set_end_format: rdb1440_dist7, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist7_com_mas_m: (set_end_format: rdb1440_dist7, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_db1440_dist7_com_cad_w: {set_end_format: rdb1440_dist7, archer_category: wa_ccw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist7_com_jr_w: {set_end_format: rdb1440_dist7, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist7_com_sr_w: {set_end_format: rdb1440_dist7, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist7_com_mas_w: {set_end_format: rdb1440_dist7, archer_category: wa_cmw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist7_com_cad_m: {set_end_format: rdb1440_dist7, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist7_com_jr_m: {set_end_format: rdb1440_dist7, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist7_com_sr_m: {set_end_format: rdb1440_dist7, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist7_com_mas_m: {set_end_format: rdb1440_dist7, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
 
         # Set/Distance 8 (repeat set/dist 4, change number (var and sef))
-            wa_db1440_dist8_rec_cad_w: (set_end_format: rdb1440_dist8, archer_category: wa_rcw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist8_rec_jr_w: (set_end_format: rdb1440_dist8, archer_category: wa_rjw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist8_rec_sr_w: (set_end_format: rdb1440_dist8, archer_category: wa_rsw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist8_rec_mas_w: (set_end_format: rdb1440_dist8, archer_category: wa_rmw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist8_rec_cad_m: (set_end_format: rdb1440_dist8, archer_category: wa_rcm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist8_rec_jr_m: (set_end_format: rdb1440_dist8, archer_category: wa_rjm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist8_rec_sr_m: (set_end_format: rdb1440_dist8, archer_category: wa_rsm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist8_rec_mas_m: (set_end_format: rdb1440_dist8, archer_category: wa_rmm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_db1440_dist8_rec_cad_w: {set_end_format: rdb1440_dist8, archer_category: wa_rcw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist8_rec_jr_w: {set_end_format: rdb1440_dist8, archer_category: wa_rjw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist8_rec_sr_w: {set_end_format: rdb1440_dist8, archer_category: wa_rsw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist8_rec_mas_w: {set_end_format: rdb1440_dist8, archer_category: wa_rmw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist8_rec_cad_m: {set_end_format: rdb1440_dist8, archer_category: wa_rcm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist8_rec_jr_m: {set_end_format: rdb1440_dist8, archer_category: wa_rjm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist8_rec_sr_m: {set_end_format: rdb1440_dist8, archer_category: wa_rsm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist8_rec_mas_m: {set_end_format: rdb1440_dist8, archer_category: wa_rmm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
 
-            wa_db1440_dist8_com_cad_w: (set_end_format: rdb1440_dist8, archer_category: wa_ccw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist8_com_jr_w: (set_end_format: rdb1440_dist8, archer_category: wa_cjw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist8_com_sr_w: (set_end_format: rdb1440_dist8, archer_category: wa_csw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist8_com_mas_w: (set_end_format: rdb1440_dist8, archer_category: wa_cmw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist8_com_cad_m: (set_end_format: rdb1440_dist8, archer_category: wa_ccm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist8_com_jr_m: (set_end_format: rdb1440_dist8, archer_category: wa_cjm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist8_com_sr_m: (set_end_format: rdb1440_dist8, archer_category: wa_csm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db1440_dist8_com_mas_m: (set_end_format: rdb1440_dist8, archer_category: wa_cmm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-
+            wa_db1440_dist8_com_cad_w: {set_end_format: rdb1440_dist8, archer_category: wa_ccw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist8_com_jr_w: {set_end_format: rdb1440_dist8, archer_category: wa_cjw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist8_com_sr_w: {set_end_format: rdb1440_dist8, archer_category: wa_csw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist8_com_mas_w: {set_end_format: rdb1440_dist8, archer_category: wa_cmw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist8_com_cad_m: {set_end_format: rdb1440_dist8, archer_category: wa_ccm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist8_com_jr_m: {set_end_format: rdb1440_dist8, archer_category: wa_cjm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist8_com_sr_m: {set_end_format: rdb1440_dist8, archer_category: wa_csm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db1440_dist8_com_mas_m: {set_end_format: rdb1440_dist8, archer_category: wa_cmm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}
+        }
+        wa_db1440_dtcs.each do |dtc, attrs|
+            Organization::DistanceTargetCategory.find_or_create_by(attrs)
+        end
 
     # 1440 Round
+        wa_1440_dtcs = {
         # Set/Distance 1 (repeat Double 1440 set/dist 1, change round (var and sef))
-            wa_1440_dist1_rec_cad_w: (set_end_format: r1440_dist1, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist1_rec_jr_w: (set_end_format: r1440_dist1, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist1_rec_sr_w: (set_end_format: r1440_dist1, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist1_rec_mas_w: (set_end_format: r1440_dist1, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist1_rec_cad_m: (set_end_format: r1440_dist1, archer_category: wa_rcm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist1_rec_jr_m: (set_end_format: r1440_dist1, archer_category: wa_rjm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist1_rec_sr_m: (set_end_format: r1440_dist1, archer_category: wa_rsm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist1_rec_mas_m: (set_end_format: r1440_dist1, archer_category: wa_rmm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_1440_dist1_rec_cad_w: {set_end_format: r1440_dist1, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist1_rec_jr_w: {set_end_format: r1440_dist1, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist1_rec_sr_w: {set_end_format: r1440_dist1, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist1_rec_mas_w: {set_end_format: r1440_dist1, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist1_rec_cad_m: {set_end_format: r1440_dist1, archer_category: wa_rcm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist1_rec_jr_m: {set_end_format: r1440_dist1, archer_category: wa_rjm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist1_rec_sr_m: {set_end_format: r1440_dist1, archer_category: wa_rsm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist1_rec_mas_m: {set_end_format: r1440_dist1, archer_category: wa_rmm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
             
-            wa_1440_dist1_com_cad_w: (set_end_format: r1440_dist1, archer_category: wa_ccw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist1_com_jr_w: (set_end_format: r1440_dist1, archer_category: wa_cjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist1_com_sr_w: (set_end_format: r1440_dist1, archer_category: wa_csw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist1_com_mas_w: (set_end_format: r1440_dist1, archer_category: wa_cmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist1_com_cad_m: (set_end_format: r1440_dist1, archer_category: wa_ccm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist1_com_jr_m: (set_end_format: r1440_dist1, archer_category: wa_cjm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist1_com_sr_m: (set_end_format: r1440_dist1, archer_category: wa_csm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist1_com_mas_m: (set_end_format: r1440_dist1, archer_category: wa_cmm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_1440_dist1_com_cad_w: {set_end_format: r1440_dist1, archer_category: wa_ccw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist1_com_jr_w: {set_end_format: r1440_dist1, archer_category: wa_cjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist1_com_sr_w: {set_end_format: r1440_dist1, archer_category: wa_csw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist1_com_mas_w: {set_end_format: r1440_dist1, archer_category: wa_cmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist1_com_cad_m: {set_end_format: r1440_dist1, archer_category: wa_ccm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist1_com_jr_m: {set_end_format: r1440_dist1, archer_category: wa_cjm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist1_com_sr_m: {set_end_format: r1440_dist1, archer_category: wa_csm, distance: "90m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist1_com_mas_m: {set_end_format: r1440_dist1, archer_category: wa_cmm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
         # Set/Distance 2 (repeat Double 1440 set/dist 2, change round (var and sef))
-            wa_1440_dist2_rec_cad_w: (set_end_format: r1440_dist2, archer_category: wa_rcw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist2_rec_jr_w: (set_end_format: r1440_dist2, archer_category: wa_rjw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist2_rec_sr_w: (set_end_format: r1440_dist2, archer_category: wa_rsw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist2_rec_mas_w: (set_end_format: r1440_dist2, archer_category: wa_rmw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist2_rec_cad_m: (set_end_format: r1440_dist2, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist2_rec_jr_m: (set_end_format: r1440_dist2, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist2_rec_sr_m: (set_end_format: r1440_dist2, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist2_rec_mas_m: (set_end_format: r1440_dist2, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_1440_dist2_rec_cad_w: {set_end_format: r1440_dist2, archer_category: wa_rcw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist2_rec_jr_w: {set_end_format: r1440_dist2, archer_category: wa_rjw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist2_rec_sr_w: {set_end_format: r1440_dist2, archer_category: wa_rsw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist2_rec_mas_w: {set_end_format: r1440_dist2, archer_category: wa_rmw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist2_rec_cad_m: {set_end_format: r1440_dist2, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist2_rec_jr_m: {set_end_format: r1440_dist2, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist2_rec_sr_m: {set_end_format: r1440_dist2, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist2_rec_mas_m: {set_end_format: r1440_dist2, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
-            wa_1440_dist2_com_cad_w: (set_end_format: r1440_dist2, archer_category: wa_ccw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist2_com_jr_w: (set_end_format: r1440_dist2, archer_category: wa_cjw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist2_com_sr_w: (set_end_format: r1440_dist2, archer_category: wa_csw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist2_com_mas_w: (set_end_format: r1440_dist2, archer_category: wa_cmw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist2_com_cad_m: (set_end_format: r1440_dist2, archer_category: wa_ccm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist2_com_jr_m: (set_end_format: r1440_dist2, archer_category: wa_cjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist2_com_sr_m: (set_end_format: r1440_dist2, archer_category: wa_csm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_1440_dist2_com_mas_m: (set_end_format: r1440_dist2, archer_category: wa_cmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_1440_dist2_com_cad_w: {set_end_format: r1440_dist2, archer_category: wa_ccw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist2_com_jr_w: {set_end_format: r1440_dist2, archer_category: wa_cjw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist2_com_sr_w: {set_end_format: r1440_dist2, archer_category: wa_csw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist2_com_mas_w: {set_end_format: r1440_dist2, archer_category: wa_cmw, distance: "50m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist2_com_cad_m: {set_end_format: r1440_dist2, archer_category: wa_ccm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist2_com_jr_m: {set_end_format: r1440_dist2, archer_category: wa_cjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist2_com_sr_m: {set_end_format: r1440_dist2, archer_category: wa_csm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_1440_dist2_com_mas_m: {set_end_format: r1440_dist2, archer_category: wa_cmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
         # Set/Distance 3 (repeat Double 1440 set/dist 3, change round (var and sef))
-            wa_1440_dist3_rec_cad_w: (set_end_format: r1440_dist3, archer_category: wa_rcw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist3_rec_jr_w: (set_end_format: r1440_dist3, archer_category: wa_rjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist3_rec_sr_w: (set_end_format: r1440_dist3, archer_category: wa_rsw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist3_rec_mas_w: (set_end_format: r1440_dist3, archer_category: wa_rmw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist3_rec_cad_m: (set_end_format: r1440_dist3, archer_category: wa_rcm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist3_rec_jr_m: (set_end_format: r1440_dist3, archer_category: wa_rjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist3_rec_sr_m: (set_end_format: r1440_dist3, archer_category: wa_rsm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist3_rec_mas_m: (set_end_format: r1440_dist3, archer_category: wa_rmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_1440_dist3_rec_cad_w: {set_end_format: r1440_dist3, archer_category: wa_rcw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist3_rec_jr_w: {set_end_format: r1440_dist3, archer_category: wa_rjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist3_rec_sr_w: {set_end_format: r1440_dist3, archer_category: wa_rsw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist3_rec_mas_w: {set_end_format: r1440_dist3, archer_category: wa_rmw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist3_rec_cad_m: {set_end_format: r1440_dist3, archer_category: wa_rcm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist3_rec_jr_m: {set_end_format: r1440_dist3, archer_category: wa_rjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist3_rec_sr_m: {set_end_format: r1440_dist3, archer_category: wa_rsm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist3_rec_mas_m: {set_end_format: r1440_dist3, archer_category: wa_rmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
 
-            wa_1440_dist3_com_cad_w: (set_end_format: r1440_dist3, archer_category: wa_ccw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist3_com_jr_w: (set_end_format: r1440_dist3, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist3_com_sr_w: (set_end_format: r1440_dist3, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist3_com_mas_w: (set_end_format: r1440_dist3, archer_category: wa_cmw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist3_com_cad_m: (set_end_format: r1440_dist3, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist3_com_jr_m: (set_end_format: r1440_dist3, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist3_com_sr_m: (set_end_format: r1440_dist3, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist3_com_mas_m: (set_end_format: r1440_dist3, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_1440_dist3_com_cad_w: {set_end_format: r1440_dist3, archer_category: wa_ccw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist3_com_jr_w: {set_end_format: r1440_dist3, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist3_com_sr_w: {set_end_format: r1440_dist3, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist3_com_mas_w: {set_end_format: r1440_dist3, archer_category: wa_cmw, distance: "40m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist3_com_cad_m: {set_end_format: r1440_dist3, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist3_com_jr_m: {set_end_format: r1440_dist3, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist3_com_sr_m: {set_end_format: r1440_dist3, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist3_com_mas_m: {set_end_format: r1440_dist3, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
 
         # Set/Distance 4 (repeat Double 1440 set/dist 4, change round (var and sef))
-            wa_1440_dist4_rec_cad_w: (set_end_format: r1440_dist4, archer_category: wa_rcw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist4_rec_jr_w: (set_end_format: r1440_dist4, archer_category: wa_rjw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist4_rec_sr_w: (set_end_format: r1440_dist4, archer_category: wa_rsw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist4_rec_mas_w: (set_end_format: r1440_dist4, archer_category: wa_rmw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist4_rec_cad_m: (set_end_format: r1440_dist4, archer_category: wa_rcm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist4_rec_jr_m: (set_end_format: r1440_dist4, archer_category: wa_rjm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist4_rec_sr_m: (set_end_format: r1440_dist4, archer_category: wa_rsm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist4_rec_mas_m: (set_end_format: r1440_dist4, archer_category: wa_rmm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_1440_dist4_rec_cad_w: {set_end_format: r1440_dist4, archer_category: wa_rcw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist4_rec_jr_w: {set_end_format: r1440_dist4, archer_category: wa_rjw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist4_rec_sr_w: {set_end_format: r1440_dist4, archer_category: wa_rsw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist4_rec_mas_w: {set_end_format: r1440_dist4, archer_category: wa_rmw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist4_rec_cad_m: {set_end_format: r1440_dist4, archer_category: wa_rcm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist4_rec_jr_m: {set_end_format: r1440_dist4, archer_category: wa_rjm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist4_rec_sr_m: {set_end_format: r1440_dist4, archer_category: wa_rsm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist4_rec_mas_m: {set_end_format: r1440_dist4, archer_category: wa_rmm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
 
-            wa_1440_dist4_com_cad_w: (set_end_format: r1440_dist4, archer_category: wa_ccw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist4_com_jr_w: (set_end_format: r1440_dist4, archer_category: wa_cjw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist4_com_sr_w: (set_end_format: r1440_dist4, archer_category: wa_csw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist4_com_mas_w: (set_end_format: r1440_dist4, archer_category: wa_cmw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist4_com_cad_m: (set_end_format: r1440_dist4, archer_category: wa_ccm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist4_com_jr_m: (set_end_format: r1440_dist4, archer_category: wa_cjm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist4_com_sr_m: (set_end_format: r1440_dist4, archer_category: wa_csm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_1440_dist4_com_mas_m: (set_end_format: r1440_dist4, archer_category: wa_cmm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_1440_dist4_com_cad_w: {set_end_format: r1440_dist4, archer_category: wa_ccw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist4_com_jr_w: {set_end_format: r1440_dist4, archer_category: wa_cjw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist4_com_sr_w: {set_end_format: r1440_dist4, archer_category: wa_csw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist4_com_mas_w: {set_end_format: r1440_dist4, archer_category: wa_cmw, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist4_com_cad_m: {set_end_format: r1440_dist4, archer_category: wa_ccm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist4_com_jr_m: {set_end_format: r1440_dist4, archer_category: wa_cjm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist4_com_sr_m: {set_end_format: r1440_dist4, archer_category: wa_csm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_1440_dist4_com_mas_m: {set_end_format: r1440_dist4, archer_category: wa_cmm, distance: "30m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}
+        }
+        wa_1440_dtcs.each do |dtc, attrs|
+            Organization::DistanceTargetCategory.find_or_create_by(attrs)
+        end
 
     # Double 720 Round
+        wa_db720_dtcs = {
         # Set/Distance 1 (repeat 1440 set/dist 2, change round (var and sef), Recurve: Men Jr/Sr & Women Jr/Sr shoot 70m, Men Cad/Mas & Women Cad/Mas shoot 60m, Compound: all shoot 50m, 80cm target (w/alt))
-            wa_db720_dist1_rec_cad_w: (set_end_format: rdb720_dist1, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist1_rec_jr_w: (set_end_format: rdb720_dist1, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist1_rec_sr_w: (set_end_format: rdb720_dist1, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist1_rec_mas_w: (set_end_format: rdb720_dist1, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist1_rec_cad_m: (set_end_format: rdb720_dist1, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist1_rec_jr_m: (set_end_format: rdb720_dist1, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist1_rec_sr_m: (set_end_format: rdb720_dist1, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist1_rec_mas_m: (set_end_format: rdb720_dist1, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_db720_dist1_rec_cad_w: {set_end_format: rdb720_dist1, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist1_rec_jr_w: {set_end_format: rdb720_dist1, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist1_rec_sr_w: {set_end_format: rdb720_dist1, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist1_rec_mas_w: {set_end_format: rdb720_dist1, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist1_rec_cad_m: {set_end_format: rdb720_dist1, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist1_rec_jr_m: {set_end_format: rdb720_dist1, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist1_rec_sr_m: {set_end_format: rdb720_dist1, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist1_rec_mas_m: {set_end_format: rdb720_dist1, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
-            wa_db720_dist1_com_cad_w: (set_end_format: rdb720_dist1, archer_category: wa_ccw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist1_com_jr_w: (set_end_format: rdb720_dist1, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist1_com_sr_w: (set_end_format: rdb720_dist1, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist1_com_mas_w: (set_end_format: rdb720_dist1, archer_category: wa_cmw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist1_com_cad_m: (set_end_format: rdb720_dist1, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist1_com_jr_m: (set_end_format: rdb720_dist1, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist1_com_sr_m: (set_end_format: rdb720_dist1, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist1_com_mas_m: (set_end_format: rdb720_dist1, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_db720_dist1_com_cad_w: {set_end_format: rdb720_dist1, archer_category: wa_ccw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist1_com_jr_w: {set_end_format: rdb720_dist1, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist1_com_sr_w: {set_end_format: rdb720_dist1, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist1_com_mas_w: {set_end_format: rdb720_dist1, archer_category: wa_cmw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist1_com_cad_m: {set_end_format: rdb720_dist1, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist1_com_jr_m: {set_end_format: rdb720_dist1, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist1_com_sr_m: {set_end_format: rdb720_dist1, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist1_com_mas_m: {set_end_format: rdb720_dist1, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
 
         # Set/Distance 2 (repeat Double 720 set/dist 1, change number (var and sef))
-            wa_db720_dist2_rec_cad_w: (set_end_format: rdb720_dist2, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist2_rec_jr_w: (set_end_format: rdb720_dist2, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist2_rec_sr_w: (set_end_format: rdb720_dist2, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist2_rec_mas_w: (set_end_format: rdb720_dist2, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist2_rec_cad_m: (set_end_format: rdb720_dist2, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist2_rec_jr_m: (set_end_format: rdb720_dist2, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist2_rec_sr_m: (set_end_format: rdb720_dist2, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist2_rec_mas_m: (set_end_format: rdb720_dist2, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_db720_dist2_rec_cad_w: {set_end_format: rdb720_dist2, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist2_rec_jr_w: {set_end_format: rdb720_dist2, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist2_rec_sr_w: {set_end_format: rdb720_dist2, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist2_rec_mas_w: {set_end_format: rdb720_dist2, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist2_rec_cad_m: {set_end_format: rdb720_dist2, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist2_rec_jr_m: {set_end_format: rdb720_dist2, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist2_rec_sr_m: {set_end_format: rdb720_dist2, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist2_rec_mas_m: {set_end_format: rdb720_dist2, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
-            wa_db720_dist2_com_cad_w: (set_end_format: rdb720_dist2, archer_category: wa_ccw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist2_com_jr_w: (set_end_format: rdb720_dist2, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist2_com_sr_w: (set_end_format: rdb720_dist2, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist2_com_mas_w: (set_end_format: rdb720_dist2, archer_category: wa_cmw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist2_com_cad_m: (set_end_format: rdb720_dist2, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist2_com_jr_m: (set_end_format: rdb720_dist2, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist2_com_sr_m: (set_end_format: rdb720_dist2, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist2_com_mas_m: (set_end_format: rdb720_dist2, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_db720_dist2_com_cad_w: {set_end_format: rdb720_dist2, archer_category: wa_ccw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist2_com_jr_w: {set_end_format: rdb720_dist2, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist2_com_sr_w: {set_end_format: rdb720_dist2, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist2_com_mas_w: {set_end_format: rdb720_dist2, archer_category: wa_cmw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist2_com_cad_m: {set_end_format: rdb720_dist2, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist2_com_jr_m: {set_end_format: rdb720_dist2, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist2_com_sr_m: {set_end_format: rdb720_dist2, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist2_com_mas_m: {set_end_format: rdb720_dist2, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
 
         # Set/Distance 3 (repeat Double 720 set/dist 1, change number (var and sef))
-            wa_db720_dist3_rec_cad_w: (set_end_format: rdb720_dist3, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist3_rec_jr_w: (set_end_format: rdb720_dist3, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist3_rec_sr_w: (set_end_format: rdb720_dist3, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist3_rec_mas_w: (set_end_format: rdb720_dist3, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist3_rec_cad_m: (set_end_format: rdb720_dist3, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist3_rec_jr_m: (set_end_format: rdb720_dist3, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist3_rec_sr_m: (set_end_format: rdb720_dist3, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist3_rec_mas_m: (set_end_format: rdb720_dist3, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_db720_dist3_rec_cad_w: {set_end_format: rdb720_dist3, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist3_rec_jr_w: {set_end_format: rdb720_dist3, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist3_rec_sr_w: {set_end_format: rdb720_dist3, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist3_rec_mas_w: {set_end_format: rdb720_dist3, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist3_rec_cad_m: {set_end_format: rdb720_dist3, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist3_rec_jr_m: {set_end_format: rdb720_dist3, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist3_rec_sr_m: {set_end_format: rdb720_dist3, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist3_rec_mas_m: {set_end_format: rdb720_dist3, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
-            wa_db720_dist3_com_cad_w: (set_end_format: rdb720_dist3, archer_category: wa_ccw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist3_com_jr_w: (set_end_format: rdb720_dist3, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist3_com_sr_w: (set_end_format: rdb720_dist3, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist3_com_mas_w: (set_end_format: rdb720_dist3, archer_category: wa_cmw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist3_com_cad_m: (set_end_format: rdb720_dist3, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist3_com_jr_m: (set_end_format: rdb720_dist3, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist3_com_sr_m: (set_end_format: rdb720_dist3, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist3_com_mas_m: (set_end_format: rdb720_dist3, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_db720_dist3_com_cad_w: {set_end_format: rdb720_dist3, archer_category: wa_ccw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist3_com_jr_w: {set_end_format: rdb720_dist3, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist3_com_sr_w: {set_end_format: rdb720_dist3, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist3_com_mas_w: {set_end_format: rdb720_dist3, archer_category: wa_cmw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist3_com_cad_m: {set_end_format: rdb720_dist3, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist3_com_jr_m: {set_end_format: rdb720_dist3, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist3_com_sr_m: {set_end_format: rdb720_dist3, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist3_com_mas_m: {set_end_format: rdb720_dist3, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
 
         # Set/Distance 4 (repeat Double 720 set/dist 1, change number (var and sef))
-            wa_db720_dist4_rec_cad_w: (set_end_format: rdb720_dist4, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist4_rec_jr_w: (set_end_format: rdb720_dist4, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist4_rec_sr_w: (set_end_format: rdb720_dist4, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist4_rec_mas_w: (set_end_format: rdb720_dist4, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist4_rec_cad_m: (set_end_format: rdb720_dist4, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist4_rec_jr_m: (set_end_format: rdb720_dist4, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist4_rec_sr_m: (set_end_format: rdb720_dist4, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_db720_dist4_rec_mas_m: (set_end_format: rdb720_dist4, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_db720_dist4_rec_cad_w: {set_end_format: rdb720_dist4, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist4_rec_jr_w: {set_end_format: rdb720_dist4, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist4_rec_sr_w: {set_end_format: rdb720_dist4, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist4_rec_mas_w: {set_end_format: rdb720_dist4, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist4_rec_cad_m: {set_end_format: rdb720_dist4, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist4_rec_jr_m: {set_end_format: rdb720_dist4, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist4_rec_sr_m: {set_end_format: rdb720_dist4, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_db720_dist4_rec_mas_m: {set_end_format: rdb720_dist4, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
-            wa_db720_dist4_com_cad_w: (set_end_format: rdb720_dist4, archer_category: wa_ccw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist4_com_jr_w: (set_end_format: rdb720_dist4, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist4_com_sr_w: (set_end_format: rdb720_dist4, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist4_com_mas_w: (set_end_format: rdb720_dist4, archer_category: wa_cmw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist4_com_cad_m: (set_end_format: rdb720_dist4, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist4_com_jr_m: (set_end_format: rdb720_dist4, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist4_com_sr_m: (set_end_format: rdb720_dist4, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_db720_dist4_com_mas_m: (set_end_format: rdb720_dist4, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-
+            wa_db720_dist4_com_cad_w: {set_end_format: rdb720_dist4, archer_category: wa_ccw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist4_com_jr_w: {set_end_format: rdb720_dist4, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist4_com_sr_w: {set_end_format: rdb720_dist4, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist4_com_mas_w: {set_end_format: rdb720_dist4, archer_category: wa_cmw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist4_com_cad_m: {set_end_format: rdb720_dist4, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist4_com_jr_m: {set_end_format: rdb720_dist4, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist4_com_sr_m: {set_end_format: rdb720_dist4, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_db720_dist4_com_mas_m: {set_end_format: rdb720_dist4, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}
+        }
+        wa_db720_dtcs.each do |dtc, attrs|
+            Organization::DistanceTargetCategory.find_or_create_by(attrs)
+        end
 
     # 720 Round
+        wa_720_dtcs = {
         # Set/Distance 1 (repeat Double 720 set/dist 1, change round (var and sef))
-            wa_720_dist1_rec_cad_w: (set_end_format: r720_dist1, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_720_dist1_rec_jr_w: (set_end_format: r720_dist1, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_720_dist1_rec_sr_w: (set_end_format: r720_dist1, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_720_dist1_rec_mas_w: (set_end_format: r720_dist1, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_720_dist1_rec_cad_m: (set_end_format: r720_dist1, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_720_dist1_rec_jr_m: (set_end_format: r720_dist1, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_720_dist1_rec_sr_m: (set_end_format: r720_dist1, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_720_dist1_rec_mas_m: (set_end_format: r720_dist1, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_720_dist1_rec_cad_w: {set_end_format: r720_dist1, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_720_dist1_rec_jr_w: {set_end_format: r720_dist1, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_720_dist1_rec_sr_w: {set_end_format: r720_dist1, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_720_dist1_rec_mas_w: {set_end_format: r720_dist1, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_720_dist1_rec_cad_m: {set_end_format: r720_dist1, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_720_dist1_rec_jr_m: {set_end_format: r720_dist1, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_720_dist1_rec_sr_m: {set_end_format: r720_dist1, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_720_dist1_rec_mas_m: {set_end_format: r720_dist1, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
-            wa_720_dist1_com_cad_w: (set_end_format: r720_dist1, archer_category: wa_ccw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_720_dist1_com_jr_w: (set_end_format: r720_dist1, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_720_dist1_com_sr_w: (set_end_format: r720_dist1, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_720_dist1_com_mas_w: (set_end_format: r720_dist1, archer_category: wa_cmw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_720_dist1_com_cad_m: (set_end_format: r720_dist1, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_720_dist1_com_jr_m: (set_end_format: r720_dist1, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_720_dist1_com_sr_m: (set_end_format: r720_dist1, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_720_dist1_com_mas_m: (set_end_format: r720_dist1, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_720_dist1_com_cad_w: {set_end_format: r720_dist1, archer_category: wa_ccw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_720_dist1_com_jr_w: {set_end_format: r720_dist1, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_720_dist1_com_sr_w: {set_end_format: r720_dist1, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_720_dist1_com_mas_w: {set_end_format: r720_dist1, archer_category: wa_cmw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_720_dist1_com_cad_m: {set_end_format: r720_dist1, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_720_dist1_com_jr_m: {set_end_format: r720_dist1, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_720_dist1_com_sr_m: {set_end_format: r720_dist1, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_720_dist1_com_mas_m: {set_end_format: r720_dist1, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
 
         # Set/Distance 2 (repeat Double 720 set/dist 2, change round (var and sef))
-            wa_720_dist2_rec_cad_w: (set_end_format: r720_dist2, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_720_dist2_rec_jr_w: (set_end_format: r720_dist2, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_720_dist2_rec_sr_w: (set_end_format: r720_dist2, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_720_dist2_rec_mas_w: (set_end_format: r720_dist2, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_720_dist2_rec_cad_m: (set_end_format: r720_dist2, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_720_dist2_rec_jr_m: (set_end_format: r720_dist2, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_720_dist2_rec_sr_m: (set_end_format: r720_dist2, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil)
-            wa_720_dist2_rec_mas_m: (set_end_format: r720_dist2, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil)
+            wa_720_dist2_rec_cad_w: {set_end_format: r720_dist2, archer_category: wa_rcw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_720_dist2_rec_jr_w: {set_end_format: r720_dist2, archer_category: wa_rjw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_720_dist2_rec_sr_w: {set_end_format: r720_dist2, archer_category: wa_rsw, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_720_dist2_rec_mas_w: {set_end_format: r720_dist2, archer_category: wa_rmw, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_720_dist2_rec_cad_m: {set_end_format: r720_dist2, archer_category: wa_rcm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_720_dist2_rec_jr_m: {set_end_format: r720_dist2, archer_category: wa_rjm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_720_dist2_rec_sr_m: {set_end_format: r720_dist2, archer_category: wa_rsm, distance: "70m", target: t122cm_1spot_10ring, alt_target: nil}, 
+            wa_720_dist2_rec_mas_m: {set_end_format: r720_dist2, archer_category: wa_rmm, distance: "60m", target: t122cm_1spot_10ring, alt_target: nil}, 
 
-            wa_720_dist2_com_cad_w: (set_end_format: r720_dist2, archer_category: wa_ccw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_720_dist2_com_jr_w: (set_end_format: r720_dist2, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_720_dist2_com_sr_w: (set_end_format: r720_dist2, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_720_dist2_com_mas_w: (set_end_format: r720_dist2, archer_category: wa_cmw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_720_dist2_com_cad_m: (set_end_format: r720_dist2, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_720_dist2_com_jr_m: (set_end_format: r720_dist2, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_720_dist2_com_sr_m: (set_end_format: r720_dist2, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
-            wa_720_dist2_com_mas_m: (set_end_format: r720_dist2, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring)
+            wa_720_dist2_com_cad_w: {set_end_format: r720_dist2, archer_category: wa_ccw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_720_dist2_com_jr_w: {set_end_format: r720_dist2, archer_category: wa_cjw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_720_dist2_com_sr_w: {set_end_format: r720_dist2, archer_category: wa_csw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_720_dist2_com_mas_w: {set_end_format: r720_dist2, archer_category: wa_cmw, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_720_dist2_com_cad_m: {set_end_format: r720_dist2, archer_category: wa_ccm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_720_dist2_com_jr_m: {set_end_format: r720_dist2, archer_category: wa_cjm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_720_dist2_com_sr_m: {set_end_format: r720_dist2, archer_category: wa_csm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}, 
+            wa_720_dist2_com_mas_m: {set_end_format: r720_dist2, archer_category: wa_cmm, distance: "50m", target: t80cm_1spot_10ring, alt_target: t80cm_1spot_6ring}
+        }
+        wa_720_dtcs.each do |dtc, attrs|
+            Organization::DistanceTargetCategory.find_or_create_by(attrs)
+        end
 
 
 # ##########################################################
