@@ -5,6 +5,7 @@ class Organization::GovBody < ApplicationRecord
     has_many :divisions, through: :archer_categories
     has_many :age_classes, through: :archer_categories
     has_many :genders, through: :archer_categories
+    has_many :score_sessions
 
     # all attrs - :name, :org_type, :geo_area
     

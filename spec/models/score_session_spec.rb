@@ -16,7 +16,8 @@ RSpec.describe ScoreSession, type: :model do
         end_date: "2010-09-05", 
         rank: "1st", 
         active: true, 
-        archer_id: 1
+        archer_id: 1, 
+        gov_body_id: 1
         }
     }
     
@@ -30,24 +31,24 @@ RSpec.describe ScoreSession, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:test_req) {
-        {name: "2010 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", archer_id: 1}
+        {name: "2010 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", archer_id: 1, gov_body_id: 1}
     }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "2010 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", active: true, archer_id: 1}
+        {name: "2010 World Cup", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", active: true, archer_id: 1, gov_body_id: 1}
     }
     
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {name: "2000 Pan Am Trials", score_session_type: "Competition", city: "Chula Vista", state: "CA", country: "CAN", start_date: "2000-09-01", end_date: "", rank: "3rd", active: false, archer_id: 1}
+        {name: "2000 Pan Am Trials", score_session_type: "Competition", city: "Chula Vista", state: "CA", country: "CAN", start_date: "2000-09-01", end_date: "", rank: "3rd", active: false, archer_id: 1, gov_body_id: 1}
     }
 
     # every attr blank
     let(:blank) {
-        {name: "", score_session_type: "", city: "", state: "", country: "", start_date: "", end_date: "", rank: "", active: "", archer_id: 1}
+        {name: "", score_session_type: "", city: "", state: "", country: "", start_date: "", end_date: "", rank: "", active: "", archer_id: 1, gov_body_id: 1}
     }
   
     # ###################################################################
@@ -220,7 +221,7 @@ RSpec.describe ScoreSession, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            valid_archer
+            before_score_session
             valid_set_end_format
             valid_target
         end
@@ -310,6 +311,16 @@ RSpec.describe ScoreSession, type: :model do
                 
                 expect(score_session.shots).to include(check_shot)
                 expect(score_session.shots.last.score_entry).to eq(check_shot.score_entry)
+            end
+        end
+
+        describe "belongs to a GovBody and" do
+            before(:each) do
+                before_shot
+            end
+
+            it "can find an associated object" do
+                expect(valid_score_session.gov_body).to eq(valid_gov_body)
             end
         end
     end

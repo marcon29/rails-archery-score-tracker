@@ -4,6 +4,7 @@ class ScoreSession < ApplicationRecord
     has_many :ends
     has_many :shots
     belongs_to :archer
+    belongs_to :gov_body, class_name: "Organization::GovBody"
     
     # assoc attrs - :archer_id
     # data/user attrs - :name :score_session_type :city :state :country :start_date :end_date :rank :active

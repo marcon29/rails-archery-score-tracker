@@ -100,6 +100,7 @@ end
 def before_score_session
   before_archer
   valid_archer
+  valid_gov_body
 end
 
 def before_round
@@ -238,7 +239,8 @@ def valid_score_session
     end_date: "2020-09-05", 
     rank: "1st", 
     active: true, 
-    archer: valid_archer
+    archer: valid_archer,
+    gov_body: valid_gov_body
   )
 end
 

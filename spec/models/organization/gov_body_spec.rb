@@ -166,5 +166,11 @@ RSpec.describe Organization::GovBody, type: :model do
                 expect(valid_gender_alt.gov_bodies).to include(@gov_body)
             end
         end
+
+        describe "has many ScoreSessions" do
+            it "find an associated object" do
+                expect(valid_gov_body.score_sessions).to include(valid_score_session)
+            end
+        end
     end
 end
