@@ -315,10 +315,6 @@ RSpec.describe ScoreSession, type: :model do
         end
 
         describe "belongs to a GovBody and" do
-            before(:each) do
-                before_shot
-            end
-
             it "can find an associated object" do
                 expect(valid_score_session.gov_body).to eq(valid_gov_body)
             end

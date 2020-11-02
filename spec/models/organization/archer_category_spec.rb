@@ -184,6 +184,12 @@ RSpec.describe Organization::ArcherCategory, type: :model do
                 expect(valid_category.distance_target_categories).to include(valid_dist_targ_cat)
             end
         end
+
+        describe "has many Rounds and" do
+            it "can find an associated object" do
+                expect(valid_archer_category.rounds).to include(valid_round)
+            end
+        end
     end
 
     # helper method tests ########################################################

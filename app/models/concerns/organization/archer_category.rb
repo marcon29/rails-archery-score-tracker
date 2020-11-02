@@ -4,6 +4,7 @@ class Organization::ArcherCategory < ApplicationRecord
     belongs_to :age_class
     belongs_to :gender
     has_many :distance_target_categories
+    has_many :rounds
 
     # assoc attrs - :gov_body_id, :discipline_id, :division_id, :age_class_id, :gender_id
     # data attrs - :cat_code

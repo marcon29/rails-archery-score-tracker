@@ -5,6 +5,7 @@ class Round < ApplicationRecord
     belongs_to :archer
     belongs_to :score_session
     belongs_to :round_format, class_name: "Format::RoundFormat"
+    belongs_to :archer_category, class_name: "Organization::ArcherCategory"
 
     # has_one :archer_category, through: :archer
     # has_one :discipline, division, age_class, through: :archer_category

@@ -13,7 +13,8 @@ RSpec.describe Round, type: :model do
             rank: "1st", 
             archer_id: 1, 
             score_session_id: 1, 
-            round_format_id: 1
+            round_format_id: 1, 
+            archer_category_id: 1
         }
     }
 
@@ -27,24 +28,24 @@ RSpec.describe Round, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:test_req) {
-        {round_type: "Qualifying", score_method: "Points", archer_id: 1, score_session_id: 1, round_format_id: 1}
+        {round_type: "Qualifying", score_method: "Points", archer_id: 1, score_session_id: 1, round_format_id: 1, archer_category_id: 1}
     }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "2020 World Cup - Double 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 1, score_session_id: 1, round_format_id: 1}
+        {name: "2020 World Cup - Double 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 1, score_session_id: 1, round_format_id: 1, archer_category_id: 1}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {name: "", round_type: "Match", score_method: "Set", rank: "Win", archer_id: 1, score_session_id: 1, round_format_id: 1}
+        {name: "", round_type: "Match", score_method: "Set", rank: "Win", archer_id: 1, score_session_id: 1, round_format_id: 1, archer_category_id: 1}
     }
 
     # every attr blank
     let(:blank) {
-        {name: "", round_type: "", score_method: "", rank: "", archer_id: 1, score_session_id: 1, round_format_id: 1}
+        {name: "", round_type: "", score_method: "", rank: "", archer_id: 1, score_session_id: 1, round_format_id: 1, archer_category_id: 1}
     }
   
     # ###################################################################
@@ -327,12 +328,13 @@ RSpec.describe Round, type: :model do
             end
         end
 
-        describe "sectioning off for Organization concern" do
-            it "has one ArcherCategory" do
-                pending "need to create associated models and add associations"
-                expect(test_round.archer_category).to eq(valid_category)
+        describe "belongs to an ArcherCategory and" do
+            it "can find an associated object" do
+                expect(valid_round.archer_category).to eq(valid_category)
             end
+        end
 
+        describe "sectioning off for Organization concern" do
             it "has one Discipline" do
                 pending "need to create associated models and add associations"
                 expect(test_round.discipline).to eq(valid_discipline)

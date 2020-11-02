@@ -106,6 +106,7 @@ end
 def before_round
   before_score_session
   valid_score_session
+  # valid_category
 end
 
 def before_rset
@@ -245,7 +246,7 @@ def valid_score_session
 end
 
 def valid_round
-  Round.find_or_create_by(name: "2020 World Cup - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session, round_format: valid_round_format)
+  Round.find_or_create_by(name: "2020 World Cup - 1440 Round", round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session, round_format: valid_round_format, archer_category: valid_category)
 end
 
 def valid_rset

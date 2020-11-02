@@ -120,7 +120,7 @@ RSpec.describe Rset, type: :model do
                 other_set_end_format = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: second_round_format)
 
                 # need second round
-                second_round = Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session, round_format: second_round_format)
+                second_round = Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "1st", archer: valid_archer, score_session: valid_score_session, round_format: second_round_format, archer_category: valid_category)
                 expect(Round.all.count).to eq(2)
                 expect(Rset.all.count).to eq(1)
 
