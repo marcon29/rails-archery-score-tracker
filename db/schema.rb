@@ -43,10 +43,10 @@ ActiveRecord::Schema.define(version: 2020_11_02_034753) do
   create_table "format_round_formats", force: :cascade do |t|
     t.string "name"
     t.integer "num_sets"
+    t.integer "discipline_id"
     t.boolean "user_edit", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "discipline_id"
     t.index ["discipline_id"], name: "index_format_round_formats_on_discipline_id"
   end
 
@@ -110,9 +110,9 @@ ActiveRecord::Schema.define(version: 2020_11_02_034753) do
     t.string "distance"
     t.integer "target_id"
     t.integer "alt_target_id"
-    t.index ["alt_target_id"], name: "index_organization_dist_targ_cats_on_alt_target_id"
     t.index ["set_end_format_id"], name: "index_organization_dist_targ_cats_on_set_end_format_id"
     t.index ["target_id"], name: "index_organization_dist_targ_cats_on_target_id"
+    t.index ["alt_target_id"], name: "index_organization_dist_targ_cats_on_alt_target_id"
   end
 
   create_table "organization_divisions", force: :cascade do |t|
@@ -143,11 +143,11 @@ ActiveRecord::Schema.define(version: 2020_11_02_034753) do
     t.integer "archer_id"
     t.integer "score_session_id"
     t.integer "round_format_id"
+    t.integer "archer_category_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "archer_category_id"
-    t.index ["archer_category_id"], name: "index_rounds_on_archer_category_id"
     t.index ["round_format_id"], name: "index_rounds_on_round_format_id"
+    t.index ["archer_category_id"], name: "index_rounds_on_archer_category_id"
   end
 
   create_table "rsets", force: :cascade do |t|
@@ -158,11 +158,11 @@ ActiveRecord::Schema.define(version: 2020_11_02_034753) do
     t.integer "score_session_id"
     t.integer "round_id"
     t.integer "set_end_format_id"
+    t.integer "distance_target_category_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "distance_target_category_id"
-    t.index ["distance_target_category_id"], name: "index_rsets_on_distance_target_category_id"
     t.index ["set_end_format_id"], name: "index_rsets_on_set_end_format_id"
+    t.index ["distance_target_category_id"], name: "index_rsets_on_distance_target_category_id"
   end
 
   create_table "score_sessions", force: :cascade do |t|
@@ -175,10 +175,10 @@ ActiveRecord::Schema.define(version: 2020_11_02_034753) do
     t.date "end_date"
     t.string "rank"
     t.integer "archer_id"
+    t.integer "gov_body_id"
     t.boolean "active", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "gov_body_id"
     t.index ["gov_body_id"], name: "index_score_sessions_on_gov_body_id"
   end
 

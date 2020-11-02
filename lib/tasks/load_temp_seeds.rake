@@ -60,8 +60,8 @@ task load_archers: :environment do
       username: "testuser#{count}", 
       email: "testuser#{count}@example.com", 
       password_digest: "test", 
-      first_name: "test#{count}", 
-      last_name: "user#{count}", 
+	  first_name: get_div(c).last, 
+      last_name: get_details(c).last, 
       birthdate: get_details(c).first, 
       gender: get_gender(c), 
       home_city: get_details(c).last, 
@@ -71,81 +71,88 @@ task load_archers: :environment do
 	  default_division: get_div(c).last
     )
   end
+  Archer.all.each { |a| a.update(password: "test") }
 end
 
 desc "Load Score Session Seeds"
 task load_score_sessions: :environment do
 	# these create an active 2020 World Cup for each Senior Recurve & Compound Archer
-	ScoreSession.find_or_create_by(name: "2020 World Cup", score_session_type: "Tournament", city: "Chula Vista", state: "CA", country: "USA", start_date: "2020-09-01", end_date: "", rank: "", archer_id: 5, active: true)
-	ScoreSession.find_or_create_by(name: "2020 World Cup", score_session_type: "Tournament", city: "Chula Vista", state: "CA", country: "USA", start_date: "2020-09-01", end_date: "", rank: "", archer_id: 13, active: true)
-	ScoreSession.find_or_create_by(name: "2020 World Cup", score_session_type: "Tournament", city: "Chula Vista", state: "CA", country: "USA", start_date: "2020-09-01", end_date: "", rank: "", archer_id: 21, active: true)
-	ScoreSession.find_or_create_by(name: "2020 World Cup", score_session_type: "Tournament", city: "Chula Vista", state: "CA", country: "USA", start_date: "2020-09-01", end_date: "", rank: "", archer_id: 29, active: true)
+	ScoreSession.find_or_create_by(name: "2020 World Cup", score_session_type: "Tournament", city: "Chula Vista", state: "CA", country: "USA", start_date: "2020-09-01", end_date: "", rank: "", archer_id: 5, gov_body_id: 1, active: true)
+	ScoreSession.find_or_create_by(name: "2020 World Cup", score_session_type: "Tournament", city: "Chula Vista", state: "CA", country: "USA", start_date: "2020-09-01", end_date: "", rank: "", archer_id: 13, gov_body_id: 1, active: true)
+	ScoreSession.find_or_create_by(name: "2020 World Cup", score_session_type: "Tournament", city: "Chula Vista", state: "CA", country: "USA", start_date: "2020-09-01", end_date: "", rank: "", archer_id: 21, gov_body_id: 1, active: true)
+	ScoreSession.find_or_create_by(name: "2020 World Cup", score_session_type: "Tournament", city: "Chula Vista", state: "CA", country: "USA", start_date: "2020-09-01", end_date: "", rank: "", archer_id: 29, gov_body_id: 1, active: true)
 
 	# these create an inactive 2010 US Nationals for each Junior Recurve & Compound Archer
-	ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", archer_id: 4, active: false)
-	ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", archer_id: 12, active: false)
-	ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", archer_id: 20, active: false)
-	ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", archer_id: 28, active: false)
+	ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", archer_id: 4, gov_body_id: 1, active: false)
+	ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", archer_id: 12, gov_body_id: 1, active: false)
+	ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", archer_id: 20, gov_body_id: 1, active: false)
+	ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", archer_id: 28, gov_body_id: 1, active: false)
+
+	# these are set up for USA Archery when adding that in
+	# ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", archer_id: 4, gov_body_id: 2, active: false)
+	# ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", archer_id: 12, gov_body_id: 2, active: false)
+	# ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", archer_id: 20, gov_body_id: 2, active: false)
+	# ScoreSession.find_or_create_by(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", archer_id: 28, gov_body_id: 2, active: false)
 end
 
 desc "Load Qualifying Round Seeds"
 task load_qualifying_rounds: :environment do
 	# these create a 720 Round for the 2020 World Cup for each Senior Archer
-	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "", archer_id: 5, score_session_id: 1, round_format_id: 4)
-	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "", archer_id: 13, score_session_id: 2, round_format_id: 4)
-	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "", archer_id: 21, score_session_id: 3, round_format_id: 4)
-	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "", archer_id: 29, score_session_id: 4, round_format_id: 4)
+	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "", archer_id: 5, score_session_id: 1, round_format_id: 4, archer_category_id: 3)
+	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "", archer_id: 13, score_session_id: 2, round_format_id: 4, archer_category_id: 7)
+	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "", archer_id: 21, score_session_id: 3, round_format_id: 4, archer_category_id: 11)
+	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "", archer_id: 29, score_session_id: 4, round_format_id: 4, archer_category_id: 15)
 
 	# these create a 1440 Round for the 2010 US Nationals for each Junior Archer
-	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 4, score_session_id: 5, round_format_id: 2)
-	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 12, score_session_id: 6, round_format_id: 2)
-	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 20, score_session_id: 7, round_format_id: 2)
-	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 28, score_session_id: 8, round_format_id: 2)
+	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 4, score_session_id: 5, round_format_id: 2, archer_category_id: 2)
+	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 12, score_session_id: 6, round_format_id: 2, archer_category_id: 6)
+	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 20, score_session_id: 7, round_format_id: 2, archer_category_id: 10)
+	Round.find_or_create_by(round_type: "Qualifying", score_method: "Points", rank: "1st", archer_id: 28, score_session_id: 8, round_format_id: 2, archer_category_id: 14)
 end
 
 # desc "Load Match Round Seeds"
 # task load_match_rounds: :environment do
 # 	# these need to be revisited after working out Match Round Rules
-# 	Round.find_or_create_by(name: "1/16 Match", round_type: "Match", score_method: "Set", rank: "", archer_id: 5, score_session_id: 1, round_format_id: "")
-# 	Round.find_or_create_by(name: "1/16 Match", round_type: "Match", score_method: "Set", rank: "", archer_id: 13, score_session_id: 2, round_format_id: "")
+# 	Round.find_or_create_by(name: "1/16 Match", round_type: "Match", score_method: "Set", rank: "", archer_id: 5, score_session_id: 1, round_format_id: "", archer_category_id: "")
+# 	Round.find_or_create_by(name: "1/16 Match", round_type: "Match", score_method: "Set", rank: "", archer_id: 13, score_session_id: 2, round_format_id: "", archer_category_id: "")
 # end
 
 desc "Load Qualifying Set Seeds"
 task load_qualifying_rsets: :environment do
 	# these create both Rsets for each 720 Round for the 2020 World Cup for each Senior Archer
-	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 5, score_session_id: 1, round_id: 1, set_end_format_id: 17)
-	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 5, score_session_id: 1, round_id: 1, set_end_format_id: 18)
+	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 5, score_session_id: 1, round_id: 1, set_end_format_id: 17, distance_target_category_id: 259)
+	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 5, score_session_id: 1, round_id: 1, set_end_format_id: 18, distance_target_category_id: 275)
 
-	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 13, score_session_id: 2, round_id: 2, set_end_format_id: 17)
-	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 13, score_session_id: 2, round_id: 2, set_end_format_id: 18)
+	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 13, score_session_id: 2, round_id: 2, set_end_format_id: 17, distance_target_category_id: 263)
+	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 13, score_session_id: 2, round_id: 2, set_end_format_id: 18, distance_target_category_id: 279)
 
-	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 21, score_session_id: 3, round_id: 3, set_end_format_id: 17)
-	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 21, score_session_id: 3, round_id: 3, set_end_format_id: 18)
+	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 21, score_session_id: 3, round_id: 3, set_end_format_id: 17, distance_target_category_id: 267)
+	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 21, score_session_id: 3, round_id: 3, set_end_format_id: 18, distance_target_category_id: 283)
 
-	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 29, score_session_id: 4, round_id: 4, set_end_format_id: 17)
-	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 29, score_session_id: 4, round_id: 4, set_end_format_id: 18)
+	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 29, score_session_id: 4, round_id: 4, set_end_format_id: 17, distance_target_category_id: 271)
+	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 29, score_session_id: 4, round_id: 4, set_end_format_id: 18, distance_target_category_id: 287)
 
 
 	# these create all 4 Rsets for each 1440 Round for the 2010 US Nationals for each Junior Archer
-	Rset.find_or_create_by(date: "2010-09-01", rank: "1st", archer_id: 4, score_session_id: 5, round_id: 5, set_end_format_id: 9)
-	Rset.find_or_create_by(date: "2010-09-02", rank: "1st", archer_id: 4, score_session_id: 5, round_id: 5, set_end_format_id: 10)
-	Rset.find_or_create_by(date: "2010-09-03", rank: "1st", archer_id: 4, score_session_id: 5, round_id: 5, set_end_format_id: 11)
-	Rset.find_or_create_by(date: "2010-09-04", rank: "1st", archer_id: 4, score_session_id: 5, round_id: 5, set_end_format_id: 12)
+	Rset.find_or_create_by(date: "2010-09-01", rank: "1st", archer_id: 4, score_session_id: 5, round_id: 5, set_end_format_id: 9, distance_target_category_id: 130)
+	Rset.find_or_create_by(date: "2010-09-02", rank: "1st", archer_id: 4, score_session_id: 5, round_id: 5, set_end_format_id: 10, distance_target_category_id: 146)
+	Rset.find_or_create_by(date: "2010-09-03", rank: "1st", archer_id: 4, score_session_id: 5, round_id: 5, set_end_format_id: 11, distance_target_category_id: 162)
+	Rset.find_or_create_by(date: "2010-09-04", rank: "1st", archer_id: 4, score_session_id: 5, round_id: 5, set_end_format_id: 12, distance_target_category_id: 178)
 
-	Rset.find_or_create_by(date: "2010-09-01", rank: "1st", archer_id: 12, score_session_id: 6, round_id: 6, set_end_format_id: 9)
-	Rset.find_or_create_by(date: "2010-09-02", rank: "1st", archer_id: 12, score_session_id: 6, round_id: 6, set_end_format_id: 10)
-	Rset.find_or_create_by(date: "2010-09-03", rank: "1st", archer_id: 12, score_session_id: 6, round_id: 6, set_end_format_id: 11)
-	Rset.find_or_create_by(date: "2010-09-04", rank: "1st", archer_id: 12, score_session_id: 6, round_id: 6, set_end_format_id: 12)
+	Rset.find_or_create_by(date: "2010-09-01", rank: "1st", archer_id: 12, score_session_id: 6, round_id: 6, set_end_format_id: 9, distance_target_category_id: 134)
+	Rset.find_or_create_by(date: "2010-09-02", rank: "1st", archer_id: 12, score_session_id: 6, round_id: 6, set_end_format_id: 10, distance_target_category_id: 150)
+	Rset.find_or_create_by(date: "2010-09-03", rank: "1st", archer_id: 12, score_session_id: 6, round_id: 6, set_end_format_id: 11, distance_target_category_id: 166)
+	Rset.find_or_create_by(date: "2010-09-04", rank: "1st", archer_id: 12, score_session_id: 6, round_id: 6, set_end_format_id: 12, distance_target_category_id: 182)
 	
-	Rset.find_or_create_by(date: "2010-09-01", rank: "1st", archer_id: 20, score_session_id: 7, round_id: 7, set_end_format_id: 9)
-	Rset.find_or_create_by(date: "2010-09-02", rank: "1st", archer_id: 20, score_session_id: 7, round_id: 7, set_end_format_id: 10)
-	Rset.find_or_create_by(date: "2010-09-03", rank: "1st", archer_id: 20, score_session_id: 7, round_id: 7, set_end_format_id: 11)
-	Rset.find_or_create_by(date: "2010-09-04", rank: "1st", archer_id: 20, score_session_id: 7, round_id: 7, set_end_format_id: 12)
+	Rset.find_or_create_by(date: "2010-09-01", rank: "1st", archer_id: 20, score_session_id: 7, round_id: 7, set_end_format_id: 9, distance_target_category_id: 138)
+	Rset.find_or_create_by(date: "2010-09-02", rank: "1st", archer_id: 20, score_session_id: 7, round_id: 7, set_end_format_id: 10, distance_target_category_id: 154)
+	Rset.find_or_create_by(date: "2010-09-03", rank: "1st", archer_id: 20, score_session_id: 7, round_id: 7, set_end_format_id: 11, distance_target_category_id: 170)
+	Rset.find_or_create_by(date: "2010-09-04", rank: "1st", archer_id: 20, score_session_id: 7, round_id: 7, set_end_format_id: 12, distance_target_category_id: 186)
 	
-	Rset.find_or_create_by(date: "2010-09-01", rank: "1st", archer_id: 28, score_session_id: 8, round_id: 8, set_end_format_id: 9)
-	Rset.find_or_create_by(date: "2010-09-02", rank: "1st", archer_id: 28, score_session_id: 8, round_id: 8, set_end_format_id: 10)
-	Rset.find_or_create_by(date: "2010-09-03", rank: "1st", archer_id: 28, score_session_id: 8, round_id: 8, set_end_format_id: 11)
-	Rset.find_or_create_by(date: "2010-09-04", rank: "1st", archer_id: 28, score_session_id: 8, round_id: 8, set_end_format_id: 12)
+	Rset.find_or_create_by(date: "2010-09-01", rank: "1st", archer_id: 28, score_session_id: 8, round_id: 8, set_end_format_id: 9, distance_target_category_id: 142)
+	Rset.find_or_create_by(date: "2010-09-02", rank: "1st", archer_id: 28, score_session_id: 8, round_id: 8, set_end_format_id: 10, distance_target_category_id: 158)
+	Rset.find_or_create_by(date: "2010-09-03", rank: "1st", archer_id: 28, score_session_id: 8, round_id: 8, set_end_format_id: 11, distance_target_category_id: 174)
+	Rset.find_or_create_by(date: "2010-09-04", rank: "1st", archer_id: 28, score_session_id: 8, round_id: 8, set_end_format_id: 12, distance_target_category_id: 190)
 end
 
 # desc "Load Match Set Seeds"
