@@ -6,9 +6,6 @@ class Round < ApplicationRecord
     belongs_to :score_session
     belongs_to :round_format, class_name: "Format::RoundFormat"
     belongs_to :archer_category, class_name: "Organization::ArcherCategory"
-
-    # has_one :archer_category, through: :archer
-    # has_one :discipline, division, age_class, through: :archer_category
     
     # assoc attrs - :archer_id, :score_session_id, :round_format_id
     # data attrs - :name, :round_type, :score_method, :rank
@@ -29,12 +26,6 @@ class Round < ApplicationRecord
         inclusion: { in: SCORE_METHODS }
     validate :check_associations, :check_and_assign_rank
     before_validation :assign_name
-    
-    
-    # keeping this until I'm sure the discipline association works
-    # validates :discipline, 
-    #     presence: { message: "You must choose a discipline." }, 
-    #     inclusion: { in: DISCIPLINES }
 
 
     # ##### helpers (callbacks & validations)
@@ -54,46 +45,36 @@ class Round < ApplicationRecord
     end
 
     # ##### helpers (data control)
+    def gov_body
+        self.score_session.gov_body
+    end
+    
+    def discipline
+        self.round_format.discipline
+    end
+    
+    def division
+        self.archer_category.division
+    end
+    
+    def age_class
+        self.archer_category.age_class
+    end
+
+    def gender
+        Organization::Gender.where(name: self.archer.gender).first
+    end
+
     def score
         self.rsets.collect { |rset| rset.score }.sum
     end
-
-
-    # get archer category
-        # need to know:
-        # take input of Division and AgeClass
-    #     Organization::ArcherCategory
-    #         .where(gov_body: Organization::GovBody.where(name: round.score_session.gov_body
-            
-    #         .where(division: Organization::Division.where(name: "Recurve"
-    #         .where(age_class: Organization::AgeClass.where(name: "Senior"
-    #         .where(gender: Organization::Gender.where(name: round.archer.gender) )
-
-    #     Organization::ArcherCategory.where(division: Organization::Division.where(name: "Recurve")).where(age_class: Organization::AgeClass.where(name: "Senior")).where(gender: Organization::Gender.where(name: "Male"))
-    # # nice to know
-    #     .where(discipline: Organization::Discipline.where(name: round.round_format.discipline
-
-    # ############ to do after Org concern is done ################
-    # helping Rset get distance_target_category
-        # use age (from Archer) to find AgeClass
-        # use Division (from Self), AgeClass (calc) and Gender (from Archer) to find ArcherCategory
-        # Rset will use found ArcherCategory to get distance and Target
-        # method for logic belongs in ArcherCategory (class method), call here and pass in args: ArcherCategory.category_from_div_age_gen
-
-        # ##########################
-        # check out ArcherCategory (model and specs) for ideas and started code
-
-        # ########### to set category by selections from setting up Round ###############
-        # returns a category by division, age_class & gender
-            # originally from archer_category
-        # def self.default(division, age_class, gender)
-            # self.where("max_age >=?", age).where("min_age <=?", age).where(cat_gender: gender, cat_division: division)
-            # finds division by name (only input at Round)
-            # finds age_class by name
-            # finds gender by name
-        # end
-
-        
-
-
+    
+    # method for logic belongs in ArcherCategory??? (class method), call here and pass in args: ArcherCategory.category_from_div_age_gen
+    def find_category_by_div_age_class(division: division, age_class: age_class)
+        Organization::ArcherCategory
+            .where(gov_body: self.gov_body)
+            .where(division: Organization::Division.where(name: division))
+            .where(age_class: Organization::AgeClass.where(name: age_class))
+            .where(gender: self.gender).first
+    end
 end

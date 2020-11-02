@@ -334,80 +334,101 @@ RSpec.describe Round, type: :model do
             end
         end
 
-        describe "sectioning off for Organization concern" do
-            it "has one Discipline" do
-                pending "need to create associated models and add associations"
-                expect(test_round.discipline).to eq(valid_discipline)
-            end
-
-            it "has one Division" do
-                pending "need to create associated models and add associations"
-                expect(test_round.division).to eq(valid_division)
-            end
-
-            it "has one Age Class" do
-                pending "need to create associated models and add associations"
-                expect(test_round.age_class).to eq(valid_age_class)
-            end
-        end
+        
     end
 
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
-        it "can calculate the total score for a round" do
-            before_shot
-            Round.destroy_all
-            Rset.destroy_all
-            End.destroy_all
-            Shot.destroy_all
-
-            round = Round.create(test_req)
-            expect(Round.all.count).to eq(1)
-            expect(Rset.all.count).to eq(0)
-            expect(End.all.count).to eq(0)
-            expect(Shot.all.count).to eq(0)
-
-            second_set_end_format = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
-            first_rset = Rset.create(date: "2020-09-01", archer_id: 1, score_session_id: 1, round: round, set_end_format: valid_set_end_format, distance_target_category: valid_dist_targ_cat)
-            second_rset = Rset.create(date: "2020-09-01", archer_id: 1, score_session_id: 1, round: round, set_end_format: second_set_end_format, distance_target_category: valid_dist_targ_cat)
-            expect(Rset.all.count).to eq(2)
-            expect(round.rsets.count).to eq(2)
+        describe "methods primarily for getting associated object data" do
+            before(:each) do
+                before_shot
+            end
             
-            # set up first Rset
-            first_end = End.create(archer_id: 1, score_session_id: 1, round: round, rset: first_rset)
-            second_end = End.create(archer_id: 1, score_session_id: 1, round: round, rset: first_rset)
-            expect(End.all.count).to eq(2)
-            expect(first_rset.ends.count).to eq(2)
-            expect(round.ends.count).to eq(2)
+            it "can find the gov_body for the ScoreSession" do
+                expect(test_round.gov_body).to eq(valid_gov_body)
+            end
 
-            Shot.create(score_entry: "X", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: first_end)
-            Shot.create(score_entry: "10", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: first_end)
-            Shot.create(score_entry: "M", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: first_end)
-            Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: second_end)
-            Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: second_end)
-            Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: second_end)
-            expect(Shot.all.count).to eq(6)
-            expect(first_rset.shots.count).to eq(6)
-            expect(round.shots.count).to eq(6)
+            it "can find the Discipline for the Round" do
+                expect(test_round.discipline).to eq(valid_discipline)
+            end
 
-            # set up second Rset
-            third_end = End.create(archer_id: 1, score_session_id: 1, round: round, rset: second_rset)
-            fourth_end = End.create(archer_id: 1, score_session_id: 1, round: round, rset: second_rset)
-            expect(End.all.count).to eq(4)
-            expect(second_rset.ends.count).to eq(2)
-            expect(round.ends.count).to eq(4)
+            it "can find the Division for the Round" do
+                expect(test_round.division).to eq(valid_division)
+            end
 
-            Shot.create(score_entry: "X", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: third_end)
-            Shot.create(score_entry: "10", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: third_end)
-            Shot.create(score_entry: "M", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: third_end)
-            Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: fourth_end)
-            Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: fourth_end)
-            Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: fourth_end)
-            expect(Shot.all.count).to eq(12)
-            expect(second_rset.shots.count).to eq(6)
-            expect(round.shots.count).to eq(12)
+            it "can find the AgeClass for the Round" do
+                expect(test_round.age_class).to eq(valid_age_class)
+            end
 
-            expect(round.score).to eq(70)
+            it "can find the Gender for the Archer that the Round belongs to" do
+                expect(test_round.gender).to eq(valid_gender)
+            end
+        end
+
+        describe "methods primarily for getting useful data" do
+            it "can calculate the total score for a round" do
+                before_shot
+                Round.destroy_all
+                Rset.destroy_all
+                End.destroy_all
+                Shot.destroy_all
+
+                round = Round.create(test_req)
+                expect(Round.all.count).to eq(1)
+                expect(Rset.all.count).to eq(0)
+                expect(End.all.count).to eq(0)
+                expect(Shot.all.count).to eq(0)
+
+                second_set_end_format = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
+                first_rset = Rset.create(date: "2020-09-01", archer_id: 1, score_session_id: 1, round: round, set_end_format: valid_set_end_format, distance_target_category: valid_dist_targ_cat)
+                second_rset = Rset.create(date: "2020-09-01", archer_id: 1, score_session_id: 1, round: round, set_end_format: second_set_end_format, distance_target_category: valid_dist_targ_cat)
+                expect(Rset.all.count).to eq(2)
+                expect(round.rsets.count).to eq(2)
+                
+                # set up first Rset
+                first_end = End.create(archer_id: 1, score_session_id: 1, round: round, rset: first_rset)
+                second_end = End.create(archer_id: 1, score_session_id: 1, round: round, rset: first_rset)
+                expect(End.all.count).to eq(2)
+                expect(first_rset.ends.count).to eq(2)
+                expect(round.ends.count).to eq(2)
+
+                Shot.create(score_entry: "X", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: first_end)
+                Shot.create(score_entry: "10", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: first_end)
+                Shot.create(score_entry: "M", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: first_end)
+                Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: second_end)
+                Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: second_end)
+                Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: first_rset, end: second_end)
+                expect(Shot.all.count).to eq(6)
+                expect(first_rset.shots.count).to eq(6)
+                expect(round.shots.count).to eq(6)
+
+                # set up second Rset
+                third_end = End.create(archer_id: 1, score_session_id: 1, round: round, rset: second_rset)
+                fourth_end = End.create(archer_id: 1, score_session_id: 1, round: round, rset: second_rset)
+                expect(End.all.count).to eq(4)
+                expect(second_rset.ends.count).to eq(2)
+                expect(round.ends.count).to eq(4)
+
+                Shot.create(score_entry: "X", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: third_end)
+                Shot.create(score_entry: "10", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: third_end)
+                Shot.create(score_entry: "M", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: third_end)
+                Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: fourth_end)
+                Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: fourth_end)
+                Shot.create(score_entry: "5", archer_id: 1, score_session_id: 1, round: round, rset: second_rset, end: fourth_end)
+                expect(Shot.all.count).to eq(12)
+                expect(second_rset.shots.count).to eq(6)
+                expect(round.shots.count).to eq(12)
+
+                expect(round.score).to eq(70)
+            end
+
+            it "can find an ArcherCategory by Division and AgeClass" do
+                before_shot
+                check_cat = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CJM", gov_body: valid_gov_body, division: valid_division_alt, age_class: valid_age_class_alt, gender: valid_gender)
+                check_category = test_round.find_category_by_div_age_class(division: "Compound", age_class: "Junior")
+                
+                expect(check_category).to eq(check_cat)
+            end
         end
 
         it "helpers TBD" do

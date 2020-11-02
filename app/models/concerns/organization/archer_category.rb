@@ -34,15 +34,13 @@ class Organization::ArcherCategory < ApplicationRecord
             # finds all elgibile categories by age (from archer) and gender (from archer)
         # call archer.eligible_age_classes
             # finds all elgibile age_classes by age (from archer) 
-    # from Round
-        # call round.archer_category
-            # finds category by division (input), age_class (input), gender (from archer)
     
 
-    # ########### to find dligibe age_classes and cateogries ###############
+    # ########### to find eligibe age_classes and cateogries ###############
     # need to find a category by age/age_class, division and gender
     # similar to default below - used to find the category to assign to Rset
-    # def category_from_div_age_gen
+        # pick up from Round if doing here
+    # def self.find_category_by_div_age_class
     # end
     
     # def self.default(division, age, gender)
