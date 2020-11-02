@@ -93,20 +93,26 @@ RSpec.describe Organization::Discipline, type: :model do
     describe "instances are properly associated to other models" do
         before(:each) do
             @discipline = Organization::Discipline.create(duplicate)
-            archer_category = Organization::ArcherCategory.create(
-                cat_code: "check", 
-                gov_body: valid_gov_body_alt, 
+            @round_format = Format::RoundFormat.create(
+                name: "600 Round", 
+                num_sets: 2, 
                 discipline: @discipline, 
-                division: valid_division_alt, 
-                age_class: valid_age_class_alt, 
-                gender: valid_gender_alt
+                user_edit: true
             )
+            valid_gov_disc_join
         end 
 
         describe "has many GovBodies and can" do
             it "find an associated object" do
-                expect(@discipline.gov_bodies).to include(valid_gov_body_alt)
-                expect(valid_gov_body_alt.disciplines).to include(@discipline)
+                expect(valid_discipline.gov_bodies).to include(valid_gov_body)
+                expect(valid_gov_body.disciplines).to include(valid_discipline)
+            end
+        end
+
+        describe "has many RoundFormats and can" do
+            it "find an associated object" do
+                expect(@discipline.round_formats).to include(@round_format)
+                expect(@round_format.discipline).to eq(@discipline)
             end
         end
     end

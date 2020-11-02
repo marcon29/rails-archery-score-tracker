@@ -6,7 +6,7 @@ RSpec.describe Format::RoundFormat, type: :model do
     # ###################################################################
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
     let(:test_all) {
-        {name: "720 Round", num_sets: 2, user_edit: true}
+        {name: "720 Round", num_sets: 2, discipline_id: 1, user_edit: true}
     }
     
     let(:test_round_format) {
@@ -19,24 +19,24 @@ RSpec.describe Format::RoundFormat, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:test_req) {
-        {name: "720 Round", num_sets: 2}
+        {name: "720 Round", num_sets: 2, discipline_id: 1}
     }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "720 Round", num_sets: 2, user_edit: true}
+        {name: "720 Round", num_sets: 2, discipline_id: 1, user_edit: true}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {name: "Double 720 Round", num_sets: 4}
+        {name: "Double 720 Round", num_sets: 4, discipline_id: 1}
     }
 
     # every attr blank
     let(:blank) {
-        {name: "", num_sets: "", user_edit: ""}
+        {name: "", num_sets: "", user_edit: "", discipline_id: 1}
     }
   
     # ###################################################################
@@ -55,6 +55,10 @@ RSpec.describe Format::RoundFormat, type: :model do
 
     # object creation and validation tests #######################################
     describe "model creates and updates only valid instances - " do
+        before(:each) do
+            valid_discipline
+        end
+
         describe "valid when " do
             it "given all required and unrequired attributes" do
                 expect(Format::RoundFormat.all.count).to eq(0)
@@ -131,7 +135,7 @@ RSpec.describe Format::RoundFormat, type: :model do
                 # can create an instance with user_edit == false, but not edit after
                 expect(Format::RoundFormat.all.count).to eq(0)
                 
-                round_format = Format::RoundFormat.create(name: test_all[:name], num_sets: test_all[:num_sets], user_edit: false)
+                round_format = Format::RoundFormat.create(name: test_all[:name], num_sets: test_all[:num_sets], discipline_id: test_all[:discipline_id], user_edit: false)
                 expect(Format::RoundFormat.all.count).to eq(1)
                 # keeping this until figure out why it won't run validity test correctly (works fine in console)
                 # expect(round_format).to be_valid
@@ -153,6 +157,10 @@ RSpec.describe Format::RoundFormat, type: :model do
 
     # association tests ########################################################
     describe "instances are properly associated to other models" do
+        before(:each) do
+            valid_discipline
+        end
+        
         describe "has many SetEndFormats and can" do
             it "find an associated object" do
                 expect(valid_round_format.set_end_formats).to include(valid_set_end_format)
@@ -195,6 +203,13 @@ RSpec.describe Format::RoundFormat, type: :model do
                 
                 expect(round_format.rounds).to include(check_round)
                 expect(round_format.rounds.last.name).to eq(check_round.name)
+            end
+        end
+
+        describe "belongs to Discipline and can" do
+            it "find an associated object" do
+                # assoc_discipline = valid_discipline
+                expect(valid_round_format.discipline).to eq(valid_discipline)
             end
         end
     end

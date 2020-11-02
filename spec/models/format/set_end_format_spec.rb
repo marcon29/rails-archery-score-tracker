@@ -107,7 +107,7 @@ RSpec.describe Format::SetEndFormat, type: :model do
 
             it "name is duplicated but for different Format::RoundFormat" do
                 # need two round_formats
-                Format::RoundFormat.create(name: "720 Round", num_sets: 4, user_edit: false)
+                Format::RoundFormat.create(name: "720 Round", num_sets: 4, discipline_id: 1, user_edit: false)
                 expect(Format::RoundFormat.all.count).to eq(2)
                 expect(Format::SetEndFormat.all.count).to eq(0)
 
@@ -254,7 +254,7 @@ RSpec.describe Format::SetEndFormat, type: :model do
     describe "all helper methods work correctly:" do
         it "can find all the Format::SetEndFormats belonging to the same Format::RoundFormat" do
             valid_round_format
-            second_round_format = Format::RoundFormat.create(name: "720 Round", num_sets: 1, user_edit: false)
+            second_round_format = Format::RoundFormat.create(name: "720 Round", num_sets: 1, discipline_id: 1, user_edit: false)
             expect(Format::RoundFormat.count).to eq(2)
 
             first_set_end_foramt = valid_set_end_format

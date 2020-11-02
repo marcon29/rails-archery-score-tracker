@@ -1,6 +1,7 @@
 class Organization::GovBody < ApplicationRecord
+    has_many :disciplines_gov_bodies, class_name: "Organization::DisciplinesGovBodies"
+    has_many :disciplines, through: :disciplines_gov_bodies
     has_many :archer_categories
-    has_many :disciplines, through: :archer_categories
     has_many :divisions, through: :archer_categories
     has_many :age_classes, through: :archer_categories
     has_many :genders, through: :archer_categories

@@ -132,17 +132,17 @@ RSpec.describe Organization::GovBody, type: :model do
             archer_category = Organization::ArcherCategory.create(
                 cat_code: "check", 
                 gov_body: @gov_body, 
-                discipline: valid_discipline_alt, 
                 division: valid_division_alt, 
                 age_class: valid_age_class_alt, 
                 gender: valid_gender_alt
             )
+            valid_gov_disc_join
         end
 
         describe "has many Disciplines" do
             it "find an associated object" do
-                expect(@gov_body.disciplines).to include(valid_discipline_alt)
-                expect(valid_discipline_alt.gov_bodies).to include(@gov_body)
+                expect(valid_gov_body.disciplines).to include(valid_discipline)
+                expect(valid_discipline.gov_bodies).to include(valid_gov_body)
             end
         end 
 

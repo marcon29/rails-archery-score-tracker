@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_31_174106) do
+ActiveRecord::Schema.define(version: 2020_11_02_020826) do
 
   create_table "archers", force: :cascade do |t|
     t.string "username"
@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(version: 2020_10_31_174106) do
     t.boolean "user_edit", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "discipline_id"
+    t.index ["discipline_id"], name: "index_format_round_formats_on_discipline_id"
   end
 
   create_table "format_set_end_formats", force: :cascade do |t|
@@ -84,7 +86,6 @@ ActiveRecord::Schema.define(version: 2020_10_31_174106) do
   create_table "organization_archer_categories", force: :cascade do |t|
     t.string "cat_code"
     t.integer "gov_body_id"
-    t.integer "discipline_id"
     t.integer "division_id"
     t.integer "age_class_id"
     t.integer "gender_id"
@@ -98,15 +99,20 @@ ActiveRecord::Schema.define(version: 2020_10_31_174106) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "organization_disciplines_gov_bodies", id: false, force: :cascade do |t|
+    t.integer "gov_body_id", null: false
+    t.integer "discipline_id", null: false
+  end
+
   create_table "organization_dist_targ_cats", force: :cascade do |t|
     t.integer "set_end_format_id"
     t.integer "archer_category_id"
     t.string "distance"
     t.integer "target_id"
     t.integer "alt_target_id"
+    t.index ["alt_target_id"], name: "index_organization_dist_targ_cats_on_alt_target_id"
     t.index ["set_end_format_id"], name: "index_organization_dist_targ_cats_on_set_end_format_id"
     t.index ["target_id"], name: "index_organization_dist_targ_cats_on_target_id"
-    t.index ["alt_target_id"], name: "index_organization_dist_targ_cats_on_alt_target_id"
   end
 
   create_table "organization_divisions", force: :cascade do |t|

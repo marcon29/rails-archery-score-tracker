@@ -57,6 +57,21 @@ class Round < ApplicationRecord
         self.rsets.collect { |rset| rset.score }.sum
     end
 
+
+    # get archer category
+        # need to know:
+        # take input of Division and AgeClass
+    #     Organization::ArcherCategory
+    #         .where(gov_body: Organization::GovBody.where(name: round.score_session.gov_body
+            
+    #         .where(division: Organization::Division.where(name: "Recurve"
+    #         .where(age_class: Organization::AgeClass.where(name: "Senior"
+    #         .where(gender: Organization::Gender.where(name: round.archer.gender) )
+
+    #     Organization::ArcherCategory.where(division: Organization::Division.where(name: "Recurve")).where(age_class: Organization::AgeClass.where(name: "Senior")).where(gender: Organization::Gender.where(name: "Male"))
+    # # nice to know
+    #     .where(discipline: Organization::Discipline.where(name: round.round_format.discipline
+
     # ############ to do after Org concern is done ################
     # helping Rset get distance_target_category
         # use age (from Archer) to find AgeClass

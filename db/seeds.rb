@@ -31,6 +31,16 @@
     outdoor = Organization::Discipline.find_or_create_by(name: "Outdoor")
     indoor = Organization::Discipline.find_or_create_by(name: "Indoor")
 
+# ##########################################################
+# JOIN GovBodies and Disciplines (pre-load)
+# ##########################################################
+    # simple JOIN model/table for many_to_many, no attrs
+    # add every combination of gov bodies and disciplines, as long as gov body does have that discipline
+    wa_outdoor = Organization::DisciplinesGovBodies.find_or_create_by(gov_body: world_archery, discipline: outdoor)
+    wa_indoor = Organization::DisciplinesGovBodies.find_or_create_by(gov_body: world_archery, discipline: indoor)
+    
+    # usa_outdoor = Organization::DisciplinesGovBodies.find_or_create_by(gov_body: usa_archery, discipline: outdoor)
+    # usa_indoor = Organization::DisciplinesGovBodies.find_or_create_by(gov_body: usa_archery, discipline: indoor)
 
 # ##########################################################
 # Divisions (pre-load)
@@ -86,62 +96,62 @@
     # all_attrs = (cat_code: "WA-RCW", gov_body: world_archery, discipline: outdoor, division: recurve, age_class: wa_cadet, gender: female)
 
     # World Archery
-        wa_rcw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RCW", gov_body: world_archery, discipline: outdoor, division: recurve, age_class: wa_cadet, gender: female)
-        wa_rjw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RJW", gov_body: world_archery, discipline: outdoor, division: recurve, age_class: wa_junior, gender: female)
-        wa_rsw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RW",  gov_body: world_archery, discipline: outdoor, division: recurve, age_class: wa_senior, gender: female)
-        wa_rmw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RMW", gov_body: world_archery, discipline: outdoor, division: recurve, age_class: wa_master, gender: female)
+        wa_rcw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RCW", gov_body: world_archery, division: recurve, age_class: wa_cadet, gender: female)
+        wa_rjw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RJW", gov_body: world_archery, division: recurve, age_class: wa_junior, gender: female)
+        wa_rsw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RW",  gov_body: world_archery, division: recurve, age_class: wa_senior, gender: female)
+        wa_rmw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RMW", gov_body: world_archery, division: recurve, age_class: wa_master, gender: female)
             
-        wa_rcm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RCM", gov_body: world_archery, discipline: outdoor, division: recurve, age_class: wa_cadet, gender: male)
-        wa_rjm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RJM", gov_body: world_archery, discipline: outdoor, division: recurve, age_class: wa_junior, gender: male)
-        wa_rsm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RM",  gov_body: world_archery, discipline: outdoor, division: recurve, age_class: wa_senior, gender: male)
-        wa_rmm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RMM", gov_body: world_archery, discipline: outdoor, division: recurve, age_class: wa_master, gender: male)
+        wa_rcm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RCM", gov_body: world_archery, division: recurve, age_class: wa_cadet, gender: male)
+        wa_rjm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RJM", gov_body: world_archery, division: recurve, age_class: wa_junior, gender: male)
+        wa_rsm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RM",  gov_body: world_archery, division: recurve, age_class: wa_senior, gender: male)
+        wa_rmm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RMM", gov_body: world_archery, division: recurve, age_class: wa_master, gender: male)
             
-        wa_ccw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CCW", gov_body: world_archery, discipline: outdoor, division: compound, age_class: wa_cadet, gender: female)
-        wa_cjw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CJW", gov_body: world_archery, discipline: outdoor, division: compound, age_class: wa_junior, gender: female)
-        wa_csw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CW",  gov_body: world_archery, discipline: outdoor, division: compound, age_class: wa_senior, gender: female)
-        wa_cmw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CMW", gov_body: world_archery, discipline: outdoor, division: compound, age_class: wa_master, gender: female)
+        wa_ccw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CCW", gov_body: world_archery, division: compound, age_class: wa_cadet, gender: female)
+        wa_cjw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CJW", gov_body: world_archery, division: compound, age_class: wa_junior, gender: female)
+        wa_csw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CW",  gov_body: world_archery, division: compound, age_class: wa_senior, gender: female)
+        wa_cmw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CMW", gov_body: world_archery, division: compound, age_class: wa_master, gender: female)
 
-        wa_ccm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CCM", gov_body: world_archery, discipline: outdoor, division: compound, age_class: wa_cadet, gender: male)
-        wa_cjm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CJM", gov_body: world_archery, discipline: outdoor, division: compound, age_class: wa_junior, gender: male)
-        wa_csm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CM",  gov_body: world_archery, discipline: outdoor, division: compound, age_class: wa_senior, gender: male)
-        wa_cmm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CMM", gov_body: world_archery, discipline: outdoor, division: compound, age_class: wa_master, gender: male)
+        wa_ccm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CCM", gov_body: world_archery, division: compound, age_class: wa_cadet, gender: male)
+        wa_cjm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CJM", gov_body: world_archery, division: compound, age_class: wa_junior, gender: male)
+        wa_csm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CM",  gov_body: world_archery, division: compound, age_class: wa_senior, gender: male)
+        wa_cmm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CMM", gov_body: world_archery, division: compound, age_class: wa_master, gender: male)
 
     # USA Archery (add when done)
-        # usa_rbw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RBW", gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_bowman, gender: female)
-        # usa_ruw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RUW", gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_cub, gender: female)
-        # usa_rcw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RCW", gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_cadet, gender: female)
-        # usa_rjw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RJW", gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_junior, gender: female)
-        # usa_rsw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RW",  gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_senior, gender: female)
-        # usa_rm50w = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RM50W", gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_master50, gender: female)
-        # usa_rm60w = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RM60W", gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_master60, gender: female)
-        # usa_rm70w = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RM70W", gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_master70, gender: female)
+        # usa_rbw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RBW", gov_body: usa_archery, division: recurve, age_class: us_bowman, gender: female)
+        # usa_ruw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RUW", gov_body: usa_archery, division: recurve, age_class: us_cub, gender: female)
+        # usa_rcw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RCW", gov_body: usa_archery, division: recurve, age_class: us_cadet, gender: female)
+        # usa_rjw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RJW", gov_body: usa_archery, division: recurve, age_class: us_junior, gender: female)
+        # usa_rsw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RW",  gov_body: usa_archery, division: recurve, age_class: us_senior, gender: female)
+        # usa_rm50w = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RM50W", gov_body: usa_archery, division: recurve, age_class: us_master50, gender: female)
+        # usa_rm60w = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RM60W", gov_body: usa_archery, division: recurve, age_class: us_master60, gender: female)
+        # usa_rm70w = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RM70W", gov_body: usa_archery, division: recurve, age_class: us_master70, gender: female)
             
-        # usa_rbm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RBW", gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_bowman, gender: male)
-        # usa_rum = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RUW", gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_cub, gender: male)
-        # usa_rcm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RCM", gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_cadet, gender: male)
-        # usa_rjm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RJM", gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_junior, gender: male)
-        # usa_rsm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RM",  gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_senior, gender: male)
-        # usa_rm50m = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RM50M", gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_master50, gender: male)
-        # usa_rm60m = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RM60M", gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_master60, gender: male)
-        # usa_rm70m = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RM70M", gov_body: usa_archery, discipline: outdoor, division: recurve, age_class: us_master70, gender: male)
+        # usa_rbm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RBW", gov_body: usa_archery, division: recurve, age_class: us_bowman, gender: male)
+        # usa_rum = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RUW", gov_body: usa_archery, division: recurve, age_class: us_cub, gender: male)
+        # usa_rcm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RCM", gov_body: usa_archery, division: recurve, age_class: us_cadet, gender: male)
+        # usa_rjm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RJM", gov_body: usa_archery, division: recurve, age_class: us_junior, gender: male)
+        # usa_rsm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RM",  gov_body: usa_archery, division: recurve, age_class: us_senior, gender: male)
+        # usa_rm50m = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RM50M", gov_body: usa_archery, division: recurve, age_class: us_master50, gender: male)
+        # usa_rm60m = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RM60M", gov_body: usa_archery, division: recurve, age_class: us_master60, gender: male)
+        # usa_rm70m = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-RM70M", gov_body: usa_archery, division: recurve, age_class: us_master70, gender: male)
 
-        # usa_cbw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CBW", gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_bowman, gender: female)
-        # usa_cuw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CUW", gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_cub, gender: female)
-        # usa_ccw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CCW", gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_cadet, gender: female)
-        # usa_cjw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CJW", gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_junior, gender: female)
-        # usa_csw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CW",  gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_senior, ender: female)
-        # usa_cm50w = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CM50W", gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_master50, gender: female)
-        # usa_cm60w = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CM60W", gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_master60, gender: female)
-        # usa_cm70w = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CM70W", gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_master70, gender: female)
+        # usa_cbw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CBW", gov_body: usa_archery, division: compound, age_class: us_bowman, gender: female)
+        # usa_cuw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CUW", gov_body: usa_archery, division: compound, age_class: us_cub, gender: female)
+        # usa_ccw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CCW", gov_body: usa_archery, division: compound, age_class: us_cadet, gender: female)
+        # usa_cjw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CJW", gov_body: usa_archery, division: compound, age_class: us_junior, gender: female)
+        # usa_csw = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CW",  gov_body: usa_archery, division: compound, age_class: us_senior, ender: female)
+        # usa_cm50w = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CM50W", gov_body: usa_archery, division: compound, age_class: us_master50, gender: female)
+        # usa_cm60w = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CM60W", gov_body: usa_archery, division: compound, age_class: us_master60, gender: female)
+        # usa_cm70w = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CM70W", gov_body: usa_archery, division: compound, age_class: us_master70, gender: female)
 
-        # usa_cbm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CBM", gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_bowman, gender: male)
-        # usa_cum = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CUM", gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_cub, gender: male)
-        # usa_ccm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CCM", gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_cadet, gender: male)
-        # usa_cjm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CJM", gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_junior, gender: male)
-        # usa_csm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CM",  gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_senior, ender: male)
-        # usa_cm50m = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CM50M", gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_master50, gender: male)
-        # usa_cm60m = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CM60M", gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_master60, gender: male)
-        # usa_cm70m = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CM70M", gov_body: usa_archery, discipline: outdoor, division: compound, age_class: us_master70, gender: male)
+        # usa_cbm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CBM", gov_body: usa_archery, division: compound, age_class: us_bowman, gender: male)
+        # usa_cum = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CUM", gov_body: usa_archery, division: compound, age_class: us_cub, gender: male)
+        # usa_ccm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CCM", gov_body: usa_archery, division: compound, age_class: us_cadet, gender: male)
+        # usa_cjm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CJM", gov_body: usa_archery, division: compound, age_class: us_junior, gender: male)
+        # usa_csm = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CM",  gov_body: usa_archery, division: compound, age_class: us_senior, ender: male)
+        # usa_cm50m = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CM50M", gov_body: usa_archery, division: compound, age_class: us_master50, gender: male)
+        # usa_cm60m = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CM60M", gov_body: usa_archery, division: compound, age_class: us_master60, gender: male)
+        # usa_cm70m = Organization::ArcherCategory.find_or_create_by(cat_code: "USA-CM70M", gov_body: usa_archery, division: compound, age_class: us_master70, gender: male)
 
 
 
@@ -154,10 +164,10 @@
         # must set user_edit to false
 
     # World & USA Outdoor Rounds
-        rf_db_1440 = Format::RoundFormat.find_or_create_by(name: "Double 1440 Round", num_sets: 8, user_edit: false)
-        rf_1440 = Format::RoundFormat.find_or_create_by(name: "1440 Round", num_sets: 4, user_edit: false)
-        rf_db_720 = Format::RoundFormat.find_or_create_by(name: "Double 720 Round", num_sets: 4, user_edit: false)
-        rf_720 = Format::RoundFormat.find_or_create_by(name: "720 Round", num_sets: 2, user_edit: false)
+        rf_db_1440 = Format::RoundFormat.find_or_create_by(name: "Double 1440 Round", num_sets: 8, discipline: outdoor, user_edit: false)
+        rf_1440 = Format::RoundFormat.find_or_create_by(name: "1440 Round", num_sets: 4, discipline: outdoor, user_edit: false)
+        rf_db_720 = Format::RoundFormat.find_or_create_by(name: "Double 720 Round", num_sets: 4, discipline: outdoor, user_edit: false)
+        rf_720 = Format::RoundFormat.find_or_create_by(name: "720 Round", num_sets: 2, discipline: outdoor, user_edit: false)
 
     # World & USA Match Rounds (works for both Outdoor and Indoor)
         # need to sort out how to deal with this - indeterminanent # of Sets - also how to name the Sets

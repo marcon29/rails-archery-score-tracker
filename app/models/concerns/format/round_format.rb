@@ -1,6 +1,7 @@
 class Format::RoundFormat < ApplicationRecord
     has_many :set_end_formats
     has_many :rounds
+    belongs_to :discipline, class_name: "Organization::Discipline"
     
     # all attrs - :name, :num_sets, :user_edit
 

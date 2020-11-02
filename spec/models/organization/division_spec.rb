@@ -96,7 +96,6 @@ RSpec.describe Organization::Division, type: :model do
             archer_category = Organization::ArcherCategory.create(
                 cat_code: "check", 
                 gov_body: valid_gov_body_alt, 
-                discipline: valid_discipline_alt, 
                 division: @division, 
                 age_class: valid_age_class_alt, 
                 gender: valid_gender_alt

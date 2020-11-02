@@ -1,6 +1,7 @@
 class Organization::Discipline < ApplicationRecord
-    has_many :archer_categories
-    has_many :gov_bodies, through: :archer_categories
+    has_many :disciplines_gov_bodies, class_name: "Organization::DisciplinesGovBodies"
+    has_many :gov_bodies, through: :disciplines_gov_bodies
+    has_many :round_formats, class_name: "Format::RoundFormat"
 
     # all attrs - :name
     

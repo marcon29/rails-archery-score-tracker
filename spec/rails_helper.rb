@@ -152,7 +152,7 @@ end
 # ##########################################################
 
 def valid_round_format
-  Format::RoundFormat.find_or_create_by(name: "1440 Round", num_sets: 4, user_edit: false)
+  Format::RoundFormat.find_or_create_by(name: "1440 Round", num_sets: 4, discipline: valid_discipline, user_edit: false)
 end
 
 def valid_set_end_format
@@ -309,12 +309,16 @@ end
 
 def valid_category
   # Organization::ArcherCategory.create(cat_code: "WA-RM", gov_body_id: 1, discipline_id: 1, division_id: 1, age_class_id: 1, gender_id: 1)
-  Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RM", gov_body: valid_gov_body, discipline: valid_discipline, division: valid_division, age_class: valid_age_class, gender: valid_gender)
+  Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RM", gov_body: valid_gov_body, division: valid_division, age_class: valid_age_class, gender: valid_gender)
 end
 
 def valid_category_alt
   # Organization::ArcherCategory.create(cat_code: "WA-RJW", gov_body_id: 1, discipline_id: 1, division_id: 1, age_class: valid_age_class_junior, gender_id: valid_gender_female)
-  Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RM", gov_body: valid_gov_body_alt, discipline: valid_discipline_alt, division: valid_division_alt, age_class: valid_age_class_alt, gender: valid_gender_alt)
+  Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RM", gov_body: valid_gov_body_alt, division: valid_division_alt, age_class: valid_age_class_alt, gender: valid_gender_alt)
+end
+
+def valid_gov_disc_join
+  Organization::DisciplinesGovBodies.create(gov_body: valid_gov_body, discipline: valid_discipline)
 end
 
 

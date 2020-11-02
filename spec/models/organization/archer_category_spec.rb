@@ -6,7 +6,7 @@ RSpec.describe Organization::ArcherCategory, type: :model do
     # ###################################################################
     # needs to be different from valid object in RailsHelper to avoid duplicte failures
     let(:test_all) {
-        {cat_code: "USA-RM", gov_body_id: 1, discipline_id: 1, division_id: 1, age_class_id: 1, gender_id: 1}
+        {cat_code: "USA-RM", gov_body_id: 1, division_id: 1, age_class_id: 1, gender_id: 1}
     }
         
     let(:test_archer_category) {
@@ -25,24 +25,24 @@ RSpec.describe Organization::ArcherCategory, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     # let(:test_req) {
-    #     {cat_code: "WA-RJM", gov_body_id: 1, discipline_id: 1, division_id: 1, age_class_id: 1, gender_id: 1}
+    #     {cat_code: "WA-RJM", gov_body_id: 1, division_id: 1, age_class_id: 1, gender_id: 1}
     # }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {cat_code: "USA-RM", gov_body_id: 1, discipline_id: 1, division_id: 1, age_class_id: 1, gender_id: 1}
+        {cat_code: "USA-RM", gov_body_id: 1, division_id: 1, age_class_id: 1, gender_id: 1}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {cat_code: "USA-RJM", gov_body_id: 1, discipline_id: 1, division_id: 1, age_class_id: 1, gender_id: 1}
+        {cat_code: "USA-RJM", gov_body_id: 1, division_id: 1, age_class_id: 1, gender_id: 1}
     }
 
     # every attr blank
     let(:blank) {
-        {cat_code: "", gov_body_id: "", discipline_id: "", division_id: "", age_class_id: "", gender_id: ""}
+        {cat_code: "", gov_body_id: "", division_id: "", age_class_id: "", gender_id: ""}
     }
   
     # ###################################################################
@@ -65,7 +65,6 @@ RSpec.describe Organization::ArcherCategory, type: :model do
     describe "model creates and updates only valid instances - " do
         before(:each) do
             valid_gov_body
-            valid_discipline
             valid_division
             valid_age_class
             valid_gender
@@ -132,22 +131,6 @@ RSpec.describe Organization::ArcherCategory, type: :model do
             end
         end
 
-        describe "belongs to Disciplline and can" do
-            it "find an associated object" do
-                assoc_discipline = valid_discipline
-                expect(test_archer_category.discipline).to eq(assoc_discipline)
-            end
-
-            it "create a new instance via the associated object and get associated object attributes" do
-                assoc_discipline = valid_discipline
-                update[:discipline_id] = ""
-                check_archer_category = assoc_discipline.archer_categories.create(update)
-                
-                expect(check_archer_category.discipline).to eq(assoc_discipline)
-                expect(check_archer_category.discipline.name).to include(assoc_discipline.name)
-            end
-        end
-
         describe "belongs to Division and can" do
             it "find an associated object" do
                 assoc_division = valid_division
@@ -207,7 +190,6 @@ RSpec.describe Organization::ArcherCategory, type: :model do
     describe "all helper methods work correctly:" do
         before(:each) do
             valid_gov_body
-            valid_discipline
             valid_division
             valid_age_class
             valid_gender
