@@ -446,8 +446,8 @@ RSpec.describe Shot, type: :model do
             end
 
             it "can find the distance at which shot was made" do
-                expect(test_shot.distance).to eq("90m")
-                # expect(test_shot.distance).to eq(valid_dist_targ_cat.distance)
+                # expect(test_shot.distance).to eq("90m")
+                expect(test_shot.distance).to eq(valid_dist_targ_cat.distance)
             end
             
             it "can find the target into which shot was made" do

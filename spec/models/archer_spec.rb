@@ -335,11 +335,6 @@ RSpec.describe Archer, type: :model do
                 expect(archer.shots.last.score_entry).to eq(check_shot.score_entry)
             end
         end
-    
-        it "has many ArcherCategories" do
-            pending "need to add create associated models and add associations"
-            expect(test_archer.archer_categories).to include(valid_category)
-        end
     end
 
     # helper method tests ########################################################

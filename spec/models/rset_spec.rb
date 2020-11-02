@@ -34,14 +34,28 @@ RSpec.describe Rset, type: :model do
         Format::SetEndFormat.create(second_set_end_format_attrs)
     }
 
+    # let(:test_alt_targ) {
+    #     {set_end_format_id: 1, archer_category_id: 1, distance: "70m", target_id: 1, alt_target_id: 2}
+        
+    # }
+        
+    # let(:test_dtc_alt_targ) {
+    #     Organization::DistanceTargetCategory.create(test_alt_targ)
+    # }
+
     # ###################################################################
     # define standard create/update variations
     # ###################################################################
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:test_req) {
-        {date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2, distance_target_category_id: 1}
+        {date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2}
     }
+
+    # original before auto-assign DTC
+    # let(:test_req) {
+    #     {date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2, distance_target_category_id: 1}
+    # }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
@@ -52,13 +66,23 @@ RSpec.describe Rset, type: :model do
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {date: "2020-09-05", rank: "3rd", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2, distance_target_category_id: 1}
+        {date: "2020-09-05", rank: "3rd", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2}
     }
+    
+    # original before auto-assign DTC
+    # let(:update) {
+    #     {date: "2020-09-05", rank: "3rd", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2, distance_target_category_id: 1}
+    # }
 
     # every attr blank
     let(:blank) {
-        {date: "", rank: "", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2, distance_target_category_id: 1}
+        {date: "", rank: "", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2}
     }
+
+    # original before auto-assign DTC
+    # let(:blank) {
+    #     {date: "", rank: "", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2, distance_target_category_id: 1}
+    # }
     
     # ###################################################################
     # define test results for auto-assign attrs
@@ -84,6 +108,7 @@ RSpec.describe Rset, type: :model do
             before_rset
             second_set_end_format
             valid_rset
+            valid_dist_targ_cat_alt
         end
 
         describe "valid when " do
@@ -129,11 +154,14 @@ RSpec.describe Rset, type: :model do
                 test_rset
                 expect(Rset.all.count).to eq(2)
                 
+                # gives me third DTC so third Rset will be valid 
+                Organization::DistanceTargetCategory.create(set_end_format_id: 3, archer_category_id: 1, distance: "90m", target_id: 1)
+
                 # gives me 1 rset in second_round with same name as rset in first_round
                 update[:round_id] = 2
                 update[:set_end_format_id] = 3
                 rset = Rset.create(update)
-                
+
                 expect(rset).to be_valid
                 expect(Rset.all.count).to eq(3)
                 expect(rset.name).to eq(assigned_name_dupe)
@@ -186,6 +214,7 @@ RSpec.describe Rset, type: :model do
 
                 Format::SetEndFormat.all.each do |sef|
                     test_req[:set_end_format_id] = sef.id
+                    Organization::DistanceTargetCategory.create(set_end_format_id: sef.id, archer_category_id: 1, distance: "70m", target_id: 1)
                     Rset.create(test_req)
                 end
                 expect(Rset.all.count).to eq(4)
@@ -252,6 +281,7 @@ RSpec.describe Rset, type: :model do
         before(:each) do
             before_rset
             second_set_end_format
+            valid_dist_targ_cat_alt
         end
 
         describe "belongs to an Archer and" do
@@ -347,13 +377,24 @@ RSpec.describe Rset, type: :model do
 
         describe "belongs to a DistanceTargetCategory and" do
             it "can find an associated object" do
-                expect(valid_rset.distance_target_category).to eq(valid_dist_targ_cat)
+                # expect(valid_rset.distance_target_category).to eq(valid_dist_targ_cat)
+
+                valid_dist_targ_cat_alt
+                rset = Rset.create(test_req)
+                expect(rset.distance_target_category).to eq(valid_dist_targ_cat_alt)
             end
         end
 
         describe "has one Target and" do
-            it "can find an associated object" do
+            it "find an associated object when only having primary target" do
                 expect(valid_rset.target).to eq(valid_target)
+            end
+
+            it "find an associated object when having an alternate target" do
+                valid_rset
+                test_rset
+                expect(test_rset.target).to eq(valid_target)
+                expect(test_rset.alt_target).to eq(valid_target_alt)
             end
         end
     end
@@ -363,13 +404,26 @@ RSpec.describe Rset, type: :model do
         before(:each) do
             before_rset
             second_set_end_format
+            valid_dist_targ_cat_alt
         end
 
         describe "methods primarily for callbacks and validations" do
+            it "can identify the ArcherCategory of the Round it belongs to" do
+                expect(test_rset.archer_category).to eq(valid_category)
+            end
+
+            it "can find the DistanceTargetCategory it should have from Round data" do
+                expect(valid_rset.find_dist_targ_cat).to eq(valid_dist_targ_cat)
+            end
         end
 
         describe "methods primarily for getting useful data" do
+            it "can identify the distance for itself" do
+                expect(test_rset.distance).to eq(valid_dist_targ_cat_alt.distance)
+            end
+
             it "can identify the RoundFormat of the Round it belongs to" do
+                pending "not sure if I need this - method in model file, commented out"
                 expect(test_rset.round_format).to eq(valid_round_format)
             end
 

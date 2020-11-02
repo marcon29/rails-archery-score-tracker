@@ -380,6 +380,7 @@ RSpec.describe Round, type: :model do
                 expect(Shot.all.count).to eq(0)
 
                 second_set_end_format = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
+                valid_dist_targ_cat_alt
                 first_rset = Rset.create(date: "2020-09-01", archer_id: 1, score_session_id: 1, round: round, set_end_format: valid_set_end_format, distance_target_category: valid_dist_targ_cat)
                 second_rset = Rset.create(date: "2020-09-01", archer_id: 1, score_session_id: 1, round: round, set_end_format: second_set_end_format, distance_target_category: valid_dist_targ_cat)
                 expect(Rset.all.count).to eq(2)
