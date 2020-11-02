@@ -32,7 +32,7 @@ class ScoreSession < ApplicationRecord
     end
 
     def format_name
-        self.name = self.name.titlecase
+        self.name = self.name.titlecase.gsub("Us", "US")
     end
 
     # ##### helpers (data control)

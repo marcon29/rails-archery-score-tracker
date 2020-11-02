@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_02_020826) do
+ActiveRecord::Schema.define(version: 2020_11_02_034753) do
 
   create_table "archers", force: :cascade do |t|
     t.string "username"
@@ -145,6 +145,8 @@ ActiveRecord::Schema.define(version: 2020_11_02_020826) do
     t.integer "round_format_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "archer_category_id"
+    t.index ["archer_category_id"], name: "index_rounds_on_archer_category_id"
     t.index ["round_format_id"], name: "index_rounds_on_round_format_id"
   end
 
@@ -158,6 +160,8 @@ ActiveRecord::Schema.define(version: 2020_11_02_020826) do
     t.integer "set_end_format_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "dist_targ_cat_id"
+    t.index ["dist_targ_cat_id"], name: "index_rsets_on_dist_targ_cat_id"
     t.index ["set_end_format_id"], name: "index_rsets_on_set_end_format_id"
   end
 
@@ -174,6 +178,8 @@ ActiveRecord::Schema.define(version: 2020_11_02_020826) do
     t.boolean "active", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "gov_body_id"
+    t.index ["gov_body_id"], name: "index_score_sessions_on_gov_body_id"
   end
 
   create_table "shots", force: :cascade do |t|

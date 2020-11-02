@@ -101,7 +101,7 @@ RSpec.describe Round, type: :model do
 
             it "name is duplicated but for different ScoreSessions" do
                 # need two round_formats
-                second_round_format = Format::RoundFormat.create(name: "720 Round", num_sets: 1, user_edit: false)
+                second_round_format = Format::RoundFormat.create(name: "720 Round", num_sets: 1, discipline_id: 1, user_edit: false)
 
                 # need two score_sessions
                 second_score_sesion = ScoreSession.create(name: "2010 US Nationals", score_session_type: "Tournament", city: "Oxford", state: "OH", country: "USA", start_date: "2010-09-01", end_date: "2010-09-05", rank: "1st", active: true, archer_id: 1)
