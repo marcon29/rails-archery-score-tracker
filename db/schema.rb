@@ -160,8 +160,8 @@ ActiveRecord::Schema.define(version: 2020_11_02_034753) do
     t.integer "set_end_format_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "dist_targ_cat_id"
-    t.index ["dist_targ_cat_id"], name: "index_rsets_on_dist_targ_cat_id"
+    t.integer "distance_target_category_id"
+    t.index ["distance_target_category_id"], name: "index_rsets_on_distance_target_category_id"
     t.index ["set_end_format_id"], name: "index_rsets_on_set_end_format_id"
   end
 

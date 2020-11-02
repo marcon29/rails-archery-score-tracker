@@ -95,7 +95,7 @@ RSpec.describe End, type: :model do
             it "number is duplicated but for different Rset" do
                 # need second rset
                 second_set_end_format = Format::SetEndFormat.create(num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
-                second_rset = Rset.find_or_create_by(date: "2020-09-01", rank: "1st", archer: valid_archer, score_session: valid_score_session, round: valid_round, set_end_format: second_set_end_format)
+                second_rset = Rset.find_or_create_by(date: "2020-09-01", rank: "1st", archer: valid_archer, score_session: valid_score_session, round: valid_round, set_end_format: second_set_end_format, distance_target_category: valid_dist_targ_cat)
                 expect(Rset.all.count).to eq(2)
                 expect(End.all.count).to eq(0)
 
@@ -363,7 +363,7 @@ RSpec.describe End, type: :model do
                 third_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 1)
                 
                 second_set_end_format = Format::SetEndFormat.create(name: "Set/Distance2", num_ends: 6, shots_per_end: 6, user_edit: false, round_format: valid_round_format)
-                second_rset = Rset.create(date: "2020-09-01", rank: "", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format: second_set_end_format)
+                second_rset = Rset.create(date: "2020-09-01", rank: "", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format: second_set_end_format, distance_target_category: valid_dist_targ_cat)
                 other_end = End.create(archer_id: 1, score_session_id: 1, round_id: 1, rset_id: 2)
                 
                 expect(first_end.ends_in_set.count).to eq(3)

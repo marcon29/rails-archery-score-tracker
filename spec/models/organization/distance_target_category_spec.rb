@@ -143,6 +143,12 @@ RSpec.describe Organization::DistanceTargetCategory, type: :model do
                 expect(test_dtc_alt_targ.alt_target).to eq(valid_target_alt)
             end
         end
+
+        describe "has many Rsets and" do
+            it "can find an associated object" do
+                expect(valid_dist_targ_cat.rsets).to include(valid_rset)
+            end
+        end
     end
 
     # helper method tests ########################################################

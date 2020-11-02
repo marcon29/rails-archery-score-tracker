@@ -106,12 +106,12 @@ end
 def before_round
   before_score_session
   valid_score_session
-  # valid_category
 end
 
 def before_rset
   before_round
   valid_round
+  valid_dist_targ_cat
 end
 
 def before_end
@@ -178,7 +178,7 @@ def valid_target
 end
 
 def valid_target_alt
-  Format::Target.find_or_create_by(name: "80cm/1-spot/6-ring", size: "80cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 1, user_edit: false)
+  Format::Target.find_or_create_by(name: "80cm/1-spot/6-ring", size: "80cm", score_areas: 6, rings: 6, x_ring: true, max_score: 10, spots: 1, user_edit: true)
 end
 
 def valid_dist_targ_cat
@@ -250,7 +250,7 @@ def valid_round
 end
 
 def valid_rset
-  Rset.find_or_create_by(name: "2020 World Cup - 1440 Round - Set/Distance1", date: "2020-09-01", rank: "1st", archer: valid_archer, score_session: valid_score_session, round: valid_round, set_end_format: valid_set_end_format)
+  Rset.find_or_create_by(name: "2020 World Cup - 1440 Round - Set/Distance1", date: "2020-09-01", rank: "1st", archer: valid_archer, score_session: valid_score_session, round: valid_round, set_end_format: valid_set_end_format, distance_target_category: valid_dist_targ_cat)
 end
 
 def valid_end

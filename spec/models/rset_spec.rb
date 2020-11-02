@@ -13,7 +13,8 @@ RSpec.describe Rset, type: :model do
             archer_id: 1, 
             score_session_id: 1, 
             round_id: 1, 
-            set_end_format_id: 2
+            set_end_format_id: 2, 
+            distance_target_category_id: 1
         }
     }
 
@@ -39,24 +40,24 @@ RSpec.describe Rset, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:test_req) {
-        {date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2}
+        {date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2, distance_target_category_id: 1}
     }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {name: "2020 World Cup - 1440 Round - Set/Distance2", date: "2020-09-01", rank: "1st", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2}
+        {name: "2020 World Cup - 1440 Round - Set/Distance2", date: "2020-09-01", rank: "1st", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2, distance_target_category_id: 1}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {date: "2020-09-05", rank: "3rd", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2}
+        {date: "2020-09-05", rank: "3rd", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2, distance_target_category_id: 1}
     }
 
     # every attr blank
     let(:blank) {
-        {date: "", rank: "", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2}
+        {date: "", rank: "", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2, distance_target_category_id: 1}
     }
     
     # ###################################################################
@@ -180,11 +181,6 @@ RSpec.describe Rset, type: :model do
             end
 
             it "exceeds the total number of Rsets allowable for the Round" do
-                Format::SetEndFormat.destroy_all
-                Rset.destroy_all
-                expect(Format::SetEndFormat.all.count).to eq(0)
-                expect(Rset.all.count).to eq(0)
-
                 valid_round_format.num_sets.times { Format::SetEndFormat.create(second_set_end_format_attrs) }
                 expect(Format::SetEndFormat.all.count).to eq(4)
 
@@ -349,16 +345,15 @@ RSpec.describe Rset, type: :model do
             end
         end
 
-        describe "sectioning off for Organization concern" do
-            it "has one DistanceTargetCategory" do
-                pending "need to add create associated models and add associations"
-                expect(test_rset.distance_target_category).to eq(valid_category)
+        describe "belongs to a DistanceTargetCategory and" do
+            it "can find an associated object" do
+                expect(valid_rset.distance_target_category).to eq(valid_dist_targ_cat)
             end
+        end
 
-            it "has one Target" do
-                pending "need to add create associated models and add associations"
-                # expect(test_rset.target).to eq(valid_target)
-                expect(test_rset.target).to eq(something_to_fail)
+        describe "has one Target and" do
+            it "can find an associated object" do
+                expect(valid_rset.target).to eq(valid_target)
             end
         end
     end

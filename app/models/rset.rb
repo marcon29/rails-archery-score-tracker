@@ -6,7 +6,9 @@ class Rset < ApplicationRecord
     belongs_to :round
     belongs_to :set_end_format, class_name: "Format::SetEndFormat"
     # belongs_to :distance_target_category, class_name: "Organization::DistanceTargetCategory"
-
+    belongs_to :distance_target_category, class_name: "Organization::DistanceTargetCategory"
+    has_one :target, through: :distance_target_category
+    
     # has_one :distance_target_category, through: :archer
     # has_one :target, through: :distance_target_category
     
@@ -29,11 +31,6 @@ class Rset < ApplicationRecord
 
     #####  placeholders to get Shot working independently ######
     ######## remove/edit once DistTargCat assoc working ########
-    # shouldn't need this at all, will have direct assoc that Shot can call
-    def target
-        Format::Target.first
-    end
-
     # should need this so Shot can pull info from Rset instead of assoc
     def distance
         # real code

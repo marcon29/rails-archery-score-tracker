@@ -7,7 +7,7 @@ class Organization::DistanceTargetCategory < ApplicationRecord
     belongs_to :archer_category
     belongs_to :target, class_name: "Format::Target"
     belongs_to :alt_target, class_name: "Format::Target", optional: true
-    # has_many :rsets
+    has_many :rsets
     
     # assoc attrs - :round_format_id, :set_end_format_id, :archer_category_id, :target_id, :alt_target_id
     # data attrs  - :distance

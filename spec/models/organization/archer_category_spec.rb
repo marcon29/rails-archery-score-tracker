@@ -187,7 +187,7 @@ RSpec.describe Organization::ArcherCategory, type: :model do
 
         describe "has many Rounds and" do
             it "can find an associated object" do
-                expect(valid_archer_category.rounds).to include(valid_round)
+                expect(valid_category.rounds).to include(valid_round)
             end
         end
     end
