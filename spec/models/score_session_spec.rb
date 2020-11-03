@@ -390,10 +390,5 @@ RSpec.describe ScoreSession, type: :model do
                 end
             end
         end
-    
-        it "helpers TBD" do
-            pending "add as needed"
-            expect(test_score_session).to be_valid
-        end
     end
 end

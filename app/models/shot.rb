@@ -84,8 +84,7 @@ class Shot < ApplicationRecord
     end
         
 
-    # ######### helpers to add once DistanceTarget and associations finished ###################
-
+    # ######### helpers to add when building stats page ###################
         # it "can find the discipline in which the shot was made" do
             # want to be able to to call shot.discipline
             # needs assoc: round
@@ -110,8 +109,5 @@ class Shot < ApplicationRecord
             # needs assoc: round, archer?
             # age_class = shot.round.archer_category
         # end
-    
-    
-    
 
 end

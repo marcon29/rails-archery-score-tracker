@@ -34,15 +34,6 @@ RSpec.describe Rset, type: :model do
         Format::SetEndFormat.create(second_set_end_format_attrs)
     }
 
-    # let(:test_alt_targ) {
-    #     {set_end_format_id: 1, archer_category_id: 1, distance: "70m", target_id: 1, alt_target_id: 2}
-        
-    # }
-        
-    # let(:test_dtc_alt_targ) {
-    #     Organization::DistanceTargetCategory.create(test_alt_targ)
-    # }
-
     # ###################################################################
     # define standard create/update variations
     # ###################################################################
@@ -51,11 +42,6 @@ RSpec.describe Rset, type: :model do
     let(:test_req) {
         {date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2}
     }
-
-    # original before auto-assign DTC
-    # let(:test_req) {
-    #     {date: "2020-09-01", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2, distance_target_category_id: 1}
-    # }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
@@ -68,21 +54,11 @@ RSpec.describe Rset, type: :model do
     let(:update) {
         {date: "2020-09-05", rank: "3rd", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2}
     }
-    
-    # original before auto-assign DTC
-    # let(:update) {
-    #     {date: "2020-09-05", rank: "3rd", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2, distance_target_category_id: 1}
-    # }
 
     # every attr blank
     let(:blank) {
         {date: "", rank: "", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2}
     }
-
-    # original before auto-assign DTC
-    # let(:blank) {
-    #     {date: "", rank: "", archer_id: 1, score_session_id: 1, round_id: 1, set_end_format_id: 2, distance_target_category_id: 1}
-    # }
     
     # ###################################################################
     # define test results for auto-assign attrs
@@ -270,8 +246,6 @@ RSpec.describe Rset, type: :model do
 
                 expect(test_rset).to be_invalid
                 expect(test_rset.errors.messages).to be_present
-
-                # expect(test_round.check_associations.count).to eq(1)
             end
         end
     end
@@ -377,8 +351,6 @@ RSpec.describe Rset, type: :model do
 
         describe "belongs to a DistanceTargetCategory and" do
             it "can find an associated object" do
-                # expect(valid_rset.distance_target_category).to eq(valid_dist_targ_cat)
-
                 valid_dist_targ_cat_alt
                 rset = Rset.create(test_req)
                 expect(rset.distance_target_category).to eq(valid_dist_targ_cat_alt)
@@ -463,11 +435,6 @@ RSpec.describe Rset, type: :model do
                 
                 expect(rset.score).to eq(35)
             end
-        end
-
-        it "helpers TBD" do
-            pending "add as needed"
-            expect(rset).to be_invalid
         end
     end
 end

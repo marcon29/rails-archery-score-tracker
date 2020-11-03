@@ -263,10 +263,6 @@ RSpec.describe Shot, type: :model do
 
                 expect(test_shot).to be_invalid
                 expect(test_shot.errors.messages).to be_present
-
-                # expect(test_round.check_associations.count).to eq(1)
-                # expect(test_rset.check_associations.count).to eq(3)
-                # expect(test_endd.check_associations.count).to eq(6)
             end
         end
     end
@@ -453,11 +449,6 @@ RSpec.describe Shot, type: :model do
             it "can find the target into which shot was made" do
                 expect(test_shot.target).to eq(valid_target)
             end
-        end
-
-        it "helpers TBD" do
-            pending "add as needed"
-            expect(test_shot).to be_invalid
         end
     end
 end

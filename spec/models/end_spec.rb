@@ -431,10 +431,5 @@ RSpec.describe End, type: :model do
                 expect(endd.complete?).to eq(true)
             end
         end
-
-        it "helpers TBD" do
-            pending "add as needed"
-            expect(endd).to be_invalid
-        end
     end
 end

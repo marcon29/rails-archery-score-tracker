@@ -1,11 +1,13 @@
 class ApplicationRecord < ActiveRecord::Base
 	self.abstract_class = true
   
+	# tests for this are in ScoreSession
 	def check_and_assign_rank
 		allowable_ranks = [/\A\d+st\z/i, /\A\d+nd\z/i, /\A\d+rd\z/i, /\A\d+th\z/i, /\A\d+\z/, /\AW\z/i, /\AL\z/i, /\Awin\z/i, /\Aloss\z/i, /\Awon\z/i, /\Alost\z/i]
 		# allows all numbers only: /\A\d+\z/ ( checks below for not 0: /\A^0+\z/ )
 			# allows all numbers except 0 (checked below) ending with 'st' 'nd' 'rd' 'th' (case insenitive): /\A\d+st\z/i, /\A\d+nd\z/i, /\A\d+rd\z/i, /\A\d+th\z/i
 			# allowable text  (case insenitive): W, L, win, loss, won, lost
+	
 		if self.rank.present?
 			string = self.rank.strip.gsub(" ", "").downcase
 			if string.scan(Regexp.union(allowable_ranks)).empty? || string.match(Regexp.union(/\A^0+\z/, /\A^0+st\z/i, /\A^0+nd\z/i, /\A^0+rd\z/i, /\A^0+th\z/i))
@@ -16,6 +18,7 @@ class ApplicationRecord < ActiveRecord::Base
 		end
 	end
 
+	# tests for this are in ScoreSession
 	def assign_rank(rank)
 		if rank.starts_with?("W", "w")
 			string = "Win"
@@ -85,14 +88,4 @@ class ApplicationRecord < ActiveRecord::Base
 			get_data_columns.each { |col| errors.add("#{col}", message) }
 		end
 	end
-	
-
-	
-
-	
-
-
-
-
-
 end

@@ -392,10 +392,5 @@ RSpec.describe Archer, type: :model do
                 expect(test_archer.eligible_category_names).to include(valid_category.name)
             end
         end
-
-        it "helpers TBD" do
-            pending "add as needed"
-            expect(test_archer).to be_invalid
-        end
     end
 end

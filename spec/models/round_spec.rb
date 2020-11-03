@@ -323,8 +323,7 @@ RSpec.describe Round, type: :model do
 
         describe "belongs to a RoundFormat and" do
             it "can find an associated object" do
-                assoc_round_format = valid_round_format
-                expect(test_round.round_format).to eq(assoc_round_format)
+                expect(test_round.round_format).to eq(valid_round_format)
             end
         end
 
@@ -333,8 +332,6 @@ RSpec.describe Round, type: :model do
                 expect(valid_round.archer_category).to eq(valid_category)
             end
         end
-
-        
     end
 
     # helper method tests ########################################################
@@ -430,11 +427,6 @@ RSpec.describe Round, type: :model do
                 
                 expect(check_category).to eq(check_cat)
             end
-        end
-
-        it "helpers TBD" do
-            pending "add as needed"
-            expect(test_round).to be_valid
         end
     end
 end

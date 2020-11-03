@@ -57,7 +57,6 @@ class End < ApplicationRecord
     end 
 
 
-
     # ##### helpers (data control)
     def score
         self.shots.collect { |shot| shot.score }.sum
@@ -74,7 +73,4 @@ class End < ApplicationRecord
     def complete?
         scored_shots.count < self.shots_per_end ? false : true
     end
-
-
-
 end
