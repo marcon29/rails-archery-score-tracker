@@ -123,7 +123,7 @@ RSpec.describe ScoreSession, type: :model do
 
             it "name is duplicated but for different ScoreSessions" do
                 # need second Archer
-                second_archer = Archer.create(username: "testuser", email: "testuser@example.com", password: "test", first_name: "Test", last_name: "Tuser", birthdate: "1980-07-01", gender: "Male", default_division: "Recurve")
+                second_archer = Archer.create(username: "testuser", email: "testuser@example.com", password: "test", first_name: "Test", last_name: "Tuser", birthdate: "1980-07-01", gender_id: 1, default_division: "Recurve")
                 expect(Archer.all.count).to eq(2)
                 expect(ScoreSession.all.count).to eq(0)
 

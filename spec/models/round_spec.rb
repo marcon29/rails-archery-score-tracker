@@ -212,7 +212,7 @@ RSpec.describe Round, type: :model do
                     first_name: "Test", 
                     last_name: "Tuser", 
                     birthdate: "1980-07-01", 
-                    gender: "Male", 
+                    gender_id: 1, 
                     home_city: "Denver", 
                     home_state: "CO", 
                     home_country: "USA", 

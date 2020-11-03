@@ -15,7 +15,7 @@ RSpec.describe Archer, type: :model do
             first_name: "Test", 
             last_name: "Tuser", 
             birthdate: "1980-07-01", 
-            gender: "Male", 
+            gender_id: 1, 
             home_city: "Denver", 
             home_state: "CO", 
             home_country: "USA", 
@@ -34,24 +34,24 @@ RSpec.describe Archer, type: :model do
     
     # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
     let(:test_req) {
-        {username: "testuser", email: "testuser@example.com", password: "test", first_name: "Test", last_name: "Tuser", birthdate: "1980-07-01", gender: "Male", default_division: "Recurve"}
+        {username: "testuser", email: "testuser@example.com", password: "test", first_name: "Test", last_name: "Tuser", birthdate: "1980-07-01", gender_id: 1, default_division: "Recurve"}
     }
 
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
     let(:duplicate) {
-        {username: "testuser", email: "testuser@example.com", password: "test", first_name: "Test", last_name: "Tuser", birthdate: "1980-07-01", gender: "Male", home_city: "Denver", home_state: "CO", home_country: "USA", default_age_class: "Senior", default_division: "Recurve"}
+        {username: "testuser", email: "testuser@example.com", password: "test", first_name: "Test", last_name: "Tuser", birthdate: "1980-07-01", gender_id: 1, home_city: "Denver", home_state: "CO", home_country: "USA", default_age_class: "Senior", default_division: "Recurve"}
     }
 
     # start w/ test_all, change all values, make any auto-assign blank (don't delete), delete any attrs with DB defaults
     let(:update) {
-        {username: "updateuser", email: "update-user@example.com", password: "test", first_name: "Jane", last_name: "Doe", birthdate: "2001-10-01", gender: "Female", home_city: "Chicago", home_state: "IL", home_country: "CAN", default_age_class: "", default_division: "Compound"}
+        {username: "updateuser", email: "update-user@example.com", password: "test", first_name: "Jane", last_name: "Doe", birthdate: "2001-10-01", gender_id: 2, home_city: "Chicago", home_state: "IL", home_country: "CAN", default_age_class: "", default_division: "Compound"}
     }
 
     # every attr blank
     let(:blank) {
-        {username: "", email: "", password: "", first_name: "", last_name: "", birthdate: "", gender: "", home_city: "", home_state: "", home_country: "", default_age_class: "", default_division: ""}
+        {username: "", email: "", password: "", first_name: "", last_name: "", birthdate: "", gender_id: "", home_city: "", home_state: "", home_country: "", default_age_class: "", default_division: ""}
     }
 
     # ###################################################################
@@ -102,7 +102,7 @@ RSpec.describe Archer, type: :model do
                 expect(test_archer.first_name).to eq(test_all[:first_name])
                 expect(test_archer.last_name).to eq(test_all[:last_name])
                 expect(test_archer.birthdate).to eq(test_all[:birthdate].to_date)
-                expect(test_archer.gender).to eq(test_all[:gender])
+                expect(test_archer.gender).to eq(valid_gender)
                 expect(test_archer.home_city).to eq(test_all[:home_city])
                 expect(test_archer.home_state).to eq(test_all[:home_state])
                 expect(test_archer.home_country).to eq(test_all[:home_country])
@@ -124,7 +124,7 @@ RSpec.describe Archer, type: :model do
                 expect(archer.first_name).to eq(test_req[:first_name])
                 expect(archer.last_name).to eq(test_req[:last_name])
                 expect(archer.birthdate).to eq(test_req[:birthdate].to_date)
-                expect(archer.gender).to eq(test_req[:gender])
+                expect(archer.gender).to eq(valid_gender)
                 expect(archer.default_division).to eq(test_req[:default_division])
 
                 # not req input tests (default_age_class auto-asigned from missing)
@@ -146,7 +146,7 @@ RSpec.describe Archer, type: :model do
                 expect(test_archer.first_name).to eq(update[:first_name])
                 expect(test_archer.last_name).to eq(update[:last_name])
                 expect(test_archer.birthdate).to eq(update[:birthdate].to_date)
-                expect(test_archer.gender).to eq(update[:gender])
+                expect(test_archer.gender).to eq(valid_gender_alt)
                 expect(test_archer.home_city).to eq(update[:home_city])
                 expect(test_archer.home_state).to eq(update[:home_state])
                 expect(test_archer.home_country).to eq(update[:home_country])
@@ -189,7 +189,7 @@ RSpec.describe Archer, type: :model do
             end
 
             it "attributes are outside allowable inputs" do
-                duplicate[:gender] = "bad data"
+                duplicate[:gender_id] = 3
                 duplicate[:default_age_class] = "bad data"
                 duplicate[:default_division] = "bad data"
                 archer = Archer.create(duplicate)
@@ -230,8 +230,7 @@ RSpec.describe Archer, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            valid_set_end_format
-            valid_target
+            before_archer
         end
 
         describe "has many ScoreSessions and" do
@@ -333,6 +332,12 @@ RSpec.describe Archer, type: :model do
                 
                 expect(archer.shots).to include(check_shot)
                 expect(archer.shots.last.score_entry).to eq(check_shot.score_entry)
+            end
+        end
+
+        describe "belongs to a Gender and" do
+            it "can find an associated object" do
+                expect(valid_archer.gender).to eq(valid_gender)
             end
         end
     end

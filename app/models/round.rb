@@ -62,7 +62,7 @@ class Round < ApplicationRecord
     end
 
     def gender
-        Organization::Gender.where(name: self.archer.gender).first
+        self.archer.gender
     end
 
     def score

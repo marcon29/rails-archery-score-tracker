@@ -92,7 +92,8 @@ RSpec.describe Organization::Gender, type: :model do
     # association tests ########################################################
     describe "instances are properly associated to other models" do
         before(:each) do
-            @gender = Organization::Gender.create(duplicate)
+            before_archer
+            @gender = Organization::Gender.find_or_create_by(duplicate)
             archer_category = Organization::ArcherCategory.create(
                 cat_code: "check", 
                 gov_body: valid_gov_body_alt, 
@@ -106,6 +107,12 @@ RSpec.describe Organization::Gender, type: :model do
             it "find an associated object" do
                 expect(@gender.gov_bodies).to include(valid_gov_body_alt)
                 expect(valid_gov_body_alt.genders).to include(@gender)
+            end
+        end
+
+        describe "has many Archers" do
+            it "find an associated object" do
+                expect(valid_gender.archers).to include(valid_archer)
             end
         end
     end

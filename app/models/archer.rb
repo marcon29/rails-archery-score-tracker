@@ -4,6 +4,7 @@ class Archer < ApplicationRecord
     has_many :rsets
     has_many :ends
     has_many :shots
+    belongs_to :gender, class_name: "Organization::Gender"
     has_secure_password
 
     # all authentication attrs - :username :email :password 
@@ -13,7 +14,8 @@ class Archer < ApplicationRecord
     
     @@all_divisions = Organization::Division.all.collect { |obj| obj.name }
     @@all_age_classes = Organization::AgeClass.all.collect { |obj| obj.name }
-    @@all_genders = Organization::Gender.all.collect { |obj| obj.name }
+    # @@all_genders = Organization::Gender.all.collect { |obj| obj.name }
+    @@all_genders = Organization::Gender.all
 
     validates :username, 
         presence: { message: "You must provide a username." }, 
@@ -103,7 +105,8 @@ class Archer < ApplicationRecord
         categories = []
         eligible_age_classes.each do |ac|
             # Organization::ArcherCategory.where(age_class_id: ac.id).where(gender_id: self.gender.id)
-            Organization::ArcherCategory.where(age_class_id: ac.id).where(gender: Organization::Gender.where(name: self.gender)).each { |cat| categories << cat }
+            # Organization::ArcherCategory.where(age_class_id: ac.id).where(gender: Organization::Gender.where(name: self.gender)).each { |cat| categories << cat }
+            Organization::ArcherCategory.where(age_class_id: ac.id).where(gender: self.gender).each { |cat| categories << cat }
         end
         categories
     end

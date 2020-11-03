@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_02_034753) do
+ActiveRecord::Schema.define(version: 2020_11_02_233426) do
 
   create_table "archers", force: :cascade do |t|
     t.string "username"
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 2020_11_02_034753) do
     t.string "first_name"
     t.string "last_name"
     t.date "birthdate"
-    t.string "gender"
+    t.integer "gender_id"
     t.string "home_city"
     t.string "home_state"
     t.string "home_country"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2020_11_02_034753) do
     t.string "default_division"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["gender_id"], name: "index_archers_on_gender_id"
   end
 
   create_table "ends", force: :cascade do |t|
@@ -110,9 +111,9 @@ ActiveRecord::Schema.define(version: 2020_11_02_034753) do
     t.string "distance"
     t.integer "target_id"
     t.integer "alt_target_id"
+    t.index ["alt_target_id"], name: "index_organization_dist_targ_cats_on_alt_target_id"
     t.index ["set_end_format_id"], name: "index_organization_dist_targ_cats_on_set_end_format_id"
     t.index ["target_id"], name: "index_organization_dist_targ_cats_on_target_id"
-    t.index ["alt_target_id"], name: "index_organization_dist_targ_cats_on_alt_target_id"
   end
 
   create_table "organization_divisions", force: :cascade do |t|
@@ -146,8 +147,8 @@ ActiveRecord::Schema.define(version: 2020_11_02_034753) do
     t.integer "archer_category_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["round_format_id"], name: "index_rounds_on_round_format_id"
     t.index ["archer_category_id"], name: "index_rounds_on_archer_category_id"
+    t.index ["round_format_id"], name: "index_rounds_on_round_format_id"
   end
 
   create_table "rsets", force: :cascade do |t|
@@ -161,8 +162,8 @@ ActiveRecord::Schema.define(version: 2020_11_02_034753) do
     t.integer "distance_target_category_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["set_end_format_id"], name: "index_rsets_on_set_end_format_id"
     t.index ["distance_target_category_id"], name: "index_rsets_on_distance_target_category_id"
+    t.index ["set_end_format_id"], name: "index_rsets_on_set_end_format_id"
   end
 
   create_table "score_sessions", force: :cascade do |t|
