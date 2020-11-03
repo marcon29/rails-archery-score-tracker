@@ -9,8 +9,6 @@ class Rset < ApplicationRecord
     has_one :target, through: :distance_target_category
     has_one :alt_target, through: :distance_target_category
 
-    # has_one :alt_target, class_name: "Format::Target", optional: true
-    
     # assoc attrs - :archer_id, :score_session_id, :round_id, :set_end_format_id
     # data attrs - :name, :date, :rank
     # user attrs - :date, :rank
@@ -63,11 +61,7 @@ class Rset < ApplicationRecord
     end
 
     def find_dist_targ_cat
-        Organization::DistanceTargetCategory
-            .where(set_end_format: self.set_end_format)
-            .where(archer_category: self.archer_category).first
-            # .where(set_end_format_id: 3)
-            # .where(archer_category_id: 1).first
+        Organization::DistanceTargetCategory.find_dtc_by_set_cat(set_end_format: self.set_end_format, archer_category: self.archer_category)
     end
     
 
@@ -92,5 +86,4 @@ class Rset < ApplicationRecord
     def score
         self.ends.collect { |endd| endd.score }.sum
     end 
-        
 end

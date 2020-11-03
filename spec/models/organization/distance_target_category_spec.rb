@@ -179,9 +179,10 @@ RSpec.describe Organization::DistanceTargetCategory, type: :model do
             expect(test_dtc_alt_targ.target_options).to eq(check_alt)
         end
 
-        it "helpers TBD" do
-            pending "add as needed"
-            expect(dtc).to be_valid
+        it "can find an instance with a SetEndFormat and ArcherCategory" do
+            valid_dist_targ_cat
+            dtc = Organization::DistanceTargetCategory.find_dtc_by_set_cat(set_end_format: valid_set_end_format, archer_category: valid_category)
+            expect(dtc).to eq(valid_dist_targ_cat)
         end
     end
 end

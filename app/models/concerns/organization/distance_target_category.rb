@@ -30,4 +30,8 @@ class Organization::DistanceTargetCategory < ApplicationRecord
         all_targets.push(self.alt_target) if alt_target
         all_targets
     end
+
+    def self.find_dtc_by_set_cat(set_end_format: set_end_format, archer_category: archer_category)
+        self.where(set_end_format: set_end_format).where(archer_category: archer_category).first
+    end
 end
