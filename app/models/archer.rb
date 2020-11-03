@@ -70,7 +70,6 @@ class Archer < ApplicationRecord
     end
 
 
-
     # ##### helpers (data control)
     def full_name
         "#{self.first_name.capitalize} #{self.last_name.capitalize}"
@@ -82,24 +81,17 @@ class Archer < ApplicationRecord
         today >= birthday ? eligibility_age : eligibility_age-1
     end
 
+    # if need the 4 methods below anywhere else, should work in application_record as is (figure out how to use eligibility age)
     def eligible_age_classes
         Organization::AgeClass.find_eligible_age_classes_by_age(self.eligibility_age)
     end
 
-    def eligible_age_class_names
-        self.eligible_age_classes.collect { |ac| ac.name }.uniq
+    def eligible_categories
+        Organization::ArcherCategory.find_eligible_categories_by_age_gender(age: self.eligibility_age, gender: self.gender)
     end
 
-    def eligible_categories
-        # need to update to using the associated instance???
-        # possible updates in ArchCat model: instance scope (for above)?
-        categories = []
-        eligible_age_classes.each do |ac|
-            # Organization::ArcherCategory.where(age_class_id: ac.id).where(gender_id: self.gender.id)
-            # Organization::ArcherCategory.where(age_class_id: ac.id).where(gender: Organization::Gender.where(name: self.gender)).each { |cat| categories << cat }
-            Organization::ArcherCategory.where(age_class_id: ac.id).where(gender: self.gender).each { |cat| categories << cat }
-        end
-        categories
+    def eligible_age_class_names
+        self.eligible_age_classes.collect { |ac| ac.name }.uniq
     end
 
     def eligible_category_names

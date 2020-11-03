@@ -16,7 +16,7 @@ class Organization::ArcherCategory < ApplicationRecord
     before_validation :format_cat_code
     
     
-    # helpers (callbacks & validations)
+    # ##### helpers (callbacks & validations)
     def name
         self.gender.name == "Male" ? gender = "Men" : gender = "Women" 
         "#{self.division.name}-#{self.age_class.name}-#{gender}"
@@ -26,7 +26,8 @@ class Organization::ArcherCategory < ApplicationRecord
         self.cat_code = self.cat_code.gsub(" ", "").upcase if self.cat_code
     end
 
-
+    
+    # ##### helpers (data control)
 
     # ########### need to build - WHERE? ###############
     # from Archer
@@ -47,21 +48,45 @@ class Organization::ArcherCategory < ApplicationRecord
     #     self.where("max_age >=?", age).where("min_age <=?", age).where(cat_gender: gender, cat_division: division)
     # end
 
-    # def self.eligible_categories(age, gender)
-    #     categories = self.where("max_age >=?", age).where(open_to_younger: true).where(cat_gender: gender)
-    #     if categories.empty? 
-    #         categories = self.where("min_age <=?", age).where(open_to_older: true).where(cat_gender: gender)
-    #     end
-    #     categories.order(:min_age)
+    
+
+    # ################  from Archer ###################################
+    def self.find_eligible_categories_by_age_gender(age: age, gender: gender)
+        age_classes = Organization::AgeClass.find_eligible_age_classes_by_age(age)
+        
+        categories = []
+        age_classes.each do |ac|
+            self.where(age_class: ac).where(gender: gender).each { |cat| categories << cat }
+        end
+        categories
+    end
+
+    # def self.find_eligible_category_names(age: age, gender: gender)
+    #     self.find_eligible_categories_by_age_gender(age: age, gender: gender).collect { |cat| cat.name }.uniq
     # end
+
+    
+    # #################################################################
+
+    # ################  from Round ###################################
+    def self.find_category(gov_body: gov_body, division: division, age_class: age_class, gender: gender)
+        Organization::ArcherCategory.where(gov_body: gov_body).where(division: division).where(age_class: age_class).where(gender: gender).first
+    end
+    
+    # def find_category_by_div_age_class(division: division, age_class: age_class)
+    #     Organization::ArcherCategory
+    #         .where(gov_body: self.gov_body)
+    #         .where(division: Organization::Division.where(name: division))
+    #         .where(age_class: Organization::AgeClass.where(name: age_class))
+    #         .where(gender: self.gender).first
+    # end
+    # #################################################################
 
     # def self.eligible_categories_by_age_class(age, gender)
     #     self.eligible_categories(age, gender).collect { |cat| cat.cat_age_class }.uniq
     # end
-
-    # def self.eligible_categories_by_name(age, gender)
-    #     self.eligible_categories(age, gender).collect { |cat| cat.name }.uniq
-    # end
+    
+    
 
     # added after original - similar to eligible_categories_by_age_class
     # def self.age_class_by_age(age)

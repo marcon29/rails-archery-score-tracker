@@ -211,9 +211,83 @@ RSpec.describe Organization::ArcherCategory, type: :model do
             expect(archer_category.cat_code).to eq("WA-CJW")
         end
 
-        it "can find an ArcherCategory by Division/AgeClass/Gender" do
-            pending "need to build and make sure it goes in this model"
-            expect(test_dtc.category_from_div_age_gen).to eq(valid_category)
+        it "can find all eligible ArcherCategories by age and Gender" do
+            expect(Organization::ArcherCategory.all.count).to eq(0)
+            rjm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RJM", gov_body: valid_gov_body, division: valid_division, age_class: valid_age_class_alt, gender: valid_gender)
+            rsm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RM", gov_body: valid_gov_body, division: valid_division, age_class: valid_age_class, gender: valid_gender)
+            rjw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RJW", gov_body: valid_gov_body, division: valid_division, age_class: valid_age_class_alt, gender: valid_gender_alt)
+            rsw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RW", gov_body: valid_gov_body, division: valid_division, age_class: valid_age_class, gender: valid_gender_alt)
+            expect(Organization::ArcherCategory.all.count).to eq(4)
+            expect(Organization::Division.all.count).to eq(1)
+            expect(Organization::AgeClass.all.count).to eq(2)
+            expect(Organization::Gender.all.count).to eq(2)
+            junior_min = 18
+            junior_max = 20
+            senior_min = 21
+            senior_max = 49
+
+            male_cats = Organization::ArcherCategory.find_eligible_categories_by_age_gender(age: junior_min, gender: valid_gender)
+            female_cats = Organization::ArcherCategory.find_eligible_categories_by_age_gender(age: junior_min, gender: valid_gender_alt)
+            expect(male_cats).to include(rjm)
+            expect(male_cats).to include(rsm)
+            expect(female_cats).to include(rjw)
+            expect(female_cats).to include(rsw)
+
+            male_cats = Organization::ArcherCategory.find_eligible_categories_by_age_gender(age: junior_max, gender: valid_gender)
+            female_cats = Organization::ArcherCategory.find_eligible_categories_by_age_gender(age: junior_max, gender: valid_gender_alt)
+            expect(male_cats).to include(rjm)
+            expect(male_cats).to include(rsm)
+            expect(female_cats).to include(rjw)
+            expect(female_cats).to include(rsw)
+
+            male_cats = Organization::ArcherCategory.find_eligible_categories_by_age_gender(age: senior_min, gender: valid_gender)
+            female_cats = Organization::ArcherCategory.find_eligible_categories_by_age_gender(age: senior_min, gender: valid_gender_alt)
+            expect(male_cats).to_not include(rjm)
+            expect(male_cats).to include(rsm)
+            expect(female_cats).to_not include(rjw)
+            expect(female_cats).to include(rsw)
+
+            male_cats = Organization::ArcherCategory.find_eligible_categories_by_age_gender(age: senior_max, gender: valid_gender)
+            female_cats = Organization::ArcherCategory.find_eligible_categories_by_age_gender(age: senior_max, gender: valid_gender_alt)
+            expect(male_cats).to_not include(rjm)
+            expect(male_cats).to include(rsm)
+            expect(female_cats).to_not include(rjw)
+            expect(female_cats).to include(rsw)
+        end
+
+        it "can find all ArcherCategories with same Division, AgeClass, and Gender" do
+            expect(Organization::ArcherCategory.all.count).to eq(0)
+            rjm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RJM", gov_body: valid_gov_body, division: valid_division, age_class: valid_age_class_alt, gender: valid_gender)
+            rsm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RM", gov_body: valid_gov_body, division: valid_division, age_class: valid_age_class, gender: valid_gender)
+            rjw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RW", gov_body: valid_gov_body, division: valid_division, age_class: valid_age_class_alt, gender: valid_gender_alt)
+            rsw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-RJW", gov_body: valid_gov_body, division: valid_division, age_class: valid_age_class, gender: valid_gender_alt)
+
+            cjm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CJM", gov_body: valid_gov_body, division: valid_division_alt, age_class: valid_age_class_alt, gender: valid_gender)
+            csm = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CM", gov_body: valid_gov_body, division: valid_division_alt, age_class: valid_age_class, gender: valid_gender)
+            cjw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CW", gov_body: valid_gov_body, division: valid_division_alt, age_class: valid_age_class_alt, gender: valid_gender_alt)
+            csw = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CJW", gov_body: valid_gov_body, division: valid_division_alt, age_class: valid_age_class, gender: valid_gender_alt)
+            expect(Organization::ArcherCategory.all.count).to eq(8)
+            expect(Organization::Division.all.count).to eq(2)
+            expect(Organization::AgeClass.all.count).to eq(2)
+            expect(Organization::Gender.all.count).to eq(2)
+
+            r_jr_male = Organization::ArcherCategory.find_category(gov_body: valid_gov_body, division: valid_division, age_class: valid_age_class_alt, gender: valid_gender)
+            r_sr_male = Organization::ArcherCategory.find_category(gov_body: valid_gov_body, division: valid_division, age_class: valid_age_class, gender: valid_gender)
+            r_jr_female = Organization::ArcherCategory.find_category(gov_body: valid_gov_body, division: valid_division, age_class: valid_age_class_alt, gender: valid_gender_alt)
+            r_sr_female = Organization::ArcherCategory.find_category(gov_body: valid_gov_body, division: valid_division, age_class: valid_age_class, gender: valid_gender_alt)
+            expect(r_jr_male).to eq(rjm)
+            expect(r_sr_male).to eq(rsm)
+            expect(r_jr_female).to eq(rjw)
+            expect(r_sr_female).to eq(rsw)
+
+            c_jr_male = Organization::ArcherCategory.find_category(gov_body: valid_gov_body, division: valid_division_alt, age_class: valid_age_class_alt, gender: valid_gender)
+            c_sr_male = Organization::ArcherCategory.find_category(gov_body: valid_gov_body, division: valid_division_alt, age_class: valid_age_class, gender: valid_gender)
+            c_jr_female = Organization::ArcherCategory.find_category(gov_body: valid_gov_body, division: valid_division_alt, age_class: valid_age_class_alt, gender: valid_gender_alt)
+            c_sr_female = Organization::ArcherCategory.find_category(gov_body: valid_gov_body, division: valid_division_alt, age_class: valid_age_class, gender: valid_gender_alt)
+            expect(c_jr_male).to eq(cjm)
+            expect(c_sr_male).to eq(csm)
+            expect(c_jr_female).to eq(cjw)
+            expect(c_sr_female).to eq(csw)
         end
 
 

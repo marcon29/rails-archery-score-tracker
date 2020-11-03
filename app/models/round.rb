@@ -69,12 +69,7 @@ class Round < ApplicationRecord
         self.rsets.collect { |rset| rset.score }.sum
     end
     
-    # method for logic belongs in ArcherCategory??? (class method), call here and pass in args: ArcherCategory.category_from_div_age_gen
     def find_category_by_div_age_class(division: division, age_class: age_class)
-        Organization::ArcherCategory
-            .where(gov_body: self.gov_body)
-            .where(division: Organization::Division.where(name: division))
-            .where(age_class: Organization::AgeClass.where(name: age_class))
-            .where(gender: self.gender).first
+        Organization::ArcherCategory.find_category(gov_body: self.gov_body, division: division, age_class: age_class, gender: self.gender)
     end
 end

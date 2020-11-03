@@ -426,7 +426,7 @@ RSpec.describe Round, type: :model do
             it "can find an ArcherCategory by Division and AgeClass" do
                 before_shot
                 check_cat = Organization::ArcherCategory.find_or_create_by(cat_code: "WA-CJM", gov_body: valid_gov_body, division: valid_division_alt, age_class: valid_age_class_alt, gender: valid_gender)
-                check_category = test_round.find_category_by_div_age_class(division: "Compound", age_class: "Junior")
+                check_category = test_round.find_category_by_div_age_class(division: valid_division_alt, age_class: valid_age_class_alt)
                 
                 expect(check_category).to eq(check_cat)
             end
