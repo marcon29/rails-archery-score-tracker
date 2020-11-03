@@ -178,10 +178,69 @@ RSpec.describe Organization::AgeClass, type: :model do
 
     # helper method tests ########################################################
     describe "all helper methods work correctly:" do
-        it "can return the age class's name with correct capitalization" do
-            duplicate[:name] = "bowman"
-            age_class = Organization::AgeClass.create(duplicate)
-            expect(age_class.name).to eq(duplicate[:name].titlecase)
+        describe "methods primarily for callbacks and validations" do
+            it "can return the age class's name with correct capitalization" do
+                duplicate[:name] = "bowman"
+                age_class = Organization::AgeClass.create(duplicate)
+                expect(age_class.name).to eq(duplicate[:name].titlecase)
+            end
+        end
+
+        describe "methods primarily for getting useful data" do
+            before(:each) do
+                # @age_class = Organization::AgeClass.create(duplicate)
+                valid_age_class_alt
+                valid_age_class
+            end 
+            
+            it "can find all posible default age classes when given an age" do
+                junior_min = 18
+                junior_max = 20
+                senior_min = 21
+                senior_max = 49
+
+                age_classes = Organization::AgeClass.find_age_class_by_age(junior_min)
+                expect(age_classes).to include(valid_age_class_alt)
+
+                age_classes = Organization::AgeClass.find_age_class_by_age(junior_max)
+                expect(age_classes).to include(valid_age_class_alt)
+
+                age_classes = Organization::AgeClass.find_age_class_by_age(senior_min)
+                expect(age_classes).to include(valid_age_class)
+
+                age_classes = Organization::AgeClass.find_age_class_by_age(senior_max)
+                expect(age_classes).to include(valid_age_class)
+            end
+
+            it "can find all eligible age classes when given an age" do
+                junior_min = 18
+                junior_max = 20
+                senior_min = 21
+                senior_max = 49
+
+                age_classes = Organization::AgeClass.find_eligible_age_classes_by_age(junior_min)
+                expect(age_classes).to include(valid_age_class_alt)
+                expect(age_classes).to include(valid_age_class)
+
+                age_classes = Organization::AgeClass.find_eligible_age_classes_by_age(junior_max)
+                expect(age_classes).to include(valid_age_class_alt)
+                expect(age_classes).to include(valid_age_class)
+
+                age_classes = Organization::AgeClass.find_eligible_age_classes_by_age(senior_min)
+                expect(age_classes).to_not include(valid_age_class_alt)
+                expect(age_classes).to include(valid_age_class)
+
+                age_classes = Organization::AgeClass.find_eligible_age_classes_by_age(senior_max)
+                expect(age_classes).to_not include(valid_age_class_alt)
+                expect(age_classes).to include(valid_age_class)
+
+                # def valid_age_class
+                #     Organization::AgeClass.find_or_create_by(name: "Senior", min_age: 21, max_age: 49, open_to_younger: true, open_to_older: true)
+                # end
+                # def valid_age_class_alt
+                #     Organization::AgeClass.find_or_create_by(name: "Junior", min_age: 18, max_age: 20, open_to_younger: true, open_to_older: false)
+                # end
+            end
         end
     end
 end

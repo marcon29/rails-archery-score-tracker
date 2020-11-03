@@ -10,11 +10,10 @@ class Archer < ApplicationRecord
     # all authentication attrs - :username :email :password 
     # data/user attrs - :first_name :last_name :birthdate :gender :home_city :home_state :home_country :default_age_class, :default_division
     # DEPENDENCIES: 
-        # Tertiary: Division, AgeClass, Gender (validations)
+        # Tertiary: Division, AgeClass
     
     @@all_divisions = Organization::Division.all.collect { |obj| obj.name }
     @@all_age_classes = Organization::AgeClass.all.collect { |obj| obj.name }
-    # @@all_genders = Organization::Gender.all.collect { |obj| obj.name }
     @@all_genders = Organization::Gender.all
 
     validates :username, 
@@ -40,7 +39,7 @@ class Archer < ApplicationRecord
         # format username and email after validations so spaces can be caught
 
 
-    # helpers (callbacks & validations)
+    # ##### helpers (callbacks & validations)
     def format_username
         self.username = self.username.downcase.gsub(" ","")
     end
@@ -54,25 +53,23 @@ class Archer < ApplicationRecord
         self.last_name = self.last_name.capitalize
     end
 
-    # need to update this as you create associations
+    # possible update - ability to break out or select by GovBody???
     def assign_default_age_class
-        # need to update to using the associated instance???
-        # possible updates in ArchCat model: instance scope (for above)?, return single object instead of array?
-        
         if self.default_age_class.blank? && self.birthdate
-            self.default_age_class = find_default_age_class.first.name
+            self.default_age_class = find_default_age_classes.first.name
         end
     end
 
-    def find_default_age_class
-        # need to update to using the associated instance???
-        # this finds an array of AgeClasses
-        Organization::AgeClass.where("max_age >=?", self.eligibility_age).where("min_age <=?", self.eligibility_age) if self.eligibility_age
+    def find_default_age_classes
+        Organization::AgeClass.find_age_class_by_age(self.eligibility_age)
+        # returns array of AgeClasses
     end
       
     def eligibility_age
         Date.today.year-self.birthdate.year if self.birthdate
     end
+
+
 
     # ##### helpers (data control)
     def full_name
@@ -86,13 +83,7 @@ class Archer < ApplicationRecord
     end
 
     def eligible_age_classes
-        # need to update to using the associated instance???
-        # possible updates in ArchCat model: instance scope (for above)?
-        age_classes = Organization::AgeClass.where("max_age >=?", self.eligibility_age).where(open_to_younger: true)
-        if age_classes.empty? 
-            age_classes = Organization::AgeClass.where("min_age <=?", self.eligibility_age).where(open_to_older: true)
-        end
-        age_classes.order(:min_age)
+        Organization::AgeClass.find_eligible_age_classes_by_age(self.eligibility_age)
     end
 
     def eligible_age_class_names

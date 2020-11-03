@@ -14,7 +14,8 @@ class Organization::AgeClass < ApplicationRecord
         inclusion: { in: [true, false], message: "You must select if an open class." }
     before_validation :format_name, :assign_blank_ages
 
-    # helpers (callbacks & validations)
+
+    # ##### helpers (callbacks & validations)
     def format_name
         self.name = self.name.titlecase
     end
@@ -23,4 +24,18 @@ class Organization::AgeClass < ApplicationRecord
         self.min_age = 1 unless self.min_age
         self.max_age = 1000 unless self.max_age
     end
+
+
+    # ##### helpers (data control)
+    def self.find_age_class_by_age(age)
+        self.where("max_age >=?", age).where("min_age <=?", age)
+        # returns array of AgeClasses
+    end
+
+    def self.find_eligible_age_classes_by_age(age)
+        age_classes = self.where("max_age >=?", age).where(open_to_younger: true)
+        age_classes = self.where("min_age <=?", age).where(open_to_older: true) if age_classes.empty?
+        age_classes.order(:min_age)
+    end
+
 end
