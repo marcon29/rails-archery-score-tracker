@@ -14,20 +14,8 @@ RSpec.describe Organization::ArcherCategory, type: :model do
     }
 
     # ###################################################################
-    # define any additional objects to test for this model 
-    # ###################################################################
-    # only add multiple instantiations if need simultaneous instances for testing
-
-
-    # ###################################################################
     # define standard create/update variations
     # ###################################################################
-    
-    # take test_all and remove any non-required attrs and auto-assign (not auto_format) attrs, all should be formatted correctly
-    # let(:test_req) {
-    #     {cat_code: "WA-RJM", gov_body_id: 1, division_id: 1, age_class_id: 1, gender_id: 1}
-    # }
-
     # exact duplicate of test_all
         # use as whole for testing unique values
         # use for testing specific atttrs (bad inclusion, bad format, helpers, etc.) - change in test itself
@@ -49,12 +37,7 @@ RSpec.describe Organization::ArcherCategory, type: :model do
     # define custom error messages
     # ###################################################################
     let(:missing_cat_code_message) {"You must provide a category code."}
-    
     let(:duplicate_cat_code_message) {"That category code is already used."}
-
-    # let(:inclusion_attr_message) {}
-    # let(:number_attr_message) {}
-    # let(:format_attr_message) {}
     
 
     # ###################################################################
@@ -288,12 +271,6 @@ RSpec.describe Organization::ArcherCategory, type: :model do
             expect(c_sr_male).to eq(csm)
             expect(c_jr_female).to eq(cjw)
             expect(c_sr_female).to eq(csw)
-        end
-
-
-        it "helpers TBD" do
-            pending "add as needed"
-            expect(test_archer_category).to be_invalid
         end
     end
 end

@@ -11,7 +11,7 @@ class Organization::Gender < ApplicationRecord
         uniqueness: { case_sensitive: false, message: "That gender is already used." }
     before_validation :format_name
 
-    # helpers (callbacks & validations)
+    # ##### helpers (callbacks & validations)
     def format_name
         self.name = self.name.titlecase
     end

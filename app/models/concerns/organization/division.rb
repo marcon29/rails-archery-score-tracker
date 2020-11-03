@@ -10,7 +10,7 @@ class Organization::Division < ApplicationRecord
         uniqueness: { case_sensitive: false, message: "That name is already taken." }
     before_validation :format_name
 
-    # helpers (callbacks & validations)
+    # ##### helpers (callbacks & validations)
     def format_name
         self.name = self.name.titlecase
     end

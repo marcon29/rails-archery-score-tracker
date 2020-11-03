@@ -188,7 +188,6 @@ RSpec.describe Organization::AgeClass, type: :model do
 
         describe "methods primarily for getting useful data" do
             before(:each) do
-                # @age_class = Organization::AgeClass.create(duplicate)
                 valid_age_class_alt
                 valid_age_class
             end 
@@ -233,13 +232,6 @@ RSpec.describe Organization::AgeClass, type: :model do
                 age_classes = Organization::AgeClass.find_eligible_age_classes_by_age(senior_max)
                 expect(age_classes).to_not include(valid_age_class_alt)
                 expect(age_classes).to include(valid_age_class)
-
-                # def valid_age_class
-                #     Organization::AgeClass.find_or_create_by(name: "Senior", min_age: 21, max_age: 49, open_to_younger: true, open_to_older: true)
-                # end
-                # def valid_age_class_alt
-                #     Organization::AgeClass.find_or_create_by(name: "Junior", min_age: 18, max_age: 20, open_to_younger: true, open_to_older: false)
-                # end
             end
         end
     end
