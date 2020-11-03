@@ -1,4 +1,3 @@
-
 # ################################################
 # Archer build helpers
 # ################################################
@@ -131,7 +130,6 @@ task load_qualifying_rsets: :environment do
 
 	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 29, score_session_id: 4, round_id: 4, set_end_format_id: 17) #, distance_target_category_id: 271)
 	Rset.find_or_create_by(date: "2020-09-01", rank: "", archer_id: 29, score_session_id: 4, round_id: 4, set_end_format_id: 18) #, distance_target_category_id: 287)
-
 
 	# these create all 4 Rsets for each 1440 Round for the 2010 US Nationals for each Junior Archer
 	Rset.find_or_create_by(date: "2010-09-01", rank: "1st", archer_id: 4, score_session_id: 5, round_id: 5, set_end_format_id: 9) #, distance_target_category_id: 130)
