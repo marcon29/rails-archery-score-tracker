@@ -208,7 +208,6 @@ RSpec.describe Format::RoundFormat, type: :model do
 
         describe "belongs to Discipline and can" do
             it "find an associated object" do
-                # assoc_discipline = valid_discipline
                 expect(valid_round_format.discipline).to eq(valid_discipline)
             end
         end

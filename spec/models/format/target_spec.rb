@@ -12,12 +12,6 @@ RSpec.describe Format::Target, type: :model do
     let(:test_target) {
         Format::Target.create(test_all)
     }
-    
-    # ###################################################################
-    # define any additional objects to test for this model 
-    # ###################################################################
-    # only add multiple instantiations if need simultaneous instances for testing
-
 
     # ###################################################################
     # define standard create/update variations
@@ -139,7 +133,6 @@ RSpec.describe Format::Target, type: :model do
             end
 
             it "unique attributes are duplicated" do
-                # call initial test object to check against for duplication
                 test_target
                 expect(Format::Target.all.count).to eq(1)
                 target = Format::Target.create(duplicate)
