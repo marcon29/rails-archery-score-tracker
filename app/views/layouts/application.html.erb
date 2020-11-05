@@ -18,26 +18,25 @@
   <body>
     <header>
       <section id="header-top">
-        <h1 id="header-HL">Archery Score Tracker</h1>
+        <h1 id="header-HL"><%= link_to "Archery Score Tracker", root_path %></h1>
         <nav id="user-nav">
           <ul>
-            <li>Profile</li>
-            <li>Log Out</li>
-            <li>Log In</li>
-            <li>Sign Up</li>
+            <li><%= link_to "About", about_path %></li>
+            <li><%= link_to "Profile", "#" %></li>
+            <li><%= link_to "Log Out", "#" %></li>
+            <li><%= link_to "Log In", "#" %></li>
+            <li><%= link_to "Sign Up", "#" %></li>
           </ul>
         </nav>
       </section>
       <section id="header-bottom">
         <nav id="main-nav">
           <ul>
-            <li>Home</li>
-            <li>Score Session Results</li>
-            <li>Shot Analysis</li>
-            <li>New Score Session</li>
-            <li>Manage Rounds</li>
-            <li>Manage Targets</li>
-            <li>About</li>
+            <li><%= link_to "Your Scores", "#" %></li>
+            <li><%= link_to "Shot Analysis", "#" %></li>
+            <li><%= link_to "New Score Session", "#" %></li>
+            <li><%= link_to "Manage Rounds", "#" %></li>
+            <li><%= link_to "Manage Targets", "#" %></li>
           </ul>
         </nav>
       </section>
