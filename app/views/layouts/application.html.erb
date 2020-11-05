@@ -1,7 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
     <title>RailsArcheryScoreTracker</title>
+	  <meta name="author" content="Mark Stabler">
+	  <meta name="description" content="Track all your archery scores and shots, analyze your performance."/>
+    
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -10,6 +16,37 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header>
+      <h1 class="display-horiz">Archery Score Tracker</h1>
+      <nav>
+        <ul>
+          <li>Profile</li>
+          <li>Log Out</li>
+          <li>Log In</li>
+          <li>Sign Up</li>
+        </ul>
+      </nav>
+      <nav>
+        <ul>
+          <li>Home</li>
+          <li>Score Session Results</li>
+          <li>Shot Analysis</li>
+          <li>New Score Session</li>
+          <li>Manage Rounds</li>
+          <li>Manage Targets</li>
+          <li>About</li>
+        </ul>
+      </nav>
+    </header>
+    
+    <main>
+      <%= yield %>
+    </main>
+
+    <footer>
+        <h3><a href="https://www.markstabler.com" target="_blank">Created by Mark Stabler</a></h3>
+        <p class="display-horiz fine-print">© Stabler Writing Services, LLC</p>
+        <p class="display-horiz fine-print"><a href="https://github.com/marcon29/rails-archery-score-tracker" target="_blank">MIT License & Source Code</a></p>
+    </footer>
   </body>
 </html>
