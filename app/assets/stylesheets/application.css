@@ -34,6 +34,7 @@ html {
     /* position: relative; */
     margin: 0;
     padding: 0;
+    font-size: 10px;
 
     /* position: relative; */
     /* min-height: 100%; */
@@ -81,15 +82,51 @@ footer {
     text-align: center;
 }
 
-nav ul li {
-    display: inline-block;
-    margin: 1rem;
+nav ul {
+    margin: 0;
+    padding: 0;
     list-style-type: none;
 }
 
+#header-top {
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+}
+
+#header-HL {
+    flex: 3 3;
+    margin: 0;
+}
+
+#user-nav {
+    flex: 1 1 30rem;
+    text-align: right;
+}
+
+#user-nav ul li {
+    display: inline-block;
+    margin: 0 2rem 0 0;
+    background-color: #FBE122;
+}
+
+#header-bottom {
+    padding: 0 2rem;
+    text-align: center;
+}
+
+#main-nav ul {
+    display: flex;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+#main-nav ul li {
+    background-color: #EF3340;
+    flex: 1 1;
+}
 
 /* Main content area layout */
-
 main {
 	width: 90%;
 	margin: 0 auto;
@@ -103,7 +140,7 @@ main {
 
 
 .display-horiz {
-    display: inline;
+    display: inline-block;
     margin-right: 6rem;
 }
 
@@ -118,9 +155,9 @@ h1 {
 	/* letter-spacing: .13rem; */
 }
 
-header h1 {
+/* header h1 {
 	font-size: 4.8rem;
-}
+} */
 
 h2 {
 	color: #00B5E2;
@@ -152,12 +189,12 @@ p, ul, ol {
 a {
 	outline: none;
 	text-decoration: none;
-	color: #285DC2;
+	color: #00B5E2;
 }
 
 a:focus, a:hover {
 	color: #FBE122;
-	font-weight: bold;
+	/* font-weight: bold; */
 }
 
 /* Header Links styles */
@@ -174,15 +211,15 @@ h1 a:focus, h1 a:hover, h2 a:focus, h2 a:hover, h3 a:focus, h3 a:hover {
 /* ******************************************************* */
 /* Viewport Size Adjustments */
 /* ******************************************************* */
-@media screen and (max-width: 750px) {
+/* @media screen and (max-width: 750px) {
 	html {
-		/* font-size: 9.5px; */
+		font-size: 9.5px;
 	}
-}
+} */
 
 
-@media screen and (max-width: 440px) {
+/* @media screen and (max-width: 440px) {
 	html {
-		/* font-size: 9px; */
+		font-size: 9px;
 	}
-}
+} */
