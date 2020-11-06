@@ -36,7 +36,7 @@
         <section id="header-bottom">
           <nav id="main-nav">
             <ul>
-              <% if current_user.score_sessions.any? && current_user.score_sessions.first.active == true %>
+              <% if active_score_session? %>
                 <li><%= link_to "Resume Score Session", "#" %></li>
               <% end %>
               <li><%= link_to "Your Scores", "#" %></li>

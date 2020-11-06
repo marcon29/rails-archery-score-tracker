@@ -10,7 +10,7 @@
     </ul>
 
     <section>
-        <% if current_user.score_sessions.any? && current_user.score_sessions.first.active == true %>
+        <% if active_score_session? %>
             <section>
                 <h2>Resume Current Score Session</h2>
                 <p>Details from the current score session</p>
