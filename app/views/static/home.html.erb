@@ -1,14 +1,54 @@
-<h1>Static#home - Welcome Archer</h1>
-<section>
-	<h2>Login Form if no user</h2>
-		<p>if no user</p>
-	<h2>Resume Current Score Session</h2>
-		<p>if user and active score session</p>
-	<h2>Main Stats</h2>
-		<p>if user</p>
-	<h2>Most Recent Score Sessions</h2>
-		<p>if user</p>
-		<h3>Tournaments</h3>
-		<h3>Leagues</h3>
-		<h3>Competitions</h3>
-<section>
+<% if current_user %>
+    <h1>Welcome <%= current_user.first_name %></h1>
+    <p>
+        <b>Name:</b> <%= current_user.full_name %> 
+            &nbsp; &nbsp; || &nbsp; &nbsp;
+        <b>Gender:</b> <%= current_user.gender.name %> 
+            &nbsp; &nbsp; || &nbsp; &nbsp;
+        <b>Age:</b> <%= current_user.age %> 
+            &nbsp; &nbsp; || &nbsp; &nbsp;
+        <b>From:</b> <%= current_user.home_country %> 
+            &nbsp; &nbsp; || &nbsp; &nbsp;
+        <b>Default Division:</b> <%= current_user.default_division %> 
+            &nbsp; &nbsp; || &nbsp; &nbsp;
+        <b>Default Age Class:</b> <%= current_user.default_age_class %>
+    </p>
+
+    <section>
+        <% if current_user.score_sessions.first.active == true %>
+            <section>
+                <h2>Resume Current Score Session</h2>
+                <p>Details from the current score session</p>
+            </section>
+        <% end %>
+        <section>
+            <h2>Main Stats</h2>
+            <p>Some cool stat like personal best score</p>
+            <p>Some cool stat like average score over time</p>
+            <p>Some other cool stat I will think of later</p>
+        </section>
+        <section>
+            <h2>Most Recent Score Sessions</h2>
+            <div>
+                <h3>Tournaments</h3>
+                <p>Details from most recent tournament</p>
+                <p>Details from 2nd most recent tournament</p>
+                <p>Details from 3rd most recent tournament</p>
+            </div>
+            <div>
+                <h3>Leagues</h3>
+                <p>Details from most recent league</p>
+                <p>Details from 2nd most recent league</p>
+                <p>Details from 3rd most recent league</p>
+            <div>
+            </div>
+                <h3>Competitions</h3>
+                <p>Details from most recent competition</p>
+                <p>Details from 2nd most recent competition</p>
+                <p>Details from 3rd most recent competition</p>
+            </div>
+        </section>
+    </section>
+<% else %>
+    <%= render "sessions/login_form" %>
+<% end %>

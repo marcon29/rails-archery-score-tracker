@@ -18,6 +18,7 @@ RSpec.describe "static/home.html.erb", type: :view do
         end
 
         it "main content shows the Login form" do
+            
             expect(page).to have_css("form", id: "login-form")
         end
     end
@@ -49,6 +50,7 @@ RSpec.describe "static/home.html.erb", type: :view do
         end
 
         it "main content shows correct home page content" do
+            expect(page).to have_css("h1", text: "Welcome #{archer.first_name}")
             expect(page).to_not have_css("form", id: "login-form")
         end
     end

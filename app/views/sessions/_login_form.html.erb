@@ -1,0 +1,24 @@
+<h1>Log In</h1>
+
+<section>
+    <%= form_tag login_path, id: "login-form", class: "user-form" do %>
+        <%= text_field_tag :username, nil, 
+            class: ("form-input-field" if @user.errors[:username].empty?) || ("field_with_errors" if @user.errors[:username].any?), 
+            placeholder: (@user.errors[:username].first || @user.username || "Enter your username")
+        %>
+        <%= text_field_tag :email, nil, 
+            class: ("form-input-field" if @user.errors[:email].empty?) || ("field_with_errors" if @user.errors[:email].any?), 
+            placeholder: (@user.errors[:email].first || @user.email || "Enter your email")
+        %>
+        <%= password_field_tag :password, nil, 
+            class: ("form-input-field" if @user.errors[:password].empty?) || ("field_with_errors" if @user.errors[:password].any?), 
+            placeholder: (@user.errors[:password].first || "Enter your password")
+        %>
+        <%= submit_tag "Log In" %>
+    <% end %>
+</section>
+
+<section>
+    <p>Or <%= link_to "Sign Up", "#" %> as a new archer.</p>
+</section>
+

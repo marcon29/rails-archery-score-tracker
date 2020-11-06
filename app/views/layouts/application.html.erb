@@ -22,25 +22,32 @@
         <nav id="user-nav">
           <ul>
             <li><%= link_to "About", about_path %></li>
-            <li><%= link_to "Profile", "#" %></li>
-            <li><%= link_to "Log Out", logout_path, method: "delete" %></li>
-            <li><%= link_to "Log In", login_path %></li>
-            <li><%= link_to "Sign Up", "#" %></li>
+            <% if current_user %>
+              <li><%= link_to "Profile", "#" %></li>
+              <li><%= link_to "Log Out", logout_path, method: "delete" %></li>
+            <% else %>
+              <li><%= link_to "Log In", login_path %></li>
+              <li><%= link_to "Sign Up", "#" %></li>
+            <% end %>
           </ul>
         </nav>
       </section>
-      <section id="header-bottom">
-        <nav id="main-nav">
-          <ul>
-            <li><%= link_to "Resume Score Session", "#" %></li>
-            <li><%= link_to "Your Scores", "#" %></li>
-            <li><%= link_to "Shot Analysis", "#" %></li>
-            <li><%= link_to "New Score Session", "#" %></li>
-            <li><%= link_to "Manage Rounds", "#" %></li>
-            <li><%= link_to "Manage Targets", "#" %></li>
-          </ul>
-        </nav>
-      </section>
+      <% if current_user %>
+        <section id="header-bottom">
+          <nav id="main-nav">
+            <ul>
+              <% if current_user.score_sessions.first.active == true %>
+                <li><%= link_to "Resume Score Session", "#" %></li>
+              <% end %>
+              <li><%= link_to "Your Scores", "#" %></li>
+              <li><%= link_to "Shot Analysis", "#" %></li>
+              <li><%= link_to "New Score Session", "#" %></li>
+              <li><%= link_to "Manage Rounds", "#" %></li>
+              <li><%= link_to "Manage Targets", "#" %></li>
+            </ul>
+          </nav>
+        </section>
+      <% end %>
     </header>
     
     <main>
