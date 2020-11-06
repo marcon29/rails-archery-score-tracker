@@ -16,14 +16,30 @@ class ArchersController < ApplicationController
 
 
   def create
+    @archer = Archer.new
+    @genders = Organization::Gender.all
+    @divisions = Organization::Division.all
+    @age_classes = Organization::AgeClass.all
+    
     check = params[:archer]
-    binding.pry
+    render :new
   end
 
   def edit
+    @archer = current_user
+    @genders = Organization::Gender.all
+    @divisions = Organization::Division.all
+    @age_classes = Organization::AgeClass.all
   end
 
   def update
+    @archer = current_user
+    @genders = Organization::Gender.all
+    @divisions = Organization::Division.all
+    @age_classes = Organization::AgeClass.all
+
+    check = params[:archer]
+    render :edit
   end
 
   

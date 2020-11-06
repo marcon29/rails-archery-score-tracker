@@ -26,8 +26,8 @@
               <li><%= link_to "#{current_user.first_name}'s Profile", archer_path(current_user) %></li>
               <li><%= link_to "Log Out", logout_path, method: "delete" %></li>
             <% else %>
-              <li><%= link_to "Log In", login_path %></li>
-              <li><%= link_to "Sign Up", "#" %></li>
+              <li><%= link_to "Log In", root_path %></li>
+              <li><%= link_to "Sign Up", new_archer_path %></li>
             <% end %>
           </ul>
         </nav>
