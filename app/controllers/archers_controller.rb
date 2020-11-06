@@ -15,9 +15,11 @@ class ArchersController < ApplicationController
     @divisions = Organization::Division.all
     @age_classes = Organization::AgeClass.all
 
-    
-    binding.pry
-    render :new
+    if @archer.save
+      log_user_in(@archer)
+    else
+      render :new
+    end
   end
 
   def edit
