@@ -1,18 +1,13 @@
 <% if current_user %>
     <h1>Welcome <%= current_user.first_name %></h1>
-    <p>
-        <b>Name:</b> <%= current_user.full_name %> 
-            &nbsp; &nbsp; || &nbsp; &nbsp;
-        <b>Gender:</b> <%= current_user.gender.name %> 
-            &nbsp; &nbsp; || &nbsp; &nbsp;
-        <b>Age:</b> <%= current_user.age %> 
-            &nbsp; &nbsp; || &nbsp; &nbsp;
-        <b>From:</b> <%= current_user.home_country %> 
-            &nbsp; &nbsp; || &nbsp; &nbsp;
-        <b>Default Division:</b> <%= current_user.default_division %> 
-            &nbsp; &nbsp; || &nbsp; &nbsp;
-        <b>Default Age Class:</b> <%= current_user.default_age_class %>
-    </p>
+    <ul id="archer-info-home">
+        <li>Name: <b><%= current_user.full_name %></b></li>
+        <li>Gender: <b><%= current_user.gender.name %></b></li>
+        <li>Age: <b><%= current_user.age %></b></li>
+        <li>From: <b><%= current_user.home_country %></b></li>
+        <li>Default Division: <b><%= current_user.default_division %></b></li>
+        <li>Default Age Class: <b><%= current_user.default_age_class %></b></li>
+    </ul>
 
     <section>
         <% if current_user.score_sessions.first.active == true %>
@@ -28,7 +23,7 @@
             <p>Some other cool stat I will think of later</p>
         </section>
         <section>
-            <h2>Most Recent Score Sessions</h2>
+            <h2>Most Recent Scores</h2>
             <div>
                 <h3>Tournaments</h3>
                 <p>Details from most recent tournament</p>

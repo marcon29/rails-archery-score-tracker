@@ -1,0 +1,46 @@
+/* // Place all the styles related to the Archers controller here. */
+/* // They will automatically be included in application.css. */
+/* // You can use Sass (SCSS) here: https://sass-lang.com/ */
+
+@charset "utf-8";
+/* CSS Document */
+
+#archer-info h3, #archer-info p {
+    margin: .8rem 0;
+}
+
+#login-info, #personal-info, #category-info {
+    margin-bottom: 2rem;
+}
+
+/* personal info flexbox */
+#personal-info {
+    display: flex;
+    max-width: 67%;
+}
+
+#hometown-info {
+    flex: 1 1 40rem;
+}           
+
+#gender-info {
+    flex: 1 1 40rem;
+}
+
+#age-info {
+    flex: 1 1 40rem;
+}
+
+/* category info flexbox */
+#category-info {
+    display: flex;
+    max-width: 45%;
+}
+
+#default-divisions {
+    flex: 1 1 40rem;
+}           
+
+#default-age-classes {
+    flex: 1 1 40rem;
+}
