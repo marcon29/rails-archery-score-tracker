@@ -36,8 +36,18 @@ class ArchersController < ApplicationController
     @divisions = Organization::Division.all
     @age_classes = @archer.eligible_age_classes
 
-    check = params[:archer]
-    render :edit
+    
+    @archer.assign_attributes(archer_params)
+    
+    if !@archer.eligible_age_classes.include?(Organization::AgeClass.find_by(name: params[:archer][:default_age_class]))
+      @archer.default_age_class = nil
+    end
+
+    if @archer.save
+      redirect_to archer_path(@archer)
+    else
+      render :edit
+    end
   end
 
 

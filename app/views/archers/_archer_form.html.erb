@@ -8,7 +8,6 @@
     <% else %>
         <br>
     <% end %>
-    
 
     <%= f.label :email %>
     <%= f.email_field :email, class: "form-input-field archer-input", placeholder: "Enter your email *" %>
@@ -20,6 +19,9 @@
 
     <%= f.label :password %>
     <%= f.password_field :password, class: "form-input-field archer-input", placeholder: "Enter a password *" %>
+    <% if archer_form_type == "edit" %>
+        <p class="small-text">Leave blank if you are not changing your password.</p>
+    <% end %>
     <% if @archer.errors[:password].any? %>
         <p class="small-text red-text"><%= @archer.errors[:password].first %></p>
     <% else %>
@@ -95,5 +97,8 @@
     <br>
 
     <%= f.submit %>
+    <% if archer_form_type == "edit" %>
+        <%= link_to "Cancel", archer_path(current_user) %>
+    <% end %>
     <p>Fields marked with a <span class="red-text">*</span> are required.</p>
 <% end %>
