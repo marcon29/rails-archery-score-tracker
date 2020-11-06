@@ -238,7 +238,7 @@ footer a {
 /* ******************************************************* */
 /* Forms */
 /* ******************************************************* */
-input, textarea {
+input, textarea, select {
     display: block;
     margin-bottom: 1rem;
     height: 3rem;
@@ -247,6 +247,23 @@ input, textarea {
 .form-input-field {
     width: 30rem;
     padding-left: 1rem;
+}
+
+.archer-input {
+    display: inline;
+}
+
+.remove-bottom-margin {
+    margin-bottom: 0;
+}
+
+.small-text {
+    font-size: 1.4rem;
+    margin-top: 0;
+}
+
+.red-text {
+    color: red;
 }
 
 .field_with_errors {
