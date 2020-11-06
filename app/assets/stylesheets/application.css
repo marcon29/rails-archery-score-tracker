@@ -268,8 +268,9 @@ input, textarea, select {
 
 .field_with_errors {
     border: 1px red solid;
-    width: 30rem;
-    padding-left: 1rem;
+    width: 31rem;
+    padding: .2rem;
+    display: table;
 }
 
 /* ******************************************************* */

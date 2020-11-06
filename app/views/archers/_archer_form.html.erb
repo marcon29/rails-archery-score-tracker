@@ -13,27 +13,27 @@
 
     <h3>Personal Information<span class="red-text">*</span></h3>
     <%= f.label :first_name, "First Name" %>
-    <%= f.text_field :first_name, class: "form-input-field archer-input", placeholder: (@archer.errors[:password].first || "Enter your first name *") %>
+    <%= f.text_field :first_name, class: "form-input-field archer-input", placeholder: (@archer.errors[:first_name].first || "Enter your first name *") %>
     <br>
     <%= f.label :last_name, "Last Name" %>
-    <%= f.text_field :last_name, class: "form-input-field archer-input", placeholder: (@archer.errors[:password].first || "Enter your last name *") %>
+    <%= f.text_field :last_name, class: "form-input-field archer-input", placeholder: (@archer.errors[:last_name].first || "Enter your last name *") %>
     <br>
     <%= f.label :birthdate, "Birth Date" %>
-    <%= f.date_field :birthdate, class: "form-input-field archer-input", placeholder: (@archer.errors[:password].first || "Enter your birth date *") %>
+    <%= f.date_field :birthdate, class: "form-input-field archer-input", placeholder: (@archer.errors[:birthdate].first || "Enter your birth date *") %>
     <br>
-    <%= f.label :gender %>
-    <%= f.collection_select :gender, @genders, :id, :name, {}, {class: "form-input-field archer-input"} %>
+    <%= f.label :gender_id %>
+    <%= f.collection_select :gender_id, @genders, :id, :name, {}, {class: "form-input-field archer-input"} %>
     <br>
 
     <h3>Location Information</h3>
     <%= f.label :home_city, "Home City" %>
-    <%= f.text_field :home_city, class: "form-input-field archer-input", placeholder: (@archer.errors[:password].first || "Enter the city you live in") %>
+    <%= f.text_field :home_city, class: "form-input-field archer-input", placeholder: "Enter the city you live in" %>
     <br>
     <%= f.label :home_state, "Home State" %>
-    <%= f.text_field :home_state, class: "form-input-field archer-input", placeholder: (@archer.errors[:password].first || "Enter the state you live in") %>
+    <%= f.text_field :home_state, class: "form-input-field archer-input", placeholder: "Enter the state you live in" %>
     <br>
     <%= f.label :home_country, "Home Country" %>
-    <%= f.text_field :home_country, class: "form-input-field archer-input", placeholder: (@archer.errors[:password].first || "Enter the country you live in") %>
+    <%= f.text_field :home_country, class: "form-input-field archer-input", placeholder: "Enter the country you live in" %>
     <br>
 
     <h3 class="remove-bottom-margin">Competition Infomation<span class="red-text">*</span></h3>
@@ -42,15 +42,18 @@
     <% elsif archer_form_type == "edit" %>
         <p class="small-text">Used to reduce entering info when starting new Score Session.</p>
     <% end %>
+
     <%= f.label :default_age_class, "Primary Age Class" %>
-    <%= f.collection_select :default_age_class, @age_classes, :name, :name, {prompt: true}, {class: "form-input-field archer-input", style: "margin-bottom: 0;"} %>
+    <%= f.collection_select :default_age_class, @age_classes, :name, :name, {prompt: "Select an age class"}, {class: "form-input-field archer-input", style: "margin-bottom: 0;"} %>
+    
     <% if archer_form_type == "new" %>
         <p class="small-text">If you don't choose, the youngest eligible age class will be automatically assigned.</p>
     <% elsif archer_form_type == "edit" %>
         <p class="small-text">Only shows Age Classes you're eligible for.</p>
     <% end %>
+
     <%= f.label :default_division, "Primary Shooting Style" %>
-    <%= f.collection_select :default_division, @divisions, :name, :name, {prompt: true}, {class: "form-input-field archer-input"} %>
+    <%= f.collection_select :default_division, @divisions, :name, :name, {prompt: (@archer.errors[:default_division].first || "Select a shooting style *")}, {class: "form-input-field archer-input"} %>
     <br>
     <br>
 
