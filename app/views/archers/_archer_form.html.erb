@@ -1,3 +1,4 @@
+<% # binding.pry %>
 <%= form_for(@archer) do |f| %>
     <h3>Login Information<span class="red-text">*</span></h3>
     <%= f.label :username %>
@@ -36,10 +37,18 @@
     <br>
 
     <h3 class="remove-bottom-margin">Competition Infomation<span class="red-text">*</span></h3>
-    <p class="small-text">You can change these at any time.</p>
+    <% if archer_form_type == "new" %>
+        <p class="small-text">You can change these at any time.</p>
+    <% elsif archer_form_type == "edit" %>
+        <p class="small-text">Used to reduce entering info when starting new Score Session.</p>
+    <% end %>
     <%= f.label :default_age_class, "Primary Age Class" %>
     <%= f.collection_select :default_age_class, @age_classes, :name, :name, {prompt: true}, {class: "form-input-field archer-input", style: "margin-bottom: 0;"} %>
-    <p class="small-text">If you do not choose a default age class, it will automatically be assigned based on your age.</p>    
+    <% if archer_form_type == "new" %>
+        <p class="small-text">If you don't choose, the youngest eligible age class will be automatically assigned.</p>
+    <% elsif archer_form_type == "edit" %>
+        <p class="small-text">Only shows Age Classes you're eligible for.</p>
+    <% end %>
     <%= f.label :default_division, "Primary Shooting Style" %>
     <%= f.collection_select :default_division, @divisions, :name, :name, {prompt: true}, {class: "form-input-field archer-input"} %>
     <br>

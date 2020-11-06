@@ -27,9 +27,13 @@ class Organization::AgeClass < ApplicationRecord
 
 
     # ##### helpers (data control)
+    # how to do this will be determined by how to work with multiple GovBodies
     def self.find_age_class_by_age(age)
-        self.where("max_age >=?", age).where("min_age <=?", age)
         # returns array of AgeClasses
+        # self.where("max_age >=?", age).where("min_age <=?", age)
+        
+        # returns only youngest AgeClass
+        self.where("max_age >=?", age).where("min_age <=?", age).order(:min_age).first
     end
 
     def self.find_eligible_age_classes_by_age(age)

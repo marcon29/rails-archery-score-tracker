@@ -56,17 +56,22 @@ class Archer < ApplicationRecord
     # possible update - ability to break out or select by GovBody???
     def assign_default_age_class
         if self.default_age_class.blank? && self.birthdate
-            self.default_age_class = find_default_age_classes.first.name
+            self.default_age_class = find_default_age_class.name
         end
     end
 
-    def find_default_age_classes
-        Organization::AgeClass.find_age_class_by_age(self.eligibility_age)
-        # returns array of AgeClasses
+    # returns youngest age class Archer is elibibility for
+    def find_default_age_class
+        # Organization::AgeClass.find_age_class_by_age(self.eligibility_age)
+        self.eligible_age_classes.first
     end
       
     def eligibility_age
         Date.today.year-self.birthdate.year if self.birthdate
+    end
+
+    def eligible_age_classes
+        Organization::AgeClass.find_eligible_age_classes_by_age(self.eligibility_age)
     end
 
 
@@ -81,11 +86,9 @@ class Archer < ApplicationRecord
         today >= birthday ? eligibility_age : eligibility_age-1
     end
 
-    # if need the 4 methods below anywhere else, should work in application_record as is (figure out how to use eligibility age)
-    def eligible_age_classes
-        Organization::AgeClass.find_eligible_age_classes_by_age(self.eligibility_age)
-    end
 
+
+    # if need the methods below anywhere else, should work in application_record as is (figure out how to use eligibility age)
     def eligible_categories
         Organization::ArcherCategory.find_eligible_categories_by_age_gender(age: self.eligibility_age, gender: self.gender)
     end

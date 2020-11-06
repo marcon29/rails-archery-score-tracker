@@ -20,7 +20,7 @@ class ArchersController < ApplicationController
     @genders = Organization::Gender.all
     @divisions = Organization::Division.all
     @age_classes = Organization::AgeClass.all
-    
+
     check = params[:archer]
     render :new
   end
@@ -29,14 +29,15 @@ class ArchersController < ApplicationController
     @archer = current_user
     @genders = Organization::Gender.all
     @divisions = Organization::Division.all
-    @age_classes = Organization::AgeClass.all
+    @age_classes = @archer.eligible_age_classes
+    
   end
 
   def update
     @archer = current_user
     @genders = Organization::Gender.all
     @divisions = Organization::Division.all
-    @age_classes = Organization::AgeClass.all
+    @age_classes = @archer.eligible_age_classes
 
     check = params[:archer]
     render :edit
