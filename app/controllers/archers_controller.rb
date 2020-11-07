@@ -1,4 +1,6 @@
 class ArchersController < ApplicationController
+  before_action :require_login, only: [:show, :create, :edit]
+
   def show
   end
 
@@ -35,10 +37,10 @@ class ArchersController < ApplicationController
     @genders = Organization::Gender.all
     @divisions = Organization::Division.all
     @age_classes = @archer.eligible_age_classes
-
     
     @archer.assign_attributes(archer_params)
-    
+
+    # this might do better in a model
     if !@archer.eligible_age_classes.include?(Organization::AgeClass.find_by(name: params[:archer][:default_age_class]))
       @archer.default_age_class = nil
     end
