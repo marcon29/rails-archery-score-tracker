@@ -1,0 +1,14 @@
+<section id=<%= "rset-#{rset.id}" %> class="rset-section">
+    <section id=<%= "rset-#{rset.id}-info" %> class="rset-info">
+        <h4 class="short-bottom-margin"><%= rset.set_end_format.name %> - <%= rset.distance %></h4>
+        <p class="display-horiz">Date: <b><%= formatted_date_short(rset.date) %></b></p>
+        <p class="display-horiz">Target: <b><%= rset.target.name %></b></p>
+        <p class="display-horiz">Score: <b><%= rset.score %></b></p>
+        <p class="display-horiz">Rank: <b><%= get_rank(rset) %></b></p>
+    </section>
+    
+    <section id=<%= "rset-#{rset.id}-scores" %> class="all-scores">
+        <%= render partial: "ends/scores_table", locals: {ends: rset.ends, builder_end: rset.ends.first} %>
+    </section>
+</section>
+    

@@ -1,0 +1,15 @@
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <% builder_end.shots.each { |shot| tag.th shot.number } %>
+            <th class="spacer"></th>
+            <th>Total</th>
+            <th class="spacer"></th>
+            <%= tag.th "Set" if builder_end.set_score %>
+        </tr>
+    </thead>
+    <tbody>
+        <%= render collection: ends, partial: "ends/endd" %>
+    </tbody>
+</table>

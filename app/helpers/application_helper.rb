@@ -35,6 +35,12 @@ module ApplicationHelper
         end
     end
 
+    # display_rank(rset)
+
+    def get_rank(object)
+        object.rank.blank? ? "N/A" : object.rank
+    end
+
 
     # ##########################################################
     # these might be better in a model

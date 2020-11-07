@@ -2,16 +2,47 @@
 /* // They will automatically be included in application.css. */
 /* // You can use Sass (SCSS) here: https://sass-lang.com/ */
 
-
-#all-rsets {
-    width: 90%;
-    margin: 0 auto;
-}
+/* ******************************************************* */
+/* Scores Layout */
+/* ******************************************************* */
 
 .rset-section {
-    margin-bottom: 3rem;
+    width: 90%;
+    margin: 0 auto 3rem;
 }
 
 .rset-info {
     margin-bottom: 1.5rem;
+}
+
+/* ******************************************************* */
+/* Scores Tables */
+/* ******************************************************* */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+thead th {
+    width: 4rem;
+}
+
+tbody th {
+    width: 6rem;
+}
+
+td {
+    width: 4rem;
+    border-spacing: 0;
+    border: 1px solid black;
+    text-align: center;
+}
+
+.spacer {
+    width: 2rem;
+    border: none;
+}
+
+.end-score, .end-set-score {
+    width: 6rem;
 }
