@@ -1,0 +1,45 @@
+<h1>Welcome <%= current_user.first_name %></h1>
+<section id=<%= "archer-#{current_user.id}" %> class="general-info">
+    <p>Name: <b><%= current_user.full_name %></b></p>
+    <p>Gender: <b><%= current_user.gender.name %></b></p>
+    <p>Age: <b><%= current_user.age %></b></p>
+    <p>From: <b><%= current_user.home_country %></b></p>
+    <p>Default Division: <b><%= current_user.default_division %></b></p>
+    <p>Default Age Class: <b><%= current_user.default_age_class %></b></p>
+</section>
+
+<section>
+    <% if active_score_session? %>
+        <section>
+            <h2>Resume Current Score Session</h2>
+            <p>Details from the current score session</p>
+        </section>
+    <% end %>
+    <section>
+        <h2>Main Stats</h2>
+        <p>Some cool stat like personal best score</p>
+        <p>Some cool stat like average score over time</p>
+        <p>Some other cool stat I will think of later</p>
+    </section>
+    <section>
+        <h2>Most Recent Scores</h2>
+        <div>
+            <h3>Tournaments</h3>
+            <p>Details from most recent tournament</p>
+            <p>Details from 2nd most recent tournament</p>
+            <p>Details from 3rd most recent tournament</p>
+        </div>
+        <div>
+            <h3>Leagues</h3>
+            <p>Details from most recent league</p>
+            <p>Details from 2nd most recent league</p>
+            <p>Details from 3rd most recent league</p>
+        <div>
+        </div>
+            <h3>Competitions</h3>
+            <p>Details from most recent competition</p>
+            <p>Details from 2nd most recent competition</p>
+            <p>Details from 3rd most recent competition</p>
+        </div>
+    </section>
+</section>
