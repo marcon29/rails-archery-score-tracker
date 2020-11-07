@@ -1,104 +1,64 @@
-<% # binding.pry %>
+
+<!–– the content for all notes is in FORM_NOTES hash in application_helper.rb ––>
+
 <%= form_for(@archer) do |f| %>
     <h3>Login Information<span class="red-text">*</span></h3>
-    <%= f.label :username %>
-    <%= f.text_field :username, class: "form-input-field archer-input", placeholder: "Enter a username *" %>
-    <% if @archer.errors[:username].any? %>
-        <p class="small-text red-text"><%= @archer.errors[:username].first %></p>
-    <% else %>
-        <br>
-    <% end %>
+        <%= f.label :username %>
+        <%= f.text_field :username, class: "form-input-field archer-input", placeholder: "Enter a username *" %>
+            <%= error_check(@archer, :username) %>
 
-    <%= f.label :email %>
-    <%= f.email_field :email, class: "form-input-field archer-input", placeholder: "Enter your email *" %>
-    <% if @archer.errors[:email].any? %>
-        <p class="small-text red-text"><%= @archer.errors[:email].first %></p>
-    <% else %>
-        <br>
-    <% end %>
+        <%= f.label :email %>
+        <%= f.email_field :email, class: "form-input-field archer-input", placeholder: "Enter your email *" %>
+            <%= error_check(@archer, :email) %>
 
-    <%= f.label :password %>
-    <%= f.password_field :password, class: "form-input-field archer-input", placeholder: "Enter a password *" %>
-    <% if archer_form_type == "edit" %>
-        <p class="small-text">Leave blank if you are not changing your password.</p>
-    <% end %>
-    <% if @archer.errors[:password].any? %>
-        <p class="small-text red-text"><%= @archer.errors[:password].first %></p>
-    <% else %>
-        <br>
-    <% end %>
+        <%= f.label :password %>
+        <%= f.password_field :password, class: "form-input-field archer-input", placeholder: "Enter a password *" %>
+            <%= error_check(@archer, :password) %>
+            <%= form_note(:password) %>
 
     <h3>Personal Information<span class="red-text">*</span></h3>
-    <%= f.label :first_name, "First Name" %>
-    <%= f.text_field :first_name, class: "form-input-field archer-input", placeholder: "Enter your first name *" %>
-    <% if @archer.errors[:first_name].any? %>
-        <p class="small-text red-text"><%= @archer.errors[:first_name].first %></p>
-    <% else %>
-        <br>
-    <% end %>
+        <%= f.label :first_name, "First Name" %>
+        <%= f.text_field :first_name, class: "form-input-field archer-input", placeholder: "Enter your first name *" %>
+            <%= error_check(@archer, :first_name) %>
 
-    <%= f.label :last_name, "Last Name" %>
-    <%= f.text_field :last_name, class: "form-input-field archer-input", placeholder: "Enter your last name *" %>
-    <% if @archer.errors[:last_name].any? %>
-        <p class="small-text red-text"><%= @archer.errors[:last_name].first %></p>
-    <% else %>
-        <br>
-    <% end %>
+        <%= f.label :last_name, "Last Name" %>
+        <%= f.text_field :last_name, class: "form-input-field archer-input", placeholder: "Enter your last name *" %>
+            <%= error_check(@archer, :last_name) %>
 
-    <%= f.label :birthdate, "Birth Date" %>
-    <%= f.date_field :birthdate, class: "form-input-field archer-input", placeholder: "Enter your birth date *" %>
-    <% if @archer.errors[:birthdate].any? %>
-        <p class="small-text red-text"><%= @archer.errors[:birthdate].first %></p>
-    <% else %>
-        <br>
-    <% end %>
-    
-    <%= f.label :gender_id %>
-    <%= f.collection_select :gender_id, @genders, :id, :name, {}, {class: "form-input-field archer-input"} %>
-    <% if @archer.errors[:gender_id].any? %>
-        <p class="small-text red-text"><%= @archer.errors[:gender_id].first %></p>
-    <% else %>
-        <br>
-    <% end %>
+        <%= f.label :birthdate, "Birth Date" %>
+        <%= f.date_field :birthdate, class: "form-input-field archer-input", placeholder: "Enter your birth date *" %>
+            <%= error_check(@archer, :birthdate) %>
+        
+        <%= f.label :gender_id %>
+        <%= f.collection_select :gender_id, @genders, :id, :name, {}, {class: "form-input-field archer-input"} %>
+            <%= error_check(@archer, :gender_id) %>
 
     <h3>Location Information</h3>
-    <%= f.label :home_city, "Home City" %>
-    <%= f.text_field :home_city, class: "form-input-field archer-input", placeholder: "Enter the city you live in" %>
-    <br>
-    <%= f.label :home_state, "Home State" %>q
-    <%= f.text_field :home_state, class: "form-input-field archer-input", placeholder: "Enter the state you live in" %>
-    <br>
-    <%= f.label :home_country, "Home Country" %>
-    <%= f.text_field :home_country, class: "form-input-field archer-input", placeholder: "Enter the country you live in" %>
-    <br>
+        <%= f.label :home_city, "Home City" %>
+        <%= f.text_field :home_city, class: "form-input-field archer-input", placeholder: "Enter the city you live in" %>
+            <%= error_check(@archer, :home_city) %>
+
+        <%= f.label :home_state, "Home State" %>q
+        <%= f.text_field :home_state, class: "form-input-field archer-input", placeholder: "Enter the state you live in" %>
+            <%= error_check(@archer, :home_state) %>
+
+        <%= f.label :home_country, "Home Country" %>
+        <%= f.text_field :home_country, class: "form-input-field archer-input", placeholder: "Enter the country you live in" %>
+            <%= error_check(@archer, :home_country) %>
 
     <h3 class="remove-bottom-margin">Competition Infomation<span class="red-text">*</span></h3>
-    <% if archer_form_type == "new" %>
-        <p class="small-text">You can change these at any time.</p>
-    <% elsif archer_form_type == "edit" %>
-        <p class="small-text">Used to reduce entering info when starting new Score Session.</p>
-    <% end %>
+        <%= form_note(:comp_section) %>
 
-    <%= f.label :default_age_class, "Primary Age Class" %>
-    <%= f.collection_select :default_age_class, @age_classes, :name, :name, {prompt: "Select an age class"}, {class: "form-input-field archer-input", style: "margin-bottom: 0;"} %>
-    <% if archer_form_type == "new" %>
-        <p class="small-text">If you don't choose, the youngest eligible age class will be automatically assigned (requires you enter your birth date).</p>
-    <% elsif archer_form_type == "edit" %>
-        <p class="small-text">Only shows Age Classes you're eligible for.</p>
-    <% end %>
+        <%= f.label :default_age_class, "Primary Age Class" %>
+        <%= f.collection_select :default_age_class, @age_classes, :name, :name, {prompt: "Select an age class"}, {class: "form-input-field archer-input remove-bottom-margin"} %>
+            <%= form_note(:age_class) %>
 
-    <%= f.label :default_division, "Primary Shooting Style" %>
-    <%= f.collection_select :default_division, @divisions, :name, :name, {prompt: (@archer.errors[:default_division].first || "Select a shooting style *")}, {class: "form-input-field archer-input"} %>
-    <% if @archer.errors[:default_division].any? %>
-        <p class="small-text red-text"><%= @archer.errors[:default_division].first %></p>
-    <% else %>
-        <br>
-    <% end %>
+        <%= f.label :default_division, "Primary Shooting Style" %>
+        <%= f.collection_select :default_division, @divisions, :name, :name, {prompt: (@archer.errors[:default_division].first || "Select a shooting style *")}, {class: "form-input-field archer-input"} %>
+            <%= error_check(@archer, :default_division) %>
+    
     <br>
-
     <%= f.submit %>
-    <% if archer_form_type == "edit" %>
-        <%= link_to "Cancel", archer_path(current_user) %>
-    <% end %>
+    <%= link_to "Cancel", archer_path(current_user) if form_type == "edit" %>
     <p>Fields marked with a <span class="red-text">*</span> are required.</p>
 <% end %>

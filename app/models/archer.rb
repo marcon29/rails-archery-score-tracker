@@ -49,8 +49,8 @@ class Archer < ApplicationRecord
     end    
 
     def format_names
-        self.first_name = self.first_name.capitalize
-        self.last_name = self.last_name.capitalize
+        self.first_name = self.first_name.capitalize if self.first_name.present?
+        self.last_name = self.last_name.capitalize if self.last_name.present?
     end
 
     # possible update - ability to break out or select by GovBody???
