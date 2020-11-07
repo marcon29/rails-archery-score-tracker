@@ -88,4 +88,9 @@ class ApplicationRecord < ActiveRecord::Base
 			get_data_columns.each { |col| errors.add("#{col}", message) }
 		end
 	end
+
+	def full_location
+		"#{self.city}, #{self.state}, #{self.country}"
+	end
+
 end

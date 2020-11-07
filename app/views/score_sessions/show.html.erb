@@ -1,2 +1,85 @@
-<h1>ScoreSessions#show</h1>
-<p>Find me in app/views/score_sessions/show.html.erb</p>
+<h1><%= @score_session.name %></h1>
+<ul id="general-info">
+    <li>Score Type: <b><%= @score_session.score_session_type %></b></li>
+    <li>Governing Body: <b><%= @score_session.gov_body.name %></b></li>
+    <li>Location: <b><%= @score_session.full_location %></b></li>
+    <li>Date(s): <b><%= formatted_date_range(@score_session.start_date, @score_session.end_date) %></b></li>
+    <% if @score_session.rank.blank? %>
+        <li>Rank: <b>N/A</b></li>
+    <% else  %>
+        <li>Rank: <b><%= @score_session.rank %></b></li>
+    <% end  %>
+</ul>
+<hr>
+
+<% @rounds.each do |round| %>
+    <section id=<%= "round-#{round.id}" %> >
+        <section id=<%= "round-#{round.id}-info" %> >
+            <h3 class="short-bottom-margin"><%= round.round_format.name %> (<%= round.round_type %>)</h3>
+            <p class="display-horiz">Category: <b><%= round.division.name %> <%= round.age_class.name %></b></p>
+            <p class="display-horiz">Score: <b><%= round.score %></b></p>
+            <% if round.rank.blank? %>
+                <p class="display-horiz">Rank: <b>N/A</b></p>
+            <% else  %>
+                <p class="display-horiz">Rank: <b><%= round.rank %></b></p>
+            <% end  %>
+        </section>
+        <section id="all-rsets">
+            <% round.rsets.each do |rset| %>
+                <section id=<%= "rset-#{rset.id}" %> class="rset-section">
+                    <section id=<%= "rset-#{rset.id}-info" %> class="rset-info">
+                        <h4 class="short-bottom-margin"><%= rset.set_end_format.name %> - <%= rset.distance %></h4>
+                        <p class="display-horiz">Date: <b><%= formatted_date_short(rset.date) %></b></p>
+                        <p class="display-horiz">Target: <b><%= rset.target.name %></b></p>
+                        <p class="display-horiz">Score: <b><%= rset.score %></b></p>
+                        <% if rset.rank.blank? %>
+                            <p class="display-horiz">Rank: <b>N/A</b></p>
+                        <% else  %>
+                            <p class="display-horiz">Rank: <b><%= rset.rank %></b></p>
+                        <% end  %>
+                    </section>
+                    
+                    <!–– start of partial for Ends ––>
+                    <section id=<%= "rset-#{rset.id}-scores" %> >
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <% rset.ends.first.shots.each do |shot| %>
+                                        <th><%= shot.number %></th>
+                                    <% end  %>
+                                    <th class="spacer"></th>
+                                    <th>Total</th>
+                                    <th class="spacer"></th>
+                                    <th>Set</th>
+                                    <% if rset.ends.first.set_score %>
+                                        <th>Set</th>
+                                    <% end  %>
+                                <tr>
+                            </thead>
+                            <tbody>
+                                <% rset.ends.each do |endd| %>
+                                    <tr>
+                                        <th>End <%= endd.number %></th>
+                                        <% endd.shots.each do |shot| %>
+                                            <td><%= shot.score_entry %></td>
+                                        <% end  %>
+                                        <td class="spacer"></td>
+                                        <td class="end-score"><%= endd.score %></td>
+                                        <td class="spacer"></td>
+                                        <td class="end-set-score"><%= endd.set_score %></td>
+                                        <% if endd.set_score %>
+                                            <td class="end-set-score"><%= endd.set_score %></td>
+                                        <% end  %>
+                                    </tr>
+                                <% end  %>
+                            </tbody>
+                        </table>
+                    </section>
+                    <!–– end of partial for Ends ––>
+
+                </section>
+            <% end  %>
+        </section>
+    </section>
+<% end  %>

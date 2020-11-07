@@ -1,2 +1,16 @@
-<h1>ScoreSessions#index</h1>
-<p>Find me in app/views/score_sessions/index.html.erb</p>
+<h1><%= "#{current_user.first_name}'s Scores" %></h1>
+
+<h3><%= @score_sessions.score_session_type %></h3>
+
+<li><%= link_to @score_sessions.name, score_session_path(@score_sessions) %></li>
+<li><%= @score_sessions.name %></li>
+<li><%= @score_sessions.gov_body.name %></li>
+<li><%= @score_sessions.city %></li>
+<li><%= @score_sessions.state %></li>
+<li><%= @score_sessions.country %></li>
+<li><%= @score_sessions.start_date %></li>
+<li><%= @score_sessions.end_date %></li>
+<li><%= @score_sessions.rank %></li>
+
+<li><%= @score_sessions.active %></li>
+

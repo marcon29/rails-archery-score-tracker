@@ -53,5 +53,13 @@ module ApplicationHelper
         date.strftime("%m/%d/%Y")
     end
 
+    def formatted_date_range(start_date, end_date)
+        range = start_date.strftime("%m/%d/%Y")
+        if end_date != start_date
+            range = range + "-" + end_date.strftime("%m/%d/%Y") 
+        end
+        range
+    end
+
 
 end

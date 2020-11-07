@@ -1,6 +1,6 @@
 <% if current_user %>
     <h1>Welcome <%= current_user.first_name %></h1>
-    <ul id="archer-info-home">
+    <ul id="general-info">
         <li>Name: <b><%= current_user.full_name %></b></li>
         <li>Gender: <b><%= current_user.gender.name %></b></li>
         <li>Age: <b><%= current_user.age %></b></li>
