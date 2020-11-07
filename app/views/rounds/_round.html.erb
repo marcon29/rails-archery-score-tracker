@@ -1,12 +1,18 @@
 <section id=<%= "round-#{round.id}" %> class="round-section">
     <section id=<%= "round-#{round.id}-info" %> class="round-info" >
-        <h3 class="short-bottom-margin"><%= round.round_format.name %> (<%= round.round_type %>)</h3>
+        <% if show_action? %>
+            <h3 class="short-bottom-margin"><%= round.round_format.name %> (<%= round.round_type %>)</h3>
+        <% else %>
+            <p class="display-horiz">Round: <b><%= round.round_format.name %> (<%= round.round_type %>)</b></p>
+        <% end %>
         <p class="display-horiz">Category: <b><%= round.division.name %> <%= round.age_class.name %></b></p>
         <p class="display-horiz">Score: <b><%= round.score %></b></p>
         <p class="display-horiz">Rank: <b><%= get_rank(round) %></b></p>
     </section>
     
-    <section id=<%= "round-#{round.id}-rsets" %> class="all-rsets">
-        <%= render collection: round.rsets, partial: "rsets/rset" %>
-    </section>
+    <% if show_action? %>
+        <section id=<%= "round-#{round.id}-rsets" %> class="all-rsets">
+            <%= render collection: round.rsets, partial: "rsets/rset" %>
+        </section>
+    <% end %>
 </section>

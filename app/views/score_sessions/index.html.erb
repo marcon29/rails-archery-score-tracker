@@ -1,16 +1,13 @@
 <h1><%= "#{current_user.first_name}'s Scores" %></h1>
 
-<h3><%= @score_sessions.score_session_type %></h3>
-
-<li><%= link_to @score_sessions.name, score_session_path(@score_sessions) %></li>
-<li><%= @score_sessions.name %></li>
-<li><%= @score_sessions.gov_body.name %></li>
-<li><%= @score_sessions.city %></li>
-<li><%= @score_sessions.state %></li>
-<li><%= @score_sessions.country %></li>
-<li><%= @score_sessions.start_date %></li>
-<li><%= @score_sessions.end_date %></li>
-<li><%= @score_sessions.rank %></li>
-
-<li><%= @score_sessions.active %></li>
-
+<% if @score_sessions.nil? %>
+    <h3>You have not recorded any scores yet.</h3>
+    <p>Add a <%= link_to "New Score Session", new_score_session_path %> to get started.</p>
+<% else %>
+    <% @score_session_types.each do |type|  %>
+        <h2><%= type %>s</h2>
+        <section id=<%= "score-session-#{type.downcase}" %> class="score-session-type-section">
+            <%= render collection: score_sessions_by_type(@score_sessions, type), partial: "score_session" %>
+        </section>
+    <% end %>
+<% end %>

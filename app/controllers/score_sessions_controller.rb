@@ -1,13 +1,11 @@
 class ScoreSessionsController < ApplicationController
+  helper_method :score_sessions_by_type
 
   # don't forget to restrict the views!!!!!
 
   def index
-    # real code
-    # @score_sessions = current_user.score_sessions
-
-    # placeholder to get view set up
-    @score_sessions = current_user.score_sessions.first
+    @score_sessions = current_user.score_sessions
+    @score_session_types = score_session_types(@score_sessions)
   end
 
   def show
@@ -27,6 +25,14 @@ class ScoreSessionsController < ApplicationController
   def update
   end
 
-  
+
+  # ##### helpers
+  def score_sessions_by_type(sessions, type)
+    sessions.where(score_session_type: type)
+  end
+
+  def score_session_types(sessions)
+    sessions.collect { |ss| ss.score_session_type }.uniq
+  end
 
 end

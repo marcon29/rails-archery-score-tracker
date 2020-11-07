@@ -1,14 +1,1 @@
-<h1><%= @score_session.name %></h1>
-<section id=<%= "score-session-#{@score_session.id}" %> class="general-info">
-    <p>Score Type: <b><%= @score_session.score_session_type %></b></p>
-    <p>Governing Body: <b><%= @score_session.gov_body.name %></b></p>
-    <p>Location: <b><%= @score_session.full_location %></b></p>
-    <p>Date(s): <b><%= formatted_date_range(@score_session.start_date, @score_session.end_date) %></b></p>
-    <p>Rank: <b><%= get_rank(@score_session) %></b></p>
-</section>
-
-<hr>
-
-<section id=<%= "score-session-#{@score_session.id}-rounds" %> class="all-rounds">
-    <%= render collection: @score_session.rounds, partial: "rounds/round" %>
-</section>
+<%= render partial: "score_session", locals: {score_session: @score_session} %>

@@ -6,7 +6,7 @@
 /* Scores Layout */
 /* ******************************************************* */
 
-.rset-section {
+.rset-section, .score-session-type-section {
     width: 90%;
     margin: 0 auto 3rem;
 }

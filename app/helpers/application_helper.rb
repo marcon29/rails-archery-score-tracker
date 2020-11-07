@@ -27,6 +27,10 @@ module ApplicationHelper
         end
     end
 
+    def show_action?
+        params[:action] == "show"
+    end
+
     def form_note(placement)
         if form_type == "new"
             tag.p FORM_NOTES[:new][placement], class: "small-text" 
@@ -50,19 +54,17 @@ module ApplicationHelper
     end
     
     def formatted_date(date)
-        date.strftime("%B%e, %Y")
-    end
-
-    # adding this also - may want to use when displaying ScoreSession instead of long format above
-    # delete if don't use
-    def formatted_date_short(date)
         date.strftime("%m/%d/%Y")
     end
 
+    def formatted_date_long(date)
+        date.strftime("%B%e, %Y")
+    end
+
     def formatted_date_range(start_date, end_date)
-        range = start_date.strftime("%m/%d/%Y")
+        range = formatted_date(start_date)
         if end_date != start_date
-            range = range + "-" + end_date.strftime("%m/%d/%Y") 
+            range = range + "-" + formatted_date(end_date)
         end
         range
     end
