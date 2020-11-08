@@ -8,7 +8,7 @@
             <%= form_note(:name) %>
 
         <%= f.label :score_session_type, "Score Session Type" %>
-        <%= select_tag :score_session_type, options_for_select(@score_session_types), class: form_input_class(:score_session_type) %>
+        <%= f.select :score_session_type, options_for_select(@score_session_types), {}, class: form_input_class(:score_session_type) %>
             <%= error_check(@score_session, :score_session_type) %>
             <%= form_note(:score_session_type) %>
 
@@ -48,6 +48,12 @@
             <%= form_note(:rank) %>
     
     <h3>Rounds In Score Session<span class="red-text">*</span></h3>
+    <%= f.fields_for :rounds do |round_f| %>
+        <%= render partial: "rounds/round_form", locals: {round_f: round_f} %>
+    <% end %>
+    
+   
+    
 
     <%= f.submit %>
     <%= link_to "Cancel", score_session_path(@score_session) if form_type == "edit" %>

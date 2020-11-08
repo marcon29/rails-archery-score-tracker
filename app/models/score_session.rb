@@ -36,6 +36,14 @@ class ScoreSession < ApplicationRecord
         self.name = self.name.titlecase.gsub("Us", "US")
     end
 
+    # ##### helpers (associated models instantiation)
+    def rounds_attributes=(attributes)
+        attributes.values.each do |attr|
+            round = Round.find_or_create_by(attr)
+            self.rounds.build(round: round)
+        end
+    end
+
     # ##### helpers (data control)
         # date range - collect all dates between start and end (inclusive)
             # hold - may not need this - html can restrict date range (can just use start and end)
