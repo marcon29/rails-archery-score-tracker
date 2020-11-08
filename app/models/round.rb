@@ -44,6 +44,14 @@ class Round < ApplicationRecord
         "#{self.score_session.name} - #{self.round_format.name}" # if self.round
     end
 
+    # ##### helpers (associated models instantiation)
+    def rsets_attributes=(attributes)
+        attributes.values.each do |attr|
+            rset = Rset.find_or_create_by(attr)
+            self.rsets.build(rset: rset)
+        end
+    end
+
     # ##### helpers (data control)
     def gov_body
         self.score_session.gov_body

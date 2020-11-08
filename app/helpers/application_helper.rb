@@ -10,6 +10,7 @@ module ApplicationHelper
             password: "Leave blank if you are not changing your password.", 
             comp_section: "Used to reduce entering info when starting new Score Session.", 
             default_age_class: "Only shows Age Classes you're eligible for.", 
+            age_class: "Only shows Age Classes you're eligible for.", 
             end_date: "Leave blank or use start date if score session is single day.", 
             rank: 'Enter a number above 0, "W" or "L".'
         }

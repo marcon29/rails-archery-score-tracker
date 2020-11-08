@@ -1,0 +1,11 @@
+<section class=rset-form-fields>
+    <%= rset_f.label :date %>
+    <%= rset_f.date_field :date, class: form_input_class(:date), placeholder: "Enter the last day of the score session *" %>
+        <%= error_check(rset_f.object, :date) %>
+        <%= form_note(:date) %>
+
+    <%= rset_f.label :rank %>
+    <%= rset_f.text_field :rank, class: form_input_class(:rank), placeholder: "Enter your final rank for the score session" %>
+        <%= error_check(rset_f.object, :rank) %>
+        <%= form_note(:rank) %>
+</section>

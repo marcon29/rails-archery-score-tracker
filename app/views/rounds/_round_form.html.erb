@@ -1,7 +1,6 @@
-<h4><%= round_f.object.round_format.name  %></h4>
-<section class= form-round-section>
+<section class= round-form-fields>
     <%= round_f.label :round_type, "Round Type" %>
-    <%= round_f.select :round_type, options_for_select(@round_types), {}, class: form_input_class(:division) %>
+    <%= round_f.select :round_type, options_for_select(@round_types), {}, class: form_input_class(:round_type) %>
         <%= error_check(round_f.object, :round_type) %>
         <%= form_note(:round_type) %>
 
@@ -11,7 +10,7 @@
         <%= form_note(:division) %>
 
     <%= round_f.label :age_class, "Age Class" %>
-    <%= round_f.collection_select :age_class, @age_classes, :id, :name, {}, {class: form_input_class(:division)} %>
+    <%= round_f.collection_select :age_class, @age_classes, :id, :name, {}, {class: form_input_class(:age_class)} %>
         <%= error_check(round_f.object, :age_class) %>
         <%= form_note(:age_class) %>
 
@@ -19,4 +18,9 @@
     <%= round_f.text_field :rank, class: form_input_class(:rank), placeholder: "Enter your final rank for the score session" %>
         <%= error_check(round_f.object, :rank) %>
         <%= form_note(:rank) %>
+    
+    <%= round_f.fields_for :rsets do |rset_f| %>
+        <h4><%= rset_f.object.set_end_format.name %> - <%= rset_f.object.distance %></h4>
+        <%= render partial: "rsets/rset_form", locals: {rset_f: rset_f} %>
+    <% end %>
 </section>

@@ -21,15 +21,16 @@ class ScoreSessionsController < ApplicationController
 
   def edit
     @score_session = ScoreSession.find(params[:id])
-    @round = @score_session.rounds.first
 
-
+    # for ScoreSession collections
     @score_session_types = SCORE_SESSION_TYPES
     @gov_bodies = Organization::GovBody.all
+    
+    # for Round collections
     @round_types = ROUND_TYPES
     @divisions = Organization::Division.all
-    # @age_classes = Organization::AgeClass.all # linit by ScoreSession.gov_body
-    @age_classes = current_user.eligible_age_classes
+    @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
+    
   end
 
   def score

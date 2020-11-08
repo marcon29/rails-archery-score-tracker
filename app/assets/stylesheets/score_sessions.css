@@ -6,7 +6,10 @@
 /* Scores Layout */
 /* ******************************************************* */
 
-.rset-section, .score-session-section, .form-round-section {
+.score-session-section, 
+.rset-section, 
+.round-form-fields,
+.rset-form-fields {
     width: 90%;
     margin: 0 auto 3rem;
 }
