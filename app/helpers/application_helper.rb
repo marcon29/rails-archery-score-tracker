@@ -2,12 +2,16 @@ module ApplicationHelper
     FORM_NOTES = {
         new: {
             comp_section: "You can change these at any time.", 
-            age_class: "If you don't choose, the youngest eligible age class will be automatically assigned (requires you enter your birth date)."
+            age_class: "If you don't choose, the youngest eligible age class will be automatically assigned (requires you enter your birth date).", 
+            end_date: "Leave blank if score session is single day.", 
+            rank: 'Leave blank unless entering an old score session. Otherwise enter a number above 0, "W" or "L".'
         }, 
         edit: {
             password: "Leave blank if you are not changing your password.", 
             comp_section: "Used to reduce entering info when starting new Score Session.", 
-            age_class: "Only shows Age Classes you're eligible for."
+            age_class: "Only shows Age Classes you're eligible for.", 
+            end_date: "Leave blank if score session is single day.", 
+            rank: 'Enter a number above 0, "W" or "L".'
         }
     }
     

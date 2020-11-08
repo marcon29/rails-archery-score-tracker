@@ -1,0 +1,45 @@
+<!–– the content for all notes is in FORM_NOTES hash in application_helper.rb ––>
+
+<%= form_for(@score_session) do |f| %>
+    <%= f.label :name %>
+    <%= f.text_field :name, class: "form-input-field archer-input", placeholder: "Enter a score session name *" %>
+        <%= error_check(@score_session, :name) %>
+
+    <%= f.label :score_session_type, "Score Session Type" %>
+    <%= select_tag :score_session_type, options_for_select(@score_session_types), class: "form-input-field archer-input" %>
+        <%= error_check(@score_session, :score_session_type) %>
+
+    <%= f.label :gov_body_id, "Governing Body" %>
+    <%= f.collection_select :gov_body_id, @gov_bodies, :id, :name, {}, {class: "form-input-field archer-input"} %>
+        <%= error_check(@score_session, :gov_body_id) %>
+    
+    <%= f.label :city %>
+    <%= f.text_field :city, class: "form-input-field archer-input", placeholder: "Enter the city where the score session is held" %>
+        <%= error_check(@score_session, :city) %>
+
+    <%= f.label :state %>
+    <%= f.text_field :state, class: "form-input-field archer-input", placeholder: "Enter the state where the score session is held" %>
+        <%= error_check(@score_session, :state) %>
+
+    <%= f.label :country %>
+    <%= f.text_field :country, class: "form-input-field archer-input", placeholder: "Enter the country where the score session is held" %>
+        <%= error_check(@score_session, :country) %>
+
+    <%= f.label :start_date, "Start Date" %>
+    <%= f.date_field :start_date, class: "form-input-field archer-input", placeholder: "Enter the first day of the score session *" %>
+        <%= error_check(@score_session, :start_date) %>
+
+    <%= f.label :end_date, "End Date" %>
+    <%= f.date_field :end_date, class: "form-input-field archer-input remove-bottom-margin", placeholder: "Enter the last day of the score session *" %>
+        <%= form_note(:end_date) %>
+        <%= error_check(@score_session, :end_date) %>
+
+    <%= f.label :rank %>
+    <%= f.text_field :rank, class: "form-input-field archer-input remove-bottom-margin", placeholder: "Enter your final rank for the score session" %>
+        <%= form_note(:rank) %>
+        <%= error_check(@score_session, :rank) %>
+
+    <%= f.submit %>
+    <%= link_to "Cancel", score_session_path(@score_session) if form_type == "edit" %>
+    <p>Fields marked with a <span class="red-text">*</span> are required.</p>
+<% end %>

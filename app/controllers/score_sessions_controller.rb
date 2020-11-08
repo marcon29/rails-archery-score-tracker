@@ -20,6 +20,12 @@ class ScoreSessionsController < ApplicationController
   end
 
   def edit
+    @score_session = ScoreSession.find(params[:id])
+    @score_session_types = SCORE_SESSION_TYPES
+    @gov_bodies = Organization::GovBody.all
+  end
+
+  def score
     @score_session = find_active_score_session
   end
 

@@ -22,4 +22,8 @@ class ApplicationController < ActionController::Base
     def find_active_score_session
         current_user.score_sessions.where(active: true).first
     end
+
+    def score_session_types(sessions)
+        sessions.collect { |ss| ss.score_session_type }.uniq
+    end
 end
