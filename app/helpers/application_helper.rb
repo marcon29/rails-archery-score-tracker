@@ -43,6 +43,9 @@ module ApplicationHelper
         params[:action] == "edit"
     end
 
+    def score_action?
+        params[:action] == "score"
+    end
     
 
     def form_note(placement)
