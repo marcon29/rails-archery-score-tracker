@@ -72,6 +72,10 @@ module ApplicationHelper
         object.rank.blank? ? "N/A" : object.rank
     end
 
+    def required_field
+        tag.span "*", class: "red-text"
+    end
+
 
     # ##########################################################
     # these might be better in a model

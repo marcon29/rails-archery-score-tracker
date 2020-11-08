@@ -1,38 +1,39 @@
 <!–– the content for all notes is in FORM_NOTES hash in application_helper.rb ––>
 
 <%= form_for(@score_session) do |score_ses_f| %>
-    <h3>Score Session Information<span class="red-text">*</span></h3>
-        <%= score_ses_f.label :name %>
+    <h2>Score Session Information</h2>
+    <section class= score-session-form-fields>
+        <%= score_ses_f.label :name %><%= required_field %>
         <%= score_ses_f.text_field :name, class: form_input_class(:name), placeholder: "Enter a score session name *" %>
             <%= error_check(@score_session, :name) %>
             <%= form_note(:name) %>
 
-        <%= score_ses_f.label :score_session_type, "Score Session Type" %>
+        <%= score_ses_f.label :score_session_type, "Score Session Type" %><%= required_field %>
         <%= score_ses_f.select :score_session_type, options_for_select(@score_session_types), {}, class: form_input_class(:score_session_type) %>
             <%= error_check(@score_session, :score_session_type) %>
             <%= form_note(:score_session_type) %>
 
-        <%= score_ses_f.label :gov_body_id, "Governing Body" %>
+        <%= score_ses_f.label :gov_body_id, "Governing Body" %><%= required_field %>
         <%= score_ses_f.collection_select :gov_body_id, @gov_bodies, :id, :name, {}, {class: form_input_class(:gov_body_id)} %>
             <%= error_check(@score_session, :gov_body_id) %>
             <%= form_note(:gov_body_id) %>
         
-        <%= score_ses_f.label :city %>
+        <%= score_ses_f.label :city %><%= required_field %>
         <%= score_ses_f.text_field :city, class: form_input_class(:city), placeholder: "Enter the city where the score session is held" %>
             <%= error_check(@score_session, :city) %>
             <%= form_note(:city) %>
 
-        <%= score_ses_f.label :state %>
+        <%= score_ses_f.label :state %><%= required_field %>
         <%= score_ses_f.text_field :state, class: form_input_class(:state), placeholder: "Enter the state where the score session is held" %>
             <%= error_check(@score_session, :state) %>
             <%= form_note(:state) %>
 
-        <%= score_ses_f.label :country %>
+        <%= score_ses_f.label :country %><%= required_field %>
         <%= score_ses_f.text_field :country, class: form_input_class(:country), placeholder: "Enter the country where the score session is held" %>
             <%= error_check(@score_session, :country) %>
             <%= form_note(:country) %>
 
-        <%= score_ses_f.label :start_date, "Start Date" %>
+        <%= score_ses_f.label :start_date, "Start Date" %><%= required_field %>
         <%= score_ses_f.date_field :start_date, class: form_input_class(:start_date), placeholder: "Enter the first day of the score session *" %>
             <%= error_check(@score_session, :start_date) %>
             <%= form_note(:start_date) %>
@@ -46,14 +47,14 @@
         <%= score_ses_f.text_field :rank, class: form_input_class(:rank), placeholder: "Enter your final rank for the score session" %>
             <%= error_check(@score_session, :rank) %>
             <%= form_note(:rank) %>
+    </section>
     
-    <h3>Rounds In Score Session<span class="red-text">*</span></h3>
+    <h2>Rounds In Score Session</h2>
     <%= score_ses_f.fields_for :rounds do |round_f| %>
-        <h4><%= round_f.object.round_format.name %></h4>
         <%= render partial: "rounds/round_form", locals: {round_f: round_f} %>
     <% end %>
 
     <%= score_ses_f.submit %>
     <%= link_to "Cancel", score_session_path(@score_session) if form_type == "edit" %>
-    <p>Fields marked with a <span class="red-text">*</span> are required.</p>
+    <p>Fields marked with a <%= required_field %> are required.</p>
 <% end %>
