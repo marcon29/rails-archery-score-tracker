@@ -1,11 +1,16 @@
 <% if show_action? %>
     <h1><%= score_session.name %></h1>
+<% elsif edit_action? %>
+    <h1 class="short-bottom-margin">Edit <%= score_session.name %></h1>
+    <p>Edit Score Session Details</p>
+<% elsif home_action? %>
+    <h3 class="short-bottom-margin"><%= link_to score_session.name, edit_score_session_path(score_session) %></h3>
 <% else %>
-    <h3 class="short-bottom-margin"><%= link_to @score_sessions.first.name, score_session_path(@score_sessions.first) %></h3>
+    <h3 class="short-bottom-margin"><%= link_to score_session.name, score_session_path(score_session) %></h3>
 <% end %>
 
 <section id=<%= "score-session-#{score_session.id}" %> class="general-info">
-    <% if show_action? %>
+    <% if show_action? || edit_action? %>
         <p>Score Type: <b><%= score_session.score_session_type %></b></p>
     <% end %>
     <p>Governing Body: <b><%= score_session.gov_body.name %></b></p>

@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
     # protect_from_forgery with: :exception
-    helper_method :current_user
+    helper_method :current_user, :find_active_score_session
 
     def log_user_in(user)
         session[:user_id] = user.id
@@ -17,5 +17,9 @@ class ApplicationController < ActionController::Base
 
     def require_login
         redirect_to root_path unless logged_in?
+    end
+
+    def find_active_score_session
+        current_user.score_sessions.where(active: true).first
     end
 end

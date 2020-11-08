@@ -27,9 +27,19 @@ module ApplicationHelper
         end
     end
 
+    def home_action?
+        params[:action] == "home"
+    end
+
     def show_action?
         params[:action] == "show"
     end
+
+    def edit_action?
+        params[:action] == "edit"
+    end
+
+    
 
     def form_note(placement)
         if form_type == "new"

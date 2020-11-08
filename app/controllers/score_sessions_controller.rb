@@ -20,6 +20,7 @@ class ScoreSessionsController < ApplicationController
   end
 
   def edit
+    @score_session = find_active_score_session
   end
 
   def update
