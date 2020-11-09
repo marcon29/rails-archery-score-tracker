@@ -44,6 +44,9 @@ class ScoreSession < ApplicationRecord
         attributes.values.each do |attrs|
             round = Round.find(attrs[:id])
             if round
+                # ensure name auto updates
+                attrs[:archer_category_id] = ""
+
                 # get category
                 attrs[:archer_category_id] = round.find_category_by_div_age_class(division: attrs[:division], age_class: attrs[:age_class]).id
                 attrs.delete(:division)

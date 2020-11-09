@@ -26,6 +26,7 @@ class Round < ApplicationRecord
         inclusion: { in: SCORE_METHODS }
     # validate :check_associations, :check_and_assign_rank
     validate :check_and_assign_rank
+    # validates_associated :rsets
     before_validation :assign_name
 
 

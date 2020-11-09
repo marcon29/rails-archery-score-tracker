@@ -61,15 +61,21 @@ class ScoreSessionsController < ApplicationController
       @score_session.valid?
       render :edit
     elsif @score_session.save
+      children_auto_updates
         # need to update so goes back to correct place (can't use from_score because always comes from edit)
         # redirect_to score_path(@score_session) if from_score
-        binding.pry
         redirect_to score_session_path(@score_session) # unless from_score
     else
       render :edit
     end
       
   end
+
+  def children_auto_updates
+    @score_session.rounds.each { |round| round.update(name: "") }
+    @score_session.rsets.each { |rset| rset.update(name: "") }
+  end
+    
   
   # round_errors(@score_session)
   
