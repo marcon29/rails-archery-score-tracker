@@ -39,17 +39,52 @@ class ScoreSessionsController < ApplicationController
 
   def update
     # binding.pry
-    # for Round:
-      # if round_type == "Qualifying" then score_method = "Points"
-      # if round_type == "Match" then score_method = "Set"
+    @score_session = ScoreSession.find(params[:id])
+    
+    @score_session.assign_attributes(score_session_params)
+    
+
+
+    
+    # @score_session.rounds.assign_attributes(score_session_params)
+    binding.pry
+    
+    
+    # if @score_session.valid?
+    if @score_session.save
+        # need to update so goes back to correct place (can't use from_score because always comes from edit)
+        # redirect_to score_path(@score_session) if from_score
+        redirect_to score_session_path(@score_session) # unless from_score
+    else
+      render :edit
+    end
+    
+    # archer_category
+    
+    # for round:
       # find archer_category - get input for division and age_class
           # find_category_by_div_age_class(division: params[:round][:division], age_class: params[:round][:age_class])
+    
+    # for rset:
+      # if round.round_type == "Qualifying" then score_method = "Points"
+      # if round.round_type == "Match" then score_method = "Set"
+      
   end
  
     # user attrs - :round_type, :rank
     # DISCIPLINES = ["Outdoor", "Indoor"]
     # DIVISIONS = ["Recurve", "Compound"]
     # ROUND_TYPES = ["Qualifying", "Match"]
+
+
+  def score_session_params
+    params.require(:score_session).permit(:name, :score_session_type, :gov_body_id, :city, :state, :country, :start_date, :end_date, :rank,
+      rounds_attributes: [:id, :round_type, :score_method, :rank, :division, :age_class]
+    )
+    # params.require(:score_session).permit(:name, :score_session_type, :gov_body_id, :city, :state, :country, :start_date, :end_date, :rank)
+  end
+
+  
 
   # ##### helpers
   def score_sessions_by_type(sessions, type)

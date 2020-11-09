@@ -38,9 +38,35 @@ class ScoreSession < ApplicationRecord
 
     # ##### helpers (associated models instantiation)
     def rounds_attributes=(attributes)
-        attributes.values.each do |attr|
-            round = Round.find_or_create_by(attr)
-            self.rounds.build(round: round)
+        # binding.pry
+        # attributes.values.each do |attrs|
+        #     round = Round.find_or_create_by(attrs)
+        #     self.rounds.build(round: round)
+        # end
+
+        attributes.values.each do |attrs|
+            round = Round.find(attrs[:id])
+            if round
+                # get category
+                attrs[:archer_category_id] = round.find_category_by_div_age_class(division: attrs[:division], age_class: attrs[:age_class]).id
+                attrs.delete(:division)
+                attrs.delete(:age_class)
+
+                # assign score_method
+                if attrs[:round_type] == "Qualifying"
+                    attrs[:score_method] = "Points"
+                elsif attrs[:round_type] == "Match"
+                    attrs[:score_method] = "Set"
+                end
+
+                # update
+                round.update(attrs)
+            # if new 
+            # else
+                # need to build out how to create a new round, need to work with RoundFormat
+                # attrs[:archer] = self.archer
+                # self.rounds.build(round: round)
+            end
         end
     end
 

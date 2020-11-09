@@ -4,33 +4,33 @@
 <%= form_for(@archer) do |f| %>
     <h3>Login Information</h3>
         <%= f.label :username %><%= required_field %>
-        <%= f.text_field :username, class: form_input_class(:username), placeholder: "Enter a username *" %>
+        <%= f.text_field :username, class: form_input_class(:username), placeholder: "Enter a username" %>
             <%= error_check(@archer, :username) %>
             <%= form_note(:username) %>
 
         <%= f.label :email %><%= required_field %>
-        <%= f.email_field :email, class: form_input_class(:email), placeholder: "Enter your email *" %>
+        <%= f.email_field :email, class: form_input_class(:email), placeholder: "Enter your email" %>
             <%= error_check(@archer, :email) %>
             <%= form_note(:email) %>
 
         <%= f.label :password %><%= required_field %>
-        <%= f.password_field :password, class: form_input_class(:password), placeholder: "Enter a password *" %>
+        <%= f.password_field :password, class: form_input_class(:password), placeholder: "Enter a password" %>
             <%= error_check(@archer, :password) %>
             <%= form_note(:password) %>
 
     <h3>Personal Information</h3>
         <%= f.label :first_name, "First Name" %><%= required_field %>
-        <%= f.text_field :first_name, class: form_input_class(:first_name), placeholder: "Enter your first name *" %>
+        <%= f.text_field :first_name, class: form_input_class(:first_name), placeholder: "Enter your first name" %>
             <%= error_check(@archer, :first_name) %>
             <%= form_note(:first_name) %>
 
         <%= f.label :last_name, "Last Name" %><%= required_field %>
-        <%= f.text_field :last_name, class: form_input_class(:last_name), placeholder: "Enter your last name *" %>
+        <%= f.text_field :last_name, class: form_input_class(:last_name), placeholder: "Enter your last name" %>
             <%= error_check(@archer, :last_name) %>
             <%= form_note(:last_name) %>
 
         <%= f.label :birthdate, "Birth Date" %><%= required_field %>
-        <%= f.date_field :birthdate, class: form_input_class(:birthdate), placeholder: "Enter your birth date *" %>
+        <%= f.date_field :birthdate, class: form_input_class(:birthdate), placeholder: "Enter your birth date" %>
             <%= error_check(@archer, :birthdate) %>
             <%= form_note(:birthdate) %>
         
@@ -58,16 +58,16 @@
     <h3 class="remove-bottom-margin">Competition Infomation</h3>
         <%= form_note(:comp_section) %>
 
+        <%= f.label :default_division, "Primary Shooting Style" %><%= required_field %>
+        <%= f.collection_select :default_division, @divisions, :name, :name, {prompt: "Select a shooting style"}, {class: form_input_class(:default_division)} %>
+            <%= error_check(@archer, :default_division) %>
+            <%= form_note(:default_division) %>
+    
         <%= f.label :default_age_class, "Primary Age Class" %><%= required_field %>
         <%= f.collection_select :default_age_class, @age_classes, :name, :name, {prompt: "Select an age class"}, {class: form_input_class(:default_age_class)} %>
             <%= error_check(@archer, :default_age_class) %>
             <%= form_note(:default_age_class) %>
-
-        <%= f.label :default_division, "Primary Shooting Style" %><%= required_field %>
-        <%= f.collection_select :default_division, @divisions, :name, :name, {prompt: (@archer.errors[:default_division].first || "Select a shooting style *")}, {class: form_input_class(:default_division)} %>
-            <%= error_check(@archer, :default_division) %>
-            <%= form_note(:default_division) %>
-    
+        
     <br>
     <%= f.submit %>
     <%= link_to "Cancel", archer_path(current_user) if form_type == "edit" %>

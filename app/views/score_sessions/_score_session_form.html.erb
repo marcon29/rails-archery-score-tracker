@@ -9,7 +9,7 @@
             <%= form_note(:name) %>
 
         <%= score_ses_f.label :score_session_type, "Score Session Type" %><%= required_field %>
-        <%= score_ses_f.select :score_session_type, options_for_select(@score_session_types), {}, class: form_input_class(:score_session_type) %>
+        <%= score_ses_f.select :score_session_type, options_for_select(@score_session_types, @score_session.score_session_type), {}, class: form_input_class(:score_session_type) %>
             <%= error_check(@score_session, :score_session_type) %>
             <%= form_note(:score_session_type) %>
 

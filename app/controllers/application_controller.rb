@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
     # protect_from_forgery with: :exception
-    helper_method :current_user, :find_active_score_session
+    helper_method :current_user, :find_active_score_session, :from_score?
 
     def log_user_in(user)
         session[:user_id] = user.id
@@ -26,5 +26,9 @@ class ApplicationController < ActionController::Base
 
     def score_session_types(sessions)
         sessions.collect { |ss| ss.score_session_type }.uniq
+    end
+
+    def from_score?
+        request.referrer.ends_with?("score")
     end
 end
