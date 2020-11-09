@@ -4,8 +4,13 @@
     <%= round_f.select :round_type, options_for_select(@round_types, round_f.object.round_type), {}, class: form_input_class(:round_type) %>
         <%= error_check(round_f.object, :round_type) %>
         <%= form_note(:round_type) %>
+    
+    <%= round_f.label :score_method, "Score Method" %><%= required_field %>
+    <%= round_f.select :score_method, options_for_select(@score_methods, round_f.object.score_method), {}, class: form_input_class(:score_method) %>
+        <%= error_check(round_f.object, :score_method) %>
+        <%= form_note(:score_method) %>
 
-    <%= round_f.label :division, "Division" %><%= required_field %>
+    <%= round_f.label :division %><%= required_field %>
     <%= round_f.collection_select :division, @divisions, :id, :name, {selected: round_f.object.archer_category.division.id}, {class: form_input_class(:division)} %>
         <%= error_check(round_f.object, :division) %>
         <%= form_note(:division) %>
@@ -19,7 +24,7 @@
     <%= round_f.text_field :rank, class: form_input_class(:rank), placeholder: "Enter your final rank for the score session" %>
         <%= error_check(round_f.object, :rank) %>
         <%= form_note(:rank) %>
-    
+        
     <h3>Sets/Distances In Round</h3>
     <%= round_f.fields_for :rsets do |rset_f| %>
         <%= render partial: "rsets/rset_form", locals: {rset_f: rset_f} %>

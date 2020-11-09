@@ -33,11 +33,11 @@ class Round < ApplicationRecord
     # auto create name ( ScoreSession.name - RoundFormat.name )
     def assign_name
         if self.score_session && self.round_format
-            if self.name.blank?
+            # if self.name.blank?
                 self.name = create_name
-            elsif !self.name.include?(self.score_session.name) || !self.name.include?(self.round_format.name)
-                self.name = create_name
-            end
+            # elsif !self.name.include?(self.score_session.name) || !self.name.include?(self.round_format.name)
+                # self.name = create_name
+            # end
         end
     end
 
@@ -47,9 +47,14 @@ class Round < ApplicationRecord
 
     # ##### helpers (associated models instantiation)
     def rsets_attributes=(attributes)
-        attributes.values.each do |attr|
-            rset = Rset.find_or_create_by(attr)
-            self.rsets.build(rset: rset)
+        attributes.values.each do |attrs|
+            rset = Rset.find(attrs[:id])
+            if rset
+                rset.update(attrs)
+                # binding.pry
+            # else
+            #     self.rsets.build(rset: rset)
+            end
         end
     end
 

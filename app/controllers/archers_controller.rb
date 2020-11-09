@@ -13,9 +13,11 @@ class ArchersController < ApplicationController
 
   def create
     @archer = Archer.new(archer_params)
-    # @genders = Organization::Gender.all
-    # @divisions = Organization::Division.all
-    # @age_classes = Organization::AgeClass.all
+
+    # these are so the data is available when re-rendering
+    @genders = Organization::Gender.all
+    @divisions = Organization::Division.all
+    @age_classes = Organization::AgeClass.all
 
     if @archer.save
       log_user_in(@archer)
@@ -34,6 +36,11 @@ class ArchersController < ApplicationController
 
   def update
     @archer = current_user
+    
+    # these are so the data is available when re-rendering
+    @genders = Organization::Gender.all
+    @divisions = Organization::Division.all
+    @age_classes = @archer.eligible_age_classes
     
     @archer.assign_attributes(archer_params)
 

@@ -34,11 +34,24 @@ module ApplicationHelper
         end
     end
 
+    # def error_check(object, attr, parent=nil, objects=nil, id=nil)
+    #     if parent && objects && id
+    #         parent_errors = parent.errors[objects]
+    #         if parent_errors.any?
+    #             msg_for = parent_errors.first[id]
+    #             tag.p msg_for[attr].first, class: "small-text red-text"
+    #         end
+    #     elsif object.errors[attr].any?
+    #         tag.p object.errors[attr].first, class: "small-text red-text" 
+    #     end
+    # end
+
     def error_check(object, attr)
         if object.errors[attr].any?
             tag.p object.errors[attr].first, class: "small-text red-text" 
         end
     end
+
 
     def form_input_class(placement)
         if form_note(placement) == "<br>"

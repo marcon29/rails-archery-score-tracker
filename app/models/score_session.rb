@@ -1,4 +1,5 @@
 class ScoreSession < ApplicationRecord
+    # has_many :rounds, index_errors: true
     has_many :rounds
     has_many :rsets
     has_many :ends
@@ -20,6 +21,8 @@ class ScoreSession < ApplicationRecord
     validates :state, presence: { message: "You must enter a state." }
     validates :country, presence: { message: "You must enter a country." }
     validate :assign_dates, :check_and_assign_rank
+    # validates_associated :rounds
+    # validates_associated :rsets
     before_validation :format_name
 
     
@@ -38,12 +41,6 @@ class ScoreSession < ApplicationRecord
 
     # ##### helpers (associated models instantiation)
     def rounds_attributes=(attributes)
-        # binding.pry
-        # attributes.values.each do |attrs|
-        #     round = Round.find_or_create_by(attrs)
-        #     self.rounds.build(round: round)
-        # end
-
         attributes.values.each do |attrs|
             round = Round.find(attrs[:id])
             if round
@@ -53,14 +50,17 @@ class ScoreSession < ApplicationRecord
                 attrs.delete(:age_class)
 
                 # assign score_method
-                if attrs[:round_type] == "Qualifying"
-                    attrs[:score_method] = "Points"
-                elsif attrs[:round_type] == "Match"
-                    attrs[:score_method] = "Set"
-                end
-
+                # if attrs[:round_type] == "Qualifying"
+                #     attrs[:score_method] = "Points"
+                # elsif attrs[:round_type] == "Match"
+                #     attrs[:score_method] = "Set"
+                # end
+                
                 # update
                 round.update(attrs)
+
+                # get errors if round.invalid? and pass to score_session for views
+                self.errors[:rounds] << {round.id => round.errors.messages} if round.errors.any?
             # if new 
             # else
                 # need to build out how to create a new round, need to work with RoundFormat
