@@ -64,10 +64,15 @@ module ApplicationHelper
         params[:action] == "score"
     end
 
-    def from_score_session?
-        params[:controller] == "score_sessions"
-    end
+    # def from_score_session?
+    #     params[:controller] == "score_sessions"
+    # end
     
+    def from_score?
+        request.referrer.ends_with?("score")
+    end
+
+
     def get_rank(object)
         object.rank.blank? ? "N/A" : object.rank
     end

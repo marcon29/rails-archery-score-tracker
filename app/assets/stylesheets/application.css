@@ -175,6 +175,11 @@ main {
     margin: 0 6rem 0 0;
 }
 
+.display-horiz-hl {
+    display: inline-block;
+    margin-right: 1rem;
+}
+
 
 /* ******************************************************* */
 /* Typography */

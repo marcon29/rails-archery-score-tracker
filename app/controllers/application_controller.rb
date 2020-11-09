@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
     end
 
     def find_active_score_session
+        # @active_score_session ||= current_user.score_sessions.where(active: true).first
         current_user.score_sessions.where(active: true).first
     end
 

@@ -38,7 +38,7 @@ class ScoreSessionsController < ApplicationController
   end
 
   def update
-    binding.pry
+    # binding.pry
     # for Round:
       # if round_type == "Qualifying" then score_method = "Points"
       # if round_type == "Match" then score_method = "Set"

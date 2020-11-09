@@ -11,8 +11,8 @@
 <section>
     <% if active_score_session? %>
         <h2>Resume Current Score Session</h2>
-        <section id=<%= "score-session-#{@active_score_session.id}" %> class="score-session-section">
-            <%= render partial: "score_sessions/score_session", locals: {score_session: @active_score_session} %>
+        <section id=<%= "score-session-#{find_active_score_session.id}" %> class="score-session-section">
+            <%= render partial: "score_sessions/score_session", locals: {score_session: find_active_score_session} %>
         </section>
     <% end %>
     <section>

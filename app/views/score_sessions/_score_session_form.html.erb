@@ -49,12 +49,18 @@
             <%= form_note(:rank) %>
     </section>
     
-    <h2>Rounds In Score Session</h2>
-    <%= score_ses_f.fields_for :rounds do |round_f| %>
-        <%= render partial: "rounds/round_form", locals: {round_f: round_f} %>
+    <% if !from_score? %>
+        <h2>Rounds In Score Session</h2>
+        <%= score_ses_f.fields_for :rounds do |round_f| %>
+            <%= render partial: "rounds/round_form", locals: {round_f: round_f} %>
+        <% end %>
     <% end %>
 
     <%= score_ses_f.submit %>
-    <%= link_to "Cancel", score_session_path(@score_session) if form_type == "edit" %>
+    <% if from_score? %>
+        <%= link_to "Cancel", score_path(@score_session) if form_type == "edit" %>
+    <% else %>
+        <%= link_to "Cancel", score_session_path(@score_session) if form_type == "edit" %>
+    <% end %>
     <p>Fields marked with a <%= required_field %> are required.</p>
 <% end %>

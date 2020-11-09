@@ -1,13 +1,11 @@
-<% if show_action? %>
-    <h1><%= score_session.name %></h1>
-<% elsif edit_action? %>
-    <h1 class="short-bottom-margin">Edit <%= score_session.name %></h1>
-    <p><%= link_to "Edit Score Session Details", edit_score_session_path(score_session) %></p>
-<% elsif score_action? %>
-    <h1 class="short-bottom-margin"><%= score_session.name %>(Scoring)</h1>
-    <p><%= link_to "Edit Score Session Details", score_path(score_session) %></p>
-<% elsif home_action? %>
+<% if home_action? %>
     <h3 class="short-bottom-margin"><%= link_to score_session.name, score_path(score_session) %></h3>
+<% elsif show_action? %>
+    <h1 class="display-horiz-hl"><%= score_session.name %></h1>
+    <%= link_to "Edit", edit_score_session_path(score_session) %>
+<% elsif score_action? %>
+    <h1 class="display-horiz-hl"><%= score_session.name %>(Scoring)</h1>
+    <%= link_to "Edit Score Session Details", edit_score_session_path(score_session) %>
 <% else %>
     <h3 class="short-bottom-margin"><%= link_to score_session.name, score_session_path(score_session) %></h3>
 <% end %>
