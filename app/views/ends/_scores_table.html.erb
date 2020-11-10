@@ -2,7 +2,9 @@
     <thead>
         <tr>
             <th></th>
-            <% builder_end.shots.each { |shot| tag.th shot.number } %>
+            <% builder_end.shots.each do |shot| %>
+                <%= tag.th shot.number %>
+            <% end %>
             <th class="spacer"></th>
             <th>Total</th>
             <th class="spacer"></th>
