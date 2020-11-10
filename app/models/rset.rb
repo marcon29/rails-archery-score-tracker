@@ -26,6 +26,7 @@ class Rset < ApplicationRecord
 
     # ##### helpers (callbacks & validations)
     def assign_name
+binding.pry # 6, 11, 19, 24
         if self.round && self.set_end_format
             # if self.name.blank?
                 self.name = create_name

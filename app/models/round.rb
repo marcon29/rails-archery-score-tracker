@@ -31,6 +31,7 @@ class Round < ApplicationRecord
     # ##### helpers (callbacks & validations)
     # auto create name ( ScoreSession.name - RoundFormat.name )
     def assign_name
+binding.pry # 28
         if self.score_session && self.round_format
             # if self.name.blank?
                 self.name = create_name
@@ -46,12 +47,16 @@ class Round < ApplicationRecord
 
     # ##### helpers (associated models instantiation)
     def rsets_attributes=(attributes)
+binding.pry # 4, 17
         attributes.values.each do |attrs|
             rset = Rset.find(attrs[:id])
+binding.pry # 5, 10, 18, 23
             if rset
                 rset.update(attrs)
+binding.pry # 8, 13, 21, 26
                 # pass errors to round which passes them to score_session for views
                 self.errors[:rsets] << {rset.id => rset.errors.messages} if rset.errors.any?
+binding.pry # 9, 14, 22, 27
             # else
             #     self.rsets.build(rset: rset)
             end

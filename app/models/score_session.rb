@@ -25,28 +25,33 @@ class ScoreSession < ApplicationRecord
     
     # ##### helpers (callbacks & validations)
     def assign_dates
-        if self.start_date.blank?
-            errors.add(:start_date, "You must choose a start date.")
-        elsif self.end_date.blank?
+        errors.add(:start_date, "You must choose a start date.") if self.start_date.blank?
+    
+        if self.end_date.blank?
             self.end_date = self.start_date
+        elsif self.end_date < self.start_date
+            errors.add(:end_date, "The end date must come after the start date.")
         end
     end
 
     def format_name
+binding.pry # 34
         self.name = self.name.titlecase.gsub("Us", "US")
     end
 
     # ##### helpers (associated models instantiation)
     def rounds_attributes=(attributes)
+binding.pry # 2
         attributes.values.each do |attrs|
-            round = Round.find(attrs[:id])
+            round = Round.find(attrs[:id])            
+binding.pry # 3
             if round
                 # get category from input, then delete input
                 attrs[:archer_category_id] = round.find_category_by_div_age_class(division: attrs[:division], age_class: attrs[:age_class]).id
                 attrs.delete(:division)
                 attrs.delete(:age_class)
                 round.assign_attributes(attrs)
-                
+binding.pry # 15
                 # pass errors from rsets to score_session for views
                 if round.errors.any?
                     round.rsets.each do |rset|
@@ -57,9 +62,12 @@ class ScoreSession < ApplicationRecord
                         end
                     end
                 end
+binding.pry # 16
                 round.update(attrs)
+binding.pry # 30
                 # pass errors from rounds to score_session for views
                 self.errors[:rounds] << {round.id => round.errors.messages} if round.errors.any?
+binding.pry # 31
             # if new 
             # else
                 # need to build out how to create a new round, need to work with RoundFormat

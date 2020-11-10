@@ -50,8 +50,9 @@ class ScoreSessionsController < ApplicationController
     @divisions = Organization::Division.all
     @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
     
+binding.pry # 1
     @score_session.assign_attributes(score_session_params)
-    
+binding.pry # 32
     if @score_session.errors.messages.any?
       @score_session.rsets.each do |rset|
         check_children_errors(rset, @score_session, :rsets)
@@ -60,8 +61,9 @@ class ScoreSessionsController < ApplicationController
       @score_session.rounds.each do |round|
         check_children_errors(round, @score_session, :rounds)
       end
-      
+binding.pry # 33
       @score_session.valid?
+binding.pry # 36
       render :edit
     elsif @score_session.save
       children_auto_updates
@@ -108,8 +110,8 @@ class ScoreSessionsController < ApplicationController
     @score_session.rsets.each { |rset| rset.update(name: "") }
   end
   
-  def check_children_errors(object, parent, children)
-    parent.errors[children].each do |id_error|
+  def check_children_errors(object, parent, children_symbol)
+    parent.errors[children_symbol].each do |id_error|
       error = id_error[object.id]
       if error
         error.keys.each do |attr|

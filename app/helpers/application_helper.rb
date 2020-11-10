@@ -97,11 +97,11 @@ module ApplicationHelper
     end
     
     def formatted_date(date)
-        date.strftime("%m/%d/%Y")
+        date.strftime("%m/%d/%Y") if date
     end
 
     def formatted_date_long(date)
-        date.strftime("%B%e, %Y")
+        date.strftime("%B%e, %Y") if date
     end
 
     def formatted_date_range(start_date, end_date)
