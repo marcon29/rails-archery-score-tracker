@@ -27,6 +27,8 @@
         
     <h3>Sets/Distances In Round</h3>
     <%= round_f.fields_for :rsets do |rset_f| %>
+        <% get_child_error(score_ses_f.object.rsets, rset_f.object, :date) %>
+        <% get_child_error(score_ses_f.object.rsets, rset_f.object, :rank) %>
         <%= render partial: "rsets/rset_form", locals: {rset_f: rset_f} %>
     <% end %>
 </section>

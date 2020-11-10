@@ -34,24 +34,19 @@ module ApplicationHelper
         end
     end
 
-    # def error_check(object, attr, parent=nil, objects=nil, id=nil)
-    #     if parent && objects && id
-    #         parent_errors = parent.errors[objects]
-    #         if parent_errors.any?
-    #             msg_for = parent_errors.first[id]
-    #             tag.p msg_for[attr].first, class: "small-text red-text"
-    #         end
-    #     elsif object.errors[attr].any?
-    #         tag.p object.errors[attr].first, class: "small-text red-text" 
-    #     end
-    # end
-
     def error_check(object, attr)
         if object.errors[attr].any?
             tag.p object.errors[attr].first, class: "small-text red-text" 
         end
     end
-
+     
+    def get_child_error(children, object, attr)
+        check_object = object
+        children.each do |child|
+            check_object = child if child.id == object.id
+        end
+        object.errors.messages[attr] = check_object.errors.messages[attr]
+    end
 
     def form_input_class(placement)
         if form_note(placement) == "<br>"
@@ -84,7 +79,6 @@ module ApplicationHelper
     def from_score?
         request.referrer.ends_with?("score")
     end
-
 
     def get_rank(object)
         object.rank.blank? ? "N/A" : object.rank

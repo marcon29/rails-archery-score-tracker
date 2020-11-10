@@ -51,13 +51,16 @@ class ScoreSessionsController < ApplicationController
     @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
     
     @score_session.assign_attributes(score_session_params)
-
-    # if @score_session.errors[:rounds].first
     
     if @score_session.errors.messages.any?
+      @score_session.rsets.each do |rset|
+        check_children_errors(rset, @score_session, :rsets)
+      end
+      
       @score_session.rounds.each do |round|
         check_children_errors(round, @score_session, :rounds)
       end
+      
       @score_session.valid?
       render :edit
     elsif @score_session.save
@@ -71,23 +74,7 @@ class ScoreSessionsController < ApplicationController
       
   end
 
-  def children_auto_updates
-    @score_session.rounds.each { |round| round.update(name: "") }
-    @score_session.rsets.each { |rset| rset.update(name: "") }
-  end
-    
   
-  # round_errors(@score_session)
-  
-  def check_children_errors(object, parent, children)
-    parent_errors = parent.errors[children]
-    # if parent_errors.any?
-        msg_for = parent_errors.first[object.id]
-        msg_for.keys.each do |attr|
-          object.errors.add(attr, msg_for[attr].first)
-        end
-    # end
-end
  
     # user attrs - :round_type, :rank
     # DISCIPLINES = ["Outdoor", "Indoor"]
@@ -114,6 +101,22 @@ end
 
   def score_session_types(sessions)
     sessions.collect { |ss| ss.score_session_type }.uniq
+  end
+
+  def children_auto_updates
+    @score_session.rounds.each { |round| round.update(name: "") }
+    @score_session.rsets.each { |rset| rset.update(name: "") }
+  end
+  
+  def check_children_errors(object, parent, children)
+    parent.errors[children].each do |id_error|
+      error = id_error[object.id]
+      if error
+        error.keys.each do |attr|
+            object.errors.add(attr, error[attr].first)
+        end
+      end
+    end
   end
 
 end

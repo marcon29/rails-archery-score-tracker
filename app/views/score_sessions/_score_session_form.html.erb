@@ -52,7 +52,7 @@
     <% if !from_score? %>
         <h2>Rounds In Score Session</h2>
         <%= score_ses_f.fields_for :rounds do |round_f| %>
-            <%= render partial: "rounds/round_form", locals: {round_f: round_f} %>
+            <%= render partial: "rounds/round_form", locals: {round_f: round_f, score_ses_f: score_ses_f} %>
         <% end %>
     <% end %>
 

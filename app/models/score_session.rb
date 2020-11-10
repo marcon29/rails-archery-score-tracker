@@ -1,5 +1,4 @@
 class ScoreSession < ApplicationRecord
-    # has_many :rounds, index_errors: true
     has_many :rounds
     has_many :rsets
     has_many :ends
@@ -21,8 +20,6 @@ class ScoreSession < ApplicationRecord
     validates :state, presence: { message: "You must enter a state." }
     validates :country, presence: { message: "You must enter a country." }
     validate :assign_dates, :check_and_assign_rank
-    # validates_associated :rounds
-    # validates_associated :rsets
     before_validation :format_name
 
     
@@ -44,25 +41,24 @@ class ScoreSession < ApplicationRecord
         attributes.values.each do |attrs|
             round = Round.find(attrs[:id])
             if round
-                # ensure name auto updates
-                attrs[:archer_category_id] = ""
-
-                # get category
+                # get category from input, then delete input
                 attrs[:archer_category_id] = round.find_category_by_div_age_class(division: attrs[:division], age_class: attrs[:age_class]).id
                 attrs.delete(:division)
                 attrs.delete(:age_class)
-
-                # assign score_method
-                # if attrs[:round_type] == "Qualifying"
-                #     attrs[:score_method] = "Points"
-                # elsif attrs[:round_type] == "Match"
-                #     attrs[:score_method] = "Set"
-                # end
+                round.assign_attributes(attrs)
                 
-                # update
+                # pass errors from rsets to score_session for views
+                if round.errors.any?
+                    round.rsets.each do |rset|
+                        round.errors[:rsets].each do |error|
+                            error.each do | id, msg |
+                                self.errors[:rsets] << {id => msg} unless self.errors[:rsets].include?({id => msg})
+                            end
+                        end
+                    end
+                end
                 round.update(attrs)
-
-                # get errors if round.invalid? and pass to score_session for views
+                # pass errors from rounds to score_session for views
                 self.errors[:rounds] << {round.id => round.errors.messages} if round.errors.any?
             # if new 
             # else
@@ -74,6 +70,13 @@ class ScoreSession < ApplicationRecord
     end
 
     # ##### helpers (data control)
+        # assign score_method - this code works, just need to determine if needed
+            # if attrs[:round_type] == "Qualifying"
+            #     attrs[:score_method] = "Points"
+            # elsif attrs[:round_type] == "Match"
+            #     attrs[:score_method] = "Set"
+            # end
+
         # date range - collect all dates between start and end (inclusive)
             # hold - may not need this - html can restrict date range (can just use start and end)
             # will use to restrict date options for round

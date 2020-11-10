@@ -24,9 +24,10 @@ class Round < ApplicationRecord
     validates :score_method, 
         presence: { message: "You must choose a score method." }, 
         inclusion: { in: SCORE_METHODS }
+    
     # validate :check_associations, :check_and_assign_rank
+    
     validate :check_and_assign_rank
-    # validates_associated :rsets
     before_validation :assign_name
 
 
@@ -52,7 +53,8 @@ class Round < ApplicationRecord
             rset = Rset.find(attrs[:id])
             if rset
                 rset.update(attrs)
-                # binding.pry
+                # pass errors to round which passes them to score_session for views
+                self.errors[:rsets] << {rset.id => rset.errors.messages} if rset.errors.any?
             # else
             #     self.rsets.build(rset: rset)
             end
