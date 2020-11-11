@@ -49,21 +49,22 @@ class ScoreSessionsController < ApplicationController
     @score_methods = SCORE_METHODS
     @divisions = Organization::Division.all
     @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
-    
-binding.pry # 1
+# binding.pry # 1
+
     @score_session.assign_attributes(score_session_params)
-binding.pry # 17
-    if @score_session.errors.messages.any?
-      @score_session.rsets.each do |rset|
-        check_children_errors(rset, @score_session, :rsets)
-      end
-      
-      @score_session.rounds.each do |round|
-        check_children_errors(round, @score_session, :rounds)
-      end
-binding.pry # 18
-      @score_session.valid?
-binding.pry # 21
+# binding.pry # 17
+
+    @score_session.rsets.each do |rset|
+      check_children_errors(rset, @score_session, :rsets)
+    end
+    
+    @score_session.rounds.each do |round|
+      check_children_errors(round, @score_session, :rounds)
+    end
+# binding.pry # 18
+
+    if @score_session.invalid? || @score_session.rounds.first.errors.any? || @score_session.rsets.first.errors.any? || @score_session.rsets.second.errors.any?
+# binding.pry # 21
       render :edit
     elsif @score_session.save
       children_auto_updates

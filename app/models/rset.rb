@@ -26,7 +26,7 @@ class Rset < ApplicationRecord
 
     # ##### helpers (callbacks & validations)
     def assign_name
-binding.pry # 8, 13
+# binding.pry # 8, 13       rset validation
         if self.round && self.set_end_format
             self.name = create_name
         end
@@ -41,10 +41,15 @@ binding.pry # 8, 13
         end_date = self.score_session.end_date if self.score_session
 
         if self.date.blank?
-            errors.add(:date, "You must choose a start date.")
+            errors.add(:date, "You must choose a date.") if rset_scored?
         elsif self.date < start_date || self.date > end_date
             errors.add(:date, "Date must be between #{start_date} and #{end_date}.")
         end
+    end
+
+    def rset_scored?
+        all_entries = self.shots.all.reject { |shot| shot.score_entry if shot.score_entry == "" }
+        all_entries.present?
     end
 
     def archer_category

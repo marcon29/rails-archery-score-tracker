@@ -25,13 +25,12 @@ class ScoreSession < ApplicationRecord
     # validates_associated :rsets
 
     before_validation :format_name
-
     
     # ##### helpers (callbacks & validations)
     def assign_dates
-        errors.add(:start_date, "You must choose a start date.") if self.start_date.blank?
-    
-        if self.end_date.blank?
+        if self.start_date.blank?
+            errors.add(:start_date, "You must choose a start date.") 
+        elsif self.end_date.blank?
             self.end_date = self.start_date
         elsif self.end_date < self.start_date
             errors.add(:end_date, "The end date must come after the start date.")
@@ -39,25 +38,28 @@ class ScoreSession < ApplicationRecord
     end
 
     def format_name
-binding.pry # 19
+# binding.pry # 19      score_session validation
         self.name = self.name.titlecase.gsub("Us", "US")
     end
 
     # ##### helpers (associated models instantiation)
     def rounds_attributes=(attributes)
         attributes.values.each do |attrs|
-            round = Round.find(attrs[:id])            
-binding.pry # 2
+            round = Round.find(attrs[:id])
+# binding.pry # 2
+
             if round
                 # get category from input, then delete input
                 attrs[:archer_category_id] = round.find_category_by_div_age_class(division: attrs[:division], age_class: attrs[:age_class]).id
                 attrs.delete(:division)
                 attrs.delete(:age_class)
                 round.update(attrs)
-binding.pry # 5
+# binding.pry # 5
+
                 # pass errors from rounds to score_session for views
                 self.errors[:rounds] << {round.id => round.errors.messages} if round.errors.any?
-binding.pry # 6
+# binding.pry # 6
+
             # if new 
             # else
                 # need to build out how to create a new round, need to work with RoundFormat
@@ -70,13 +72,16 @@ binding.pry # 6
     def rsets_attributes=(attributes)
         attributes.values.each do |attrs|
             rset = Rset.find(attrs[:id])
-binding.pry # 7, 12
+# binding.pry # 7, 12
+
             if rset
                 rset.update(attrs)
-binding.pry # 10, 15
+# binding.pry # 10, 15
+
                 # pass errors from rsets to score_session for views
                 self.errors[:rsets] << {rset.id => rset.errors.messages} if rset.errors.any?
-binding.pry # 11, 16
+# binding.pry # 11, 16
+
             # else
             #     self.rsets.build(rset: rset)
             end
