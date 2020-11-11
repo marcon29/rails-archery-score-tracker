@@ -20,6 +20,10 @@ class ScoreSession < ApplicationRecord
     validates :state, presence: { message: "You must enter a state." }
     validates :country, presence: { message: "You must enter a country." }
     validate :assign_dates, :check_and_assign_rank
+
+    # validates_associated :rounds
+    # validates_associated :rsets
+
     before_validation :format_name
 
     
@@ -41,7 +45,7 @@ binding.pry # 34
 
     # ##### helpers (associated models instantiation)
     def rounds_attributes=(attributes)
-binding.pry # 2
+# binding.pry # 2
         attributes.values.each do |attrs|
             round = Round.find(attrs[:id])            
 binding.pry # 3
@@ -50,21 +54,22 @@ binding.pry # 3
                 attrs[:archer_category_id] = round.find_category_by_div_age_class(division: attrs[:division], age_class: attrs[:age_class]).id
                 attrs.delete(:division)
                 attrs.delete(:age_class)
-                round.assign_attributes(attrs)
+                # round.assign_attributes(attrs)
+                round.update(attrs)
 binding.pry # 15
                 # pass errors from rsets to score_session for views
-                if round.errors.any?
-                    round.rsets.each do |rset|
-                        round.errors[:rsets].each do |error|
-                            error.each do | id, msg |
-                                self.errors[:rsets] << {id => msg} unless self.errors[:rsets].include?({id => msg})
-                            end
-                        end
-                    end
-                end
-binding.pry # 16
-                round.update(attrs)
-binding.pry # 30
+                # if round.errors.any?
+                #     round.rsets.each do |rset|
+                #         round.errors[:rsets].each do |error|
+                #             error.each do | id, msg |
+                #                 self.errors[:rsets] << {id => msg} unless self.errors[:rsets].include?({id => msg})
+                #             end
+                #         end
+                #     end
+                # end
+# binding.pry # 16
+#                 round.update(attrs)
+# binding.pry # 30
                 # pass errors from rounds to score_session for views
                 self.errors[:rounds] << {round.id => round.errors.messages} if round.errors.any?
 binding.pry # 31
@@ -73,6 +78,23 @@ binding.pry # 31
                 # need to build out how to create a new round, need to work with RoundFormat
                 # attrs[:archer] = self.archer
                 # self.rounds.build(round: round)
+            end
+        end
+    end
+
+    def rsets_attributes=(attributes)
+# binding.pry # 4, 17
+        attributes.values.each do |attrs|
+            rset = Rset.find(attrs[:id])
+binding.pry # 5, 10, 18, 23
+            if rset
+                rset.update(attrs)
+binding.pry # 8, 13, 21, 26
+                # pass errors from rsets to score_session for views
+                self.errors[:rsets] << {rset.id => rset.errors.messages} if rset.errors.any?
+binding.pry # 9, 14, 22, 27
+            # else
+            #     self.rsets.build(rset: rset)
             end
         end
     end

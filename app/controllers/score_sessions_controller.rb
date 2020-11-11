@@ -86,10 +86,12 @@ binding.pry # 36
 
   def score_session_params
     params.require(:score_session).permit(:name, :score_session_type, :gov_body_id, :city, :state, :country, :start_date, :end_date, :rank,
-      # rounds_attributes: [:id, :round_type, :score_method, :rank, :division, :age_class]
-      rounds_attributes: [:id, :round_type, :score_method, :rank, :division, :age_class, 
-        rsets_attributes: [:id, :date, :rank]
-      ]
+      rounds_attributes: [:id, :round_type, :score_method, :rank, :division, :age_class], 
+      rsets_attributes: [:id, :date, :rank]
+      
+      # rounds_attributes: [:id, :round_type, :score_method, :rank, :division, :age_class, 
+      #   rsets_attributes: [:id, :date, :rank]
+      # ]
     )
     # params.require(:score_session).permit(:name, :score_session_type, :gov_body_id, :city, :state, :country, :start_date, :end_date, :rank)
   end

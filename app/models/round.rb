@@ -25,6 +25,7 @@ class Round < ApplicationRecord
         presence: { message: "You must choose a score method." }, 
         inclusion: { in: SCORE_METHODS }
     validate :check_associations, :check_and_assign_rank
+    # validates_associated :rsets
     before_validation :assign_name
 
 
@@ -46,22 +47,22 @@ binding.pry # 28
     end
 
     # ##### helpers (associated models instantiation)
-    def rsets_attributes=(attributes)
-binding.pry # 4, 17
-        attributes.values.each do |attrs|
-            rset = Rset.find(attrs[:id])
-binding.pry # 5, 10, 18, 23
-            if rset
-                rset.update(attrs)
-binding.pry # 8, 13, 21, 26
-                # pass errors to round which passes them to score_session for views
-                self.errors[:rsets] << {rset.id => rset.errors.messages} if rset.errors.any?
-binding.pry # 9, 14, 22, 27
-            # else
-            #     self.rsets.build(rset: rset)
-            end
-        end
-    end
+#     def rsets_attributes=(attributes)
+# # binding.pry # 4, 17
+#         attributes.values.each do |attrs|
+#             rset = Rset.find(attrs[:id])
+# binding.pry # 5, 10, 18, 23
+#             if rset
+#                 rset.update(attrs)
+# binding.pry # 8, 13, 21, 26
+#                 # pass errors to round which passes them to score_session for views
+#                 self.errors[:rsets] << {rset.id => rset.errors.messages} if rset.errors.any?
+# binding.pry # 9, 14, 22, 27
+#             # else
+#             #     self.rsets.build(rset: rset)
+#             end
+#         end
+#     end
 
     # ##### helpers (data control)
     def gov_body
