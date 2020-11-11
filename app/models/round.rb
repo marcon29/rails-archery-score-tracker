@@ -32,13 +32,9 @@ class Round < ApplicationRecord
     # ##### helpers (callbacks & validations)
     # auto create name ( ScoreSession.name - RoundFormat.name )
     def assign_name
-binding.pry # 28
+binding.pry # 3
         if self.score_session && self.round_format
-            # if self.name.blank?
-                self.name = create_name
-            # elsif !self.name.include?(self.score_session.name) || !self.name.include?(self.round_format.name)
-                # self.name = create_name
-            # end
+            self.name = create_name
         end
     end
 

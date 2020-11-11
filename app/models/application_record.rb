@@ -3,7 +3,7 @@ class ApplicationRecord < ActiveRecord::Base
   
 	# tests for this are in ScoreSession
 	def check_and_assign_rank
-binding.pry # 7, 12, 20, 25, 29, 35
+binding.pry # 4, 9, 14, 20
 		allowable_ranks = [/\A\d+st\z/i, /\A\d+nd\z/i, /\A\d+rd\z/i, /\A\d+th\z/i, /\A\d+\z/, /\AW\z/i, /\AL\z/i, /\Awin\z/i, /\Aloss\z/i, /\Awon\z/i, /\Alost\z/i]
 		# allows all numbers only: /\A\d+\z/ ( checks below for not 0: /\A^0+\z/ )
 			# allows all numbers except 0 (checked below) ending with 'st' 'nd' 'rd' 'th' (case insenitive): /\A\d+st\z/i, /\A\d+nd\z/i, /\A\d+rd\z/i, /\A\d+th\z/i

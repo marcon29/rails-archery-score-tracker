@@ -52,7 +52,7 @@ class ScoreSessionsController < ApplicationController
     
 binding.pry # 1
     @score_session.assign_attributes(score_session_params)
-binding.pry # 32
+binding.pry # 17
     if @score_session.errors.messages.any?
       @score_session.rsets.each do |rset|
         check_children_errors(rset, @score_session, :rsets)
@@ -61,9 +61,9 @@ binding.pry # 32
       @score_session.rounds.each do |round|
         check_children_errors(round, @score_session, :rounds)
       end
-binding.pry # 33
+binding.pry # 18
       @score_session.valid?
-binding.pry # 36
+binding.pry # 21
       render :edit
     elsif @score_session.save
       children_auto_updates
