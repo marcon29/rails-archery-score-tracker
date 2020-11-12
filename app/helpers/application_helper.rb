@@ -8,9 +8,9 @@ module ApplicationHelper
         }, 
         edit: {
             password: "Leave blank if you are not changing your password.", 
-            comp_section: "Used to reduce entering info when starting new Score Session.", 
-            default_age_class: "Only shows Age Classes you're eligible for.", 
-            age_class: "Only shows Age Classes you're eligible for.", 
+            comp_section: "Reduces entering info when starting new score session.", 
+            default_age_class: "Only shows eligible age classes.", 
+            age_class: "Only shows eligible age classes.", 
             end_date: "Leave blank or use start date if score session is single day.", 
             rank: 'Enter a number above 0, "W" or "L".'
         }
@@ -18,11 +18,9 @@ module ApplicationHelper
 
     def form_note(placement)
         if form_type == "new" && FORM_NOTES[:new][placement]
-            tag.p FORM_NOTES[:new][placement], class: "small-text" 
+            tag.p FORM_NOTES[:new][placement], class: "small-text remove-bottom-margin"
         elsif form_type == "edit" && FORM_NOTES[:edit][placement]
-            tag.p FORM_NOTES[:edit][placement], class: "small-text"
-        else
-            tag.br
+            tag.p FORM_NOTES[:edit][placement], class: "small-text remove-bottom-margin"
         end
     end
 
@@ -34,9 +32,21 @@ module ApplicationHelper
         end
     end
 
+    def form_input_class(placement)
+        "remove-bottom-margin" if form_note(placement)
+    end
+
     def error_check(object, attr)
         if object.errors[attr].any?
-            tag.p object.errors[attr].first, class: "small-text red-text" 
+            tag.p object.errors[attr].first, class: "small-text red-text"
+        end
+    end
+
+    def add_error_or_note(object, attr)
+        if object.errors[attr].any?
+            tag.p object.errors[attr].first, class: "small-text red-text"
+        else
+            form_note(attr)
         end
     end
      
@@ -46,14 +56,6 @@ module ApplicationHelper
             check_object = child if child.id == object.id
         end
         object.errors.messages[attr] = check_object.errors.messages[attr]
-    end
-
-    def form_input_class(placement)
-        if form_note(placement) == "<br>"
-            "form-input-field model-input"
-        else
-            "form-input-field model-input remove-bottom-margin"
-        end
     end
 
     def home_action?

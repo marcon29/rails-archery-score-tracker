@@ -14,6 +14,19 @@ class ScoreSessionsController < ApplicationController
   end
 
   def new
+    @score_session = ScoreSession.new
+
+    # for ScoreSession collections
+    @score_session_types = SCORE_SESSION_TYPES
+    @gov_bodies = Organization::GovBody.all
+    
+    # for Round collections
+    @round_types = ROUND_TYPES
+    @score_methods = SCORE_METHODS
+    @divisions = Organization::Division.all
+    @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
+
+    
   end
 
   def create

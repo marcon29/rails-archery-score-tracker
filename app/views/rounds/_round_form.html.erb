@@ -1,36 +1,46 @@
-<section class= round-form-fields>
-    <h3><%= round_f.object.name %></h3>
-    <%= round_f.label :round_type, "Round Type" %><%= required_field %>
-    <%= round_f.select :round_type, options_for_select(@round_types, round_f.object.round_type), {}, class: form_input_class(:round_type) %>
-        <%= error_check(round_f.object, :round_type) %>
-        <%= form_note(:round_type) %>
+<h3 class="short-margins"><%= round_f.object.name %></h3>
+
+<section class="round-form-fields">
+    <div class="form-field-group">
+        <div class="label-field-pair">
+            <div><%= round_f.label :round_type, "Round Type" %><%= required_field %></div>
+            <%= round_f.select :round_type, options_for_select(@round_types, round_f.object.round_type), {}, class: form_input_class(:round_type) %>
+                <%= add_error_or_note(round_f.object, :round_type) %>
+        </div>
+        <div class="label-field-pair">
+            <div><%= round_f.label :score_method, "Score Method" %><%= required_field %></div>
+            <%= round_f.select :score_method, options_for_select(@score_methods, round_f.object.score_method), {}, class: form_input_class(:score_method) %>
+                <%= add_error_or_note(round_f.object, :score_method) %>
+        </div>
+        <div class="label-field-pair">
+            <div><%= round_f.label :division %><%= required_field %></div>
+            <%= round_f.collection_select :division, @divisions, :id, :name, {selected: round_f.object.archer_category.division.id}, {class: form_input_class(:division)} %>
+                <%= add_error_or_note(round_f.object, :division) %>
+        </div>
+        <div class="label-field-pair">
+            <div><%= round_f.label :age_class, "Age Class" %><%= required_field %></div>
+            <%= round_f.collection_select :age_class, @age_classes, :id, :name, {selected: round_f.object.archer_category.age_class.id}, {class: form_input_class(:age_class)} %>
+                <%= add_error_or_note(round_f.object, :age_class) %>
+        </div>
+    </div>
     
-    <%= round_f.label :score_method, "Score Method" %><%= required_field %>
-    <%= round_f.select :score_method, options_for_select(@score_methods, round_f.object.score_method), {}, class: form_input_class(:score_method) %>
-        <%= error_check(round_f.object, :score_method) %>
-        <%= form_note(:score_method) %>
+    <div class="form-field-group">
+        <div class="label-field-pair">
+            <div><%= round_f.label :rank %></div>
+            <%= round_f.text_field :rank, class: form_input_class(:rank), placeholder: "Enter your final rank for the score session" %>
+                <%= add_error_or_note(round_f.object, :rank) %>
+        </div>
+    </div>
+</section>
 
-    <%= round_f.label :division %><%= required_field %>
-    <%= round_f.collection_select :division, @divisions, :id, :name, {selected: round_f.object.archer_category.division.id}, {class: form_input_class(:division)} %>
-        <%= error_check(round_f.object, :division) %>
-        <%= form_note(:division) %>
-
-    <%= round_f.label :age_class, "Age Class" %><%= required_field %>
-    <%= round_f.collection_select :age_class, @age_classes, :id, :name, {selected: round_f.object.archer_category.age_class.id}, {class: form_input_class(:age_class)} %>
-        <%= error_check(round_f.object, :age_class) %>
-        <%= form_note(:age_class) %>
-
-    <%= round_f.label :rank %>
-    <%= round_f.text_field :rank, class: form_input_class(:rank), placeholder: "Enter your final rank for the score session" %>
-        <%= error_check(round_f.object, :rank) %>
-        <%= form_note(:rank) %>
-    
-    <% if !from_score? && !from_direct_url_entry?  %>
-        <h3>Sets/Distances In Round</h3>
+<% if !from_score? && !from_direct_url_entry?  %>
+    <h3 class="short-bottom-margin">Sets/Distances In Round</h3>
+    <section id="form-rset-section">
         <%= score_ses_f.fields_for :rsets do |rset_f| %>
             <% get_child_error(score_ses_f.object.rsets, rset_f.object, :date) %>
             <% get_child_error(score_ses_f.object.rsets, rset_f.object, :rank) %>
             <%= render partial: "rsets/rset_form", locals: {rset_f: rset_f} %>
         <% end %>
-    <% end %>
-</section>
+    </section>
+<% end %>
+
