@@ -39,15 +39,39 @@ class Rset < ApplicationRecord
     def check_date
         start_date = self.score_session.start_date if self.score_session
         end_date = self.score_session.end_date if self.score_session
+binding.pry # 8, 13       rset validation
 
-        if self.date.blank?
-            errors.add(:date, "You must choose a date.") if rset_scored?
-        elsif self.date < start_date || self.date > end_date
-            errors.add(:date, "Date must be between #{start_date} and #{end_date}.")
+        if rset_started? 
+            if start_date == end_date
+                self.date = start_date
+            elsif self.date.blank? || self.date < start_date || self.date > end_date 
+                errors.add(:date, "Date must be between #{start_date} and #{end_date}.")
+            end                
+        elsif self.date
+            if self.date < start_date || self.date > end_date 
+                if start_date == end_date
+                    errors.add(:date, "Date must be #{start_date} or leave blnak.") 
+                else
+                    errors.add(:date, "Date must be between #{start_date} and #{end_date} or leave blnak.")
+                end
+            end
         end
+        
+
+        # if self.date.blank?
+        #     errors.add(:date, "You must choose a date.") if rset_started?
+        # elsif self.date < start_date || self.date > end_date
+        #     if start_date == end_date && rset_started?
+        #         self.date = start_date
+        #     elsif start_date == end_date && !rset_started?
+        #         errors.add(:date, "Date must be #{start_date} or leave blnak.")
+        #     else
+        #         errors.add(:date, "Date must be between #{start_date} and #{end_date}.")
+        #     end
+        # end
     end
 
-    def rset_scored?
+    def rset_started?
         all_entries = self.shots.all.reject { |shot| shot.score_entry if shot.score_entry == "" }
         all_entries.present?
     end

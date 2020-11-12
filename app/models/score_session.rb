@@ -35,10 +35,10 @@ class ScoreSession < ApplicationRecord
         elsif self.end_date < self.start_date
             errors.add(:end_date, "The end date must come after the start date.")
         end
+# binding.pry # 19      score_session validation
     end
 
     def format_name
-# binding.pry # 19      score_session validation
         self.name = self.name.titlecase.gsub("Us", "US")
     end
 
@@ -58,7 +58,8 @@ class ScoreSession < ApplicationRecord
 
                 # pass errors from rounds to score_session for views
                 self.errors[:rounds] << {round.id => round.errors.messages} if round.errors.any?
-# binding.pry # 6
+                
+binding.pry # 6
 
             # if new 
             # else
@@ -70,17 +71,32 @@ class ScoreSession < ApplicationRecord
     end
 
     def rsets_attributes=(attributes)
+        # updates everything that's changed, not just dates, but only in this method, no idea why
+        self.update(start_date: self.start_date, end_date: self.end_date)
+        
+        # this works if run in controller - only updates dates
+        # self.update(start_date: score_session_params[:start_date], end_date: score_session_params[:end_date])
+
+
         attributes.values.each do |attrs|
             rset = Rset.find(attrs[:id])
 # binding.pry # 7, 12
 
+            # self (SS), has updated params values
+            # self.update(start_date: self.start_date, end_date: self.end_date)
+
             if rset
                 rset.update(attrs)
-# binding.pry # 10, 15
+binding.pry # 10, 15
 
                 # pass errors from rsets to score_session for views
+                if self.start_date.blank? && rset.errors.messages[:date].first
+                    rset.errors.messages[:date][0] = "You need a score session start date above."
+                end
                 self.errors[:rsets] << {rset.id => rset.errors.messages} if rset.errors.any?
-# binding.pry # 11, 16
+                
+                
+binding.pry # 11, 16
 
             # else
             #     self.rsets.build(rset: rset)
