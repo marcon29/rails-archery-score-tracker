@@ -44,6 +44,9 @@ class ScoreSession < ApplicationRecord
 
     # ##### helpers (associated models instantiation)
     def rounds_attributes=(attributes)
+        # updates everything that's changed, not just dates, but only in this method, no idea why
+        self.update(start_date: self.start_date, end_date: self.end_date)
+
         attributes.values.each do |attrs|
             round = Round.find(attrs[:id])
 # binding.pry # 2
@@ -59,7 +62,7 @@ class ScoreSession < ApplicationRecord
                 # pass errors from rounds to score_session for views
                 self.errors[:rounds] << {round.id => round.errors.messages} if round.errors.any?
                 
-binding.pry # 6
+# binding.pry # 6
 
             # if new 
             # else
@@ -72,7 +75,7 @@ binding.pry # 6
 
     def rsets_attributes=(attributes)
         # updates everything that's changed, not just dates, but only in this method, no idea why
-        self.update(start_date: self.start_date, end_date: self.end_date)
+        # self.update(start_date: self.start_date, end_date: self.end_date)
         
         # this works if run in controller - only updates dates
         # self.update(start_date: score_session_params[:start_date], end_date: score_session_params[:end_date])
@@ -87,7 +90,7 @@ binding.pry # 6
 
             if rset
                 rset.update(attrs)
-# binding.pry # 10, 15
+binding.pry # 10, 15
 
                 # pass errors from rsets to score_session for views
                 if self.start_date.blank? && rset.errors.messages[:date].first

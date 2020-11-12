@@ -36,6 +36,8 @@ class RoundsController < ApplicationController
     @round.assign_attributes(attrs)
 
     if @round.save
+      # update children for dependent data
+      @round.rsets.each { |rset| rset.update(distance_target_category: nil) }
       redirect_to score_path(@score_session)
     else
       render :edit

@@ -64,7 +64,7 @@ class ScoreSessionsController < ApplicationController
     @score_session.rounds.each do |round|
       check_children_errors(round, @score_session, :rounds)
     end
-# binding.pry # 18
+binding.pry # 18
     if @score_session.errors.any?
     # if @score_session.errors.any? || @score_session.rounds.first.errors.any? || @score_session.rsets.first.errors.any? || @score_session.rsets.second.errors.any?
     # if @score_session.invalid? || @score_session.rounds.first.errors.any? || @score_session.rsets.first.errors.any? || @score_session.rsets.second.errors.any?
@@ -90,14 +90,10 @@ class ScoreSessionsController < ApplicationController
 
 
   def score_session_params
-    params.require(:score_session).permit(:name, :score_session_type, :gov_body_id, :city, :state, :country, :start_date, :end_date, :rank,
-    rsets_attributes: [:id, :date, :rank],   
-    rounds_attributes: [:id, :round_type, :score_method, :rank, :division, :age_class]
-      
-      
-      # rounds_attributes: [:id, :round_type, :score_method, :rank, :division, :age_class, 
-      #   rsets_attributes: [:id, :date, :rank]
-      # ]
+    params.require(:score_session).permit(
+      :name, :score_session_type, :gov_body_id, :city, :state, :country, :start_date, :end_date, :rank, 
+      rounds_attributes: [:id, :round_type, :score_method, :rank, :division, :age_class], 
+      rsets_attributes: [:id, :date, :rank]
     )
     # params.require(:score_session).permit(:name, :score_session_type, :gov_body_id, :city, :state, :country, :start_date, :end_date, :rank)
   end
