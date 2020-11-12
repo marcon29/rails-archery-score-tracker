@@ -17,7 +17,6 @@ class ApplicationRecord < ActiveRecord::Base
 				self.assign_rank(string)
 			end
 		end
-# binding.pry
 	end
 
 	# tests for this are in ScoreSession

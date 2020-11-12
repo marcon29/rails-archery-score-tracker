@@ -39,7 +39,6 @@ class Rset < ApplicationRecord
     def check_date
         start_date = self.score_session.start_date if self.score_session
         end_date = self.score_session.end_date if self.score_session
-# binding.pry # 8, 13       rset validation
 
         if rset_started? 
             if start_date == end_date

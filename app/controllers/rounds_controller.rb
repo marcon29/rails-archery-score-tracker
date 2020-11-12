@@ -1,4 +1,7 @@
 class RoundsController < ApplicationController
+
+  # don't forget to restrict the views!!!!!
+  
   def index
   end
 
@@ -45,10 +48,6 @@ class RoundsController < ApplicationController
   end
 
   def round_params
-    
-    # params.require(:round).permit(:round_type, :score_method, :rank, :archer_category_id)
-
-    # params.require(:round).permit(:round_type, :score_method, :rank, :division, :age_class, :archer_category_id)
     params.require(:round).permit(:round_type, :score_method, :rank, :division, :age_class)
   end
 end

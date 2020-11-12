@@ -51,9 +51,6 @@ class ScoreSessionsController < ApplicationController
     @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
 # binding.pry # 1
 
-  # score_session_params[:start_date]
-  # score_session_params[:end_date]
-
     @score_session.assign_attributes(score_session_params)
 # binding.pry # 17
 
@@ -64,10 +61,9 @@ class ScoreSessionsController < ApplicationController
     @score_session.rounds.each do |round|
       check_children_errors(round, @score_session, :rounds)
     end
-binding.pry # 18
+# binding.pry # 18
+
     if @score_session.errors.any?
-    # if @score_session.errors.any? || @score_session.rounds.first.errors.any? || @score_session.rsets.first.errors.any? || @score_session.rsets.second.errors.any?
-    # if @score_session.invalid? || @score_session.rounds.first.errors.any? || @score_session.rsets.first.errors.any? || @score_session.rsets.second.errors.any?
 # binding.pry # 21
       render :edit
     elsif @score_session.save
@@ -78,16 +74,7 @@ binding.pry # 18
     else
       render :edit
     end
-      
   end
-
-  
- 
-    # user attrs - :round_type, :rank
-    # DISCIPLINES = ["Outdoor", "Indoor"]
-    # DIVISIONS = ["Recurve", "Compound"]
-    # ROUND_TYPES = ["Qualifying", "Match"]
-
 
   def score_session_params
     params.require(:score_session).permit(
@@ -95,7 +82,6 @@ binding.pry # 18
       rounds_attributes: [:id, :round_type, :score_method, :rank, :division, :age_class], 
       rsets_attributes: [:id, :date, :rank]
     )
-    # params.require(:score_session).permit(:name, :score_session_type, :gov_body_id, :city, :state, :country, :start_date, :end_date, :rank)
   end
 
   
