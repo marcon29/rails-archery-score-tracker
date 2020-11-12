@@ -40,7 +40,7 @@ class Rset < ApplicationRecord
         start_date = self.score_session.start_date if self.score_session
         end_date = self.score_session.end_date if self.score_session
 
-        if rset_started? 
+        if scoring_started? 
             if start_date == end_date
                 self.date = start_date
             elsif self.date.blank? || self.date < start_date || self.date > end_date 
@@ -55,11 +55,6 @@ class Rset < ApplicationRecord
                 end
             end
         end
-    end
-
-    def rset_started?
-        all_entries = self.shots.all.reject { |shot| shot.score_entry if shot.score_entry == "" }
-        all_entries.present?
     end
 
     def archer_category

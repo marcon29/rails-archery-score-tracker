@@ -55,19 +55,28 @@
                         <%= add_error_or_note(@score_session, :end_date) %>
                 </div>
             </div>
-
-            <div class="form-field-group">
-                <div class="label-field-pair">
-                    <div><%= score_ses_f.label :rank %></div>
-                    <%= score_ses_f.text_field :rank, class: form_input_class(:rank), placeholder: "Enter your final rank for the score session" %>
-                        <%= add_error_or_note(@score_session, :rank) %>
+            
+            <% if edit_action? %>
+                <div class="form-field-group">
+                    <div class="label-field-pair">
+                        <div><%= score_ses_f.label :rank %></div>
+                        <%= score_ses_f.text_field :rank, class: form_input_class(:rank), placeholder: "Enter your final rank for the score session" %>
+                            <%= add_error_or_note(@score_session, :rank) %>
+                    </div>
                 </div>
-            </div>
+            <% end %>            
         </section>
     </section>
-    
-    <% if !from_score? && !from_direct_url_entry? %>
-        <h2 class="short-bottom-margin">Rounds In Score Session</h2>
+
+    <% if new_action? || edit_action? %>
+    <% # if edit_action? || from_edit? %>
+    <% # if edit_action? && !from_score? && !from_direct_url_entry? %>
+        <% if new_action? %>
+            <h2 class="short-bottom-margin">Add a Round</h2>
+        <% else edit_action? %>
+            <h2 class="short-bottom-margin">Rounds In Score Session</h2>
+        <% end %>
+
         <section id="form-round-section">
             <%= score_ses_f.fields_for :rounds do |round_f| %>
                 <%= render partial: "rounds/round_form", locals: {round_f: round_f, score_ses_f: score_ses_f} %>
@@ -83,7 +92,7 @@
         <% else %>
             <%= link_to "Cancel", score_session_path(@score_session) if form_type == "edit" %>
         <% end %>
-        
+
         <p>Fields marked with a <%= required_field %> are required.</p>
     </section>
 <% end %>

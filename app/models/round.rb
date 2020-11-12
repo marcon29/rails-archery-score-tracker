@@ -52,11 +52,11 @@ class Round < ApplicationRecord
     end
     
     def division
-        self.archer_category.division
+        self.archer_category.division if archer_category
     end
     
     def age_class
-        self.archer_category.age_class
+        self.archer_category.age_class if archer_category
     end
 
     def gender

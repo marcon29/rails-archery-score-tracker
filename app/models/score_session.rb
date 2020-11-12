@@ -38,6 +38,7 @@ class ScoreSession < ApplicationRecord
         self.name = self.name.titlecase.gsub("Us", "US")
     end
 
+    
     # ##### helpers (associated models instantiation)
     def rounds_attributes=(attributes)
         # updates everything that's changed, not just dates, but only in this method, no idea why

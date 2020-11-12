@@ -3,7 +3,7 @@
 <section class="rset-form-fields">
     <div class="form-field-group">
         <div class="label-field-pair">
-            <div><%= rset_f.label :date %><%= required_field if rset_f.object.rset_started? %></div>
+            <div><%= rset_f.label :date %><%= required_field if rset_f.object.scoring_started? %></div>
             <%= rset_f.date_field :date, class: form_input_class(:date), placeholder: "Enter the last day of the score session *" %>
                 <%= add_error_or_note(rset_f.object, :date) %>
         </div>

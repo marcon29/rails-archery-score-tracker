@@ -58,6 +58,13 @@ module ApplicationHelper
         object.errors.messages[attr] = check_object.errors.messages[attr]
     end
 
+    def selected_option(object, attr, id_or_value)
+        if new_action?
+            nil
+        else
+        end
+    end
+
     def home_action?
         params[:action] == "home"
     end
@@ -66,19 +73,31 @@ module ApplicationHelper
         params[:action] == "show"
     end
 
+    def new_action?
+        params[:action] == "new"
+    end
+
     def edit_action?
-        params[:action] == "edit" || request.referrer.ends_with?("edit")
+        params[:action] == "edit"
     end
 
     def score_action?
         params[:action] == "score" || action_name == "score"
-
     end
 
     # def from_score_session?
     #     params[:controller] == "score_sessions"
     # end
+
+    # these handle re-rendering the form so it displays the correct info
+    # def from_new?
+    #     request.referrer && request.referrer.ends_with?("new")
+    # end
     
+    # def from_edit?
+    #     request.referrer && request.referrer.ends_with?("edit")
+    # end
+
     def from_score?
         request.referrer && request.referrer.ends_with?("score")
     end

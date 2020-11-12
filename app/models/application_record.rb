@@ -94,4 +94,9 @@ class ApplicationRecord < ActiveRecord::Base
 		"#{self.city}, #{self.state}, #{self.country}"
 	end
 
+	def scoring_started?
+        all_entries = self.shots.all.reject { |shot| shot.score_entry if shot.score_entry == "" }
+        all_entries.present?
+    end
+
 end
