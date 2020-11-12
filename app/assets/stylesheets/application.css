@@ -125,6 +125,7 @@ nav ul {
     /* background-color: #EF3340; */
 }
 
+
 /* Footer */
 footer {
     background-color: #777777;
@@ -173,6 +174,10 @@ main {
 
 .remove-bottom-margin {
     margin-bottom: 0;
+}
+
+.restore-margin {
+    margin-top: 1rem;
 }
 
 .display-horiz {
@@ -301,23 +306,10 @@ input[type=submit] {
     margin: 0 5rem 0 0;
 }
 
-
-
-
-
-
-
-.form-input-field {
-    /* width: 30rem; */
-    /* padding-left: 1rem; */
+.login-input-field {
+    display: block;
+    width: 30rem;
 }
-
-.model-input {
-    /* display: inline; */
-}
-
-
-
 
 .field_with_errors {
     border: 1px red solid;

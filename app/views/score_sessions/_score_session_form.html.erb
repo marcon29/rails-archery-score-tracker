@@ -77,11 +77,13 @@
     
     <section id="form-submit-section">
         <%= score_ses_f.submit %>
+
         <% if from_score? %>
             <%= link_to "Cancel", score_path(@score_session) if form_type == "edit" %>
         <% else %>
             <%= link_to "Cancel", score_session_path(@score_session) if form_type == "edit" %>
         <% end %>
+        
         <p>Fields marked with a <%= required_field %> are required.</p>
     </section>
 <% end %>
