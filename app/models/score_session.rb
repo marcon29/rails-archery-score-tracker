@@ -87,7 +87,7 @@ binding.pry # 6
 
             if rset
                 rset.update(attrs)
-binding.pry # 10, 15
+# binding.pry # 10, 15
 
                 # pass errors from rsets to score_session for views
                 if self.start_date.blank? && rset.errors.messages[:date].first

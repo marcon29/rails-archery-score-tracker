@@ -64,7 +64,7 @@ class ScoreSessionsController < ApplicationController
     @score_session.rounds.each do |round|
       check_children_errors(round, @score_session, :rounds)
     end
-binding.pry # 18
+# binding.pry # 18
     if @score_session.errors.any?
     # if @score_session.errors.any? || @score_session.rounds.first.errors.any? || @score_session.rsets.first.errors.any? || @score_session.rsets.second.errors.any?
     # if @score_session.invalid? || @score_session.rounds.first.errors.any? || @score_session.rsets.first.errors.any? || @score_session.rsets.second.errors.any?

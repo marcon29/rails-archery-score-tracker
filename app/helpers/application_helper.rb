@@ -65,11 +65,12 @@ module ApplicationHelper
     end
 
     def edit_action?
-        params[:action] == "edit"
+        params[:action] == "edit" || request.referrer.ends_with?("edit")
     end
 
     def score_action?
-        params[:action] == "score"
+        params[:action] == "score" || action_name == "score"
+
     end
 
     # def from_score_session?
@@ -77,7 +78,11 @@ module ApplicationHelper
     # end
     
     def from_score?
-        request.referrer.ends_with?("score")
+        request.referrer && request.referrer.ends_with?("score")
+    end
+
+    def from_direct_url_entry?
+        !request.referrer
     end
 
     def get_rank(object)
