@@ -18,32 +18,16 @@ class ScoreSessionsController < ApplicationController
     @score_session.rounds.build(archer: @score_session.archer)
     # assoc to archer, gov_body
 
-    # don't need rank for anything - this is for SS that haven't been shot yet
+    
     
     # data needed for Round
         # round_format
         # division, age_class (for archer_category)
         # round_type, score_method
     
-    # selects RoundFormat
-      # RoundFormat creates Round (assoc to archer, score_session, round_format, archer_category)
-      # iterate through RoundFormat.SetEndFormats
-          # for each: 
-              # creates Rset (assoc to archer, score_session, round, set_end_format)
-                  # no data needed: name auto-assigned, date & rank are update only
-                  # dtc auto assoc every time Rset validated
-              # Rset.set_end_format.num_ends times create endd (assoc to archer, score_session, round, rset)
-                  # no data needed: number auto-assigned, set_score is score only
-                  # iterate through rset.ends
-                      # for each:
-                          # rset.set_end_format.shots_per_end times create shot (assoc to archer, score_session, round, rset, endd)
-                              # no data needed: number auto-assigned, score_entry is score only
-    
     
     # for Round and Rset creation
     @round_formats = Format::RoundFormat.all
-
-    
 
     # for ScoreSession collections
     @score_session_types = SCORE_SESSION_TYPES
@@ -61,16 +45,36 @@ class ScoreSessionsController < ApplicationController
   end
 
   def create
-    # @score_session = ScoreSession.assign_attributes(score_session_params)
-    binding.pry
+    # should just be able to use this after nesting resources, below is just to get things working
+    # @score_session = ScoreSession.new(score_session_params)
 
-    redirect_to new_score_session_path
-    
-    # if @score_session.save
-    #   redirect_to score_session_path(@score_session) # unless from_score
-    # else
-    #   render :new
-    # end
+    @score_session = ScoreSession.new(archer: current_user)
+    @score_session.assign_attributes(score_session_params)
+
+     # for Round and Rset creation
+     @round_formats = Format::RoundFormat.all
+
+     # for ScoreSession collections
+     @score_session_types = SCORE_SESSION_TYPES
+     @gov_bodies = Organization::GovBody.all
+     
+     # for Round collections
+     @round_types = ROUND_TYPES
+     @score_methods = SCORE_METHODS
+     @divisions = Organization::Division.all
+     @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
+     @default_division = Organization::Division.find_by(name: current_user.default_division)
+     @default_age_class = Organization::AgeClass.find_by(name: current_user.default_age_class)
+
+    if @score_session.errors.any?
+      # @score_session.rounds.build(archer: @score_session.archer)
+      binding.pry
+      render :new
+    else
+      binding.pry
+      
+      redirect_to score_session_path(@score_session) # unless from_score
+    end
   end
 
   def edit

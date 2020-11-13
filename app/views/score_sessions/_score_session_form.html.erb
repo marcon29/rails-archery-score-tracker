@@ -68,10 +68,10 @@
         </section>
     </section>
 
-    <% if new_action? || edit_action? %>
+    <% if new_action? || create_action? || edit_action? %>
     <% # if edit_action? || from_edit? %>
     <% # if edit_action? && !from_score? && !from_direct_url_entry? %>
-        <% if new_action? %>
+        <% if new_action? || %>
             <h2 class="short-bottom-margin">Add a Round</h2>
         <% else edit_action? %>
             <h2 class="short-bottom-margin">Rounds In Score Session</h2>

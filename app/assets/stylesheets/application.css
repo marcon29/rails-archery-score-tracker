@@ -190,14 +190,14 @@ main {
 /* ******************************************************* */
 
 h1 {
-	color: #EF3340;
+	color: #FBE122;
 	font-size: 3.2rem;
 	/* font-family: "Yanone Kaffeesatz", "sans-serif"; */
 	/* letter-spacing: .13rem; */
 }
 
 #header-HL {
-    color: #FBE122;
+    color: #EF3340;
 }
 
 h2 {
@@ -288,7 +288,10 @@ input, textarea, select {
 select {
     width: 23.8rem;
     height: 3.5rem;
+    
 }
+
+
 
 input[type=date] {
     height: 3.2rem;

@@ -77,6 +77,10 @@ module ApplicationHelper
         params[:action] == "new"
     end
 
+    def create_action?
+        params[:action] == "create"
+    end
+
     def edit_action?
         params[:action] == "edit"
     end

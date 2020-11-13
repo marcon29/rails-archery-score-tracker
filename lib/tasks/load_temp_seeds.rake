@@ -183,3 +183,14 @@ task load_shots: :environment do
 		end
 	end
 end
+
+
+desc "Clear Tester Objects"
+task clear_tester: :environment do
+	archer = Archer.find(33)
+	archer.shots.each { |obj| obj.destroy }
+	archer.ends.each { |obj| obj.destroy }
+	archer.rsets.each { |obj| obj.destroy }
+	archer.rounds.each { |obj| obj.destroy }
+	archer.score_sessions.each { |obj| obj.destroy }
+end

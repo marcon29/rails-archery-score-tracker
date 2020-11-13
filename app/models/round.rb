@@ -32,10 +32,11 @@ class Round < ApplicationRecord
     # ##### helpers (callbacks & validations)
     # auto create name ( ScoreSession.name - RoundFormat.name )
     def assign_name
-# binding.pry # 3       round validation
         if self.score_session && self.round_format
             self.name = create_name
         end
+# binding.pry # update 3    round validation
+# binding.pry # new 5       round validation
     end
 
     def create_name
