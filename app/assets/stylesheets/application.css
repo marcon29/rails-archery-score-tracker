@@ -25,6 +25,8 @@
 /* blue = #00B5E2 */
 /* black = #000000 */
 /* white = #FFFFFF */
+/* NFAA blue = #263959 */
+
 
 /* ******************************************************* */
 /* Resetting Default Layout and Text */
@@ -47,8 +49,10 @@ html {
 body {
     margin: 0;
     padding: 0;
-	/* background-color: #FBE122; */
-	/* color: #FFFFFF; */
+    
+    background-color: #2D2D2D;
+    color: #FFFFFF;
+    
 	font-size: 1.6rem;
     font-family: "Segoe UI", Lato, sans-serif;
 }
@@ -65,16 +69,6 @@ header {
     top: 0;
     width: 100%;
     padding: 1.5rem 0;
-}
-
-footer {
-    background-color: #777777;
-    position: sticky;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    padding: 1.5rem 0;
-    text-align: center;
 }
 
 nav ul {
@@ -128,7 +122,7 @@ nav ul {
 
 /* Footer */
 footer {
-    background-color: #777777;
+    background-color: #263959;
     position: absolute;
     left: 0;
     bottom: 0;
@@ -200,6 +194,10 @@ h1 {
 	font-size: 3.2rem;
 	/* font-family: "Yanone Kaffeesatz", "sans-serif"; */
 	/* letter-spacing: .13rem; */
+}
+
+#header-HL {
+    color: #FBE122;
 }
 
 h2 {
@@ -276,25 +274,41 @@ footer a {
 /* Forms */
 /* ******************************************************* */
 input, textarea, select {
-    margin-bottom: 1rem;
+    background-color: #777777;
     height: 3rem;
-    width: 20rem;
+    width: 22.5rem;
+    margin-bottom: 1rem;
     padding-left: 1rem;
+    font-family: Lato, sans-serif;
+    color: #FFFFFF;
+    border: 1.5px solid #000000;
+    border-radius: 13px;
 }
 
 select {
-    width: 21.6rem;
-    height: 3.6rem;
+    width: 23.8rem;
+    height: 3.5rem;
 }
 
 input[type=date] {
-    height: 3.4rem;
+    height: 3.2rem;
+}
+
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
 }
 
 input[type=submit] {
     display: block;
     width: auto;
+    background-color: #263959;
+    padding: 0 1rem;
+    
 }
+
+/* yellow = #FBE122 */
+/* red = #EF3340 */
+/* blue = #00B5E2 */
 
 .form-field-group {
     display: flex;
@@ -304,6 +318,10 @@ input[type=submit] {
 
 .label-field-pair {
     margin: 0 5rem 0 0;
+}
+
+.label-field-pair div {
+    margin-bottom: .5rem;
 }
 
 .login-input-field {

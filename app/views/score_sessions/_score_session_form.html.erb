@@ -28,17 +28,17 @@
             <div class="form-field-group">
                 <div class="label-field-pair">
                     <div><%= score_ses_f.label :city %><%= required_field %></div>
-                    <%= score_ses_f.text_field :city, class: form_input_class(:city), placeholder: "Enter the city where the score session is held" %>
+                    <%= score_ses_f.text_field :city, class: form_input_class(:city), placeholder: "City where score session is held" %>
                         <%= add_error_or_note(@score_session, :city) %>
                 </div>
                 <div class="label-field-pair">
                     <div><%= score_ses_f.label :state %><%= required_field %></div>
-                    <%= score_ses_f.text_field :state, class: form_input_class(:state), placeholder: "Enter the state where the score session is held" %>
+                    <%= score_ses_f.text_field :state, class: form_input_class(:state), placeholder: "State where score session is held" %>
                         <%= add_error_or_note(@score_session, :state) %>
                 </div>
                 <div class="label-field-pair">
                     <div><%= score_ses_f.label :country %><%= required_field %></div>
-                    <%= score_ses_f.text_field :country, class: form_input_class(:country), placeholder: "Enter the country where the score session is held" %>
+                    <%= score_ses_f.text_field :country, class: form_input_class(:country), placeholder: "Country where score session is held" %>
                         <%= add_error_or_note(@score_session, :country) %>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                         <%= add_error_or_note(@score_session, :end_date) %>
                 </div>
             </div>
-            
+
             <% if edit_action? %>
                 <div class="form-field-group">
                     <div class="label-field-pair">
@@ -77,11 +77,12 @@
             <h2 class="short-bottom-margin">Rounds In Score Session</h2>
         <% end %>
 
-        <section id="form-round-section">
+        <section id=<%= new_action? ? "ss-form-round-section" : "form-round-section" %>>
             <%= score_ses_f.fields_for :rounds do |round_f| %>
                 <%= render partial: "rounds/round_form", locals: {round_f: round_f, score_ses_f: score_ses_f} %>
             <% end %>
         </section>
+        <%= tag.br if new_action? %>
     <% end %>
     
     <section id="form-submit-section">
