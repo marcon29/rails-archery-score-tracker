@@ -16,6 +16,7 @@ class RoundsController < ApplicationController
     @score_session = @round.score_session
 
     # for Round collections when re-rendering
+    @round_formats = Format::RoundFormat.all
     @round_types = ROUND_TYPES
     @score_methods = SCORE_METHODS
     @divisions = Organization::Division.all
@@ -27,6 +28,7 @@ class RoundsController < ApplicationController
     @score_session = @round.score_session
     
     # for Round collections when re-rendering
+    @round_formats = Format::RoundFormat.all
     @round_types = ROUND_TYPES
     @score_methods = SCORE_METHODS
     @divisions = Organization::Division.all

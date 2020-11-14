@@ -98,6 +98,10 @@ module ApplicationHelper
         params[:action] == "score" || action_name == "score"
     end
 
+    def only_round_update?
+        params[:controller] == "rounds"
+    end
+
     # def from_score_session?
     #     params[:controller] == "score_sessions"
     # end

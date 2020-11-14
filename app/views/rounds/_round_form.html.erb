@@ -1,4 +1,6 @@
-<h3 class="short-margins"><%= round_f.object.name %></h3>
+<% if !only_round_update? %>
+    <h3 class="short-margins"><%= round_f.object.name %></h3>
+<% end %>    
 
 <section class="round-form-fields">
     <% if new_action? || create_action? || !round_f.object.scoring_started? %>
@@ -47,8 +49,10 @@
 </section>
 
 
-<% if edit_action? || update_action? %>
+<% # if edit_action? || update_action? %>
+<% # if score_ses_f && ( (edit_action? && !from_score?) || (update_action? && !from_score?) || !from_direct_url_entry? ) %>
 <% # if !from_score? && !from_direct_url_entry?  %>
+<% if score_ses_f && !only_round_update? && !new_action? && !create_action? %>
     <h3 class="short-bottom-margin">Sets/Distances In Round</h3>
     <section id="form-rset-section">
         <%= score_ses_f.fields_for :rsets do |rset_f| %>

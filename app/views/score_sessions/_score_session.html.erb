@@ -10,7 +10,7 @@
             <h1 class="short-bottom-margin display-horiz-hl"><%= score_session.name %></h1>
             <%= link_to "Edit", edit_score_session_path(score_session) %>
         <% elsif score_action? %>
-            <h1 class="short-bottom-margin display-horiz-hl"><%= score_session.name %>(Scoring)</h1>
+            <h1 class="short-bottom-margin display-horiz-hl"><%= score_session.name %> (Scoring)</h1>
             <%= link_to "Edit Score Session Details", edit_score_session_path(score_session) %>
         <% else %>
             <h3 class="short-bottom-margin"><%= link_to score_session.name, score_session_path(score_session) %></h3>

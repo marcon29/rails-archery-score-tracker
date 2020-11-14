@@ -69,8 +69,8 @@
     </section>
 
     <!–– do not need this first conditional unless score action changes things ––>
-    <% if new_action? || create_action? || edit_action? || update_action? %>
-    <% # if edit_action? && !from_score? && !from_direct_url_entry? %>
+    <% # if edit_action? && !from_score?  %>
+    <% if new_action? || create_action? || (edit_action? && !from_score?) || (update_action? && !from_score?) || from_direct_url_entry? %>
         <% if new_action? || create_action? %>
             <h2 class="short-bottom-margin">Add a Round</h2>
         <% elsif edit_action? || update_action? %>
@@ -82,8 +82,9 @@
                 <%= render partial: "rounds/round_form", locals: {round_f: round_f, score_ses_f: score_ses_f} %>
             <% end %>
         </section>
-        <%= tag.br if (new_action? || create_action?) %>
     <% end %>
+    
+    <%= tag.br if (new_action? || create_action? || from_score?) %>
     
     <section id="form-submit-section">
         <%= score_ses_f.submit %>
@@ -92,7 +93,7 @@
             <%= link_to "Cancel", score_sessions_path %>
         <% elsif from_edit? && params[:id] %>
             <%= link_to "Cancel", score_session_path(@score_session) %>
-        <% elsif from_score? %>
+        <% elsif from_score? && params[:id] %>
             <%= link_to "Cancel", score_path(@score_session) %>
         <% else %>
             <%= link_to "Cancel", request.referer.present? ? request.referer : score_sessions_path %>
