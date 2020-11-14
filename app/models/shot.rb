@@ -33,7 +33,7 @@ class Shot < ApplicationRecord
         if self.number.blank? && self.end
             self.number = shots_in_end.count + 1 
         end
-# binding.pry # new 11    shot validation
+# binding.pry # new 12    shot validation
     end
 
     def shots_in_end

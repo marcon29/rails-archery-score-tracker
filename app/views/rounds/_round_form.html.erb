@@ -1,7 +1,7 @@
 <h3 class="short-margins"><%= round_f.object.name %></h3>
 
 <section class="round-form-fields">
-    <% if new_action? || !round_f.object.scoring_started? %>
+    <% if new_action? || create_action? || !round_f.object.scoring_started? %>
         <div class="form-field-group">
             <div class="label-field-pair">
                 <div><%= round_f.label :round_format_id, "Round" %><%= required_field %></div>
@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <% if edit_action? %>
+    <% if edit_action? || update_action? %>
         <div class="form-field-group">
             <div class="label-field-pair">
                 <div><%= round_f.label :rank %></div>
@@ -46,7 +46,8 @@
     <% end %>
 </section>
 
-<% if edit_action? %>
+
+<% if edit_action? || update_action? %>
 <% # if !from_score? && !from_direct_url_entry?  %>
     <h3 class="short-bottom-margin">Sets/Distances In Round</h3>
     <section id="form-rset-section">

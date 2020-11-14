@@ -38,7 +38,7 @@ class End < ApplicationRecord
         if self.number.blank? && self.rset
             self.number = ends_in_set.count + 1 
         end
-# binding.pry # new 9   end validation
+# binding.pry # new 10   end validation
     end
 
     def ends_in_set

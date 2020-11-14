@@ -29,8 +29,6 @@ class Rset < ApplicationRecord
         if self.round && self.set_end_format
             self.name = create_name
         end
-# binding.pry # update 8, 13    rset validation
-# binding.pry # new 7           rset validation
     end
 
     def create_name
@@ -40,6 +38,9 @@ class Rset < ApplicationRecord
     def check_date
         start_date = self.score_session.start_date if self.score_session
         end_date = self.score_session.end_date if self.score_session
+
+# binding.pry # update 8, 13    rset validation
+# binding.pry # new 8           rset validation
 
         if scoring_started? 
             if start_date == end_date

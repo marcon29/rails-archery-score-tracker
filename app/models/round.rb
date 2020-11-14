@@ -36,7 +36,7 @@ class Round < ApplicationRecord
             self.name = create_name
         end
 # binding.pry # update 3    round validation
-# binding.pry # new 5       round validation
+# binding.pry # new 6       round validation
     end
 
     def create_name

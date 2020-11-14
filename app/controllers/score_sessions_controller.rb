@@ -16,15 +16,6 @@ class ScoreSessionsController < ApplicationController
   def new
     @score_session = ScoreSession.new(archer: current_user)
     @score_session.rounds.build(archer: @score_session.archer)
-    # assoc to archer, gov_body
-
-    
-    
-    # data needed for Round
-        # round_format
-        # division, age_class (for archer_category)
-        # round_type, score_method
-    
     
     # for Round and Rset creation
     @round_formats = Format::RoundFormat.all
@@ -40,8 +31,6 @@ class ScoreSessionsController < ApplicationController
     @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
     @default_division = Organization::Division.find_by(name: current_user.default_division)
     @default_age_class = Organization::AgeClass.find_by(name: current_user.default_age_class)
-
-
   end
 
   def create
@@ -67,12 +56,8 @@ class ScoreSessionsController < ApplicationController
      @default_age_class = Organization::AgeClass.find_by(name: current_user.default_age_class)
 
     if @score_session.errors.any?
-      # @score_session.rounds.build(archer: @score_session.archer)
-      binding.pry
       render :new
     else
-      binding.pry
-      
       redirect_to score_session_path(@score_session) # unless from_score
     end
   end
@@ -104,6 +89,7 @@ class ScoreSessionsController < ApplicationController
     @gov_bodies = Organization::GovBody.all
     
     # for Round collections when re-rendering
+    @round_formats = Format::RoundFormat.all
     @round_types = ROUND_TYPES
     @score_methods = SCORE_METHODS
     @divisions = Organization::Division.all
@@ -123,15 +109,15 @@ class ScoreSessionsController < ApplicationController
 # binding.pry # 18
 
     if @score_session.errors.any?
-# binding.pry # 21
+      # binding.pry # 21
       render :edit
-    elsif @score_session.save
+    else
+      @score_session.save
+      # binding.pry # 21
       children_auto_updates
         # need to update so goes back to correct place (can't use from_score because always comes from edit)
         # redirect_to score_path(@score_session) if from_score
-        redirect_to score_session_path(@score_session) # unless from_score
-    else
-      render :edit
+      redirect_to score_session_path(@score_session) # unless from_score
     end
   end
 
@@ -164,7 +150,7 @@ class ScoreSessionsController < ApplicationController
       error = id_error[object.id]
       if error
         error.keys.each do |attr|
-            object.errors.add(attr, error[attr].first)
+          object.errors.add(attr, error[attr].first) if error[attr].present?
         end
       end
     end

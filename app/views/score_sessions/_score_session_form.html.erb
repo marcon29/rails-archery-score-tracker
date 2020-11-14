@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            <% if edit_action? %>
+            <% if edit_action? || update_action? %>
                 <div class="form-field-group">
                     <div class="label-field-pair">
                         <div><%= score_ses_f.label :rank %></div>
@@ -68,30 +68,34 @@
         </section>
     </section>
 
-    <% if new_action? || create_action? || edit_action? %>
-    <% # if edit_action? || from_edit? %>
+    <!–– do not need this first conditional unless score action changes things ––>
+    <% if new_action? || create_action? || edit_action? || update_action? %>
     <% # if edit_action? && !from_score? && !from_direct_url_entry? %>
-        <% if new_action? || %>
+        <% if new_action? || create_action? %>
             <h2 class="short-bottom-margin">Add a Round</h2>
-        <% else edit_action? %>
+        <% elsif edit_action? || update_action? %>
             <h2 class="short-bottom-margin">Rounds In Score Session</h2>
         <% end %>
 
-        <section id=<%= new_action? ? "ss-form-round-section" : "form-round-section" %>>
+        <section id=<%= (new_action? || create_action?) ? "ss-form-round-section" : "form-round-section" %>>
             <%= score_ses_f.fields_for :rounds do |round_f| %>
                 <%= render partial: "rounds/round_form", locals: {round_f: round_f, score_ses_f: score_ses_f} %>
             <% end %>
         </section>
-        <%= tag.br if new_action? %>
+        <%= tag.br if (new_action? || create_action?) %>
     <% end %>
     
     <section id="form-submit-section">
         <%= score_ses_f.submit %>
-
-        <% if from_score? %>
+        
+        <% if from_new? %>
+            <%= link_to "Cancel", score_sessions_path %>
+        <% elsif from_edit? %>
+            <%= link_to "Cancel", score_session_path(@score_session) %>
+        <% elsif from_score? %>
             <%= link_to "Cancel", score_path(@score_session) if form_type == "edit" %>
         <% else %>
-            <%= link_to "Cancel", score_session_path(@score_session) if form_type == "edit" %>
+            <%= link_to "Cancel", request.referer.present? ? request.referer : score_sessions_path %>
         <% end %>
 
         <p>Fields marked with a <%= required_field %> are required.</p>

@@ -95,7 +95,7 @@ class ApplicationRecord < ActiveRecord::Base
 	end
 
 	def scoring_started?
-        all_entries = self.shots.all.reject { |shot| shot.score_entry if shot.score_entry == "" }
+		all_entries = self.shots.select { |shot| shot.score_entry if shot.score_entry.present? }
         all_entries.present?
     end
 

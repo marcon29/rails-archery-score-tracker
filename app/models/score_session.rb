@@ -41,27 +41,24 @@ class ScoreSession < ApplicationRecord
     
     # ##### helpers (associated models instantiation)
     def rounds_attributes=(attributes)
-        # updates everything that's changed, not just dates, but only in this method, no idea why
-        self.update(start_date: self.start_date, end_date: self.end_date) if self.id
+        self.validate if self.id
 
         attributes.values.each do |attrs|
-           round = Round.find(attrs[:id]) if attrs[:id]
-# binding.pry # 2
+            round = Round.find(attrs[:id]) if attrs[:id]
+            # binding.pry # 2
             if round    # if existing/update
                 # get category from input, then delete input
                 attrs[:archer_category_id] = round.find_category_by_div_age_class(division: attrs[:division], age_class: attrs[:age_class]).id
                 attrs.delete(:division)
                 attrs.delete(:age_class)
                 round.update(attrs)
-# binding.pry # update 5
+                # binding.pry # update 5
+                
                 # pass errors from rounds to score_session for views
                 self.errors[:rounds] << {round.id => round.errors.messages} if round.errors.any?
-# binding.pry # update 6
-##############################################################
-            else    # if new
-# binding.pry # new 3
-                self.save    # runs ss validations only
-
+                binding.pry # update 6
+            else
+                # binding.pry # new 5
                 attrs[:archer_id] = self.archer.id
                 attrs[:archer_category_id] = Organization::ArcherCategory.find_category(
                     gov_body: self.gov_body, 
@@ -71,49 +68,52 @@ class ScoreSession < ApplicationRecord
                 ).id
                 attrs.delete(:division)
                 attrs.delete(:age_class)
-                round = self.rounds.create(attrs)   # runs round validations only
-# binding.pry # new 6
-                # at this point it should be impossible to create an invalid object due to bad user data entries
 
-                round.round_format.set_end_formats.each do |sef|
-                    rset_attrs = {archer: self.archer, score_session: self, set_end_format: sef}
-                    rset = round.rsets.create(rset_attrs)    # runs rset validations only
-# binding.pry # new 8
-                    end_attrs = {archer: self.archer, score_session: self, round: round, rset: rset}
-                    sef.num_ends.times do 
-                        endd = rset.ends.create(end_attrs)    # runs end validations only
-# binding.pry # new 10
-                        shot_attrs = {archer: self.archer, score_session: self, round: round, rset: rset, end: endd}
-                        sef.shots_per_end.times do
-                            shot = endd.shots.create(shot_attrs)
+                if self.save
+                    round = self.rounds.create(attrs)   # runs round validations only
+                    # binding.pry # new 7
+
+                    round.round_format.set_end_formats.each do |sef|
+                        rset_attrs = {archer: self.archer, score_session: self, set_end_format: sef}
+                        rset = round.rsets.create(rset_attrs)    # runs rset validations only
+                        # binding.pry # new 9
+
+                        end_attrs = {archer: self.archer, score_session: self, round: round, rset: rset}
+                        sef.num_ends.times do 
+                            endd = rset.ends.create(end_attrs)    # runs end validations only
+                            # binding.pry # new 11
+
+                            shot_attrs = {archer: self.archer, score_session: self, round: round, rset: rset, end: endd}
+                            sef.shots_per_end.times do
+                                shot = endd.shots.create(shot_attrs)
+                            end
+                            # binding.pry # new 13
                         end
-# binding.pry # new 12
                     end
+                else
+                    round = self.rounds.build(attrs)
                 end
             end
-# binding.pry # new 13     one fully built round
+            # binding.pry # new 14     one fully built round
         end
-# binding.pry # new 14     one fully built score session
+        # binding.pry # new 15     one fully built score session
     end
 
     def rsets_attributes=(attributes)
         attributes.values.each do |attrs|
             rset = Rset.find(attrs[:id])
-# binding.pry # 7, 12
+            # binding.pry # 7, 12
 
             if rset
                 rset.update(attrs)
-# binding.pry # 10, 15
+                # binding.pry # 10, 15
 
                 # pass errors from rsets to score_session for views
                 if self.start_date.blank? && rset.errors.messages[:date].first
                     rset.errors.messages[:date][0] = "You need a score session start date above."
                 end
                 self.errors[:rsets] << {rset.id => rset.errors.messages} if rset.errors.any?
-# binding.pry # 11, 16
-
-            # else
-            #     self.rsets.build(rset: rset)
+                # binding.pry # 11, 16
             end
         end
     end

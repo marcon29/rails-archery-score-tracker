@@ -3,6 +3,7 @@ module ApplicationHelper
         new: {
             comp_section: "You can change these at any time.", 
             default_age_class: "If you don't choose, the youngest eligible age class will be automatically assigned (requires you enter your birth date).", 
+            age_class: "Only shows eligible age classes.", 
             end_date: "Leave blank if score session is single day.", 
             rank: 'Leave blank unless entering an old score session. Otherwise enter a number above 0, "W" or "L".'
         }, 
@@ -85,6 +86,10 @@ module ApplicationHelper
         params[:action] == "edit"
     end
 
+    def update_action?
+        params[:action] == "update"
+    end
+
     def score_action?
         params[:action] == "score" || action_name == "score"
     end
@@ -94,13 +99,13 @@ module ApplicationHelper
     # end
 
     # these handle re-rendering the form so it displays the correct info
-    # def from_new?
-    #     request.referrer && request.referrer.ends_with?("new")
-    # end
+    def from_new?
+        request.referrer && request.referrer.ends_with?("new")
+    end
     
-    # def from_edit?
-    #     request.referrer && request.referrer.ends_with?("edit")
-    # end
+    def from_edit?
+        request.referrer && request.referrer.ends_with?("edit")
+    end
 
     def from_score?
         request.referrer && request.referrer.ends_with?("score")
