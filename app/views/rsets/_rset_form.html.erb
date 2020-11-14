@@ -4,12 +4,12 @@
     <div class="form-field-group">
         <div class="label-field-pair">
             <div><%= rset_f.label :date %><%= required_field if rset_f.object.scoring_started? %></div>
-            <%= rset_f.date_field :date, class: form_input_class(:date), placeholder: "Enter the last day of the score session *" %>
+            <%= rset_f.date_field :date, class: form_input_class(:date) %>
                 <%= add_error_or_note(rset_f.object, :date) %>
         </div>
         <div class="label-field-pair">
             <div><%= rset_f.label :rank %></div>
-            <%= rset_f.text_field :rank, class: form_input_class(:rank), placeholder: "Enter your final rank for the score session" %>
+            <%= rset_f.text_field :rank, class: form_input_class(:rank), placeholder: "Your final place for the set/distance" %>
                 <%= add_error_or_note(rset_f.object, :rank) %>
         </div>
     </div>

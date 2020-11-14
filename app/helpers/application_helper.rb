@@ -70,6 +70,10 @@ module ApplicationHelper
         params[:action] == "home"
     end
 
+    def index_action?
+        params[:action] == "index"
+    end
+
     def show_action?
         params[:action] == "show"
     end

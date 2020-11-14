@@ -74,4 +74,8 @@ class End < ApplicationRecord
     def complete?
         scored_shots.count < self.shots_per_end ? false : true
     end
+    
+    def score_method_is_set?
+        self.round && self.round.score_method == "Set"
+    end
 end

@@ -1,28 +1,35 @@
 <% if home_action? %>
-    <h3 class="short-bottom-margin"><%= link_to score_session.name, score_path(score_session) %></h3>
-<% elsif show_action? %>
-    <h1 class="display-horiz-hl"><%= score_session.name %></h1>
-    <%= link_to "Edit", edit_score_session_path(score_session) %>
-<% elsif score_action? %>
-    <h1 class="display-horiz-hl"><%= score_session.name %>(Scoring)</h1>
-    <%= link_to "Edit Score Session Details", edit_score_session_path(score_session) %>
+    <section id=<%= "score-session-#{score_session.id}" %> class="active-score-session">
 <% else %>
-    <h3 class="short-bottom-margin"><%= link_to score_session.name, score_session_path(score_session) %></h3>
+    <section id=<%= "score-session-#{score_session.id}" %> class="score-session-section">
 <% end %>
+    <section class="section-header">
+        <% if home_action? %>
+            <h3 class="short-bottom-margin"><%= link_to score_session.name, score_path(score_session) %></h3>
+        <% elsif show_action? %>
+            <h1 class="short-bottom-margin display-horiz-hl"><%= score_session.name %></h1>
+            <%= link_to "Edit", edit_score_session_path(score_session) %>
+        <% elsif score_action? %>
+            <h1 class="short-bottom-margin display-horiz-hl"><%= score_session.name %>(Scoring)</h1>
+            <%= link_to "Edit Score Session Details", edit_score_session_path(score_session) %>
+        <% else %>
+            <h3 class="short-bottom-margin"><%= link_to score_session.name, score_session_path(score_session) %></h3>
+        <% end %>
+    </section>
 
-<section id=<%= "score-session-#{score_session.id}" %> class="general-info">
-    <% if show_action? || edit_action? %>
-        <p>Score Type: <b><%= score_session.score_session_type %></b></p>
-    <% end %>
-    <p>Governing Body: <b><%= score_session.gov_body.name %></b></p>
-    <p>Location: <b><%= score_session.full_location %></b></p>
-    <p>Date(s): <b><%= formatted_date_range(score_session.start_date, score_session.end_date) %></b></p>
-    <p>Rank: <b><%= get_rank(score_session) %></b></p>
-</section>
+    <section id=<%= "score-session-#{score_session.id}-info" %> class="general-info">
+        <% if show_action? %>
+            <p>Score Type: <b><%= score_session.score_session_type %></b></p>
+        <% end %>
+        <p>Governing Body: <b><%= score_session.gov_body.name %></b></p>
+        <p>Location: <b><%= score_session.full_location %></b></p>
+        <p>Date(s): <b><%= formatted_date_range(score_session.start_date, score_session.end_date) %></b></p>
+        <p>Rank: <b><%= get_rank(score_session) %></b></p>
+    </section>
+    <hr>
 
-<hr>
-
-<section id=<%= "score-session-#{score_session.id}-rounds" %> class="all-rounds">
-    <%= render collection: score_session.rounds, partial: "rounds/round" %>
+    <section id=<%= "score-session-#{score_session.id}-rounds" %> class="all-rounds">
+        <%= render collection: score_session.rounds, partial: "rounds/round" %>
+    </section>
 </section>
 

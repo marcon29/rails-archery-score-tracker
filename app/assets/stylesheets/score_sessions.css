@@ -6,6 +6,9 @@
 /* Scores Layout */
 /* ******************************************************* */
 
+.active-score-session, 
+.all-score-sessions, 
+.all-rsets, 
 #form-round-section, 
 #form-rset-section {
     width: 90%;

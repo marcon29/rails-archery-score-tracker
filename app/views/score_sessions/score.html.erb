@@ -1,1 +1,3 @@
-<%= render partial: "score_session", locals: {score_session: @score_session} %>
+<section id=<%= "score-session-#{@score_session.id}" %> class="score-session-section">
+    <%= render partial: "score_session", locals: {score_session: @score_session} %>
+</section>

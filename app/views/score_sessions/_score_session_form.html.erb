@@ -60,7 +60,7 @@
                 <div class="form-field-group">
                     <div class="label-field-pair">
                         <div><%= score_ses_f.label :rank %></div>
-                        <%= score_ses_f.text_field :rank, class: form_input_class(:rank), placeholder: "Enter your final rank for the score session" %>
+                        <%= score_ses_f.text_field :rank, class: form_input_class(:rank), placeholder: "Your final place for the score session" %>
                             <%= add_error_or_note(@score_session, :rank) %>
                     </div>
                 </div>
@@ -90,10 +90,10 @@
         
         <% if from_new? %>
             <%= link_to "Cancel", score_sessions_path %>
-        <% elsif from_edit? %>
+        <% elsif from_edit? && params[:id] %>
             <%= link_to "Cancel", score_session_path(@score_session) %>
         <% elsif from_score? %>
-            <%= link_to "Cancel", score_path(@score_session) if form_type == "edit" %>
+            <%= link_to "Cancel", score_path(@score_session) %>
         <% else %>
             <%= link_to "Cancel", request.referer.present? ? request.referer : score_sessions_path %>
         <% end %>

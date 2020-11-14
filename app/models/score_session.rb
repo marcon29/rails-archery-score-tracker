@@ -56,7 +56,7 @@ class ScoreSession < ApplicationRecord
                 
                 # pass errors from rounds to score_session for views
                 self.errors[:rounds] << {round.id => round.errors.messages} if round.errors.any?
-                binding.pry # update 6
+                # binding.pry # update 6
             else
                 # binding.pry # new 5
                 attrs[:archer_id] = self.archer.id

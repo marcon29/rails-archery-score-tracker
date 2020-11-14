@@ -288,13 +288,19 @@ input, textarea, select {
 select {
     width: 23.8rem;
     height: 3.5rem;
-    
 }
-
-
 
 input[type=date] {
     height: 3.2rem;
+}
+
+::placeholder {             /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #dddddd;
+    opacity: 1;             /* Firefox */
+}
+::-ms-input-placeholder,    /* Microsoft Edge */  
+:-ms-input-placeholder {    /* Internet Explorer 10-11 */
+    color: #dddddd;
 }
 
 ::-webkit-calendar-picker-indicator {
@@ -306,7 +312,6 @@ input[type=submit] {
     width: auto;
     background-color: #263959;
     padding: 0 1rem;
-    
 }
 
 /* yellow = #FBE122 */

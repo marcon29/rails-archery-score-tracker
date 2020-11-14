@@ -39,7 +39,7 @@
         <div class="form-field-group">
             <div class="label-field-pair">
                 <div><%= round_f.label :rank %></div>
-                <%= round_f.text_field :rank, class: form_input_class(:rank), placeholder: "Enter your final rank for the score session" %>
+                <%= round_f.text_field :rank, class: form_input_class(:rank), placeholder: "Your final place for the round" %>
                     <%= add_error_or_note(round_f.object, :rank) %>
             </div>
         </div>

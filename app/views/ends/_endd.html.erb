@@ -6,5 +6,5 @@
     <td class="spacer"></td>
     <%= tag.td endd.score, class: "end-score" %>
     <td class="spacer"></td>
-    <%= tag.td endd.set_score, class: "end-set-score" if endd.set_score %>
+    <%= tag.td endd.set_score, class: "end-set-score" if endd.score_method_is_set? %>
 </tr>
