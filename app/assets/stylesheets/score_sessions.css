@@ -50,3 +50,7 @@ td {
 .end-score, .end-set-score {
     width: 6rem;
 }
+
+.score-submit {
+    border: none;
+}

@@ -63,19 +63,26 @@ class End < ApplicationRecord
         self.shots.collect { |shot| shot.score }.sum
     end
 
-    def scored_shots
-        self.shots.select { |shot| shot.score_entry.present? }
-    end
-
     def shots_per_end
         self.rset.shots_per_end
     end
-
-    def complete?
-        scored_shots.count < self.shots_per_end ? false : true
-    end
-    
+	
     def score_method_is_set?
         self.round && self.round.score_method == "Set"
     end
+
+    def active?
+        if self.rset.active?
+            if self.number == 1 
+                self.incomplete?
+            else
+                previous = self.rset.ends.find_by(number: self.number-1)
+                previous.complete? && self.incomplete?
+            end
+        else
+            false
+        end
+    end
+    
+    
 end

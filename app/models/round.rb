@@ -71,4 +71,14 @@ class Round < ApplicationRecord
     def find_category_by_div_age_class(division: division, age_class: age_class)
         Organization::ArcherCategory.find_category(gov_body: self.gov_body, division: division, age_class: age_class, gender: self.gender)
     end
+
+    def num_sets
+        self.round_format.num_sets
+    end
+
+    def shots_per_round
+        total_shots = 0
+        self.rsets.each { |rset| total_shots += rset.shots_per_rset }
+        total_shots
+    end
 end

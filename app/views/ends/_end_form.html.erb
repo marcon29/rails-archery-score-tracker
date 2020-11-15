@@ -1,6 +1,4 @@
-<% if endd.active?  %>
-    <%= render partial: "ends/end_form", locals: {endd: endd} %>
-<% else %>
+<%= form_for(endd) do |end_f| %>
     <tr id=<%= "end-#{endd.id}" %> class="end-section">
         <th>End <%= endd.number %></th>
         <% endd.shots.each do |shot| %>
@@ -9,6 +7,8 @@
         <td class="spacer"></td>
         <%= tag.td endd.score, class: "end-score" %>
         <td class="spacer"></td>
-        <%= tag.td endd.set_score, class: "end-set-score" if endd.score_method_is_set? %>
+        <%= tag.td (end_f.number_field :set_score, class: "set-score-input-field"), class: "end-set-score" if endd.score_method_is_set? %>
+        <td class="spacer"></td>
+        <%= tag.td (end_f.submit "Save Score", class: "score-submit-button"), class: "score-submit" %>
     </tr>
 <% end %>

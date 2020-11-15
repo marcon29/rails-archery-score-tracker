@@ -3,7 +3,7 @@ class ApplicationRecord < ActiveRecord::Base
   
 	# tests for this are in ScoreSession
 	def check_and_assign_rank
-# binding.pry # 4, 9, 14, 20
+	# binding.pry # 4, 9, 14, 20
 		allowable_ranks = [/\A\d+st\z/i, /\A\d+nd\z/i, /\A\d+rd\z/i, /\A\d+th\z/i, /\A\d+\z/, /\AW\z/i, /\AL\z/i, /\Awin\z/i, /\Aloss\z/i, /\Awon\z/i, /\Alost\z/i]
 		# allows all numbers only: /\A\d+\z/ ( checks below for not 0: /\A^0+\z/ )
 			# allows all numbers except 0 (checked below) ending with 'st' 'nd' 'rd' 'th' (case insenitive): /\A\d+st\z/i, /\A\d+nd\z/i, /\A\d+rd\z/i, /\A\d+th\z/i
@@ -94,9 +94,27 @@ class ApplicationRecord < ActiveRecord::Base
 		"#{self.city}, #{self.state}, #{self.country}"
 	end
 
+	def scored_shots
+        self.shots.select { |shot| shot.score_entry.present? }
+	end
+
 	def scoring_started?
-		all_entries = self.shots.select { |shot| shot.score_entry if shot.score_entry.present? }
-        all_entries.present?
-    end
+        scored_shots.present?
+	end
+
+	def incomplete?
+		if self.class.name == "Round"
+			scored_shots.count < self.shots_per_round
+		elsif self.class.name == "Rset"
+			scored_shots.count < self.shots_per_rset
+		elsif self.class.name == "End"
+			scored_shots.count < self.shots_per_end
+			# && if endd.score_method_is_set? # there is a set_score value
+		end
+	end
+
+    def complete?
+		!self.incomplete?
+	end
 
 end

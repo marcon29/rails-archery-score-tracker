@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   get '/score_sessions/:id/score', to: 'score_sessions#score', as: 'score'
   resources :rounds, only: [:index, :new, :create, :edit, :update]
   
+  resources :ends, only: [:edit, :update]
+  resources :shots, only: [:edit, :update]
+  
   
   
 end

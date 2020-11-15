@@ -92,6 +92,28 @@ class Rset < ApplicationRecord
         self.set_end_format.shots_per_end
     end
 
+    def num_ends
+        self.set_end_format.num_ends
+    end
+
+    def shots_per_rset
+        self.shots_per_end*self.num_ends
+    end
+
+    def set_num
+        self.name.last.to_i
+    end
+
+    def active?
+        if set_num == 1 
+            self.incomplete?
+        else
+            # previous = Rset.find_by(name: "#{self.round.name} - Set/Distance#{set_num-1}")
+            previous = self.round.rsets.find_by(name: "#{self.round.name} - Set/Distance#{set_num-1}")
+            previous.complete? && self.incomplete?
+        end
+    end
+
     def score
         self.ends.collect { |endd| endd.score }.sum
     end 
