@@ -1,5 +1,7 @@
 <% if endd.active?  %>
-    <%= render partial: "ends/end_form", locals: {endd: endd} %>
+    <tr id=<%= "end-#{endd.id}-form" %> class="end-section">
+        <%= render partial: "ends/end_form", locals: {endd: endd} %>
+    </tr>
 <% else %>
     <tr id=<%= "end-#{endd.id}" %> class="end-section">
         <th>End <%= endd.number %></th>

@@ -12,12 +12,12 @@
         <p class="display-horiz">Category: <b><%= round.division.name %> <%= round.age_class.name %></b></p>
         <p class="display-horiz">Score: <b><%= round.score %></b></p>
         <p class="display-horiz">Rank: <b><%= get_rank(round) %></b></p>
-        <% if score_action? %>
+        <% if score_action? || update_score_action? %>
             <p class="display-horiz"><%= link_to "Edit Round Details", edit_round_path(round) %></p>
         <% end %>
     </section>
 
-    <% if show_action? || score_action? %>
+    <% if show_action? || score_action? || update_score_action? %>
         <section id=<%= "round-#{round.id}-rsets" %> class="all-rsets">
             <%= render collection: round.rsets, partial: "rsets/rset" %>
         </section>

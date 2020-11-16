@@ -50,6 +50,12 @@ module ApplicationHelper
             form_note(attr)
         end
     end
+
+    def assign_end_errors(endd)
+        if params[:end] && params[:end][:errors].present?
+            params[:end][:errors].each { |attr, err| endd.errors.add(attr, err.first) }
+        end
+    end
      
     def get_child_error(children, object, attr)
         check_object = object
@@ -57,13 +63,6 @@ module ApplicationHelper
             check_object = child if child.id == object.id
         end
         object.errors.messages[attr] = check_object.errors.messages[attr]
-    end
-
-    def selected_option(object, attr, id_or_value)
-        if new_action?
-            nil
-        else
-        end
     end
 
     def home_action?
@@ -96,6 +95,10 @@ module ApplicationHelper
 
     def score_action?
         params[:action] == "score" || action_name == "score"
+    end
+
+    def update_score_action?
+        params[:action] == "update_score" || action_name == "update_score"
     end
 
     def only_round_update?

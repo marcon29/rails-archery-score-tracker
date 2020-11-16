@@ -1,14 +1,28 @@
-<%= form_for(endd) do |end_f| %>
-    <tr id=<%= "end-#{endd.id}" %> class="end-section">
-        <th>End <%= endd.number %></th>
-        <% endd.shots.each do |shot| %>
-            <%= tag.td shot.score_entry, id: "shot-#{shot.id}", class: "shot-score-entry" %>
-        <% end  %>
-        <td class="spacer"></td>
-        <%= tag.td endd.score, class: "end-score" %>
-        <td class="spacer"></td>
-        <%= tag.td (end_f.number_field :set_score, class: "set-score-input-field"), class: "end-set-score" if endd.score_method_is_set? %>
-        <td class="spacer"></td>
-        <%= tag.td (end_f.submit "Save Score", class: "score-submit-button"), class: "score-submit" %>
-    </tr>
+<%= form_for endd, url: update_score_path(@score_session) do |end_f| %>
+    <%= end_f.hidden_field :id %>
+    <% assign_end_errors(end_f.object) %>
+
+    <th>End <%= endd.number %></th>
+    <% endd.shots.each do |shot| %>
+        <%= tag.td shot.score_entry, id: "shot-#{shot.id}", class: "shot-score-entry" %>
+    <% end  %>
+    <td class="spacer"></td>
+    <%= tag.td endd.score, class: "end-score" %>
+    <td class="spacer"></td>
+    <%= tag.td (end_f.number_field :set_score, class: "set-score-input-field"), class: "end-set-score" if endd.score_method_is_set? %>
+    <td class="spacer"></td>
+    <%= tag.td (end_f.submit "Save Score", class: "score-submit-button"), class: "score-submit" %>
+
+    <% if endd.errors.any? %>
+        <tr>
+            <th></th>
+            <% endd.shots.each do |shot| %>
+                <td class="spacer"></td>
+            <% end  %>
+            <td class="spacer"></td>
+            <td class="spacer"></td>
+            <td class="spacer"></td>
+            <%= tag.td add_error_or_note(end_f.object, :set_score), class: "spacer" if endd.score_method_is_set? %>
+        </tr>
+    <% end %>
 <% end %>

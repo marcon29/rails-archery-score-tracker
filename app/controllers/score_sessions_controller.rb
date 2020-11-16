@@ -77,10 +77,6 @@ class ScoreSessionsController < ApplicationController
     @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
   end
 
-  def score
-    @score_session = find_active_score_session
-  end
-
   def update
     @score_session = ScoreSession.find(params[:id])
 
@@ -94,10 +90,10 @@ class ScoreSessionsController < ApplicationController
     @score_methods = SCORE_METHODS
     @divisions = Organization::Division.all
     @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
-# binding.pry # 1
+    # binding.pry # 1
 
     @score_session.assign_attributes(score_session_params)
-# binding.pry # 17
+    # binding.pry # 17
 
     @score_session.rsets.each do |rset|
       check_children_errors(rset, @score_session, :rsets)
@@ -106,7 +102,7 @@ class ScoreSessionsController < ApplicationController
     @score_session.rounds.each do |round|
       check_children_errors(round, @score_session, :rounds)
     end
-# binding.pry # 18
+    # binding.pry # 18
 
     if @score_session.errors.any?
       # binding.pry # 21
@@ -121,11 +117,34 @@ class ScoreSessionsController < ApplicationController
     end
   end
 
+  def score
+    @score_session = find_active_score_session
+  end
+
+  def update_score
+    endd = End.find(end_params[:id])
+    @score_session = endd.score_session
+    endd.update(end_params)
+    
+    if endd.errors.any?
+      params[:end][:errors] = endd.errors.messages
+      render :score
+    else
+      redirect_to score_path(@score_session)
+    end
+  end
+  
   def score_session_params
     params.require(:score_session).permit(
       :name, :score_session_type, :gov_body_id, :city, :state, :country, :start_date, :end_date, :rank, :round_format, 
       rounds_attributes: [:id, :round_format_id, :round_type, :score_method, :rank, :division, :age_class], 
       rsets_attributes: [:id, :date, :rank]
+    )
+  end
+
+  def end_params
+    params.require(:end).permit(:id, :set_score
+        # :set_score, shots_attributes: [:id, :score_entry]
     )
   end
 

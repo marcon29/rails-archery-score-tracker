@@ -9,11 +9,13 @@ Rails.application.routes.draw do
   
   resources :archers, only: [:show, :new, :create, :edit, :update]
   resources :score_sessions
-  get '/score_sessions/:id/score', to: 'score_sessions#score', as: 'score'
-  resources :rounds, only: [:index, :new, :create, :edit, :update]
   
-  resources :ends, only: [:edit, :update]
-  resources :shots, only: [:edit, :update]
+  get '/score_sessions/:id/score', to: 'score_sessions#score', as: 'score'
+  patch '/score_sessions/:id/score', to: 'score_sessions#update_score', as: "update_score"
+
+
+  resources :rounds, only: [:edit, :update]
+  # resources :shots, only: [:edit, :update]
   
   
   

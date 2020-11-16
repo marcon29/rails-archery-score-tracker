@@ -1,15 +1,6 @@
 class RoundsController < ApplicationController
 
   # don't forget to restrict the views!!!!!
-  
-  def index
-  end
-
-  def new
-  end
-
-  def create
-  end
 
   def edit
     @round = Round.find(params[:id])

@@ -9,7 +9,7 @@
         <% elsif show_action? %>
             <h1 class="short-bottom-margin display-horiz-hl"><%= score_session.name %></h1>
             <%= link_to "Edit", edit_score_session_path(score_session) %>
-        <% elsif score_action? %>
+        <% elsif score_action? || update_score_action? %>
             <h1 class="short-bottom-margin display-horiz-hl"><%= score_session.name %> (Scoring)</h1>
             <%= link_to "Edit Score Session Details", edit_score_session_path(score_session) %>
         <% else %>
