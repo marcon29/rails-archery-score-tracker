@@ -1,0 +1,4 @@
+<% #= tag.td shot.score_entry, id: "shot-#{shot.id}", class: "shot-score-entry" %>
+<% #= tag.td (end_f.number_field :set_score, class: "set-score-input-field"), class: "end-set-score" if endd.score_method_is_set? %>
+
+<%= tag.td (shot_f.text_field :score_entry, class: "score-input-field"), class: "shot-score-entry" %>

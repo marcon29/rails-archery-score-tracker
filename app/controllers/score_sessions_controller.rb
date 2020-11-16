@@ -122,18 +122,25 @@ class ScoreSessionsController < ApplicationController
   end
 
   def update_score
-    endd = End.find(end_params[:id])
-    @score_session = endd.score_session
-    endd.update(end_params)
+    @endd = End.find(end_params[:id])
+    @score_session = @endd.score_session
+    @endd.assign_attributes(end_params)
     
-    if endd.errors.any?
-      params[:end][:errors] = endd.errors.messages
+    if @endd.errors.any?
+      @endd.errors[:shots].each do |id_error|
+        id_error.each do |num, error|
+          params[:end][:shots_attributes]["#{num-1}"][:errors] = error
+        end
+      end
+      @endd.errors.delete(:shots)
+      params[:end][:errors] = @endd.errors.messages
       render :score
     else
+      @endd.save
       redirect_to score_path(@score_session)
     end
   end
-  
+
   def score_session_params
     params.require(:score_session).permit(
       :name, :score_session_type, :gov_body_id, :city, :state, :country, :start_date, :end_date, :rank, :round_format, 
@@ -143,8 +150,8 @@ class ScoreSessionsController < ApplicationController
   end
 
   def end_params
-    params.require(:end).permit(:id, :set_score
-        # :set_score, shots_attributes: [:id, :score_entry]
+    params.require(:end).permit(:id, :set_score, 
+      shots_attributes: [:id, :score_entry]
     )
   end
 
@@ -164,15 +171,36 @@ class ScoreSessionsController < ApplicationController
     @score_session.rsets.each { |rset| rset.update(name: "") }
   end
   
+  # check_children_errors(shot, @endd, :shots)
+
+  # params[:end][:shots_attributes]["#{object.number-1}"]
   def check_children_errors(object, parent, children_symbol)
     parent.errors[children_symbol].each do |id_error|
-      error = id_error[object.id]
-      if error
-        error.keys.each do |attr|
-          object.errors.add(attr, error[attr].first) if error[attr].present?
+      if children_symbol == :shots
+        id_error.each do |num, error|
+          params[:end][:shots_attributes]["#{num}"][:errors] = error
+        end
+      else
+        error = id_error[object.id]
+        if error
+          error.keys.each do |attr|
+            object.errors.add(attr, error[attr].first) if error[attr].present?
+          end
         end
       end
     end
   end
+
+  # def check_children_errors(object, parent, children_symbol)
+  #   parent.errors[children_symbol].each do |id_error|
+  #       error = id_error[object.id]
+  #       if error
+  #         error.keys.each do |attr|
+  #           object.errors.add(attr, error[attr].first) if error[attr].present?
+  #         end
+  #       end
+  #     end
+  #   end
+  # end
 
 end

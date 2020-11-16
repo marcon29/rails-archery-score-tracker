@@ -337,6 +337,7 @@ input[type=submit] {
     width: 30rem;
 }
 
+.score-input-field, 
 .set-score-input-field {
     height: 4rem;
     width: 6rem;
@@ -347,6 +348,10 @@ input[type=submit] {
     text-align: center;
 }
 
+.score-input-field {
+    width: 4rem;
+}
+
 .score-submit-button {
     margin-top: .5rem;
     margin-bottom: .5rem;
@@ -354,9 +359,12 @@ input[type=submit] {
 
 .field_with_errors {
     border: 1px red solid;
-    width: 21rem;
     padding: .2rem;
     display: table;
+}
+
+.set-score-error-message {
+    width: 21rem;
 }
 
 

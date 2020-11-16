@@ -3,9 +3,14 @@
     <% assign_end_errors(end_f.object) %>
 
     <th>End <%= endd.number %></th>
-    <% endd.shots.each do |shot| %>
-        <%= tag.td shot.score_entry, id: "shot-#{shot.id}", class: "shot-score-entry" %>
-    <% end  %>
+
+    <%= end_f.fields_for :shots do |shot_f| %>
+        <% # binding.pry %>
+        <% get_child_error(end_f.object.shots, shot_f.object, :score_entry) %>
+        <% # binding.pry %>
+        <%= tag.td (shot_f.text_field :score_entry, class: "score-input-field"), class: "shot-score-entry" %>
+    <% end %>
+
     <td class="spacer"></td>
     <%= tag.td endd.score, class: "end-score" %>
     <td class="spacer"></td>
@@ -13,16 +18,19 @@
     <td class="spacer"></td>
     <%= tag.td (end_f.submit "Save Score", class: "score-submit-button"), class: "score-submit" %>
 
-    <% if endd.errors.any? %>
+    <% if end_or_shot_errors?(endd) %>
         <tr>
             <th></th>
-            <% endd.shots.each do |shot| %>
-                <td class="spacer"></td>
-            <% end  %>
+            <td class="spacer" colspan="6">
+                <% endd.shots.each do |shot| %>
+                    <%= add_error_or_note(shot, :score_entry) %>
+                    <% #= tag.td add_error_or_note(shot_f.object, :score_entry), class: "spacer" %>
+                <% end  %>
+            </td>
             <td class="spacer"></td>
             <td class="spacer"></td>
             <td class="spacer"></td>
-            <%= tag.td add_error_or_note(end_f.object, :set_score), class: "spacer" if endd.score_method_is_set? %>
+            <%= tag.td add_error_or_note(end_f.object, :set_score), class: "spacer set-score-error-message" if endd.score_method_is_set? %>
         </tr>
     <% end %>
 <% end %>

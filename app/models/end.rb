@@ -38,7 +38,7 @@ class End < ApplicationRecord
         if self.number.blank? && self.rset
             self.number = ends_in_set.count + 1 
         end
-# binding.pry # new 10   end validation
+        # binding.pry # new 10   end validation
     end
 
     def ends_in_set
@@ -55,8 +55,20 @@ class End < ApplicationRecord
 
     def clear_set_score_if_points
         self.set_score = nil if score_method_is_points?
-    end 
+    end
 
+    # ##### helpers (associated models instantiation)
+    def shots_attributes=(attributes)
+        self.validate if self.id
+
+        attributes.values.each do |attrs|
+            shot = Shot.find(attrs[:id])
+            shot.update(attrs)
+            self.errors[:shots] << {shot.number => shot.errors.messages} if shot.errors.any?
+            # binding.pry
+            # errors???
+        end
+    end
 
     # ##### helpers (data control)
     def score

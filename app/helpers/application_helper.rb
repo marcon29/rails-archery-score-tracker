@@ -52,9 +52,18 @@ module ApplicationHelper
     end
 
     def assign_end_errors(endd)
-        if params[:end] && params[:end][:errors].present?
-            params[:end][:errors].each { |attr, err| endd.errors.add(attr, err.first) }
+        if params[:end]
+            endd.shots.each do |shot|
+                errors = params[:end][:shots_attributes]["#{shot.number-1}"][:errors]
+                errors.each { |attr, err| shot.errors.add(attr, err.first) }
+            end
+            params[:end][:errors].each { |attr, err| endd.errors.add(attr, err.first) } if params[:end][:errors].present?
         end
+    end
+
+    def end_or_shot_errors?(endd)
+        shots_with_errors = endd.shots.select { |shot| shot.errors.any? }
+        shots_with_errors.present? || endd.errors.any?
     end
      
     def get_child_error(children, object, attr)
