@@ -108,8 +108,7 @@ class ApplicationRecord < ActiveRecord::Base
 		elsif self.class.name == "Rset"
 			scored_shots.count < self.shots_per_rset
 		elsif self.class.name == "End"
-			scored_shots.count < self.shots_per_end
-			# && if endd.score_method_is_set? # there is a set_score value
+			(scored_shots.count < self.shots_per_end) || (self.score_method_is_set? && self.set_score.blank?)
 		end
 	end
 

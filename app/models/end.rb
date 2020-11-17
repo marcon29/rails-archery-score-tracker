@@ -65,8 +65,6 @@ class End < ApplicationRecord
             shot = Shot.find(attrs[:id])
             shot.update(attrs)
             self.errors[:shots] << {shot.number => shot.errors.messages} if shot.errors.any?
-            # binding.pry
-            # errors???
         end
     end
 
