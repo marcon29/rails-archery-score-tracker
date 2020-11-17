@@ -55,7 +55,7 @@ module ApplicationHelper
         if params[:end]
             endd.shots.each do |shot|
                 errors = params[:end][:shots_attributes]["#{shot.number-1}"][:errors]
-                errors.each { |attr, err| shot.errors.add(attr, err.first) }
+                errors.each { |attr, err| shot.errors.add(attr, err.first) } if errors
             end
             params[:end][:errors].each { |attr, err| endd.errors.add(attr, err.first) } if params[:end][:errors].present?
         end
