@@ -103,7 +103,9 @@ class ApplicationRecord < ActiveRecord::Base
 	end
 
 	def incomplete?
-		if self.class.name == "Round"
+		if self.class.name == "ScoreSession"
+			self.rounds.select { |round| round.complete? }.empty?
+		elsif self.class.name == "Round"
 			scored_shots.count < self.shots_per_round
 		elsif self.class.name == "Rset"
 			scored_shots.count < self.shots_per_rset

@@ -139,7 +139,8 @@ class ScoreSessionsController < ApplicationController
             @score_session = @endd.score_session
             
             @endd.assign_attributes(end_params)
-            
+                
+            # binding.pry
             if @endd.errors.any?
                 @endd.errors[:shots].each do |id_error|
                     id_error.each do |num, error|
@@ -151,6 +152,7 @@ class ScoreSessionsController < ApplicationController
                 render :score
             else
                 @endd.save
+                @score_session.update(active: false) if @score_session.complete?
                 redirect_to score_path(@score_session)
             end
         end
@@ -174,7 +176,7 @@ class ScoreSessionsController < ApplicationController
   
     # ##### helpers
     def score_sessions_by_type(sessions, type)
-        sessions.where(score_session_type: type)
+        sessions.where(score_session_type: type).where(active: false)
     end
   
     def score_session_types(sessions)
