@@ -116,6 +116,10 @@ module ApplicationHelper
         params[:action] == "update_score" || action_name == "update_score"
     end
 
+    def update_score_rset_action?
+        params[:action] == "update_score_rset"
+    end
+
     def only_round_update?
         params[:controller] == "rounds"
     end
@@ -154,7 +158,8 @@ module ApplicationHelper
     # these might be better in a model
     # ##########################################################
     def active_score_session?
-        current_user.score_sessions.any? && current_user.score_sessions.last.active
+        # current_user.score_sessions.any? && current_user.score_sessions.last.active
+        current_user.score_sessions.where(active: true).first
     end
     
     def formatted_date(date)

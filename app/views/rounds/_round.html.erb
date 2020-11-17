@@ -18,7 +18,7 @@
         <% end %>
     </section>
 
-    <% if show_action? || score_action? || update_score_action? %>
+    <% if show_action? || score_action? || update_score_action? || update_score_rset_action? %>
         <section id=<%= "round-#{round.id}-rsets" %> class="all-rsets">
             <%= render collection: round.rsets, partial: "rsets/rset" %>
         </section>

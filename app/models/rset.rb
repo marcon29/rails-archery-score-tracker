@@ -42,24 +42,30 @@ class Rset < ApplicationRecord
         start_date = self.score_session.start_date if self.score_session
         end_date = self.score_session.end_date if self.score_session
 
-# binding.pry # update 8, 13    rset validation
-# binding.pry # new 8           rset validation
+        # binding.pry # update 8, 13    rset validation
+        # binding.pry # new 8           rset validation
 
-        if scoring_started? 
-            if start_date == end_date
-                self.date = start_date
-            elsif self.date.blank? || self.date < start_date || self.date > end_date 
-                errors.add(:date, "Date must be between #{start_date} and #{end_date}.")
-            end                
-        elsif self.date
-            if self.date < start_date || self.date > end_date 
-                if start_date == end_date
-                    errors.add(:date, "Date must be #{start_date} or leave blnak.") 
-                else
-                    errors.add(:date, "Date must be between #{start_date} and #{end_date} or leave blnak.")
-                end
-            end
+        if start_date == end_date
+            self.date = start_date
+        elsif self.date.blank? || self.date < start_date || self.date > end_date 
+            errors.add(:date, "Date must be between #{start_date} and #{end_date}.") if scoring_started? 
         end
+        
+        # if scoring_started? 
+        #     if start_date == end_date
+        #         self.date = start_date
+        #     elsif self.date.blank? || self.date < start_date || self.date > end_date 
+        #         errors.add(:date, "Date must be between #{start_date} and #{end_date}.")
+        #     end                
+        # elsif self.date
+        #     if self.date < start_date || self.date > end_date 
+        #         if start_date == end_date
+        #             errors.add(:date, "Date must be #{start_date} or leave blnak.") 
+        #         else
+        #             errors.add(:date, "Date must be between #{start_date} and #{end_date} or leave blnak.")
+        #         end
+        #     end
+        # end
     end
 
     def archer_category

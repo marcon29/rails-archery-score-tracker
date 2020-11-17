@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   
   get '/score_sessions/:id/score', to: 'score_sessions#score', as: 'score'
   patch '/score_sessions/:id/score', to: 'score_sessions#update_score', as: "update_score"
+  patch '/score_sessions/:id/score/rset', to: 'score_sessions#update_score_rset', as: "update_score_rset"
 
 
   resources :rounds, only: [:edit, :update]

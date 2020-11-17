@@ -122,41 +122,44 @@ class ScoreSessionsController < ApplicationController
     end
   
     def update_score
-        if params[:rset]
-            @rset = Rset.find(rset_params[:id])
-            @score_session = @rset.score_session
-            
-            if @rset.update(rset_params)
-                redirect_to score_path(@score_session)
-            else
-                params[:rset][:errors] = @rset.errors.messages
-                render :score
-            end
-        end
+        # if params[:end]
+        @endd = End.find(end_params[:id])
+        @score_session = @endd.score_session
+        @rset = @endd.rset
 
-        if params[:end]
-            @endd = End.find(end_params[:id])
-            @score_session = @endd.score_session
-            
-            @endd.assign_attributes(end_params)
-                
-            # binding.pry
-            if @endd.errors.any?
-                @endd.errors[:shots].each do |id_error|
-                    id_error.each do |num, error|
-                        params[:end][:shots_attributes]["#{num-1}"][:errors] = error
-                    end
+        @endd.assign_attributes(end_params)
+
+        if @endd.errors.any? #|| @rset.errors.any?
+            @endd.errors[:shots].each do |id_error|
+                id_error.each do |num, error|
+                    params[:end][:shots_attributes]["#{num-1}"][:errors] = error
                 end
-                @endd.errors.delete(:shots)
-                params[:end][:errors] = @endd.errors.messages
-                render :score
-            else
-                @endd.save
-                @score_session.update(active: false) if @score_session.complete?
-                redirect_to score_path(@score_session)
             end
+            @endd.errors.delete(:shots)
+            params[:end][:errors] = @endd.errors.messages
+            render :score
+        else
+            @endd.save
+            @score_session.update(active: false) if @score_session.complete?
+            redirect_to score_path(@score_session)
         end
+        # end
     end
+
+    def update_score_rset
+        # if params[:rset]
+        @rset = Rset.find(rset_params[:id])
+        @score_session = @rset.score_session
+        
+        if @rset.update(rset_params)
+            redirect_to score_path(@score_session)
+        else
+            params[:rset][:errors] = @rset.errors.messages
+            render :score
+        end
+        # end
+    end
+    
   
     def score_session_params
         params.require(:score_session).permit(
