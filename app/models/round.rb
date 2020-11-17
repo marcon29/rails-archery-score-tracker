@@ -24,6 +24,9 @@ class Round < ApplicationRecord
     validates :score_method, 
         presence: { message: "You must choose a score method." }, 
         inclusion: { in: SCORE_METHODS }
+    # validates :rank, 
+    #     presence: { message: "You must enter a rank if Set/Distance complete." }, 
+    #     if: :complete?
     validate :check_associations, :check_and_assign_rank
     # validates_associated :rsets
     before_validation :assign_name

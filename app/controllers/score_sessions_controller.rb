@@ -122,31 +122,50 @@ class ScoreSessionsController < ApplicationController
     end
   
     def update_score
-        @endd = End.find(end_params[:id])
-        @score_session = @endd.score_session
-        
-        @endd.assign_attributes(end_params)
-        
-        if @endd.errors.any?
-            @endd.errors[:shots].each do |id_error|
-                id_error.each do |num, error|
-                    params[:end][:shots_attributes]["#{num-1}"][:errors] = error
-                end
+        if params[:rset]
+            @rset = Rset.find(rset_params[:id])
+            @score_session = @rset.score_session
+            
+            if @rset.update(rset_params)
+                redirect_to score_path(@score_session)
+            else
+                params[:rset][:errors] = @rset.errors.messages
+                render :score
             end
-            @endd.errors.delete(:shots)
-            params[:end][:errors] = @endd.errors.messages
-            render :score
-        else
-            @endd.save
-            redirect_to score_path(@score_session)
+        end
+
+        if params[:end]
+            @endd = End.find(end_params[:id])
+            @score_session = @endd.score_session
+            
+            @endd.assign_attributes(end_params)
+            
+            if @endd.errors.any?
+                @endd.errors[:shots].each do |id_error|
+                    id_error.each do |num, error|
+                        params[:end][:shots_attributes]["#{num-1}"][:errors] = error
+                    end
+                end
+                @endd.errors.delete(:shots)
+                params[:end][:errors] = @endd.errors.messages
+                render :score
+            else
+                @endd.save
+                redirect_to score_path(@score_session)
+            end
         end
     end
   
     def score_session_params
         params.require(:score_session).permit(
-            :name, :score_session_type, :gov_body_id, :city, :state, :country, :start_date, :end_date, :rank, :round_format,         rounds_attributes: [:id, :round_format_id, :round_type, :score_method, :rank, :division, :age_class], 
+            :name, :score_session_type, :gov_body_id, :city, :state, :country, :start_date, :end_date, :rank, :round_format, 
+            rounds_attributes: [:id, :round_format_id, :round_type, :score_method, :rank, :division, :age_class], 
             rsets_attributes: [:id, :date, :rank]
         )
+    end
+
+    def rset_params
+        params.require(:rset).permit(:id, :date, :rank)
     end
   
     def end_params

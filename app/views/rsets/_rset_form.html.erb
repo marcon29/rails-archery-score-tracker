@@ -1,4 +1,6 @@
-<h4 class="short-margins"><%= rset_f.object.name %> - <%= rset_f.object.distance %></h4>
+<% if !score_action? && !update_score_action? %>
+    <h4 class="short-margins"><%= rset_f.object.name %> - <%= rset_f.object.distance %></h4>
+<% end %>
 
 <section class="rset-form-fields">
     <div class="form-field-group">
@@ -12,5 +14,9 @@
             <%= rset_f.text_field :rank, class: form_input_class(:rank), placeholder: "Your final place for the set/distance" %>
                 <%= add_error_or_note(rset_f.object, :rank) %>
         </div>
+
+        <% if score_action? || update_score_action? %>
+            <%= tag.p (rset_f.submit "Update Set/Distance"), class: "display-horiz" %>
+        <% end %>
     </div>
 </section>

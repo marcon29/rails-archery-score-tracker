@@ -51,6 +51,12 @@ module ApplicationHelper
         end
     end
 
+    def assign_rset_errors(rset)
+        if params[:rset] && params[:rset][:id].to_i == rset.id
+            params[:rset][:errors].each { |attr, err| rset.errors.add(attr, err.first) } if params[:rset][:errors].present?
+        end
+    end
+
     def assign_end_errors(endd)
         if params[:end]
             endd.shots.each do |shot|

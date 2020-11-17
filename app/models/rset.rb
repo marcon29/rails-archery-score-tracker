@@ -20,6 +20,9 @@ class Rset < ApplicationRecord
     validates :name, 
         presence: true, 
         uniqueness: { case_sensitive: false, scope: :round }
+    # validates :rank, 
+    #     presence: { message: "You must enter a rank if Set/Distance complete." }, 
+    #     if: :complete?
     validate :check_associations, :check_date, :check_and_assign_rank
     before_validation :assign_name, :assign_dist_targ_cat
     

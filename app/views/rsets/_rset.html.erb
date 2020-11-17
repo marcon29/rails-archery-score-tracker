@@ -1,13 +1,26 @@
+<% # binding.pry %>
+
 <section id=<%= "rset-#{rset.id}" %> class="rset-section">
     <section id=<%= "rset-#{rset.id}-info" %> class="rset-info">
         <h4 class="short-bottom-margin"><%= rset.set_end_format.name %> - <%= rset.distance %></h4>
-        <p class="display-horiz">Date: <b><%= formatted_date(rset.date) %></b></p>
+        
+        <% if score_action? || update_score_action? %>
+            <%= form_for rset, url: update_score_path(@score_session) do |rset_f| %>
+                <%= rset_f.hidden_field :id %>
+                <% assign_rset_errors(rset_f.object) %>
+
+                <%= render partial: "rsets/rset_form", locals: {rset_f: rset_f} %>
+            <% end %>
+        <% else %>
+            <p class="display-horiz">Date: <b><%= formatted_date(rset.date) %></b></p>
+            <p class="display-horiz">Rank: <b><%= get_rank(rset) %></b></p>
+        <% end %>
+
         <p class="display-horiz">Target: <b><%= rset.target.name %></b></p>
         <p class="display-horiz">Score: <b><%= rset.score %></b></p>
-        <p class="display-horiz">Rank: <b><%= get_rank(rset) %></b></p>
-    </section>
-    
-    <section id=<%= "rset-#{rset.id}-scores" %> class="all-scores">
-        <%= render partial: "ends/scores_table", locals: {ends: rset.ends, builder_end: rset.ends.first} %>
+        
+        <section id=<%= "rset-#{rset.id}-scores" %> class="all-scores">
+            <%= render partial: "ends/scores_table", locals: {ends: rset.ends, builder_end: rset.ends.first} %>
+        </section>
     </section>
 </section>

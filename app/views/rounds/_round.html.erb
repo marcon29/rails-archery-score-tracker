@@ -6,7 +6,8 @@
     <% end %>
     
     <section id=<%= "round-#{round.id}-info" %> class="round-info" >
-        <% if index_action? || home_action? %>
+        <% # if index_action? || home_action? || score_action? || update_score_action? %>
+        <% if !show_action? %>
             <p class="display-horiz">Round: <b><%= round.round_format.name %> (<%= round.round_type %>)</b></p>
         <% end %>
         <p class="display-horiz">Category: <b><%= round.division.name %> <%= round.age_class.name %></b></p>
