@@ -6,13 +6,10 @@
     <% end %>
     
     <section id=<%= "round-#{round.id}-info" %> class="round-info" >
-        <% # if index_action? || home_action? || score_action? || update_score_action? %>
-        <% if !show_action? %>
-            <p class="display-horiz">Round: <b><%= round.round_format.name %> (<%= round.round_type %>)</b></p>
-        <% end %>
-        <p class="display-horiz">Category: <b><%= round.division.name %> <%= round.age_class.name %></b></p>
-        <p class="display-horiz">Score: <b><%= round.score %></b></p>
-        <p class="display-horiz">Rank: <b><%= get_rank(round) %></b></p>
+        <%= display_detail("Round", round.round_format.name, round.round_type, "parentheses") unless show_action? %>
+        <%= display_detail("Category", round.division.name, round.age_class.name) %>
+        <%= display_detail("Score", round.score) %>
+        <%= display_detail("Rank", get_rank(round)) %>
         <% if score_action? || update_score_action? %>
             <p class="display-horiz"><%= link_to "Edit Round Details", edit_round_path(round) %></p>
         <% end %>

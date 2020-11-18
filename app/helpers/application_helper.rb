@@ -84,9 +84,9 @@ module ApplicationHelper
         params[:action] == "home"
     end
 
-    def index_action?
-        params[:action] == "index"
-    end
+    # def index_action?
+    #     params[:action] == "index"
+    # end
 
     def show_action?
         params[:action] == "show"
@@ -145,12 +145,34 @@ module ApplicationHelper
         !request.referrer
     end
 
+
+
+
     def get_rank(object)
         object.rank.blank? ? "N/A" : object.rank
     end
 
     def required_field
         tag.span "*", class: "red-text"
+    end
+
+    def display_detail(label_text, first_detail, second_detail=nil, parentheses=nil)
+        label = label_text + ": "
+        details = tag.b do
+            concat first_detail
+            concat " " if second_detail
+            concat "(" if parentheses
+            concat second_detail if second_detail
+            concat ")" if parentheses
+        end
+
+        tag.p class: "display-horiz" do
+            concat(label)
+            concat(details) 
+        end
+    end
+
+    def display_link
     end
 
 

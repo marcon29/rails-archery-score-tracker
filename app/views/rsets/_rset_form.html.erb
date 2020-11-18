@@ -15,7 +15,7 @@
                 <%= add_error_or_note(rset_f.object, :rank) %>
         </div>
 
-        <% if score_action? || update_score_action? || update_score_rset_action?  %>
+        <% if score_action? || update_score_action? || update_score_rset_action? %>
             <%= tag.p (rset_f.submit "Select Date to Start"), class: "display-horiz" if !rset_f.object.date %>
             <%= tag.p (rset_f.submit "Update Set/Distance"), class: "display-horiz" if rset_f.object.date %>
         <% end %>

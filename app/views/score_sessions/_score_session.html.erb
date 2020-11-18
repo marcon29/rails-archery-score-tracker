@@ -18,13 +18,11 @@
     </section>
 
     <section id=<%= "score-session-#{score_session.id}-info" %> class="general-info">
-        <% if show_action? %>
-            <p>Score Type: <b><%= score_session.score_session_type %></b></p>
-        <% end %>
-        <p>Governing Body: <b><%= score_session.gov_body.name %></b></p>
-        <p>Location: <b><%= score_session.full_location %></b></p>
-        <p>Date(s): <b><%= formatted_date_range(score_session.start_date, score_session.end_date) %></b></p>
-        <p>Rank: <b><%= get_rank(score_session) %></b></p>
+        <%= display_detail("Score Type", score_session.score_session_type) if show_action? %>
+        <%= display_detail("Governing Body", score_session.gov_body.name) %>
+        <%= display_detail("Location", score_session.full_location) %>
+        <%= display_detail("Date(s)", formatted_date_range(score_session.start_date, score_session.end_date)) %>
+        <%= display_detail("Rank", get_rank(score_session)) %>
     </section>
     <hr>
 

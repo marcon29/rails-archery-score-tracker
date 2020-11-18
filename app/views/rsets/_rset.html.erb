@@ -10,12 +10,14 @@
                 <%= render partial: "rsets/rset_form", locals: {rset_f: rset_f} %>
             <% end %>
         <% else %>
-            <p class="display-horiz">Date: <b><%= formatted_date(rset.date) %></b></p>
-            <p class="display-horiz">Rank: <b><%= get_rank(rset) %></b></p>
+            <%= display_detail("Date", formatted_date(rset.date)) %>
+            <%= display_detail("Rank", get_rank(rset)) %>
         <% end %>
 
-        <p class="display-horiz">Target: <b><%= rset.target.name %></b></p>
-        <p class="display-horiz">Score: <b><%= rset.score %></b></p>
+        
+        <%= display_detail("Target", rset.target.name) %>
+        <%= display_detail("Score", rset.score) %>
+        
         
         <section id=<%= "rset-#{rset.id}-scores" %> class="all-scores">
             <%= render partial: "ends/scores_table", locals: {ends: rset.ends, builder_end: rset.ends.first} %>
