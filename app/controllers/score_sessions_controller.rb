@@ -1,8 +1,10 @@
 class ScoreSessionsController < ApplicationController
     helper_method :score_sessions_by_type
-  
+    before_action :get_ss_round_form_collections, only: [:new, :create, :edit, :update]
+    before_action :get_rset_form_collections, only: [:new, :create]
+
     # don't forget to restrict the views!!!!!
-  
+
     def index
         @score_sessions = current_user.score_sessions
         @score_session_types = score_session_types(@score_sessions)
@@ -16,21 +18,6 @@ class ScoreSessionsController < ApplicationController
     def new
         @score_session = ScoreSession.new(archer: current_user)
         @score_session.rounds.build(archer: @score_session.archer)
-      
-        # for Round and Rset creation
-        @round_formats = Format::RoundFormat.all
-
-        # for ScoreSession collections
-        @score_session_types = SCORE_SESSION_TYPES
-        @gov_bodies = Organization::GovBody.all
-        
-        # for Round collections
-        @round_types = ROUND_TYPES
-        @score_methods = SCORE_METHODS
-        @divisions = Organization::Division.all
-        @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
-        @default_division = Organization::Division.find_by(name: current_user.default_division)
-        @default_age_class = Organization::AgeClass.find_by(name: current_user.default_age_class)
     end
   
     def create
@@ -39,23 +26,6 @@ class ScoreSessionsController < ApplicationController
 
         @score_session = ScoreSession.new(archer: current_user)
         @score_session.assign_attributes(score_session_params)
-
-        # for Round and Rset creation
-        @round_formats = Format::RoundFormat.all
-
-        # for ScoreSession collections
-        @score_session_types = SCORE_SESSION_TYPES
-        @gov_bodies = Organization::GovBody.all
-        
-        # for Round collections
-        @round_types = ROUND_TYPES
-        @score_methods = SCORE_METHODS
-        @divisions = Organization::Division.all
-        @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
-        @default_division = Organization::Division.find_by(name: current_user.default_division)
-        @default_age_class = Organization::AgeClass.find_by(name: current_user.default_age_class)
-
-        binding.pry
 
         if @score_session.errors.any?
             render :new
@@ -66,53 +36,20 @@ class ScoreSessionsController < ApplicationController
   
     def edit
         @score_session = ScoreSession.find(params[:id])
-
-        # for ScoreSession collections
-        @score_session_types = SCORE_SESSION_TYPES
-        @gov_bodies = Organization::GovBody.all
-        
-        # for Round collections
-        @round_formats = Format::RoundFormat.all
-        @round_types = ROUND_TYPES
-        @score_methods = SCORE_METHODS
-        @divisions = Organization::Division.all
-        @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
     end
   
     def update
         @score_session = ScoreSession.find(params[:id])
-
-        # for ScoreSession collections when re-rendering
-        @score_session_types = SCORE_SESSION_TYPES
-        @gov_bodies = Organization::GovBody.all
-        
-        # for Round collections when re-rendering
-        @round_formats = Format::RoundFormat.all
-        @round_types = ROUND_TYPES
-        @score_methods = SCORE_METHODS
-        @divisions = Organization::Division.all
-        @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
-        # binding.pry # 1
-
         @score_session.assign_attributes(score_session_params)
-        # binding.pry # 17
 
-        @score_session.rsets.each do |rset|
-            check_children_errors(rset, @score_session, :rsets)
-        end
-        
-        @score_session.rounds.each do |round|
-            check_children_errors(round, @score_session, :rounds)
-        end
-        # binding.pry # 18
+        assign_errors_to_all_children(@score_session.rsets, @score_session, :rsets)
+        assign_errors_to_all_children(@score_session.rounds, @score_session, :rounds)
 
         if @score_session.errors.any?
-            # binding.pry # 21
             render :edit
         else
             @score_session.save
-            # binding.pry # 21
-            children_auto_updates
+            auto_update_children_names
                 # need to update so goes back to correct place (can't use from_score because always comes from edit)
                 # redirect_to score_path(@score_session) if from_score
             redirect_to score_session_path(@score_session) # unless from_score
@@ -184,6 +121,24 @@ class ScoreSessionsController < ApplicationController
     end
   
     # ##### helpers
+    def get_ss_round_form_collections
+        # for ScoreSession collections
+        @score_session_types = SCORE_SESSION_TYPES
+        @gov_bodies = Organization::GovBody.all
+        
+        # for Round collections
+        @round_types = ROUND_TYPES
+        @score_methods = SCORE_METHODS
+        @divisions = Organization::Division.all
+        @age_classes = current_user.eligible_age_classes # linit by ScoreSession.gov_body
+        @default_division = Organization::Division.find_by(name: current_user.default_division)
+        @default_age_class = Organization::AgeClass.find_by(name: current_user.default_age_class)
+    end
+
+    def get_rset_form_collections
+        @round_formats = Format::RoundFormat.all
+    end
+
     def score_sessions_by_type(sessions, type)
         sessions.where(score_session_type: type).where(active: false)
     end
@@ -191,22 +146,29 @@ class ScoreSessionsController < ApplicationController
     def score_session_types(sessions)
         sessions.collect { |ss| ss.score_session_type }.uniq
     end
-  
-    def children_auto_updates
-        @score_session.rounds.each { |round| round.update(name: "") }
-        @score_session.rsets.each { |rset| rset.update(name: "") }
+    
+    def assign_errors_to_all_children(child_collection, parent, children_symbol)
+        child_collection.each do |child|
+            assign_errors_to_child(child, parent, children_symbol)
+        end
     end
     
-    def check_children_errors(object, parent, children_symbol)
+    def assign_errors_to_child(child, parent, children_symbol)
         parent.errors[children_symbol].each do |id_error|
-            error = id_error[object.id]
+            error = id_error[child.id]
             if error
                 error.keys.each do |attr|
-                    object.errors.add(attr, error[attr].first) if error[attr].present?
+                    child.errors.add(attr, error[attr].first) if error[attr].present?
                 end
             end
         end
     end
+
+    def auto_update_children_names
+        @score_session.rounds.each { |round| round.update(name: "") }
+        @score_session.rsets.each { |rset| rset.update(name: "") }
+    end
+
   
 
     
