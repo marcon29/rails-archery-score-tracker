@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            <% if edit_action? || update_action? %>
+            <% if update_functionality? %>
                 <div class="form-field-group">
                     <div class="label-field-pair">
                         <div><%= score_ses_f.label :rank %></div>
@@ -67,26 +67,22 @@
             <% end %>            
         </section>
     </section>
-
-    <!–– do not need this first conditional unless score action changes things ––>
-    <% # if edit_action? && !from_score?  %>
-    <% if new_action? || create_action? || (edit_action? && !from_score?) || (update_action? && !from_score?) || from_direct_url_entry? %>
-        <% if new_action? || create_action? %>
+    
+    <% if creation_functionality? || (update_functionality? && !from_score?) || from_direct_url_entry? %>
+        <% if creation_functionality? %>
             <h2 class="short-bottom-margin">Add a Round</h2>
-        <% elsif edit_action? || update_action? %>
+        <% elsif update_functionality? %>
             <h2 class="short-bottom-margin">Rounds In Score Session</h2>
         <% end %>
 
-        <section id=<%= (new_action? || create_action?) ? "ss-form-round-section" : "form-round-section" %>>
+        <section id=<%= creation_functionality? ? "ss-form-round-section" : "form-round-section" %>>
             <%= score_ses_f.fields_for :rounds do |round_f| %>
                 <%= render partial: "rounds/round_form", locals: {round_f: round_f, score_ses_f: score_ses_f} %>
             <% end %>
         </section>
     <% end %>
     
-    <%= tag.br if (new_action? || create_action? || from_score?) %>
-    
-    <section id="form-submit-section">
+    <section id="form-submit-section" class="add-top-margin">
         <%= score_ses_f.submit %>
         
         <% if from_new? %>

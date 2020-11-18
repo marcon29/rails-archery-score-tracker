@@ -80,53 +80,38 @@ module ApplicationHelper
         object.errors.messages[attr] = check_object.errors.messages[attr]
     end
 
+    # ---------------------------
+
     def home_action?
         params[:action] == "home"
     end
-
-    # def index_action?
-    #     params[:action] == "index"
-    # end
-
+   
     def show_action?
         params[:action] == "show"
+    end
+
+    def creation_functionality?
+        action_name == "new" || action_name == "create" 
     end
 
     def new_action?
         params[:action] == "new"
     end
 
-    def create_action?
-        params[:action] == "create"
+    def update_functionality?
+        action_name == "edit" || action_name == "update" 
+        # (action_name == "edit" || action_name == "update") && !from_score?
     end
 
-    def edit_action?
-        params[:action] == "edit"
-    end
-
-    def update_action?
-        params[:action] == "update"
-    end
-
-    def score_action?
-        params[:action] == "score" || action_name == "score"
-    end
-
-    def update_score_action?
-        params[:action] == "update_score" || action_name == "update_score"
-    end
-
-    def update_score_rset_action?
-        params[:action] == "update_score_rset"
+    def score_functionality?
+        action_name == "score" || action_name == "update_score" || action_name =="update_score_rset"
     end
 
     def only_round_update?
         params[:controller] == "rounds"
     end
 
-    # def from_score_session?
-    #     params[:controller] == "score_sessions"
-    # end
+    # ---------------------------
 
     # these handle re-rendering the form so it displays the correct info
     def from_new?
@@ -145,8 +130,7 @@ module ApplicationHelper
         !request.referrer
     end
 
-
-
+    # ---------------------------
 
     def get_rank(object)
         object.rank.blank? ? "N/A" : object.rank

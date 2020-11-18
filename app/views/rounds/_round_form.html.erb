@@ -3,7 +3,7 @@
 <% end %>    
 
 <section class="round-form-fields">
-    <% if new_action? || create_action? %>
+    <% if creation_functionality? %>
         <div class="form-field-group">
             <div class="label-field-pair">
                 <div><%= round_f.label :round_format_id, "Round" %><%= required_field %></div>
@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <% if edit_action? || update_action? %>
+    <% if update_functionality? %>
         <div class="form-field-group">
             <div class="label-field-pair">
                 <div><%= round_f.label :rank %></div>
@@ -48,11 +48,7 @@
     <% end %>
 </section>
 
-
-<% # if edit_action? || update_action? %>
-<% # if score_ses_f && ( (edit_action? && !from_score?) || (update_action? && !from_score?) || !from_direct_url_entry? ) %>
-<% # if !from_score? && !from_direct_url_entry?  %>
-<% if score_ses_f && !only_round_update? && !new_action? && !create_action? %>
+<% if score_ses_f && !only_round_update? && !creation_functionality? %>
     <h3 class="short-bottom-margin">Sets/Distances In Round</h3>
     <section id="form-rset-section">
         <%= score_ses_f.fields_for :rsets do |rset_f| %>
