@@ -55,6 +55,8 @@ class ScoreSessionsController < ApplicationController
         @default_division = Organization::Division.find_by(name: current_user.default_division)
         @default_age_class = Organization::AgeClass.find_by(name: current_user.default_age_class)
 
+        binding.pry
+
         if @score_session.errors.any?
             render :new
         else

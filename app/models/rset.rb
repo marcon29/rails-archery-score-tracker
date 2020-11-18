@@ -1,6 +1,6 @@
 class Rset < ApplicationRecord
-    has_many :ends
-    has_many :shots
+    has_many :ends, dependent: :destroy
+    has_many :shots, dependent: :destroy
     belongs_to :archer
     belongs_to :score_session
     belongs_to :round
@@ -39,16 +39,50 @@ class Rset < ApplicationRecord
     end
 
     def check_date
-        start_date = self.score_session.start_date if self.score_session
-        end_date = self.score_session.end_date if self.score_session
-
+        # start_date = self.score_session.start_date if self.score_session
+        # end_date = self.score_session.end_date if self.score_session
         # binding.pry # update 8, 13    rset validation
         # binding.pry # new 8           rset validation
 
-        if start_date == end_date
-            self.date = start_date
-        elsif self.date.blank? || self.date < start_date || self.date > end_date 
-            errors.add(:date, "Date must be between #{start_date} and #{end_date}.") if (scoring_started? || active?)
+        if self.score_session.single_day?
+            self.date = self.score_session.start_date
+        elsif date_required?
+            errors.add(:date, "Date must be between #{self.score_session.start_date} and #{self.score_session.end_date}.") if invalid_date?
+        elsif self.date
+            errors.add(:date, "Date must be between #{self.score_session.start_date} and #{self.score_session.end_date} or leave blnak.") if invalid_date?
+        end
+
+        # if start_date == end_date
+        #     self.date = start_date
+        # elsif self.new_record?
+        #     self.date.blank? || self.date < start_date || self.date > end_date 
+        #     errors.add(:date, "Date must be between #{start_date} and #{end_date}.") if (scoring_started? || active?)
+        # end
+        
+        # if start_date == end_date
+        #     self.date = start_date
+        # elsif self.id && (scoring_started? || active?)
+        #     if self.date.blank? || self.date < start_date || self.date > end_date 
+        #         errors.add(:date, "Date must be between #{start_date} and #{end_date}.")
+        #     end                
+        # elsif self.date && (self.date < start_date || self.date > end_date )
+        #     errors.add(:date, "Date must be between #{start_date} and #{end_date} or leave blnak.")
+        # end
+    end
+
+    def date_required?
+        self.id && (self.scoring_started? || self.active?)
+    end
+
+    def date_out_of_range?
+        self.date < self.score_session.start_date || self.date > self.score_session.end_date
+    end
+
+    def invalid_date?
+        if date_required?
+            self.date.blank? || date_out_of_range?
+        else
+            date_out_of_range?
         end
     end
 

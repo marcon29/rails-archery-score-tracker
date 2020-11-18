@@ -1,7 +1,7 @@
 class Round < ApplicationRecord
-    has_many :rsets
-    has_many :ends
-    has_many :shots
+    has_many :rsets, dependent: :destroy
+    has_many :ends, dependent: :destroy
+    has_many :shots, dependent: :destroy
     belongs_to :archer
     belongs_to :score_session
     belongs_to :round_format, class_name: "Format::RoundFormat"

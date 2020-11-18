@@ -3,7 +3,7 @@
 <% end %>    
 
 <section class="round-form-fields">
-    <% if new_action? || create_action? || !round_f.object.scoring_started? %>
+    <% if new_action? || create_action? %>
         <div class="form-field-group">
             <div class="label-field-pair">
                 <div><%= round_f.label :round_format_id, "Round" %><%= required_field %></div>

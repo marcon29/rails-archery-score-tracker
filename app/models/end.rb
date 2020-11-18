@@ -1,5 +1,5 @@
 class End < ApplicationRecord
-    has_many :shots
+    has_many :shots, dependent: :destroy
     belongs_to :archer
     belongs_to :score_session
     belongs_to :round
