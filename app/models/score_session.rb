@@ -58,12 +58,16 @@ class ScoreSession < ApplicationRecord
                 round.update(round_attrs)
                 self.errors[:rounds] << {round.id => round.errors.messages} if round.errors.any?
             elsif self.save    # if new/create
-                round = self.rounds.create(round_attrs)   # runs round validations only
-                create_rsets_ends_shots(round)
+                create_full_round(round_attrs)
             else
                 round = self.rounds.build(round_attrs)      # allows Round fields to re-render
             end
         end
+    end
+
+    def create_full_round(round_attrs)
+        round = self.rounds.create(round_attrs)   # runs round validations only
+        create_rsets_ends_shots(round)
     end
 
     def create_rsets_ends_shots(round)
