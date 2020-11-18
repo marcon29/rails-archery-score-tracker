@@ -48,24 +48,8 @@ class Rset < ApplicationRecord
         if start_date == end_date
             self.date = start_date
         elsif self.date.blank? || self.date < start_date || self.date > end_date 
-            errors.add(:date, "Date must be between #{start_date} and #{end_date}.") if scoring_started? 
+            errors.add(:date, "Date must be between #{start_date} and #{end_date}.") if (scoring_started? || active?)
         end
-        
-        # if scoring_started? 
-        #     if start_date == end_date
-        #         self.date = start_date
-        #     elsif self.date.blank? || self.date < start_date || self.date > end_date 
-        #         errors.add(:date, "Date must be between #{start_date} and #{end_date}.")
-        #     end                
-        # elsif self.date
-        #     if self.date < start_date || self.date > end_date 
-        #         if start_date == end_date
-        #             errors.add(:date, "Date must be #{start_date} or leave blnak.") 
-        #         else
-        #             errors.add(:date, "Date must be between #{start_date} and #{end_date} or leave blnak.")
-        #         end
-        #     end
-        # end
     end
 
     def archer_category

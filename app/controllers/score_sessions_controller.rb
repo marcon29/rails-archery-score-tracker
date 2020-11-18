@@ -140,8 +140,12 @@ class ScoreSessionsController < ApplicationController
             render :score
         else
             @endd.save
-            @score_session.update(active: false) if @score_session.complete?
-            redirect_to score_path(@score_session)
+            if @score_session.complete?
+                @score_session.update(active: false) 
+                redirect_to score_session_path(@score_session)
+            else
+                redirect_to score_path(@score_session)
+            end
         end
         # end
     end
