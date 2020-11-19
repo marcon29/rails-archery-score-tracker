@@ -51,6 +51,6 @@
             <%= link_to "Cancel", request.referer.present? ? request.referer : score_sessions_path %>
         <% end %>
 
-        <p>Fields marked with a <%= required_field %> are required.</p>
+        <%= display_required_note %>
     </section>
 <% end %>

@@ -35,6 +35,6 @@
     <section id="form-submit-section" class="add-top-margin">
         <%= archer_f.submit %>
         <%= link_to "Cancel", archer_path(current_user) if form_type == "edit" %>
-        <p>Fields marked with a <%= required_field %> are required.</p>
+        <%= display_required_note %>
     </section>
 <% end %>
