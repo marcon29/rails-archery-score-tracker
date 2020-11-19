@@ -68,9 +68,12 @@ class ScoreSessionsController < ApplicationController
         # if params[:end]
         @endd = End.find(end_params[:id])
         @score_session = @endd.score_session
+        @round = @endd.round
         @rset = @endd.rset
 
         @endd.assign_attributes(end_params)
+
+        
 
         if @endd.errors.any? #|| @rset.errors.any?
             @endd.errors[:shots].each do |id_error|
@@ -83,6 +86,8 @@ class ScoreSessionsController < ApplicationController
             render :score
         else
             @endd.save
+            update_parent_scores
+
             if @score_session.complete?
                 @score_session.update(active: false) 
                 redirect_to score_session_path(@score_session)
@@ -121,7 +126,7 @@ class ScoreSessionsController < ApplicationController
     end
   
     def end_params
-        params.require(:end).permit(:id, :set_score, shots_attributes: [:id, :score_entry])
+        params.require(:end).permit(:id, :set_score, shots_attributes: [:id, :score_entry, :score])
     end
   
     # ##### helpers
@@ -172,6 +177,13 @@ class ScoreSessionsController < ApplicationController
         @score_session.rounds.each { |round| round.update(name: "") }
         @score_session.rsets.each { |rset| rset.update(name: "") }
     end
+
+    def update_parent_scores
+        @rset.update(score: (@rset.score + @endd.score))
+        @round.update(score: (@round.score + @endd.score))
+    end
+
+    
 
   
 

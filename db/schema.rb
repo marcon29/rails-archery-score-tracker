@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_02_233426) do
+ActiveRecord::Schema.define(version: 2020_11_19_224637) do
 
   create_table "archers", force: :cascade do |t|
     t.string "username"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 2020_11_02_233426) do
 
   create_table "ends", force: :cascade do |t|
     t.integer "number"
+    t.integer "score", default: 0
     t.integer "set_score"
     t.integer "archer_id"
     t.integer "score_session_id"
@@ -140,6 +141,7 @@ ActiveRecord::Schema.define(version: 2020_11_02_233426) do
     t.string "name"
     t.string "round_type"
     t.string "score_method"
+    t.integer "score", default: 0
     t.string "rank"
     t.integer "archer_id"
     t.integer "score_session_id"
@@ -154,6 +156,7 @@ ActiveRecord::Schema.define(version: 2020_11_02_233426) do
   create_table "rsets", force: :cascade do |t|
     t.string "name"
     t.date "date"
+    t.integer "score", default: 0
     t.string "rank"
     t.integer "archer_id"
     t.integer "score_session_id"
@@ -193,6 +196,7 @@ ActiveRecord::Schema.define(version: 2020_11_02_233426) do
     t.integer "number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "score", default: 0
   end
 
   add_foreign_key "organization_dist_targ_cats", "format_set_end_formats", column: "set_end_format_id"

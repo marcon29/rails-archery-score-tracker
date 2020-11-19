@@ -31,6 +31,7 @@ class End < ApplicationRecord
         unless: :score_method_is_points?
     validate :check_associations
     before_validation :assign_number, :clear_set_score_if_points
+    before_save :score_from_shots
     
 
     # ##### helpers (callbacks & validations)
@@ -38,7 +39,6 @@ class End < ApplicationRecord
         if self.number.blank? && self.rset
             self.number = ends_in_set.count + 1 
         end
-        # binding.pry # new 10   end validation
     end
 
     def ends_in_set
@@ -57,6 +57,11 @@ class End < ApplicationRecord
         self.set_score = nil if score_method_is_points?
     end
 
+    def score_from_shots
+        self.score = self.shots.collect { |shot| shot.score }.sum
+    end
+
+
     # ##### helpers (associated models instantiation)
     def shots_attributes=(attributes)
         self.validate if self.id
@@ -68,11 +73,8 @@ class End < ApplicationRecord
         end
     end
 
-    # ##### helpers (data control)
-    def score
-        self.shots.collect { |shot| shot.score }.sum
-    end
 
+    # ##### helpers (data control)
     def shots_per_end
         self.rset.shots_per_end
     end

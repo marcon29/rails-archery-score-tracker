@@ -66,10 +66,6 @@ class Round < ApplicationRecord
     def gender
         self.archer.gender
     end
-
-    def score
-        self.rsets.collect { |rset| rset.score }.sum
-    end
     
     def find_category_by_div_age_class(division: division, age_class: age_class)
         Organization::ArcherCategory.find_category(gov_body: self.gov_body, division: division, age_class: age_class, gender: self.gender)

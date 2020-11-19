@@ -25,6 +25,7 @@ class Shot < ApplicationRecord
         on: :update
     validate :check_associations
     before_validation :assign_number, :format_score_entry
+    before_save :score_from_score_entry
     
 
     # ##### helpers (callbacks & validations)
@@ -33,7 +34,6 @@ class Shot < ApplicationRecord
         if self.number.blank? && self.end
             self.number = shots_in_end.count + 1 
         end
-# binding.pry # new 12    shot validation
     end
 
     def shots_in_end
@@ -59,19 +59,19 @@ class Shot < ApplicationRecord
     def format_score_entry
         self.score_entry = self.score_entry.capitalize if self.score_entry
     end
+
+    def score_from_score_entry
+        if score_entry == "X"
+            self.score = self.target.max_score
+        elsif score_entry == "M"
+            self.score = 0
+        else
+            self.score = score_entry.to_i
+        end
+    end
     
     
     # ##### helpers (data control)
-    def score
-        if score_entry == "X"
-            self.target.max_score 
-        elsif score_entry == "M"
-            0 
-        else
-            score_entry.to_i
-        end
-    end
-
     def date
         self.rset.date
     end
