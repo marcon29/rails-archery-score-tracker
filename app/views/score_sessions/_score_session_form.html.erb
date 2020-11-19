@@ -29,7 +29,7 @@
         </section>
     </section>
     
-    <% if creation_functionality? || (update_functionality? && !from_score?) || from_direct_url_entry? %>
+    <% if creation_functionality? || (update_functionality? && !@score_session.active) || from_direct_url_entry? %>
         <%= tag.h2 "Add a Round", class: "short-bottom-margin" if creation_functionality? %>
         <%= tag.h2 "Rounds In Score Session", class: "short-bottom-margin" if update_functionality? %>
 

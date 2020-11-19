@@ -36,6 +36,7 @@ class ScoreSessionsController < ApplicationController
   
     def edit
         @score_session = ScoreSession.find(params[:id])
+        redirect_to score_path(@score_session) if @score_session.active && !request.referrer
     end
   
     def update
@@ -44,17 +45,18 @@ class ScoreSessionsController < ApplicationController
 
         assign_errors_to_all_children(@score_session.rsets, @score_session, :rsets)
         assign_errors_to_all_children(@score_session.rounds, @score_session, :rounds)
-
-        binding.pry
+        @score_session.validate if !score_session_params[:rounds_attributes]
 
         if @score_session.errors.any?
             render :edit
         else
             @score_session.save
             auto_update_children_names
-                # need to update so goes back to correct place (can't use from_score because always comes from edit)
-                # redirect_to score_path(@score_session) if from_score
-            redirect_to score_session_path(@score_session) # unless from_score
+            if @score_session.active
+                redirect_to score_path(@score_session)
+            else
+                redirect_to score_session_path(@score_session)
+            end
         end
     end
   
