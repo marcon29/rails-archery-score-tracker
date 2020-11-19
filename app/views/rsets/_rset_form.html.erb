@@ -1,6 +1,4 @@
-<% if !score_functionality? %>
-    <h4 class="short-margins"><%= rset_f.object.name %> - <%= rset_f.object.distance %></h4>
-<% end %>
+<%= tag.h4 "#{rset_f.object.set_end_format.name} - #{rset_f.object.distance}", class: "short-margins" unless score_functionality? %>
 
 <section class="rset-form-fields">
     <div class="form-field-group">

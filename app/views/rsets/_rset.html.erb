@@ -1,6 +1,6 @@
 <section id=<%= "rset-#{rset.id}" %> class="rset-section">
     <section id=<%= "rset-#{rset.id}-info" %> class="rset-info">
-        <h4 class="short-bottom-margin"><%= rset.set_end_format.name %> - <%= rset.distance %></h4>
+        <%= tag.h4 "#{rset.set_end_format.name} - #{rset.distance}", class: "short-bottom-margin" %>
         
         <% if score_functionality? && (rset.complete? || rset.active?) %>
             <%= form_for rset, url: update_score_rset_path(@score_session) do |rset_f| %>
@@ -14,10 +14,8 @@
             <%= display_detail("Rank", get_rank(rset)) %>
         <% end %>
 
-        
         <%= display_detail("Target", rset.target.name) %>
         <%= display_detail("Score", rset.score) %>
-        
         
         <section id=<%= "rset-#{rset.id}-scores" %> class="all-scores">
             <%= render partial: "ends/scores_table", locals: {ends: rset.ends, builder_end: rset.ends.first} %>

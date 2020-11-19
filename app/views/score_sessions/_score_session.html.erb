@@ -4,17 +4,8 @@
     <section id=<%= "score-session-#{score_session.id}" %> class="score-session-section">
 <% end %>
     <section class="section-header">
-        <% if home_action? %>
-            <h3 class="short-bottom-margin"><%= link_to score_session.name, score_path(score_session) %></h3>
-        <% elsif show_action? %>
-            <h1 class="short-bottom-margin display-horiz-hl"><%= score_session.name %></h1>
-            <%= link_to "Edit", edit_score_session_path(score_session) %>
-        <% elsif score_functionality? %>
-            <h1 class="short-bottom-margin display-horiz-hl"><%= score_session.name %> (Scoring)</h1>
-            <%= link_to "Edit Score Session Details", edit_score_session_path(score_session) %>
-        <% else %>
-            <h3 class="short-bottom-margin"><%= link_to score_session.name, score_session_path(score_session) %></h3>
-        <% end %>
+        <%= display_score_session_name(score_session) %>
+        <%= display_edit_link(score_session) if show_action? || score_functionality? %>
     </section>
 
     <section id=<%= "score-session-#{score_session.id}-info" %> class="general-info">
@@ -25,7 +16,7 @@
         <%= display_detail("Rank", get_rank(score_session)) %>
     </section>
     <hr>
-
+    
     <section id=<%= "score-session-#{score_session.id}-rounds" %> class="all-rounds">
         <%= render collection: score_session.rounds, partial: "rounds/round" %>
     </section>

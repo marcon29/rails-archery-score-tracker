@@ -140,6 +140,20 @@ module ApplicationHelper
         tag.span "*", class: "red-text"
     end
 
+    def display_score_session_name(object)
+        text = object.name
+        path = score_session_path(object)
+        
+        text << " (Scoring)" if score_functionality?
+        path = score_path(object) if home_action?
+        
+        if show_action? || score_functionality?
+            tag.h1 text, class: "short-bottom-margin display-horiz-hl"
+        else
+            tag.h3 (link_to text, path), class: "short-bottom-margin"
+        end
+    end
+
     def display_detail(label_text, first_detail, second_detail=nil, parentheses=nil)
         label = label_text + ": "
         details = tag.b do
@@ -154,6 +168,16 @@ module ApplicationHelper
             concat(label)
             concat(details) 
         end
+    end
+
+    def display_edit_link(object)
+        link_text = "Edit"
+        link_text << " #{object.class.name.titlecase} Details" if score_functionality?
+        
+        path = edit_score_session_path(object) if object.class.name == "ScoreSession"
+        path = edit_round_path(object) if object.class.name == "Round"
+
+        tag.p (link_to link_text, path), class: "display-horiz"
     end
 
     def build_input_label(builder_object, attr, required=nil)
@@ -184,7 +208,6 @@ module ApplicationHelper
     end
 
     def ss_form_collection(builder_object, input_type, attr, object, collection, selected_item=nil, required=nil)
-        # binding.pry
         if input_type == "models"
             input_field = builder_object.collection_select attr, collection, :id, :name, {selected: selected_item}, {class: form_input_class(attr)}
         elsif input_type == "list_items"

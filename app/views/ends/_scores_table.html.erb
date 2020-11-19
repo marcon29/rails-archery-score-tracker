@@ -1,13 +1,13 @@
 <table>
     <thead>
         <tr>
-            <th></th>
+            <%= tag.th %>
             <% builder_end.shots.each do |shot| %>
                 <%= tag.th shot.number %>
             <% end %>
-            <th class="spacer"></th>
-            <th>Total</th>
-            <th class="spacer"></th>
+            <%= tag.th "", class: "spacer" %>
+            <%= tag.th "Total" %>
+            <%= tag.th "", class: "spacer" %>
             <%= tag.th "Set" if builder_end.score_method_is_set? %>
         </tr>
     </thead>

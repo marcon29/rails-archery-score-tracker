@@ -4,13 +4,13 @@
     </tr>
 <% else %>
     <tr id=<%= "end-#{endd.id}" %> class="end-section">
-        <th>End <%= endd.number %></th>
+        <%= tag.th "End #{endd.number}" %>
         <% endd.shots.each do |shot| %>
             <%= tag.td shot.score_entry, id: "shot-#{shot.id}", class: "shot-score-entry" %>
         <% end  %>
-        <td class="spacer"></td>
+        <%= tag.td "", class: "spacer" %>
         <%= tag.td endd.score, class: "end-score" %>
-        <td class="spacer"></td>
+        <%= tag.td "", class: "spacer" %>
         <%= tag.td endd.set_score, class: "end-set-score" if endd.score_method_is_set? %>
     </tr>
 <% end %>
