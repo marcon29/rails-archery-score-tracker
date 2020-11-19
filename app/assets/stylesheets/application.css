@@ -336,6 +336,11 @@ input[type=submit] {
     margin-bottom: .5rem;
 }
 
+label {
+    display: block;
+    margin-bottom: .5rem;
+}
+
 .login-input-field {
     display: block;
     width: 30rem;

@@ -5,64 +5,24 @@
     <section id="form-score-session-section">
         <section class="score-session-form-fields">
             <div class="form-field-group">
-                <div class="label-field-pair">
-                    <div><%= score_ses_f.label :name %><%= required_field %></div>
-                    <%= score_ses_f.text_field :name, class: form_input_class(:name), placeholder: "Enter a score session name" %>
-                        <%= add_error_or_note(@score_session, :name) %>
-                </div>
+                <%= ss_form_input(score_ses_f, "text", :name, @score_session, "Enter a score session name", "required") %>
             </div>
-
             <div class="form-field-group">
-                <div class="label-field-pair">
-                    <div><%= score_ses_f.label :score_session_type, "Score Session Type" %><%= required_field %></div>
-                    <%= score_ses_f.select :score_session_type, options_for_select(@score_session_types, @score_session.score_session_type), {}, class: form_input_class(:score_session_type) %>
-                        <%= add_error_or_note(@score_session, :score_session_type) %>
-                </div>
-                <div class="label-field-pair">
-                    <div><%= score_ses_f.label :gov_body_id, "Governing Body" %><%= required_field %></div>
-                    <%= score_ses_f.collection_select :gov_body_id, @gov_bodies, :id, :name, {}, {class: form_input_class(:gov_body_id)} %>
-                        <%= add_error_or_note(@score_session, :gov_body_id) %>
-                </div>
+                <%= ss_form_collection(score_ses_f, "list_items", :score_session_type, @score_session, @score_session_types, @score_session.score_session_type, "required") %>
+                <%= ss_form_collection(score_ses_f, "models", :gov_body_id, @score_session, @gov_bodies, nil, "required") %>
             </div>
-            
             <div class="form-field-group">
-                <div class="label-field-pair">
-                    <div><%= score_ses_f.label :city %><%= required_field %></div>
-                    <%= score_ses_f.text_field :city, class: form_input_class(:city), placeholder: "City where score session is held" %>
-                        <%= add_error_or_note(@score_session, :city) %>
-                </div>
-                <div class="label-field-pair">
-                    <div><%= score_ses_f.label :state %><%= required_field %></div>
-                    <%= score_ses_f.text_field :state, class: form_input_class(:state), placeholder: "State where score session is held" %>
-                        <%= add_error_or_note(@score_session, :state) %>
-                </div>
-                <div class="label-field-pair">
-                    <div><%= score_ses_f.label :country %><%= required_field %></div>
-                    <%= score_ses_f.text_field :country, class: form_input_class(:country), placeholder: "Country where score session is held" %>
-                        <%= add_error_or_note(@score_session, :country) %>
-                </div>
+                <%= ss_form_input(score_ses_f, "text", :city, @score_session, "City where score session is held", "required") %>
+                <%= ss_form_input(score_ses_f, "text", :state, @score_session, "State where score session is held", "required") %>
+                <%= ss_form_input(score_ses_f, "text", :country, @score_session, "Country where score session is held", "required") %>
             </div>
-
             <div class="form-field-group">
-                <div class="label-field-pair">
-                    <div><%= score_ses_f.label :start_date, "Start Date" %><%= required_field %></div>
-                    <%= score_ses_f.date_field :start_date, class: form_input_class(:start_date) %>
-                        <%= add_error_or_note(@score_session, :start_date) %>
-                </div>
-                <div class="label-field-pair">
-                    <div><%= score_ses_f.label :end_date, "End Date" %></div>
-                    <%= score_ses_f.date_field :end_date, class: form_input_class(:end_date) %>
-                        <%= add_error_or_note(@score_session, :end_date) %>
-                </div>
+                <%= ss_form_input(score_ses_f, "date", :start_date, @score_session, nil, "required") %>
+                <%= ss_form_input(score_ses_f, "date", :end_date, @score_session) %>
             </div>
-
             <% if update_functionality? %>
                 <div class="form-field-group">
-                    <div class="label-field-pair">
-                        <div><%= score_ses_f.label :rank %></div>
-                        <%= score_ses_f.text_field :rank, class: form_input_class(:rank), placeholder: "Your final place for the score session" %>
-                            <%= add_error_or_note(@score_session, :rank) %>
-                    </div>
+                    <%= ss_form_input(score_ses_f, "text", :rank, @score_session, "Your final place for the score session", nil) %>
                 </div>
             <% end %>            
         </section>

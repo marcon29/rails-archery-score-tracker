@@ -156,7 +156,42 @@ module ApplicationHelper
         end
     end
 
-    def display_link
+    def build_input_label(builder_object, attr, required=nil)
+        label_text = "#{attr}".titlecase
+
+        label = builder_object.label attr do
+          concat label_text  
+          concat required_field if required
+        end
+    end
+
+    def build_label_field_pair(builder_object, input_field, object, attr, required)
+        tag.div class: "label-field-pair" do
+            concat build_input_label(builder_object, attr, required)
+            concat input_field
+            concat add_error_or_note(object, attr)
+        end
+    end
+
+    def ss_form_input(builder_object, input_type, attr, object, placeholder=nil, required=nil)
+        if input_type == "text"
+            input_field = builder_object.text_field attr, class: form_input_class(attr), placeholder: placeholder
+        elsif input_type == "date"
+            input_field = builder_object.date_field attr, class: form_input_class(attr)
+        end
+
+        build_label_field_pair(builder_object, input_field, object, attr, required)
+    end
+
+    def ss_form_collection(builder_object, input_type, attr, object, collection, selected_item=nil, required=nil)
+        # binding.pry
+        if input_type == "models"
+            input_field = builder_object.collection_select attr, collection, :id, :name, {selected: selected_item}, {class: form_input_class(attr)}
+        elsif input_type == "list_items"
+            input_field = builder_object.select attr, options_for_select(collection, selected_item), {}, class: form_input_class(attr)
+        end
+        
+        build_label_field_pair(builder_object, input_field, object, attr, required)
     end
 
 
