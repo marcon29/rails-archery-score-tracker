@@ -42,14 +42,10 @@
     
     <section id="form-submit-section" class="add-top-margin">
         <%= score_ses_f.submit %>
-
-        <% binding.pry %>
         
-        <% if creation_functionality? %>
-            <%= link_to "Cancel", score_sessions_path %>
-        <% elsif from_edit? && params[:id] %>
+        <% if update_functionality? && !@score_session.active %>
             <%= link_to "Cancel", score_session_path(@score_session) %>
-        <% elsif from_score? && params[:id] %>
+        <% elsif update_functionality? && @score_session.active %>
             <%= link_to "Cancel", score_path(@score_session) %>
         <% else %>
             <%= link_to "Cancel", request.referer.present? ? request.referer : score_sessions_path %>
