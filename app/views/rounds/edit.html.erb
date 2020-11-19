@@ -5,7 +5,7 @@
     
     <section id="form-submit-section" class="add-top-margin">
         <%= round_f.submit %>
-        <%= link_to "Cancel", score_path(@score_session) %>
+        <%= display_form_cancel_link(@score_session) %>
         <%= display_required_note %>
     </section>
 <% end %>

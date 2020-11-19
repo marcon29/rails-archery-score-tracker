@@ -14,7 +14,7 @@
             <%= build_form_input(archer_f, "text", :first_name, @archer, "Enter your first name", "required") %>
             <%= build_form_input(archer_f, "text", :last_name, @archer, "Enter your last name", "required") %>
             <%= build_form_input(archer_f, "date", :birthdate, @archer, nil, "required") %>
-            <%= build_form_collection(archer_f, "models", :gender_id, @archer, @genders, :id, @archer.gender.id, "required") %>
+            <%= build_form_collection(archer_f, "models", :gender_id, @archer, @genders, :id, nil, "required") %>
         </div>
 
         <%= tag.h3 "Location Information", class: "short-bottom-margin" %>
@@ -34,7 +34,7 @@
     
     <section id="form-submit-section" class="add-top-margin">
         <%= archer_f.submit %>
-        <%= link_to "Cancel", archer_path(current_user) if form_type == "edit" %>
+        <%= display_form_cancel_link(current_user) if update_functionality? %>
         <%= display_required_note %>
     </section>
 <% end %>

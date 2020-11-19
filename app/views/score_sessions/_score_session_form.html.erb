@@ -42,15 +42,7 @@
     
     <section id="form-submit-section" class="add-top-margin">
         <%= score_ses_f.submit %>
-        
-        <% if update_functionality? && !@score_session.active %>
-            <%= link_to "Cancel", score_session_path(@score_session) %>
-        <% elsif update_functionality? && @score_session.active %>
-            <%= link_to "Cancel", score_path(@score_session) %>
-        <% else %>
-            <%= link_to "Cancel", request.referer.present? ? request.referer : score_sessions_path %>
-        <% end %>
-
+        <%= display_form_cancel_link(@score_session) %>
         <%= display_required_note %>
     </section>
 <% end %>

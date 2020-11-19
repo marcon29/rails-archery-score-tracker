@@ -103,16 +103,20 @@ module ApplicationHelper
         # (action_name == "edit" || action_name == "update") && !from_score?
     end
 
-    def score_functionality?
-        action_name == "score" || action_name == "update_score" || action_name =="update_score_rset"
-    end
-
     def archer_functionality?
         controller_name == "archers"
     end
 
-    def only_round_update?
-        params[:controller] == "rounds"
+    def score_session_functionality?
+        controller_name == "score_sessions" && !score_functionality?
+    end
+
+    def round_functionality?
+        controller_name == "rounds"
+    end
+
+    def score_functionality?
+        action_name == "score" || action_name == "update_score" || action_name =="update_score_rset"
     end
 
     # ---------------------------
@@ -177,15 +181,6 @@ module ApplicationHelper
             concat details
         end
     end
-    
-    def display_required_note
-        tag.p do
-            concat "Fields marked with a "
-            concat required_field
-            concat " are required."
-        end
-    end
-    
 
     def display_edit_link(object)
         link_text = "Edit"
@@ -234,12 +229,42 @@ module ApplicationHelper
 
     def build_form_collection(builder_object, input_type, attr, object, collection, identifier=nil, selected_item=nil, required=nil)
         if input_type == "models"
-            input_field = builder_object.collection_select attr, collection, identifier, :name, {selected: selected_item}, {class: form_input_class(attr)}
+            # this causes error on Archer#new form
+            # input_field = builder_object.collection_select attr, collection, identifier, :name, {selected: selected_item}, {class: form_input_class(attr)}
+
+            # this does not cause error on Archer#new form - see if screws up selected item in other places
+            input_field = builder_object.collection_select attr, collection, identifier, :name, {}, {class: form_input_class(attr)}
+
         elsif input_type == "list_items"
             input_field = builder_object.select attr, options_for_select(collection, selected_item), {}, class: form_input_class(attr)
         end
         
         build_label_field_pair(builder_object, input_field, object, attr, required)
+    end
+
+    def display_required_note
+        tag.p do
+            concat "Fields marked with a "
+            concat required_field
+            concat " are required."
+        end
+    end
+
+    def display_form_cancel_link(object)
+        if archer_functionality?
+            path = archer_path(object)
+        elsif score_session_functionality? && update_functionality?
+            path = score_session_path(object) if !object.active
+            path = score_path(object) if object.active
+        elsif round_functionality?
+            path = score_path(object)
+        elsif request.referer.present?
+            path = request.referer
+        else
+            path = score_sessions_path
+        end
+        
+        tag.p link_to "Cancel", path
     end
 
 

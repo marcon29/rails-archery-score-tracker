@@ -1,4 +1,4 @@
-<%= tag.h3 round_f.object.round_format.name, class: "short-margins" if update_functionality? && !only_round_update? %>
+<%= tag.h3 round_f.object.round_format.name, class: "short-margins" if update_functionality? && !round_functionality? %>
 
 <section class="round-form-fields">
     <% if creation_functionality? %>
@@ -21,7 +21,7 @@
     <% end %>
 </section>
 
-<% if score_ses_f && !only_round_update? && !creation_functionality? %>
+<% if score_ses_f && !round_functionality? && !creation_functionality? %>
     <h3 class="short-bottom-margin">Sets/Distances In Round</h3>
     <section id="form-rset-section">
         <%= score_ses_f.fields_for :rsets do |rset_f| %>
