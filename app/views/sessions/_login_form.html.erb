@@ -1,4 +1,4 @@
-<h1>Log In</h1>
+<%= tag.h1 "Log In" %>
 
 <%= form_tag login_path, id: "login-form", class: "user-form" do %>
     <section class="login-form-fields">
@@ -18,7 +18,6 @@
 
     <section id="form-submit-section">
         <%= submit_tag "Log In" %>
-    
         <p>Or <%= link_to "Sign Up", new_archer_path %> as a new archer.</p>
     </section>
 <% end %>

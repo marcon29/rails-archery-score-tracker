@@ -1,92 +1,40 @@
-
 <!–– the content for all notes is in FORM_NOTES hash in application_helper.rb ––>
 
-<%= form_for(@archer) do |f| %>
+<%= form_for(@archer) do |archer_f| %>
     <section class="archer-form-fields">
-        <h3 class="short-bottom-margin">Login Information</h3>
+        <%= tag.h3 "Login Information", class: "short-bottom-margin" %>
         <div class="form-field-group">
-            <div class="label-field-pair">    
-                <div><%= f.label :username %><%= required_field %></div>
-                    <%= f.text_field :username, class: form_input_class(:username), placeholder: "Enter a username" %>
-                        <%= add_error_or_note(@archer, :username) %>
-            </div>
-            <div class="label-field-pair">
-                <div><%= f.label :email %><%= required_field %></div>
-                <%= f.email_field :email, class: form_input_class(:email), placeholder: "Enter your email" %>
-                    <%= add_error_or_note(@archer, :email) %>
-            </div>
-            <div class="label-field-pair">
-                <div><%= f.label :password %><%= required_field %></div>
-                <%= f.password_field :password, class: form_input_class(:password), placeholder: "Enter a password" %>
-                    <%= add_error_or_note(@archer, :password) %>
-            </div>
+            <%= build_form_input(archer_f, "text", :username, @archer, "Enter a username", "required") %>
+            <%= build_form_input(archer_f, "email", :email, @archer, "Enter your email", "required") %>
+            <%= build_form_input(archer_f, "password", :password, @archer, "Enter a password", "required") %>
         </div>
 
-        <h3 class="short-bottom-margin">Personal Information</h3>
+        <%= tag.h3 "Personal Information", class: "short-bottom-margin" %>
         <div class="form-field-group">
-            <div class="label-field-pair">    
-                <div><%= f.label :first_name, "First Name" %><%= required_field %></div>
-                <%= f.text_field :first_name, class: form_input_class(:first_name), placeholder: "Enter your first name" %>
-                    <%= add_error_or_note(@archer, :first_name) %>
-            </div>
-            <div class="label-field-pair">
-                <div><%= f.label :last_name, "Last Name" %><%= required_field %></div>
-                <%= f.text_field :last_name, class: form_input_class(:last_name), placeholder: "Enter your last name" %>
-                    <%= add_error_or_note(@archer, :last_name) %>
-            </div>
-            <div class="label-field-pair">
-                <div><%= f.label :birthdate, "Birth Date" %><%= required_field %></div>
-                <%= f.date_field :birthdate, class: form_input_class(:birthdate), placeholder: "Enter your birth date" %>
-                    <%= add_error_or_note(@archer, :birthdate) %>
-            </div>
-            <div class="label-field-pair">
-                <div><%= f.label :gender_id %><%= required_field %></div>
-                <%= f.collection_select :gender_id, @genders, :id, :name, {}, {class: form_input_class(:gender_id)} %>
-                    <%= add_error_or_note(@archer, :gender_id) %>
-            </div>
+            <%= build_form_input(archer_f, "text", :first_name, @archer, "Enter your first name", "required") %>
+            <%= build_form_input(archer_f, "text", :last_name, @archer, "Enter your last name", "required") %>
+            <%= build_form_input(archer_f, "date", :birthdate, @archer, nil, "required") %>
+            <%= build_form_collection(archer_f, "models", :gender_id, @archer, @genders, :id, @archer.gender.id, "required") %>
         </div>
 
-        <h3 class="short-bottom-margin">Location Information</h3>
+        <%= tag.h3 "Location Information", class: "short-bottom-margin" %>
         <div class="form-field-group">
-            <div class="label-field-pair">    
-                <div><%= f.label :home_city, "Home City" %></div>
-                <%= f.text_field :home_city, class: form_input_class(:home_city), placeholder: "Enter the city you live in" %>
-                    <%= add_error_or_note(@archer, :home_city) %>
-            </div>
-            <div class="label-field-pair">
-                <div><%= f.label :home_state, "Home State" %></div>
-                <%= f.text_field :home_state, class: form_input_class(:home_state), placeholder: "Enter the state you live in" %>
-                    <%= add_error_or_note(@archer, :home_state) %>
-            </div>
-            <div class="label-field-pair">
-                <div><%= f.label :home_country, "Home Country" %></div>
-                <%= f.text_field :home_country, class: form_input_class(:home_country), placeholder: "Enter the country you live in" %>
-                    <%= add_error_or_note(@archer, :home_country) %>
-            </div>
+            <%= build_form_input(archer_f, "text", :home_city, @archer, "Enter the city you live in") %>
+            <%= build_form_input(archer_f, "text", :home_state, @archer, "Enter the state you live in") %>
+            <%= build_form_input(archer_f, "text", :home_country, @archer, "Enter the country you live in") %>
         </div>
 
-        <h3 class="remove-bottom-margin">Competition Infomation</h3>
+        <%= tag.h3 "Competition Infomation", class: "remove-bottom-margin" %>
         <%= form_note(:comp_section) %>
         <div class="form-field-group restore-margin">
-            <div class="label-field-pair">
-                <div><%= f.label :default_division, "Primary Shooting Style" %><%= required_field %></div>
-                <%= f.collection_select :default_division, @divisions, :name, :name, {prompt: "Select a shooting style"}, {class: form_input_class(:default_division)} %>
-                    <%= add_error_or_note(@archer, :default_division) %>
-            </div>
-            <div class="label-field-pair">
-                <div><%= f.label :default_age_class, "Primary Age Class" %><%= required_field %></div>
-                <%= f.collection_select :default_age_class, @age_classes, :name, :name, {prompt: "Select an age class"}, {class: form_input_class(:default_age_class)} %>
-                    <%= add_error_or_note(@archer, :default_age_class) %>
-            </div>
+            <%= build_form_collection(archer_f, "models", :default_division, @archer, @divisions, :name, nil, "required") %>
+            <%= build_form_collection(archer_f, "models", :default_age_class, @archer, @age_classes, :name, nil, "required") %>
         </div>
     </section>
     
-    <section id="form-submit-section">
-        <br>
-        <%= f.submit %>
-
+    <section id="form-submit-section" class="add-top-margin">
+        <%= archer_f.submit %>
         <%= link_to "Cancel", archer_path(current_user) if form_type == "edit" %>
-        
         <p>Fields marked with a <%= required_field %> are required.</p>
     </section>
 <% end %>

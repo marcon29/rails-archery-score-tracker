@@ -5,24 +5,24 @@
     <section id="form-score-session-section">
         <section class="score-session-form-fields">
             <div class="form-field-group">
-                <%= ss_form_input(score_ses_f, "text", :name, @score_session, "Enter a score session name", "required") %>
+                <%= build_form_input(score_ses_f, "text", :name, @score_session, "Enter a score session name", "required") %>
             </div>
             <div class="form-field-group">
-                <%= ss_form_collection(score_ses_f, "list_items", :score_session_type, @score_session, @score_session_types, @score_session.score_session_type, "required") %>
-                <%= ss_form_collection(score_ses_f, "models", :gov_body_id, @score_session, @gov_bodies, nil, "required") %>
+                <%= build_form_collection(score_ses_f, "list_items", :score_session_type, @score_session, @score_session_types, @score_session.score_session_type, "required") %>
+                <%= build_form_collection(score_ses_f, "models", :gov_body_id, @score_session, @gov_bodies, :id, nil, "required") %>
             </div>
             <div class="form-field-group">
-                <%= ss_form_input(score_ses_f, "text", :city, @score_session, "City where score session is held", "required") %>
-                <%= ss_form_input(score_ses_f, "text", :state, @score_session, "State where score session is held", "required") %>
-                <%= ss_form_input(score_ses_f, "text", :country, @score_session, "Country where score session is held", "required") %>
+                <%= build_form_input(score_ses_f, "text", :city, @score_session, "City where score session is held", "required") %>
+                <%= build_form_input(score_ses_f, "text", :state, @score_session, "State where score session is held", "required") %>
+                <%= build_form_input(score_ses_f, "text", :country, @score_session, "Country where score session is held", "required") %>
             </div>
             <div class="form-field-group">
-                <%= ss_form_input(score_ses_f, "date", :start_date, @score_session, nil, "required") %>
-                <%= ss_form_input(score_ses_f, "date", :end_date, @score_session) %>
+                <%= build_form_input(score_ses_f, "date", :start_date, @score_session, nil, "required") %>
+                <%= build_form_input(score_ses_f, "date", :end_date, @score_session) %>
             </div>
             <% if update_functionality? %>
                 <div class="form-field-group">
-                    <%= ss_form_input(score_ses_f, "text", :rank, @score_session, "Your final place for the score session", nil) %>
+                    <%= build_form_input(score_ses_f, "text", :rank, @score_session, "Your final place for the score session", nil) %>
                 </div>
             <% end %>            
         </section>

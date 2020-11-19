@@ -107,6 +107,10 @@ module ApplicationHelper
         action_name == "score" || action_name == "update_score" || action_name =="update_score_rset"
     end
 
+    def archer_functionality?
+        controller_name == "archers"
+    end
+
     def only_round_update?
         params[:controller] == "rounds"
     end
@@ -155,7 +159,8 @@ module ApplicationHelper
     end
 
     def display_detail(label_text, first_detail, second_detail=nil, parentheses=nil)
-        label = label_text + ": "
+        label = label_text + ": " if label_text
+
         details = tag.b do
             concat first_detail
             concat " " if second_detail
@@ -164,24 +169,31 @@ module ApplicationHelper
             concat ")" if parentheses
         end
 
-        tag.p class: "display-horiz" do
-            concat(label)
-            concat(details) 
+        class_selector = "display-horiz"
+        class_selector = nil if archer_functionality?
+
+        tag.p class: class_selector do
+            concat label
+            concat details
         end
     end
 
     def display_edit_link(object)
         link_text = "Edit"
         link_text << " #{object.class.name.titlecase} Details" if score_functionality?
+        link_text << " Profile" if object.class.name == "Archer"
         
         path = edit_score_session_path(object) if object.class.name == "ScoreSession"
         path = edit_round_path(object) if object.class.name == "Round"
+        path = edit_archer_path(object) if object.class.name == "Archer"
 
         tag.p (link_to link_text, path), class: "display-horiz"
     end
 
     def build_input_label(builder_object, attr, required=nil)
         label_text = "#{attr}".titlecase
+        label_text = "Primary Shooting Style" if attr == :default_division
+        label_text = "Primary Age Class" if attr == :default_age_class
 
         label = builder_object.label attr do
           concat label_text  
@@ -197,19 +209,23 @@ module ApplicationHelper
         end
     end
 
-    def ss_form_input(builder_object, input_type, attr, object, placeholder=nil, required=nil)
+    def build_form_input(builder_object, input_type, attr, object, placeholder=nil, required=nil)
         if input_type == "text"
             input_field = builder_object.text_field attr, class: form_input_class(attr), placeholder: placeholder
         elsif input_type == "date"
             input_field = builder_object.date_field attr, class: form_input_class(attr)
+        elsif input_type == "email"
+            input_field = builder_object.email_field attr, class: form_input_class(attr)
+        elsif input_type == "password"
+            input_field = builder_object.password_field attr, class: form_input_class(attr)
         end
 
         build_label_field_pair(builder_object, input_field, object, attr, required)
     end
 
-    def ss_form_collection(builder_object, input_type, attr, object, collection, selected_item=nil, required=nil)
+    def build_form_collection(builder_object, input_type, attr, object, collection, identifier=nil, selected_item=nil, required=nil)
         if input_type == "models"
-            input_field = builder_object.collection_select attr, collection, :id, :name, {selected: selected_item}, {class: form_input_class(attr)}
+            input_field = builder_object.collection_select attr, collection, identifier, :name, {selected: selected_item}, {class: form_input_class(attr)}
         elsif input_type == "list_items"
             input_field = builder_object.select attr, options_for_select(collection, selected_item), {}, class: form_input_class(attr)
         end

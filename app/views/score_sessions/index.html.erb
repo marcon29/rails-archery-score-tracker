@@ -1,11 +1,11 @@
-<h1><%= "#{current_user.first_name}'s Completed Scores" %></h1>
+<%= tag.h1 "#{current_user.first_name}'s Completed Scores" %>
 
 <% if @score_sessions.empty? %>
-    <h3>You have not recorded any scores yet.</h3>
+    <%= tag.h3 "You have not recorded any scores yet." %>
     <p>Add a <%= link_to "New Score Session", new_score_session_path %> to get started.</p>
 <% else %>
     <% @score_session_types.each do |type|  %>
-        <h2><%= type.pluralize %></h2>
+        <%= tag.h2 type.pluralize %>
         <section id=<%= "#{type.downcase}-score-sessions" %> class="all-score-sessions">
             <%= render collection: score_sessions_by_type(@score_sessions, type), partial: "score_session" %>
         </section>

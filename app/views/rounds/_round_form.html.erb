@@ -5,20 +5,20 @@
 <section class="round-form-fields">
     <% if creation_functionality? %>
         <div class="form-field-group">
-            <%= ss_form_collection(round_f, "models", :round_format_id, round_f.object, @round_formats, (round_f.object.round_format ? round_f.object.round_format.id : nil), "required") %>
+            <%= build_form_collection(round_f, "models", :round_format_id, round_f.object, @round_formats, :id, (round_f.object.round_format ? round_f.object.round_format.id : nil), "required") %>
         </div>
     <% end %>
 
     <div class="form-field-group">
-        <%= ss_form_collection(round_f, "list_items", :round_type, round_f.object, @round_types, (round_f.object.round_type || @round_types.first), "required") %>
-        <%= ss_form_collection(round_f, "list_items", :score_method, round_f.object, @score_methods, (round_f.object.score_method || @score_methods.first), "required") %>
-        <%= ss_form_collection(round_f, "models", :division, round_f.object, @divisions, (round_f.object.division ? round_f.object.division.id : @default_division.id), "required") %>
-        <%= ss_form_collection(round_f, "models", :age_class, round_f.object, @age_classes, (round_f.object.age_class ? round_f.object.age_class.id : @default_age_class.id), "required") %>
+        <%= build_form_collection(round_f, "list_items", :round_type, round_f.object, @round_types, (round_f.object.round_type || @round_types.first), "required") %>
+        <%= build_form_collection(round_f, "list_items", :score_method, round_f.object, @score_methods, (round_f.object.score_method || @score_methods.first), "required") %>
+        <%= build_form_collection(round_f, "models", :division, round_f.object, @divisions, :id, (round_f.object.division ? round_f.object.division.id : @default_division.id), "required") %>
+        <%= build_form_collection(round_f, "models", :age_class, round_f.object, @age_classes, :id, (round_f.object.age_class ? round_f.object.age_class.id : @default_age_class.id), "required") %>
     </div>
 
     <% if update_functionality? %>
         <div class="form-field-group">
-            <%= ss_form_input(round_f, "text", :rank, round_f.object, "Your final place for the round", nil) %>
+            <%= build_form_input(round_f, "text", :rank, round_f.object, "Your final place for the round", nil) %>
         </div>
     <% end %>
 </section>

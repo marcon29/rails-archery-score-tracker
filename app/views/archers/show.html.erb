@@ -1,44 +1,41 @@
-<h1><%= current_user.full_name %></h1>
-<p><%= link_to "Edit Profile", edit_archer_path(current_user) %><p>
-<br>
+<%= tag.h1 current_user.full_name %>
+<%= display_edit_link(current_user) %>
+<br><br><br>
 
 <section id="archer-info">
     <section id="login-info">
-        <h3>Login Information</h3>
-        <p><%= current_user.username %></p>
-        <p><%= current_user.email %></p>
+        <%= tag.h3 "Login Information" %>
+        <%= display_detail("Username", current_user.username) %>
+        <%= display_detail("Email", current_user.email) %>
     </section>
 
     <section id="personal-info">
         <div id="hometown-info">
-            <h3>Hometown</h3>
-            <p>City: <%= current_user.home_city %></p>
-            <p>State: <%= current_user.home_state %></p>
-            <p>Country: <%= current_user.home_country %></p>
+            <%= tag.h3 "Hometown" %>
+            <%= display_detail("City", current_user.home_city) %>
+            <%= display_detail("State", current_user.home_state) %>
+            <%= display_detail("Country", current_user.home_country) %>
         </div>
-
         <div id="gender-info">
-            <h3>Gender</h3>
-            <p><%= current_user.gender.name %></p>
+            <%= tag.h3 "Gender" %>
+            <%= display_detail(nil, current_user.gender.name) %>
         </div>
-
         <div id="age-info">
-            <h3>Age</h3>
-            <p>Age: <%= current_user.age %></p>
-            <p>Birthday: <%= formatted_date_long(current_user.birthdate) %></p>
+            <%= tag.h3 "Age" %>
+            <%= display_detail("Age", current_user.age) %>
+            <%= display_detail("Birthday", formatted_date_long(current_user.birthdate)) %>
         </div>
     </section>
 
     <section id="category-info">
         <div id="default-divisions">
-            <h3>Default Division</h3>
-            <p><%= current_user.default_division %></p>
+            <%= tag.h3 "Default Division" %>
+            <%= display_detail(nil, current_user.default_division) %>
         </div>
-        
         <div id="default-age-classes">
-            <h3>Default Age Class</h3>
-            <p>Eligibility Age: <%= current_user.eligibility_age %></p>
-            <p>Age Class: <%= current_user.default_age_class %></p>
+            <%= tag.h3 "Default Age Class" %>
+            <%= display_detail("Eligibility Age", current_user.eligibility_age) %>
+            <%= display_detail("Age Class", current_user.default_age_class) %>
         </div>
     </section>
 </section>
