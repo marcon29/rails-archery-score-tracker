@@ -177,6 +177,16 @@ module ApplicationHelper
             concat details
         end
     end
+    
+    def display_required_note
+        # <p>Fields marked with a <%= required_field %> are required.</p>
+        tag.p do
+            concat "Fields marked with a "
+            concat required_field
+            concat " are required."
+        end
+    end
+    
 
     def display_edit_link(object)
         link_text = "Edit"

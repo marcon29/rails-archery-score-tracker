@@ -1,10 +1,11 @@
-<h1>Edit <%= @round.name %></h1>
+<%= tag.h1 @round.name %>
+
 <%= form_for(@round) do |round_f| %>
     <%= render partial: "round_form", locals: {round_f: round_f, score_ses_f: nil} %>
-    <br>
-    <section id="form-submit-section">
+    
+    <section id="form-submit-section" class="add-top-margin">
         <%= round_f.submit %>
-        <%= link_to "Cancel", score_path(@score_session) if form_type == "edit" %>
-        <p>Fields marked with a <%= required_field %> are required.</p>
+        <%= link_to "Cancel", score_path(@score_session) %>
+        <%= display_required_note %>
     </section>
 <% end %>
