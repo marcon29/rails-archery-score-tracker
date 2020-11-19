@@ -45,6 +45,8 @@ class ScoreSessionsController < ApplicationController
         assign_errors_to_all_children(@score_session.rsets, @score_session, :rsets)
         assign_errors_to_all_children(@score_session.rounds, @score_session, :rounds)
 
+        binding.pry
+
         if @score_session.errors.any?
             render :edit
         else

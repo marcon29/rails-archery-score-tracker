@@ -1,7 +1,8 @@
 <!–– the content for all notes is in FORM_NOTES hash in application_helper.rb ––>
 
 <%= form_for(@score_session) do |score_ses_f| %>
-    <h2 class="short-bottom-margin">Score Session Information</h2>
+    <%= tag.h2 "Score Session Information", class: "short-bottom-margin" %>
+
     <section id="form-score-session-section">
         <section class="score-session-form-fields">
             <div class="form-field-group">
@@ -29,11 +30,8 @@
     </section>
     
     <% if creation_functionality? || (update_functionality? && !from_score?) || from_direct_url_entry? %>
-        <% if creation_functionality? %>
-            <h2 class="short-bottom-margin">Add a Round</h2>
-        <% elsif update_functionality? %>
-            <h2 class="short-bottom-margin">Rounds In Score Session</h2>
-        <% end %>
+        <%= tag.h2 "Add a Round", class: "short-bottom-margin" if creation_functionality? %>
+        <%= tag.h2 "Rounds In Score Session", class: "short-bottom-margin" if update_functionality? %>
 
         <section id=<%= creation_functionality? ? "ss-form-round-section" : "form-round-section" %>>
             <%= score_ses_f.fields_for :rounds do |round_f| %>
@@ -44,8 +42,10 @@
     
     <section id="form-submit-section" class="add-top-margin">
         <%= score_ses_f.submit %>
+
+        <% binding.pry %>
         
-        <% if from_new? %>
+        <% if creation_functionality? %>
             <%= link_to "Cancel", score_sessions_path %>
         <% elsif from_edit? && params[:id] %>
             <%= link_to "Cancel", score_session_path(@score_session) %>

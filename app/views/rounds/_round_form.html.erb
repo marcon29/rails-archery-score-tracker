@@ -1,6 +1,4 @@
-<% if !only_round_update? %>
-    <h3 class="short-margins"><%= round_f.object.name %></h3>
-<% end %>    
+<%= tag.h3 round_f.object.round_format.name, class: "short-margins" if update_functionality? && !only_round_update? %>
 
 <section class="round-form-fields">
     <% if creation_functionality? %>
