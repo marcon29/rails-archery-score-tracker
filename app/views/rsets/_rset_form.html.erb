@@ -3,11 +3,12 @@
 <section class="rset-form-fields">
     <div class="form-field-group">
         <%= build_form_input(rset_f, "date", :date, rset_f.object, nil, ("required" if rset_f.object.scoring_started?) ) %>
-        <%= build_form_input(rset_f, "text", :rank, rset_f.object, "Your final place for the set/distance", nil) if rset_f.object.complete? %>
+        <%= build_form_input(rset_f, "text", :rank, rset_f.object, "Your final place for the set/distance", nil) if (rset_f.object.complete? && rset_f.object.active) %>
         
         <% if score_functionality? %>
             <%= tag.p (rset_f.submit "Select Date to Start"), class: "display-horiz" if !rset_f.object.date %>
-            <%= tag.p (rset_f.submit "Update Set/Distance"), class: "display-horiz" if rset_f.object.date %>
+            <%= tag.p (rset_f.submit "Update Set/Distance"), class: "display-horiz" if (rset_f.object.date && rset_f.object.incomplete?) %>
+            <%= tag.p (rset_f.submit "Enter Rank (optional) and Finish Set/Distance"), class: "display-horiz" if (rset_f.object.complete? && rset_f.object.active) %>
         <% end %>
     </div>
 </section>

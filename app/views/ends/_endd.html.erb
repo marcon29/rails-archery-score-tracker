@@ -1,4 +1,4 @@
-<% if score_functionality? && endd.rset.date && endd.active  %>
+<% if score_functionality? && endd.rset.date && endd.currently_scoring?  %>
     <tr id=<%= "end-#{endd.id}-form" %> class="end-section">
         <%= render partial: "ends/end_form", locals: {endd: endd} %>
     </tr>

@@ -109,6 +109,14 @@ class Rset < ApplicationRecord
         self.name.last.to_i
     end
 
+    def previous_rset
+        self.round.rsets.find_by(name: "#{self.round.name} - Set/Distance#{set_num-1}")
+    end
+
+    def previous_rset_active?
+        self.previous_rset ? self.previous_rset.active : false
+    end
+
     # def active?
     #     if set_num == 1 
     #         self.incomplete?

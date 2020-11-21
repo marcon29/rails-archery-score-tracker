@@ -85,15 +85,18 @@ class ScoreSessionsController < ApplicationController
             params[:end][:errors] = @endd.errors.messages
             render :score
         else
+            @endd.active = false
             @endd.save
             update_parent_scores
 
-            if @score_session.complete?
-                @score_session.update(active: false) 
-                redirect_to score_session_path(@score_session)
-            else
-                redirect_to score_path(@score_session)
-            end
+            redirect_to score_path(@score_session)
+
+            # if @score_session.complete?
+            #     @score_session.update(active: false) 
+            #     redirect_to score_session_path(@score_session)
+            # else
+            #     redirect_to score_path(@score_session)
+            # end
         end
         # end
     end
@@ -104,6 +107,7 @@ class ScoreSessionsController < ApplicationController
         @score_session = @rset.score_session
         
         if @rset.update(rset_params)
+            @rset.update(active: false) if @rset.complete?
             redirect_to score_path(@score_session)
         else
             params[:rset][:errors] = @rset.errors.messages

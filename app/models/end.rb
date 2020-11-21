@@ -83,6 +83,22 @@ class End < ApplicationRecord
         self.round && self.round.score_method == "Set"
     end
 
+    def previous_end
+        self.rset.ends.find_by(number: self.number-1)
+    end
+
+    def previous_end_active?
+        self.previous_end ? self.previous_end.active : false
+    end
+
+    def currently_scoring?
+        self.rset.active && self.rset.date && self.active && !self.previous_end_active?
+    end
+
+    def last_end_in_rset?
+        self == self.rset.ends.last
+    end
+
     # def active?
     #     if self.rset.active?
     #         if self.number == 1 
