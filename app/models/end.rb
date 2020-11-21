@@ -83,18 +83,18 @@ class End < ApplicationRecord
         self.round && self.round.score_method == "Set"
     end
 
-    def active?
-        if self.rset.active?
-            if self.number == 1 
-                self.incomplete?
-            else
-                previous = self.rset.ends.find_by(number: self.number-1)
-                previous.complete? && self.incomplete?
-            end
-        else
-            false
-        end
-    end
+    # def active?
+    #     if self.rset.active?
+    #         if self.number == 1 
+    #             self.incomplete?
+    #         else
+    #             previous = self.rset.ends.find_by(number: self.number-1)
+    #             previous.complete? && self.incomplete?
+    #         end
+    #     else
+    #         false
+    #     end
+    # end
     
     
 end

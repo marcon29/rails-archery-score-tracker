@@ -2,8 +2,8 @@
     <section id=<%= "rset-#{rset.id}-info" %> class="rset-info">
         <%= tag.h4 "#{rset.set_end_format.name} - #{rset.distance}", class: "short-bottom-margin" %>
         
-        <% # if score_functionality? && (rset.complete? || rset.active?) %>
-        <% if score_functionality? && rset.active? %>
+        <% # if score_functionality? && (rset.complete? || rset.active) %>
+        <% if score_functionality? && rset.active %>
             <%= form_for rset, url: update_score_rset_path(@score_session) do |rset_f| %>
                 <%= rset_f.hidden_field :id %>
                 <% assign_rset_errors(rset_f.object) %>
