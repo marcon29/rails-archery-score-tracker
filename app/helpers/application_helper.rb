@@ -116,7 +116,7 @@ module ApplicationHelper
     end
 
     def score_functionality?
-        action_name == "score" || action_name == "update_score" || action_name =="update_score_rset" || action_name =="update_score_round"
+        action_name == "score" || action_name == "update_score" || action_name =="update_score_rset" || action_name =="update_score_round" || commit_from_score?
     end
 
     # ---------------------------

@@ -48,10 +48,20 @@ class ScoreSessionsController < ApplicationController
         @score_session.validate if !score_session_params[:rounds_attributes]
 
         if @score_session.errors.any?
-            render :edit
+            if commit_from_score?
+                render :score
+            else
+                render :edit
+            end
         else
             @score_session.save
-            auto_update_children_names
+            
+            if commit_from_score?
+                @score_session.update(active: false)
+            else
+                update_ss_children_names
+            end
+
             if @score_session.active
                 redirect_to score_path(@score_session)
             else
@@ -73,8 +83,6 @@ class ScoreSessionsController < ApplicationController
 
         @endd.assign_attributes(end_params)
 
-        
-
         if @endd.errors.any? #|| @rset.errors.any?
             @endd.errors[:shots].each do |id_error|
                 id_error.each do |num, error|
@@ -87,7 +95,7 @@ class ScoreSessionsController < ApplicationController
         else
             @endd.active = false
             @endd.save
-            update_parent_scores
+            update_end_parents_scores
 
             redirect_to score_path(@score_session)
         end
@@ -115,8 +123,10 @@ class ScoreSessionsController < ApplicationController
 
         if @round.update(round_params)
             @round.update(active: false)
-            @score_session.update(active: false) 
-            redirect_to score_session_path(@score_session)
+            redirect_to score_path(@score_session)
+
+            # @score_session.update(active: false) 
+            # redirect_to score_session_path(@score_session)
 
             # keeping this conditional as may need when adding ability to add round after current round is finished
             # if @score_session.complete?
@@ -130,6 +140,8 @@ class ScoreSessionsController < ApplicationController
             render :score
         end
     end
+
+    
     
   
     def score_session_params
@@ -196,12 +208,12 @@ class ScoreSessionsController < ApplicationController
         end
     end
 
-    def auto_update_children_names
+    def update_ss_children_names
         @score_session.rounds.each { |round| round.update(name: "") }
         @score_session.rsets.each { |rset| rset.update(name: "") }
     end
 
-    def update_parent_scores
+    def update_end_parents_scores
         @rset.update(score: (@rset.score + @endd.score))
         @round.update(score: (@round.score + @endd.score))
     end

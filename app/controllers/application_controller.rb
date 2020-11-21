@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
     # protect_from_forgery with: :exception
-    helper_method :current_user, :find_active_score_session
+    helper_method :current_user, :find_active_score_session, :commit_from_score?
 
     def log_user_in(user)
         session[:user_id] = user.id
@@ -28,5 +28,8 @@ class ApplicationController < ActionController::Base
         sessions.collect { |ss| ss.score_session_type }.uniq
     end
 
+    def commit_from_score?
+        params[:commit].starts_with?("Enter Rank (optional)") if params[:commit]
+    end
     
 end

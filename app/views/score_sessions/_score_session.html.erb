@@ -20,5 +20,9 @@
     <section id=<%= "score-session-#{score_session.id}-rounds" %> class="all-rounds">
         <%= render collection: score_session.rounds, partial: "rounds/round" %>
     </section>
+
+    <% if score_functionality? && score_session.active && score_session.complete? && !score_session.rounds.last.active %>
+        <%= render partial: "score_sessions/score_session_form" %>
+    <% end %>
 </section>
 
