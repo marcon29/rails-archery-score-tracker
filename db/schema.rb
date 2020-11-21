@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_19_224637) do
+ActiveRecord::Schema.define(version: 2020_11_21_150700) do
 
   create_table "archers", force: :cascade do |t|
     t.string "username"
@@ -34,12 +34,14 @@ ActiveRecord::Schema.define(version: 2020_11_19_224637) do
     t.integer "number"
     t.integer "score", default: 0
     t.integer "set_score"
+    t.boolean "active", default: true
     t.integer "archer_id"
     t.integer "score_session_id"
     t.integer "round_id"
     t.integer "rset_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    
   end
 
   create_table "format_round_formats", force: :cascade do |t|
@@ -143,6 +145,7 @@ ActiveRecord::Schema.define(version: 2020_11_19_224637) do
     t.string "score_method"
     t.integer "score", default: 0
     t.string "rank"
+    t.boolean "active", default: true
     t.integer "archer_id"
     t.integer "score_session_id"
     t.integer "round_format_id"
@@ -156,8 +159,9 @@ ActiveRecord::Schema.define(version: 2020_11_19_224637) do
   create_table "rsets", force: :cascade do |t|
     t.string "name"
     t.date "date"
-    t.integer "score", default: 0
+    t.integer "score", default: 0    
     t.string "rank"
+    t.boolean "active", default: true
     t.integer "archer_id"
     t.integer "score_session_id"
     t.integer "round_id"
@@ -178,25 +182,25 @@ ActiveRecord::Schema.define(version: 2020_11_19_224637) do
     t.date "start_date"
     t.date "end_date"
     t.string "rank"
+    t.boolean "active", default: true
     t.integer "archer_id"
     t.integer "gov_body_id"
-    t.boolean "active", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["gov_body_id"], name: "index_score_sessions_on_gov_body_id"
   end
 
   create_table "shots", force: :cascade do |t|
+    t.integer "number"
     t.string "score_entry"
+    t.integer "score", default: 0
     t.integer "archer_id"
     t.integer "score_session_id"
     t.integer "round_id"
     t.integer "rset_id"
     t.integer "end_id"
-    t.integer "number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "score", default: 0
   end
 
   add_foreign_key "organization_dist_targ_cats", "format_set_end_formats", column: "set_end_format_id"
