@@ -7,21 +7,23 @@
         </div>
     <% end %>
 
-    <div class="form-field-group">
-        <%= build_form_collection(round_f, "list_items", :round_type, round_f.object, @round_types, (round_f.object.round_type || @round_types.first), "required") %>
-        <%= build_form_collection(round_f, "list_items", :score_method, round_f.object, @score_methods, (round_f.object.score_method || @score_methods.first), "required") %>
-        <%= build_form_collection(round_f, "models", :division, round_f.object, @divisions, :id, (round_f.object.division ? round_f.object.division.id : @default_division.id), "required") %>
-        <%= build_form_collection(round_f, "models", :age_class, round_f.object, @age_classes, :id, (round_f.object.age_class ? round_f.object.age_class.id : @default_age_class.id), "required") %>
-    </div>
+    <% if !score_functionality? %>
+        <div class="form-field-group">
+            <%= build_form_collection(round_f, "list_items", :round_type, round_f.object, @round_types, (round_f.object.round_type || @round_types.first), "required") %>
+            <%= build_form_collection(round_f, "list_items", :score_method, round_f.object, @score_methods, (round_f.object.score_method || @score_methods.first), "required") %>
+            <%= build_form_collection(round_f, "models", :division, round_f.object, @divisions, :id, (round_f.object.division ? round_f.object.division.id : @default_division.id), "required") %>
+            <%= build_form_collection(round_f, "models", :age_class, round_f.object, @age_classes, :id, (round_f.object.age_class ? round_f.object.age_class.id : @default_age_class.id), "required") %>
+        </div>
+    <% end %>
 
-    <% if update_functionality? %>
+    <% if update_functionality? || score_functionality? %>
         <div class="form-field-group">
             <%= build_form_input(round_f, "text", :rank, round_f.object, "Your final place for the round", nil) %>
         </div>
     <% end %>
 </section>
 
-<% if score_ses_f && !round_functionality? && !creation_functionality? %>
+<% if !score_functionality? && score_ses_f && !round_functionality? && !creation_functionality? %>
     <h3 class="short-bottom-margin">Sets/Distances In Round</h3>
     <section id="form-rset-section">
         <%= score_ses_f.fields_for :rsets do |rset_f| %>
@@ -30,5 +32,9 @@
             <%= render partial: "rsets/rset_form", locals: {rset_f: rset_f} %>
         <% end %>
     </section>
+<% end %>
+
+<% if score_functionality? %>
+    <%= tag.p (round_f.submit "Enter Rank (optional) and Finish Round"), class: "display-horiz" %>
 <% end %>
 

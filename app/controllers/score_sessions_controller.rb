@@ -90,13 +90,6 @@ class ScoreSessionsController < ApplicationController
             update_parent_scores
 
             redirect_to score_path(@score_session)
-
-            # if @score_session.complete?
-            #     @score_session.update(active: false) 
-            #     redirect_to score_session_path(@score_session)
-            # else
-            #     redirect_to score_path(@score_session)
-            # end
         end
         # end
     end
@@ -115,6 +108,28 @@ class ScoreSessionsController < ApplicationController
         end
         # end
     end
+
+    def update_score_round
+        @round = Round.find(round_params[:id])
+        @score_session = @round.score_session
+
+        if @round.update(round_params)
+            @round.update(active: false)
+            @score_session.update(active: false) 
+            redirect_to score_session_path(@score_session)
+
+            # keeping this conditional as may need when adding ability to add round after current round is finished
+            # if @score_session.complete?
+            #     @score_session.update(active: false) 
+            #     redirect_to score_session_path(@score_session)
+            # else
+            #     redirect_to score_path(@score_session)
+            # end
+        else
+            params[:round][:errors] = @round.errors.messages
+            render :score
+        end
+    end
     
   
     def score_session_params
@@ -123,6 +138,10 @@ class ScoreSessionsController < ApplicationController
             rounds_attributes: [:id, :round_format_id, :round_type, :score_method, :rank, :division, :age_class], 
             rsets_attributes: [:id, :date, :rank]
         )
+    end
+
+    def round_params
+        params.require(:round).permit(:id, :rank)
     end
 
     def rset_params

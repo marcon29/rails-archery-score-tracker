@@ -51,9 +51,9 @@ module ApplicationHelper
         end
     end
 
-    def assign_rset_errors(rset)
-        if params[:rset] && params[:rset][:id].to_i == rset.id
-            params[:rset][:errors].each { |attr, err| rset.errors.add(attr, err.first) } if params[:rset][:errors].present?
+    def assign_round_or_rset_errors(object, object_symbol)
+        if params[object_symbol] && params[object_symbol][:id].to_i == object.id
+            params[object_symbol][:errors].each { |attr, err| object.errors.add(attr, err.first) } if params[object_symbol][:errors].present?
         end
     end
 
@@ -116,7 +116,7 @@ module ApplicationHelper
     end
 
     def score_functionality?
-        action_name == "score" || action_name == "update_score" || action_name =="update_score_rset"
+        action_name == "score" || action_name == "update_score" || action_name =="update_score_rset" || action_name =="update_score_round"
     end
 
     # ---------------------------

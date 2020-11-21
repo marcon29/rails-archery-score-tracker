@@ -18,4 +18,13 @@
             <%= render collection: round.rsets, partial: "rsets/rset" %>
         </section>
     <% end %>
+
+    <% if score_functionality? && round.active && round.complete? && !round.rsets.last.active %>
+        <%= form_for round, url: update_score_round_path(@score_session) do |round_f| %>
+            <%= round_f.hidden_field :id %>
+            <% assign_round_or_rset_errors(round_f.object, :round) %>
+
+            <%= render partial: "rounds/round_form", locals: {round_f: round_f} %>
+        <% end %>
+    <% end %>
 </section>

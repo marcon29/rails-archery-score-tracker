@@ -6,7 +6,7 @@
         <% if score_functionality? && rset.active && !rset.previous_rset_active? %>
             <%= form_for rset, url: update_score_rset_path(@score_session) do |rset_f| %>
                 <%= rset_f.hidden_field :id %>
-                <% assign_rset_errors(rset_f.object) %>
+                <% assign_round_or_rset_errors(rset_f.object, :rset) %>
 
                 <%= render partial: "rsets/rset_form", locals: {rset_f: rset_f} %>
             <% end %>
